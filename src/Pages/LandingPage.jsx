@@ -1,4 +1,5 @@
-import Cards from "../Components/cards/Cards1";
+import Cards1 from "../Components/cards/Cards1";
+import Cards2 from "../Components/cards/Cards2";
 import Footer from "../Components/Footer"
 import "./LandingPage.css"
 import Header from "../Components/Header";
@@ -64,7 +65,7 @@ function LandingPage() {
   return (
     <>
       <Header />
-      <section className="container my-5 mt-5" style={{ paddingTop: "100px" }}>
+      <section className="container mb-5" style={{ marginTop: "100px" }}>
         <div className="row align-items-center">
           <div className="col-md-6 col-12">
             <h1 style={{ color: "#f58800" }}>Builders and workers Collaboration</h1>
@@ -78,18 +79,18 @@ function LandingPage() {
         </div>
       </section>
 
-      <div className="container-fluid" id="services-section">
+      <div className="container-fluid" >
         <h1 className="text-center my-7">Services</h1>
-        <div className="page2" >
-          <div className="text-center my-5 row justify-content-center">
-            <p className="fs-5 pt-5">
+        <div className="page2" style={{paddingBottom:"64px"}} >
+          <div className="text-center my-5 row ">
+            <p className="fs-5 pt-5" >
               We provide customized solutions for Builders and Workers to boost productivity, streamline tasks, <br /> and enhance efficiency, helping them focus on what they do best.
             </p>
-            <section>
+            <section className="" style={{paddingTop:"10px"}}>
               <h2 className="mb-4">Builder Services</h2>
               <div className="row g-3 px-2 justify-content-between mb-4">
                 {cardBuilder.map((card, index) => (
-                  <Cards
+                  <Cards1
                     key={index}
                     imgSrc={card.imgSrc}
                     title={card.title}
@@ -105,7 +106,7 @@ function LandingPage() {
             <div className="row g-3 justify-content-center">
 
               {cardWorker.map((card1, index) => (
-                <Cards
+                <Cards2
                   key={index}
                   imgSrc={card1.imgSrc}
                   title={card1.title}

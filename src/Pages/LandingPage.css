@@ -47,9 +47,6 @@
 .icons {
   margin-bottom: 15px;
 }
-/* .worker-card {
-  margin-bottom: 3rem;
-} */
 .page3 {
   margin: 6rem 4rem;
 }
@@ -62,3 +59,4 @@
   background-color: var(--secondary-color);
   color: var(--text-color);
 }
+

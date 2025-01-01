@@ -19,14 +19,14 @@ function RoleSelectionPage() {
        h1Text : "Worker",
        pText:" Opt for the Worker role to contribute to construction projects, track tasks, report progress, and collaborate seamlessly!",
        buttonText: "submit",
-        onClick : ()=> navigate("/Worker-Dashboard")
+        onClick : ()=> navigate("/browse-Job")
     }
   ]
   return (
     <div className="container">
       <div className="row">
 
-      <div className="col-lg-12 text-center mt-3">
+      <div className="col-lg-12 text-center">
           <h1 style={{color:"#f58800"}}>Select Your Role ! </h1>
           </div>
       
@@ -35,7 +35,7 @@ function RoleSelectionPage() {
                  key = {index}
                  imgSrc = {role.imgSrc}
                  h1Text = {role.h1Text}
-                 pText = {role.pText}
+                 pText = {role.pText} 
                  buttonText = {role.buttonText}
                  onClick = {role.onClick}
           />
