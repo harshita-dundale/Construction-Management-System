@@ -52,7 +52,7 @@
 	}
   }
     .row.g-4 {
-	row-gap: 17rem !important;
+	row-gap: 19rem !important;
   }
   
   .card {
@@ -68,3 +68,54 @@
 	bottom: 0;
 	box-shadow: 0 10px 10px hsl(225, 100%, 94%);
 }
+
+
+/* Star Rating */
+.stars i {
+	font-size: 20px;
+	color: gray;
+	cursor: pointer;
+  }
+  
+  .stars i.checked {
+	color: gold;
+  }
+  
+  .rating-section h6 {
+	margin-top: 10px;
+  }
+  
+  .average-rating {
+	font-size: 14px;
+	color: #333;
+  }
+  
+  /* Review Section */
+  /* .review-section textarea {
+	resize: none;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 8px;
+  }
+  
+  .review-section textarea:focus {
+	border-color: #051821;
+	outline: none;
+  } */
+  
+  .sort-input {
+	width: 90%; 
+	height: 45px; 
+	border-radius: 25px; 
+	border: 1px solid #ced4da; 
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+	border-color: #007bff; 
+	padding: 10px; 
+  }
+  
+  .sort-input:focus {
+	outline: none;
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+	border-color: #007bff; 
+  }
+  

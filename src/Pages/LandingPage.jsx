@@ -103,7 +103,7 @@ function LandingPage() {
 
           <section className="my-5 text-center mb-4">
             <h2 className="mb-4">Worker Services</h2>
-            <div className="row g-3 justify-content-center">
+            <div className="row g-3 px-2 justify-content-center">
 
               {cardWorker.map((card1, index) => (
                 <Cards2
