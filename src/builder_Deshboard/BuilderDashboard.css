@@ -1,0 +1,50 @@
+
+/* .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+  margin-top: 89px;
+  margin-bottom: .5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--bs-heading-color);
+} */
+.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+  /* --bs-gutter-x: 17.5rem; */
+  --bs-gutter-y: 0;
+  width: 100%;
+  padding-right: calc(var(--bs-gutter-x)* .5);
+  padding-left: calc(var(--bs-gutter-x)* .5);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+element.style{
+  --bs-gutter-x: 17.5rem;
+}
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  /* h6 {
+    font-size: 1rem;.main-content {
+       margin-top: 100px; /* Adjust the value as needed */
+    
+}
+@media (min-width: 1200px) {
+  .h2, h2 {
+      font-size: 2rem;
+      margin-top: 6em;
+  }
+}
+/* 
+body {
+  padding-top: 80px; /* Header ki height ke according adjust karo 
+}
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Ensure header is always on top 
+} */
