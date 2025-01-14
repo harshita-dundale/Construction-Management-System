@@ -65,7 +65,7 @@ function LandingPage() {
   return (
     <>
       <Header />
-      <section className="container mb-5" style={{ marginTop: "100px" }}>
+      <section className="container mb-5" id="home-section" style={{ marginTop: "100px" }}>
         <div className="row align-items-center">
           <div className="col-md-6 col-12">
             <h1 style={{ color: "#f58800" }}>Builders and workers Collaboration</h1>
@@ -79,7 +79,7 @@ function LandingPage() {
         </div>
       </section>
 
-      <div className="container-fluid" >
+      <div className="container-fluid" id="services-section">
         <h1 className="text-center my-7">Services</h1>
         <div className="page2" style={{paddingBottom:"64px"}} >
           <div className="text-center my-5 row ">

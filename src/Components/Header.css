@@ -4,6 +4,10 @@ body, html {
 .navbar-nav .nav-item {
     margin: 0;
     padding: 0;
+    cursor: pointer;
+}
+.navbar-nav .nav-item :hover{
+    text-decoration: underline;
 }
 .navbar-nav .btn {
     margin: 0 auto; 

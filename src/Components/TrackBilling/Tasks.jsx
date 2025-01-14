@@ -8,7 +8,8 @@ const Tasks = () => {
     ];
   
     return (
-      <div className="task-performance-section card p-4">
+      <div className="task-performance-section p-4">
+        {/* card */}
         <h4 className="text-center mb-4">Task & Performance</h4>
         
         {/* Active Tasks with Progress Bars */}

@@ -1,9 +1,21 @@
+.main-content {
+	margin-left: 250px; 
+	padding: 20px; 
+	transition: margin-left 0.3s ease; 
+}
+  .sidebar:not(.open) ~ .main-content {
+	margin-left: 0; 
+  }
+  @media (max-width: 767px) {
+	.main-content {
+	  margin-left: 0; 
+	}
+  }
 .card-flip {
 	position: relative;
 	width: 100%;
 	perspective: 1000px;
   }
-  
   .card-flip .card-front,
   .card-flip .card-back {
 	position: absolute;
@@ -21,17 +33,15 @@
 	transform: rotateY(180deg);
   }
   
-  .card-flip:hover .card-front {
+  .card-flip.is-flipped .card-front {
 	transform: rotateY(-180deg);
   }
   
-  .card-flip:hover .card-back {
+  .card-flip.is-flipped .card-back {
 	transform: rotateY(0deg);
   }
-
-
 /* Hover Effect for Larger Screens */
-@media (hover: hover) and (pointer: fine) {
+/* @media (hover: hover) and (pointer: fine) {
 	.card-flip:hover .card-front {
 	  transform: rotateY(-180deg);
 	}
@@ -39,10 +49,10 @@
 	.card-flip:hover .card-back {
 	  transform: rotateY(0deg);
 	}
-  }
+  } */
   
   /* Flip on Touch for Mobile Devices */
-  @media (hover: none) and (pointer: coarse) {
+  /* @media (hover: none) and (pointer: coarse) {
 	.card-flip:active .card-front {
 	  transform: rotateY(-180deg);
 	}
@@ -50,9 +60,9 @@
 	.card-flip:active .card-back {
 	  transform: rotateY(0deg);
 	}
-  }
+  } */
     .row.g-4 {
-	row-gap: 19rem !important;
+	row-gap: 22rem !important;
   }
   
   .card {
@@ -68,8 +78,6 @@
 	bottom: 0;
 	box-shadow: 0 10px 10px hsl(225, 100%, 94%);
 }
-
-
 /* Star Rating */
 .stars i {
 	font-size: 20px;
@@ -89,19 +97,6 @@
 	font-size: 14px;
 	color: #333;
   }
-  
-  /* Review Section */
-  /* .review-section textarea {
-	resize: none;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	padding: 8px;
-  }
-  
-  .review-section textarea:focus {
-	border-color: #051821;
-	outline: none;
-  } */
   
   .sort-input {
 	width: 90%; 

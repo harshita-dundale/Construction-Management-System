@@ -13,5 +13,4 @@ function Cards2({ imgSrc, title, text, buttonText }) {
     </div>
   )
 }
-
 export default Cards2;

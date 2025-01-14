@@ -12,7 +12,7 @@ function RoleSelectionPage() {
        h1Text : "Builder",
        pText:"Choose the Builder role to streamline construction, assign tasks, and ensure project success—your key to to find skilled workers!",
        buttonText: "submit",
-       onClick : ()=> alert("builder dashboard is coming")
+       onClick : ()=> navigate("/builder-page")
     },
     {
       imgSrc : role2,
@@ -23,7 +23,7 @@ function RoleSelectionPage() {
     }
   ]
   return (
-    <div className="container">
+    <div className="container my-3">
       <div className="row">
 
       <div className="col-lg-12 text-center">

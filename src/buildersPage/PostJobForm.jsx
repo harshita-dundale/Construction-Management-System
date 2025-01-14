@@ -1,5 +1,5 @@
 // import './App.css';
-import image1 from '../assets/images/photos/image1.png'; // Ensure the path is correct
+//import image1 from '../assets/images/photos/image1.png'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function PostJobForm() {
@@ -77,7 +77,7 @@ function PostJobForm() {
         </div>
         {/* Image Section */}
         <div className="col-lg-6 text-center">
-          <img src={image1} className="img-fluid" alt="Responsive Job Post Illustration" />
+          <img src="" className="img-fluid" alt="Responsive Job Post Illustration" />
         </div>
       </div>
     </div>

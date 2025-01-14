@@ -1,0 +1,54 @@
+/* Tabs Container */
+.tabs-container {
+    font-family: 'Arial', sans-serif;
+    /* max-width: 800px; */
+    margin: 10px auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    /* background-color:#ecf2f9 */
+  }
+  
+  /* Tab Header Container */
+  .tab-header-container {
+    display: flex;
+    gap: 10px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+  }
+  
+  /* Tab Button */
+  .tab-button {
+    padding: 12px 24px;
+    border: 2px solid #ccc;
+    background-color: #f1f1f1;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Active Tab Button */
+  .tab-button.active {
+    background-color: #f58800;
+    color: white;
+    border-color: #f58800;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+  }
+  
+  /* Hover Effect */
+  .tab-button:hover {
+    background-color: #e7e7e7;
+    border-color: #888;
+  }
+  
+  /* Tab Content Container */
+  .tab-content-container {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #333;
+  }
+  

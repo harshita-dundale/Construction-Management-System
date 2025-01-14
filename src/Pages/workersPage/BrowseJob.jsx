@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./BrowseJob.css";
 import Header from "../../Components/Header";
 import FilterBuilders from "../../Components/FilterBuilders";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function BrowseJob() {
   const [users, setUsers] = useState([]);
@@ -9,6 +10,7 @@ function BrowseJob() {
   const [ratings, setRatings] = useState({});
   const [sortOption, setSortOption] = useState("none");
   const [filterLocation, setFilterLocation] = useState("");
+  const [flippedCards, setFlippedCards] = useState([]);
 
   const exampleSkills = ["Masonry", "Plumbing", "Painting"];
 
@@ -60,6 +62,13 @@ function BrowseJob() {
     applyFilters();
   }, [sortOption, filterLocation, ratings, users]);
 
+  const toggleCardFlip = (id) => {
+    setFlippedCards((prev) =>
+      prev.includes(id) ? prev.filter((cardId) => cardId !== id) : [...prev, id]
+    );
+  };
+
+
   return (
     <div>
       <Header />
@@ -78,11 +87,11 @@ function BrowseJob() {
 
         {/* Filter and Sort Component */}
         <FilterBuilders
-  filterLocation={filterLocation}
-  setFilterLocation={setFilterLocation}
-  sortOption={sortOption}
-  setSortOption={setSortOption}
-/>
+          filterLocation={filterLocation}
+          setFilterLocation={setFilterLocation}
+          sortOption={sortOption}
+          setSortOption={setSortOption}
+        />
 
 
         <div className="row g-4 d-flex justify-content-center">
@@ -92,9 +101,11 @@ function BrowseJob() {
               key={index}
             >
               <div
-                className="card-flip h-100"
+                className={`card-flip h-100 ${flippedCards.includes(builder.login.uuid) ? "is-flipped" : ""
+                  }`}
                 style={{ maxWidth: "100%", margin: "0 auto" }}
               >
+                
                 {/* Front of the Flip Card */}
                 <div className="card-front">
                   <div className="card text-center h-100">
@@ -108,7 +119,8 @@ function BrowseJob() {
                       <h5 className="card-title">
                         {builder.name.first} {builder.name.last}
                       </h5>
-                      <p className="card-text text-muted">{builder.email}</p>
+                      <p className="card-text">Phone: {builder.phone}</p>
+                      <p className="card-text">Daily Payment: 400rs</p>
                       {/* Skill Badges */}
                       <div className="skills mb-3">
                         {exampleSkills.map((skill, idx) => (
@@ -121,8 +133,9 @@ function BrowseJob() {
                           </span>
                         ))}
                       </div>
-                      <button className="seeMore btn btn-light mt-auto">
-                        Apply Now
+                      <button className="seeMore btn btn-dark mt-auto"
+                        onClick={() => toggleCardFlip(builder.login.uuid)}>
+                        See More
                       </button>
                     </div>
                   </div>
@@ -132,12 +145,19 @@ function BrowseJob() {
                 <div className="card-back">
                   <div className="card text-center h-100">
                     <div className="card-body" style={{ background: "#e2ecea" }}>
+                    <div className="mt-auto text-dark" onClick={() => toggleCardFlip(builder.login.uuid)}
+                     style={{height:"30px", width:"40px", color:"black"}}>
+                      Back
+                        <FontAwesomeIcon icon="fa-solid fa-right-from-bracket"/>
+                      </div>
+
                       <h5 className="card-title">
                         Location: {builder.location.city},{" "}
                         {builder.location.country}
                       </h5>
-                      <p className="card-text">Phone: {builder.phone}</p>
-
+                      <p className="card-text">{builder.email}</p>
+                      <p className="card-text text-muted">Start: 02-04-2025</p>
+                      <p className="card-text text-muted">End: 17-04-2025</p>
                       {/* Star Rating System */}
                       <div className="rating-section">
                         <h6>Rate this Builder:</h6>
@@ -145,11 +165,10 @@ function BrowseJob() {
                           {[...Array(5)].map((_, starIndex) => (
                             <i
                               key={starIndex}
-                              className={`fa fa-star ${
-                                ratings[builder.login.uuid] > starIndex
+                              className={`fa fa-star ${ratings[builder.login.uuid] > starIndex
                                   ? "checked"
                                   : ""
-                              }`}
+                                }`}
                               onClick={() =>
                                 handleRating(builder.login.uuid, starIndex + 1)
                               }
@@ -160,9 +179,9 @@ function BrowseJob() {
                           Current Rating:{" "}
                           {ratings[builder.login.uuid] || "No rating yet"}
                         </p>
+
                       </div>
-                      <button className="seeMore btn btn-light mt-auto">
-                        Apply Now
+                      <button className="seeMore btn btn-dark mt-auto"> Apply now
                       </button>
                     </div>
                   </div>

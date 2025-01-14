@@ -1,50 +1,50 @@
-  import Cards2 from "../Components/cards/Cards2";
+import Cards2 from "../Components/cards/Cards2";
   import { useNavigate } from 'react-router-dom';
   import 'bootstrap/dist/css/bootstrap.min.css';
   import "./BuilderDashboard.css";
-  import handshake from "../assets/images/icons/handshake.gif";
-  import my5 from "../assets/images/icons/my5.gif";
-  import checklist from "../assets/images/icons/checklist.gif";
-  import my4 from "../assets/images/icons/my4.gif";
+  import icon1 from "../assets/images/icons/icon1.gif"
+  import icon2 from "../assets/images/icons/icon2.gif"
+  import icon3 from "../assets/images/icons/icon3.gif"
+  import icon4 from "../assets/images/icons/icon4.gif"
   import Header from "../Components/Header";
-  
+
  function Builder_dashboard() {
   const navigate = useNavigate();
-{/*  */}
+
   const cardData1 = [
     {
-      imgSrc: my5,
+      imgSrc: icon1,
       title: "Post and edit job",
       text: "Handle your projects efficiently and track progress.",
       buttonText: "Get Started",
       onClick: () => navigate("/post-job"),
     },
     {
-      imgSrc: my4,
+      imgSrc: icon2,
       title: "View Applications",
       text: "Improve productivity with effective collaborative tools.",
       buttonText: "Get Started",
       onClick: () => navigate("/ViewApplications"),
     },
     {
-      imgSrc: handshake,
+      imgSrc: icon3,
       title: "Hire Worker",
       text: "Monitor construction materials to reduce wastage.",
       buttonText: "Get Started",
     },
     {
-      imgSrc: checklist,
+      imgSrc: icon4,
       title: "Assign tasks",
       text: "Analyze costs & profits detail for effective budgeting.",
       buttonText: "Get Started",
     },
   ];
- 
+
    return (
     <> 
      <Header />
      <div className="container-fluid">
-      
+
            <h1 className="text-center my-5">Builder Dashboard</h1>
            <h5 className="text-center">
                Welcome to the Builder Dashboard! Manage your construction projects effectively.
@@ -53,7 +53,7 @@
             {cardData1.map((card, index) => (
             <Cards2
               key={index}
-              imgSrc={card.imgSrc}
+               imgSrc={card.imgSrc}
               title={card.title}
               text={card.text}
               buttonText={card.buttonText}
@@ -65,5 +65,5 @@
   </> 
   )
  }
- 
+
  export default Builder_dashboard;
