@@ -11,6 +11,7 @@ import PostJobForm from './builder_Deshboard/PostJobForm';
 import ViewApplications from './builder_Deshboard/ViewApplications';
 import { Auth0Provider } from '@auth0/auth0-react';
 import Dashboard from './Pages/buildersPage/Dashboard';
+import HiredWorkers from './Pages/buildersPage/HiredWorkers';
 import MaterialManagement from './Pages/buildersPage/MaterialManagement';
 import ProfitAndCostAnalysis from './Pages/buildersPage/ProfitAndCostAnalysis';
 
@@ -35,8 +36,10 @@ function App() {
           <Route path="/browse-Job" element={<BrowseJob />} />
           <Route path="/Track-Billing" element={<TrackBilling />} />
           <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/HiredWorkers" element={<HiredWorkers />} />
           <Route path="/MaterialManagement" element={<MaterialManagement />} />
           <Route path="/ProfitAndCostAnalysis" element={<ProfitAndCostAnalysis />} />
+
         </Routes>
       </Router>
     </Auth0Provider>

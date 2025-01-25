@@ -30,6 +30,7 @@
       title: "Hired Worker",
       text: "Monitor construction materials to reduce wastage.",
       buttonText: "Get Started",
+      onClick: () => navigate("/HiredWorkers"),
     },
     // {
     //   imgSrc: checklist,
