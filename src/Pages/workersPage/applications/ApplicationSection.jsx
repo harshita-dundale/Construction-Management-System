@@ -1,27 +1,19 @@
-import  { useState } from 'react';
 import ApplicationTabs from './ApplicationTabs';
 import ApplicationTable from './ApplicationTable';
 import JobDetailsModal from './JobDetailsModal';
 import Header from '../../../Components/Header';
+import { useDispatch, useSelector } from 'react-redux';
+import {  setShowModal, setCurrentJob } from '../../Redux/AppliModelSlice'
 
 const ApplicationSection = () => {
-  const [filter, setFilter] = useState('All');
-  const [showModal, setShowModal] = useState(false);
-  const [currentJob, setCurrentJob] = useState(null);
 
-  const allApplications = [
-    { title: 'Job A', date: '2025-01-01', status: 'Pending', description: 'Job A Description' },
-    { title: 'Job B', date: '2025-01-02', status: 'Selected', description: 'Job B Description' },
-    { title: 'Job C', date: '2025-01-03', status: 'Rejected', description: 'Job C Description' },
-  ];
-
-  const filteredApplications = filter === 'All' 
-    ? allApplications 
-    : allApplications.filter((app) => app.status === filter);
+  const dispatch = useDispatch(); 
+  const { activeTab } = useSelector((state) => state.appTabs);
+  const { showModal } = useSelector((state) => state.applicationsModel);
 
   const handleViewDetails = (job) => {
-    setCurrentJob(job);
-    setShowModal(true);
+    dispatch(setCurrentJob(job));
+   dispatch( setShowModal(true));
   };
 
   return (
@@ -29,20 +21,17 @@ const ApplicationSection = () => {
       <Header/>
     <div className="container mt-5">
       <h3 className="mb-3">Applications</h3>
-      <ApplicationTabs setFilter={setFilter} />
+      <ApplicationTabs />
       <div className="table-responsive">
-        <ApplicationTable
-          applications={filteredApplications}
-          onViewDetails={handleViewDetails}
-        />
+        <ApplicationTable onViewDetails={handleViewDetails} activeTab={activeTab}/>
       </div>
-      {currentJob && (
+      {showModal && <JobDetailsModal />}      {/* {currentJob && (
         <JobDetailsModal
           show={showModal}
-          onClose={() => setShowModal(false)}
+          onClose={() => dispatch(setShowModal(false))}
           jobDetails={currentJob}
         />
-      )}
+      )} */}
     </div>
     </div>
   );

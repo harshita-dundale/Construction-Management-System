@@ -1,27 +1,12 @@
-import { useNavigate } from "react-router-dom"
-import role1 from "../assets/images/photos/role1.svg"
-import role2 from "../assets/images/photos/role2.svg"
-import SelectRole from "../Components/SelectRole"
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { selectRoles } from "./Redux/RoleSlice";
+import SelectRole from "../Components/SelectRole";
 
 function RoleSelectionPage() {
   const navigate = useNavigate()
+  const roles = useSelector(selectRoles);
 
-  const roles = [
-    {
-      imgSrc : role1,
-       h1Text : "Builder",
-       pText:"Choose the Builder role to streamline construction, assign tasks, and ensure project success—your key to to find skilled workers!",
-       buttonText: "submit",
-       onClick : ()=> navigate("/builder-page")
-    },
-    {
-      imgSrc : role2,
-       h1Text : "Worker",
-       pText:" Opt for the Worker role to contribute to construction projects, track tasks, report progress, and collaborate seamlessly!",
-       buttonText: "submit",
-        onClick : ()=> navigate("/browse-Job")
-    }
-  ]
   return (
     <div className="container my-3">
       <div className="row">
@@ -37,7 +22,7 @@ function RoleSelectionPage() {
                  h1Text = {role.h1Text}
                  pText = {role.pText} 
                  buttonText = {role.buttonText}
-                 onClick = {role.onClick}
+                 onClick = {() => navigate(role.route)}
           />
         ))
        }

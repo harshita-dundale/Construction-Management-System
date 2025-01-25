@@ -20,6 +20,7 @@
     "@react-google-maps/api": "^2.20.5",
     "@reduxjs/toolkit": "^2.5.0",
     "@syncfusion/ej2-react-charts": "^28.1.36",
+    "@tanstack/react-table": "^8.20.6",
     "@types/react-table": "^7.7.20",
     "bootstrap": "^5.0.1",
     "chart.js": "^4.4.7",

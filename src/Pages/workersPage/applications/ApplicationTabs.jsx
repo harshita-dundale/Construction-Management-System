@@ -1,8 +1,12 @@
-import  { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilter } from '../../Redux/AppliModelSlice';
+import { setActiveTab } from '../../Redux/AppliTabsSlice';
 import { FaTasks, FaClock, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
-const ApplicationTabs = ({ setFilter }) => {
+const ApplicationTabs = () => {
+  const dispatch = useDispatch();
+  const activeTab = useSelector((state) => state.appTabs.activeTab);
+
   const tabs = [
     { name: 'All', icon: <FaTasks /> },
     { name: 'Pending', icon: <FaClock /> },
@@ -10,11 +14,9 @@ const ApplicationTabs = ({ setFilter }) => {
     { name: 'Rejected', icon: <FaTimesCircle /> },
   ];
 
-  const [activeTab, setActiveTab] = useState('All');
-
   const handleTabClick = (tab) => {
-    setActiveTab(tab);
-    setFilter(tab);
+    dispatch(setActiveTab(tab));
+    dispatch(setFilter(tab)); // Set filter when tab changes
   };
 
   return (
@@ -24,9 +26,7 @@ const ApplicationTabs = ({ setFilter }) => {
           <button
             className={`nav-link d-flex align-items-center gap-2 ${activeTab === tab.name ? 'active' : ''}`}
             onClick={() => handleTabClick(tab.name)}
-            style={{
-              color: '#051821',
-            }}
+            style={{ color: '#051821' }}
           >
             {tab.icon} {tab.name}
           </button>
@@ -37,3 +37,4 @@ const ApplicationTabs = ({ setFilter }) => {
 };
 
 export default ApplicationTabs;
+

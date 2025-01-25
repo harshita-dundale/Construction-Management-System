@@ -1,6 +1,6 @@
 import React from 'react';
-import '../historyTables.css'
-import { useTable } from 'react-table';
+import '../historyTables.css';
+import { useTable } from 'react-table'; // Using react-table (version 7)
 import PropTypes from 'prop-types';
 
 const HistoryTable = ({ data }) => {
@@ -12,7 +12,13 @@ const HistoryTable = ({ data }) => {
     []
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = useTable({ columns, data });
 
   if (!data || data.length === 0) {
     return (
@@ -72,3 +78,4 @@ HistoryTable.defaultProps = {
 };
 
 export default HistoryTable;
+

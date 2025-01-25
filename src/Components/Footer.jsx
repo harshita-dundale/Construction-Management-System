@@ -71,8 +71,8 @@ function Footer() {
             <FontAwesomeIcon icon={faLinkedin} style={{height:"1.8vw", color:"white"}}/>
             {/* <FontAwesomeIcon icon="fa-brands fa-linkedin" />  */}
             </a>
-            <a href="https://instagram.com" className="">
-              <FontAwesomeIcon icon={faInstagram} style={{height:"1.8vw", color:"white"}}/> 
+            <a href="https://instagram.com">
+              <FontAwesomeIcon icon={faInstagram} style={{height:"1.8vw", color:"white"}} /> 
             {/* <FontAwesomeIcon icon="fa-brands fa-instagram" />  */}
             </a>
           </div>

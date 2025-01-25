@@ -1,9 +1,8 @@
-
 /* eslint-disable react/prop-types */
 function Cards({ imgSrc, title, text, buttonText }) {
   return (
     
-     <div className="col-md-3 col-sm-6">
+     <div className="col-md-3 col-sm-6 text-dark">
                   <div className="card h-100 d-flex flex-column">
                     <div className="card-body flex-grow-1">
                       <img src={imgSrc}  className="rounded mb-3 icons" width="60" height="60" alt={title} />

@@ -1,6 +1,13 @@
-import React from 'react';
+import { useSelector } from "react-redux";
 
-const ApplicationTable = ({ applications, onViewDetails }) => {
+const ApplicationTable = ({onViewDetails, activeTab}) => {
+
+  const { allApplications } = useSelector((state) => state.applicationsModel);
+
+  const filteredApplications = activeTab === 'All' 
+    ? allApplications 
+    : allApplications.filter((app) => app.status === activeTab);
+
   return (
     <table className="table table-hover mt-4">
       <thead style={{ backgroundColor: '#266867', color: '#ffffff' }}>
@@ -12,7 +19,7 @@ const ApplicationTable = ({ applications, onViewDetails }) => {
         </tr>
       </thead>
       <tbody>
-        {applications.map((app, index) => (
+        {filteredApplications.map((app, index) => (
           <tr key={index}>
             <td>{app.title}</td>
             <td>{app.date}</td>

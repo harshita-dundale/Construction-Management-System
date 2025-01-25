@@ -1,79 +1,35 @@
-import { useEffect, useState } from "react";
-import "./BrowseJob.css";
+
+import { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchUsers, setRatings, setFilterLocation, setSortOption, toggleCardFlip, applyFilters,
+} from "../Redux/UsersSlice";
 import Header from "../../Components/Header";
 import FilterBuilders from "../../Components/FilterBuilders";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "./BrowseJob.css";
 
 function BrowseJob() {
-  const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const [ratings, setRatings] = useState({});
-  const [sortOption, setSortOption] = useState("none");
-  const [filterLocation, setFilterLocation] = useState("");
-  const [flippedCards, setFlippedCards] = useState([]);
 
-  const exampleSkills = ["Masonry", "Plumbing", "Painting"];
-
-  async function getUsers() {
-    try {
-      const response = await fetch("https://randomuser.me/api/?results=12");
-      const FinalData = await response.json();
-      setUsers(FinalData.results);
-    } catch (error) {
-      console.error("Failed to fetch users:", error);
-      setUsers([]);
-    }
-  }
+  const dispatch = useDispatch();
+  const { filteredUsers, ratings, flippedCards, filterLocation, sortOption, status,
+  } = useSelector((state) => state.users);
 
   useEffect(() => {
-    getUsers();
-  }, []);
-
-  const handleRating = (builderId, rating) => {
-    setRatings((prevRatings) => ({
-      ...prevRatings,
-      [builderId]: rating,
-    }));
-  };
-
-  const applyFilters = () => {
-    let updatedUsers = [...users];
-
-    // Filter by location
-    if (filterLocation) {
-      updatedUsers = updatedUsers.filter((user) =>
-        user.location.city.toLowerCase().includes(filterLocation.toLowerCase())
-      );
+    if (status === "idle") {
+      dispatch(fetchUsers());
     }
-
-    // Sort by selected option
-    if (sortOption === "rating") {
-      updatedUsers.sort(
-        (a, b) => (ratings[b.login.uuid] || 0) - (ratings[a.login.uuid] || 0)
-      );
-    } else if (sortOption === "name") {
-      updatedUsers.sort((a, b) => a.name.first.localeCompare(b.name.first));
-    }
-
-    setFilteredUsers(updatedUsers);
-  };
+  }, [status, dispatch]);
 
   useEffect(() => {
-    applyFilters();
-  }, [sortOption, filterLocation, ratings, users]);
-
-  const toggleCardFlip = (id) => {
-    setFlippedCards((prev) =>
-      prev.includes(id) ? prev.filter((cardId) => cardId !== id) : [...prev, id]
-    );
-  };
-
+    dispatch(applyFilters());
+  }, [filterLocation, sortOption, ratings, dispatch]);
 
   return (
     <div>
       <Header />
 
       <div className="container" style={{ marginTop: "100px" }}>
+        {/* Header Content */}
         <div className="row text-center d-flex justify-content-center">
           <h1 className="mt-2" style={{ color: "#051821" }}>
             Our Best Builders
@@ -85,15 +41,15 @@ function BrowseJob() {
           </p>
         </div>
 
-        {/* Filter and Sort Component */}
+        {/* Filter and Sort */}
         <FilterBuilders
           filterLocation={filterLocation}
-          setFilterLocation={setFilterLocation}
+          setFilterLocation={(value) => dispatch(setFilterLocation(value))}
           sortOption={sortOption}
-          setSortOption={setSortOption}
+          setSortOption={(value) => dispatch(setSortOption(value))}
         />
 
-
+        {/* Builders Cards */}
         <div className="row g-4 d-flex justify-content-center">
           {filteredUsers.map((builder, index) => (
             <div
@@ -103,10 +59,8 @@ function BrowseJob() {
               <div
                 className={`card-flip h-100 ${flippedCards.includes(builder.login.uuid) ? "is-flipped" : ""
                   }`}
-                style={{ maxWidth: "100%", margin: "0 auto" }}
               >
-                
-                {/* Front of the Flip Card */}
+                {/* Card Front */}
                 <div className="card-front">
                   <div className="card text-center h-100">
                     <div className="card-body" style={{ background: "#e2ecea" }}>
@@ -121,36 +75,27 @@ function BrowseJob() {
                       </h5>
                       <p className="card-text">Phone: {builder.phone}</p>
                       <p className="card-text">Daily Payment: 400rs</p>
-                      {/* Skill Badges */}
-                      <div className="skills mb-3">
-                        {exampleSkills.map((skill, idx) => (
-                          <span
-                            key={idx}
-                            className="badge bg-light text-dark me-2"
-                            style={{ fontSize: "14px" }}
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                      <button className="seeMore btn btn-dark mt-auto"
-                        onClick={() => toggleCardFlip(builder.login.uuid)}>
+                      <button
+                        className="seeMore btn btn-dark mt-auto"
+                        onClick={() =>
+                          dispatch(toggleCardFlip(builder.login.uuid))
+                        }
+                      >
                         See More
                       </button>
                     </div>
                   </div>
                 </div>
 
-                {/* Back of the Flip Card */}
+                {/* Card Back */}
                 <div className="card-back">
                   <div className="card text-center h-100">
                     <div className="card-body" style={{ background: "#e2ecea" }}>
-                    <div className="mt-auto text-dark" onClick={() => toggleCardFlip(builder.login.uuid)}
-                     style={{height:"30px", width:"40px", color:"black"}}>
-                      Back
-                        <FontAwesomeIcon icon="fa-solid fa-right-from-bracket"/>
+                      <div className="mt-auto text-dark"
+                        style={{ height: "30px", width: "40px", color: "black", cursor: "pointer" }}
+                        onClick={() => dispatch(toggleCardFlip(builder.login.uuid))}>
+                        Back
                       </div>
-
                       <h5 className="card-title">
                         Location: {builder.location.city},{" "}
                         {builder.location.country}
@@ -158,30 +103,24 @@ function BrowseJob() {
                       <p className="card-text">{builder.email}</p>
                       <p className="card-text text-muted">Start: 02-04-2025</p>
                       <p className="card-text text-muted">End: 17-04-2025</p>
-                      {/* Star Rating System */}
-                      <div className="rating-section">
-                        <h6>Rate this Builder:</h6>
-                        <div className="stars">
-                          {[...Array(5)].map((_, starIndex) => (
-                            <i
-                              key={starIndex}
-                              className={`fa fa-star ${ratings[builder.login.uuid] > starIndex
-                                  ? "checked"
-                                  : ""
-                                }`}
-                              onClick={() =>
-                                handleRating(builder.login.uuid, starIndex + 1)
-                              }
-                            />
-                          ))}
-                        </div>
-                        <p className="average-rating">
-                          Current Rating:{" "}
-                          {ratings[builder.login.uuid] || "No rating yet"}
-                        </p>
-
+                      <div >
+                        {[...Array(5)].map((_, starIndex) => (
+                          <i
+                            key={starIndex}
+                            className={`fa fa-star stars ${ratings[builder.login.uuid] > starIndex ? "checked" : ""
+                              }`}
+                            onClick={() =>
+                              dispatch(
+                                setRatings({
+                                  builderId: builder.login.uuid,
+                                  rating: starIndex + 1,
+                                })
+                              )
+                            }
+                          />
+                        ))}
                       </div>
-                      <button className="seeMore btn btn-dark mt-auto"> Apply now
+                      <button className="seeMore btn btn-dark mt-3"> Apply now
                       </button>
                     </div>
                   </div>

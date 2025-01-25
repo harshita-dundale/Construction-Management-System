@@ -79,13 +79,12 @@
 	box-shadow: 0 10px 10px hsl(225, 100%, 94%);
 }
 /* Star Rating */
-.stars i {
+.stars{
 	font-size: 20px;
 	color: gray;
 	cursor: pointer;
   }
-  
-  .stars i.checked {
+  .checked {
 	color: gold;
   }
   
