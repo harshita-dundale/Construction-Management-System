@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from "react";
-// import "./BrowseJob.css";
+
 import Header from "../../Components/Header";
 import FilterBuilders from "../../Components/FilterBuilders";
 const HiredWorkers = () => {
@@ -37,14 +37,14 @@ const HiredWorkers = () => {
     const applyFilters = () => {
         let updatedUsers = [...users];
 
-        // Filter by location
+        
         if (filterLocation) {
             updatedUsers = updatedUsers.filter((user) =>
                 user.location.city.toLowerCase().includes(filterLocation.toLowerCase())
             );
         }
 
-        // Sort by selected option
+        
         if (sortOption === "rating") {
             updatedUsers.sort(
                 (a, b) => (ratings[b.login.uuid] || 0) - (ratings[a.login.uuid] || 0)
@@ -95,7 +95,6 @@ const HiredWorkers = () => {
                                 className="card-flip h-100"
                                 style={{ maxWidth: "100%", margin: "0 auto" }}
                             >
-                                {/* Front of the Flip Card */}
                                 <div className="card-front">
                                     <div className="card text-center h-100">
                                         <div className="card-body" style={{ background: "#e2ecea" }}>
@@ -109,7 +108,7 @@ const HiredWorkers = () => {
                                                 {builder.name.first} {builder.name.last}
                                             </h5>
                                             <p className="card-text text-muted">{builder.email}</p>
-                                            {/* Skill Badges */}
+                                            
                                             <div className="skills mb-3">
                                                 {exampleSkills.map((skill, idx) => (
                                                     <span
@@ -128,7 +127,7 @@ const HiredWorkers = () => {
                                     </div>
                                 </div>
 
-                                {/* Back of the Flip Card */}
+                                
                                 <div className="card-back">
                                     <div className="card text-center h-100">
                                         <div className="card-body" style={{ background: "#e2ecea" }}>
@@ -138,7 +137,7 @@ const HiredWorkers = () => {
                                             </h5>
                                             <p className="card-text">Phone: {builder.phone}</p>
 
-                                            {/* Star Rating System */}
+                                            
                                             <div className="rating-section">
                                                 <h6>Rate this Builder:</h6>
                                                 <div className="stars">
