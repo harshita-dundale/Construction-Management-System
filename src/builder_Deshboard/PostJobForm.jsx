@@ -8,10 +8,10 @@ function PostJobForm() {
   return (
     <div className="container ">
       <div className="row align-items-center">
-        {/* Form Section */}
+
         <div className="col-lg-6 mb-4 mb-lg-0">
           <div className="post-job pt-5">
-            {/* Back Button */}
+          
             <button
               className="btn btn-outline-primary mb-3"
               onClick={() => navigate(-1)}
@@ -111,7 +111,6 @@ function PostJobForm() {
             </form>
           </div>
         </div>
-        {/* Image Section */}
         <div className="col-lg-6 text-center">
           <img src={image1} className="img-fluid" alt="Responsive Job Post Illustration" />
         </div>
