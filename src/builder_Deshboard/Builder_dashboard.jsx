@@ -1,10 +1,10 @@
   import Cards2 from "../Components/cards/Cards2";
   import { useNavigate } from 'react-router-dom';
   import 'bootstrap/dist/css/bootstrap.min.css';
-  // import "./BuilderDashboard.css";
+ 
   import handshake from "../assets/images/icons/handshake.gif";
   import my5 from "../assets/images/icons/my5.gif";
-  // import checklist from "../assets/images/icons/checklist.gif";
+  
   import my4 from "../assets/images/icons/my4.gif";
   import Header from "../Components/Header";
   
