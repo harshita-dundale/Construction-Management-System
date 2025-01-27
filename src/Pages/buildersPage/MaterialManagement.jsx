@@ -13,7 +13,7 @@ const MaterialManagement = () => {
   const [materialUsage, setMaterialUsage] = useState({ name: "", quantityUsed: 0 });
   const [filter, setFilter] = useState("");
 
-  // Add new material
+
   const addMaterial = () => {
     if (newMaterial.name && newMaterial.quantity > 0 && newMaterial.unitPrice > 0) {
       setMaterials([
@@ -25,7 +25,6 @@ const MaterialManagement = () => {
   };
 
 
-  // Update material usage
   const updateUsage = () => {
     const updatedMaterials = materials.map((material) =>
       material.name === materialUsage.name
@@ -36,8 +35,7 @@ const MaterialManagement = () => {
     setMaterialUsage({ name: "", quantityUsed: 0 });
   };
 
-  // const deleteMaterial = (id) => {
-  // Filter materials by name
+ 
   const filteredMaterials = materials.filter((material) =>
     material.name.toLowerCase().includes(filter.toLowerCase())
   );
@@ -58,7 +56,6 @@ const MaterialManagement = () => {
           Material Management
         </h1>
 
-        {/* Add Material Form */}
         <div
           className="mb-4 p-4"
           style={{
@@ -119,7 +116,6 @@ const MaterialManagement = () => {
           </div>
         </div>
 
-        {/* Filter Section */}
         <div 
   className="mb-3 success" 
   style={{
@@ -186,7 +182,7 @@ const MaterialManagement = () => {
             </form>
           </div>
         </div>
-        {/* Material Table */}
+       
         <div
           className=" p-4 bg-light"
           style={{
