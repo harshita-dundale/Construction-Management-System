@@ -32,12 +32,8 @@
       buttonText: "Get Started",
       onClick: () => navigate("/HiredWorkers"),
     },
-    // {
-    //   imgSrc: checklist,
-    //   title: "Assign tasks",
-    //   text: "Analyze costs & profits detail for effective budgeting.",
-    //   buttonText: "Get Started",
-    // },
+
+    
   ];
  
    return (
