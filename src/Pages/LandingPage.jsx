@@ -135,7 +135,6 @@ function LandingPage() {
     </>
   )
 }
-
 export default LandingPage;
 
 // Page1 img -> "//www.zohowebstatic.com/sites/zweb/images/projects/construction/construction-illustration.png"

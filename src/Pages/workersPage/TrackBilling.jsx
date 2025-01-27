@@ -23,7 +23,7 @@ function TrackBilling(){
 
      <div className="container-fluid mt-5">
        <div className="row">
-        <div className="col-md-6">
+        <div className=" col-md-6">
           <Chart/>
         </div>
         <div className="col-md-6">
