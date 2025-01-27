@@ -1,15 +1,16 @@
   import Cards2 from "../Components/cards/Cards2";
   import { useNavigate } from 'react-router-dom';
   import 'bootstrap/dist/css/bootstrap.min.css';
-  // import "./BuilderDashboard.css";
+  import "./BuilderDashboard.css";
   import handshake from "../assets/images/icons/handshake.gif";
   import my5 from "../assets/images/icons/my5.gif";
-  // import checklist from "../assets/images/icons/checklist.gif";
+  import checklist from "../assets/images/icons/checklist.gif";
   import my4 from "../assets/images/icons/my4.gif";
   import Header from "../Components/Header";
   
  function Builder_dashboard() {
   const navigate = useNavigate();
+{/*  */}
   const cardData1 = [
     {
       imgSrc: my5,
@@ -27,17 +28,16 @@
     },
     {
       imgSrc: handshake,
-      title: "Hired Worker",
+      title: "Hire Worker",
       text: "Monitor construction materials to reduce wastage.",
       buttonText: "Get Started",
-      onClick: () => navigate("/HiredWorkers"),
     },
-    // {
-    //   imgSrc: checklist,
-    //   title: "Assign tasks",
-    //   text: "Analyze costs & profits detail for effective budgeting.",
-    //   buttonText: "Get Started",
-    // },
+    {
+      imgSrc: checklist,
+      title: "Assign tasks",
+      text: "Analyze costs & profits detail for effective budgeting.",
+      buttonText: "Get Started",
+    },
   ];
  
    return (
@@ -46,7 +46,7 @@
      <div className="container-fluid">
       
            <h1 className="text-center my-5">Builder Dashboard</h1>
-           <h5 className="text-center ">
+           <h5 className="text-center">
                Welcome to the Builder Dashboard! Manage your construction projects effectively.
             </h5>
             <div className="row g-3 px-2 my-4 justify-content-center">

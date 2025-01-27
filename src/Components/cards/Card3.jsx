@@ -11,7 +11,7 @@ function Card3({ application }) {
         </div>
         <div className=" col-md-6 d-flex justify-content-end align-items-center">
           {/*actions d-flex flex-column flex-sm-row justify-content-end  justify-content-between align-items-center  Buttons will stack vertically on small devices and be inline on larger screens */}
-          <button className="btn btn-success mb-2 mb-sm-0 me-sm-2">Accept</button>
+          <button className="btn btn-success mb-2 mb-sm-0 me-sm-2">Shortlist</button>
           <button className="btn btn-danger mb-2 mb-sm-0 me-sm-2"> Reject</button>
         </div>
       </div>

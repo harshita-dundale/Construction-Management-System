@@ -1,26 +1,18 @@
 import React from 'react';
 import './App.css';
-import image1 from '../assets/images/photos/image1.png'; 
+import image1 from '../assets/images/photos/image1.png'; // Ensure the path is correct
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from 'react-router-dom'; 
+
 function PostJobForm() {
-  const navigate = useNavigate();
   return (
-    <div className="container ">
+    <div className="container py-5 my-5">
       <div className="row align-items-center">
         {/* Form Section */}
-        <div className="col-lg-6 mb-4 mb-lg-0">
-          <div className="post-job pt-5">
-            {/* Back Button */}
-            <button
-              className="btn btn-outline-primary mb-3"
-              onClick={() => navigate(-1)}
-            >
-              <i className="bi bi-arrow-left"></i> Back
-            </button>
+        <div className="col-lg-6 mb-4 mb-lg-0  ">
+          <div className="post-job pt-5 ">
             <h1>Post a Job</h1>
             <form>
-              <div className="form-group mb-3">
+              <div className="form-group mb-3 ">
                 <label htmlFor="job-title">Job Title</label>
                 <input
                   type="text"
@@ -79,33 +71,6 @@ function PostJobForm() {
                   placeholder="Enter job location"
                 />
               </div>
-
-              <div className="form-group mb-3">
-                <label htmlFor="email">email</label>
-                <input
-                  type="text"
-                  id="email"
-                  name="email"
-                  className="form-control"
-                  placeholder="Enter youe email"
-                />
-              </div>
-
-              <div className="form-group mb-3">
-              <label htmlFor="phone-no">Phone Number</label>
-          <input
-                  type="tel"
-                  id="phone-no"
-                  name="phone-no"
-                  className="form-control"
-                  placeholder="Enter your phone number"
-                  pattern="\d{10}"
-                  maxLength="10"
-                  required
-                />
-                <small className="form-text text-muted">Phone number must be 10 digits.</small>
-              </div>
-
               <button type="submit" className="btn btn-primary me-2">Post Job</button>
               <button type="reset" className="btn btn-secondary">Reset Form</button>
             </form>
@@ -119,5 +84,5 @@ function PostJobForm() {
     </div>
   );
 }
-export default PostJobForm;
 
+export default PostJobForm;

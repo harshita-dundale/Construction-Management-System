@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Card3 from '../Components/cards/Card3';
-import Header from '../Components/Header';
+
 function ViewApplications() {
   const [applications] = useState([
     {
@@ -31,7 +31,13 @@ function ViewApplications() {
   return (
     <div>
       {/* Header Section */}
-     <Header/>
+      <header
+        className="text-center"
+        style={{backgroundColor: "#1a4654",  position: "fixed",color: "white", top: 0, left: 0,
+     width: "100%",zIndex: 1000,}}>
+        <h1 style={{ color: "white" }}>View Applications</h1>
+        <p>Applications for <strong>Builders & Workers</strong></p>
+      </header>
       {/* Container */}
       <div className="container" style={{ marginTop: '180px' }}> {/* Added margin-top to avoid overlap with header */}
         <div className="filters bg-white rounded shadow-sm p-4 mb-4">
@@ -41,7 +47,7 @@ function ViewApplications() {
               <label htmlFor="status" className="form-label">Status</label>
               <select id="status" className="form-select">
                 <option value="all">All</option>
-                <option value="shortlisted">Accepted</option>
+                <option value="shortlisted">Shortlisted</option>
                 <option value="rejected">Rejected</option>
                 <option value="under_review">Under Review</option>
               </select>
