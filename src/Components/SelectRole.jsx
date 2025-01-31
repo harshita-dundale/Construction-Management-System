@@ -2,7 +2,6 @@
 
 function SelectRole({ imgSrc, h1Text, pText, buttonText, onClick }) {
   return (
-      //        <div className="col-md-6 col-12 d-flex flex-column justify-content-between h-100">
     <div className="col-md-6 col-12 d-flex flex-column h-100">
       <div className="text-center">
         <img
@@ -16,7 +15,7 @@ function SelectRole({ imgSrc, h1Text, pText, buttonText, onClick }) {
       </div>
       <p className="fs-5 mt-3">{pText}</p>
       <button
-        className="btn btn-light rounded-pill align-self-center roleSelect-btn"
+        className="btn btn-light align-self-center roleSelect-btn"
         onClick={onClick}
       >
         {buttonText}

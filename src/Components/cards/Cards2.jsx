@@ -6,8 +6,8 @@ function Cards2({ imgSrc, title, text, buttonText }) {
         <div className="card-body text-center">
           <img src={imgSrc} className="rounded mb-3 icons" width="60" height="60" alt={title} />
           <h5 className={title}>{title}</h5>
-          <p className="card-text">{text}</p>
-          <button className="btn btn-light rounded-pill service-btns">{buttonText} </button>
+          <p className="card-text py-2 px-2">{text}</p>
+          <button className="btn btn-light service-btns">{buttonText} </button>
         </div>
       </div>
     </div>

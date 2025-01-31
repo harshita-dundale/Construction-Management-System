@@ -4,6 +4,8 @@ import roleReducer from "./RoleSlice";
 import usersReducer from "./UsersSlice";
 import appliModelReducer from './AppliModelSlice'
 import appTabsReducer from "./AppliTabsSlice";
+import attendanceReducer from "./AttendanceSlice";
+
 const store = configureStore({
   reducer: {
     builderWorker: builderWorkerReducer,
@@ -11,6 +13,7 @@ const store = configureStore({
     users: usersReducer,
     applicationsModel : appliModelReducer,
     appTabs: appTabsReducer,
+    attendance: attendanceReducer,
   },
 });
 

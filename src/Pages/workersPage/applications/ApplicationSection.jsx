@@ -19,19 +19,13 @@ const ApplicationSection = () => {
   return (
     <div>
       <Header/>
-    <div className="container mt-5">
-      <h3 className="mb-3">Applications</h3>
+    <div className="container mt-5 pt-5">
+      {/* <h3 className="mb-3">Applications</h3> */}
       <ApplicationTabs />
       <div className="table-responsive">
         <ApplicationTable onViewDetails={handleViewDetails} activeTab={activeTab}/>
       </div>
-      {showModal && <JobDetailsModal />}      {/* {currentJob && (
-        <JobDetailsModal
-          show={showModal}
-          onClose={() => dispatch(setShowModal(false))}
-          jobDetails={currentJob}
-        />
-      )} */}
+      {showModal && <JobDetailsModal />}    
     </div>
     </div>
   );

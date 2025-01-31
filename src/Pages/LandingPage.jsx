@@ -22,7 +22,7 @@ function LandingPage() {
   return (
     <>
       <Header />
-      <section className="container mb-5" style={{ marginTop: "100px" }}>
+      <section className="container mb-5" style={{ marginTop: "100px" }} id="home-section">
         <div className="row align-items-center">
           <div className="col-md-6 col-12 text-center text-md-start">
             <h1 style={{ color: "#f58800" }}>Builders and workers Collaboration</h1>
@@ -31,7 +31,7 @@ function LandingPage() {
             </p>
             <button
               onClick={handleSeeMore}
-              className="btn btn-light rounded-pill mt-3"
+              className="btn btn-light mt-3"
               id="see-more-btn"
             >
               see more
@@ -49,7 +49,7 @@ function LandingPage() {
         </div>
       </section>
 
-      <div className="container-fluid">
+      <div className="container-fluid" id="services-section">
         <h1 className="text-center my-7">Services</h1>
         <div className="page2" style={{ paddingBottom: "64px" }}>
           <div className="text-center row ">

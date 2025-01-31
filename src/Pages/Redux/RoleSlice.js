@@ -8,7 +8,7 @@ const initialState = {
       imgSrc: role1,
       h1Text: "Builder",
       pText:
-        "Choose the Builder role to streamline construction, assign tasks, and ensure project success—your key to find skilled workers!",
+        "Choose the Builder role to streamline construction, assign tasks, and ensure project success-your key to find skilled workers!",
       buttonText: "Submit",
       route: "/builder-page",
     },
