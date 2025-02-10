@@ -1,3 +1,4 @@
+
 import { useSelector } from "react-redux";
 import Cards1 from "../Components/cards/Cards1";
 import Cards2 from "../Components/cards/Cards2";
@@ -23,12 +24,13 @@ function LandingPage() {
     <>
       <Header />
       <section className="container mb-5" style={{ marginTop: "100px" }} id="home-section">
-        <div className="row align-items-center">
-          <div className="col-md-6 col-12 text-center text-md-start">
-            <h1 style={{ color: "#f58800" }}>Builders and workers Collaboration</h1>
-            <p className="align-items-end mt-5 fs-5">
+        <div className="row d-flex align-items-center">
+          <div className="col-md-6 col-12">
+            <h1 style={{ color: "#f58800" }} className="text-center text-md-start mt-3 mt-md-0">Builders and workers Collaboration</h1>
+            <p className="mt-5 fs-5 text-center text-md-start">
               Welcome to our Builder-Worker Management Platform, where construction meets efficiency, our platform is here to help you succeed.
             </p>
+            <div className="d-flex justify-content-center justify-content-md-start">
             <button
               onClick={handleSeeMore}
               className="btn btn-light mt-3"
@@ -36,6 +38,7 @@ function LandingPage() {
             >
               see more
             </button>
+            </div>
           </div>
           <div className="col-md-6 col-12 text-center mt-4 mt-md-0">
             <img

@@ -12,7 +12,6 @@ function FilterBuilders({ filterLocation, setFilterLocation, sortOption, setSort
           onChange={(e) => setFilterLocation(e.target.value)}
         />
       </div>
-
       {/* Sort Options */}
       <div className="col-md-6 d-flex justify-content-center">
         <select
