@@ -61,7 +61,7 @@ function PostJobForm() {
                 />
               </div>
               
-              <div className="form-group mb-3">
+              {/* <div className="form-group mb-3">
                 <label htmlFor="skills-required" style={{ fontWeight: "bold" }}>Skills Required</label>
                 <select
                   id="skills-required"
@@ -75,7 +75,7 @@ function PostJobForm() {
                   <option value="carpentry">Carpentry</option>
                   <option value="electrician">Electrician</option>
                 </select>
-              </div>
+              </div> */}
               
               <div className="form-group mb-3">
                 <label htmlFor="daily-payment" style={{ fontWeight: "bold" }}>Daily Payment</label>
@@ -133,7 +133,7 @@ function PostJobForm() {
                 />
               </div>
               
-              <div className="form-group mb-3">
+              {/* <div className="form-group mb-3">
                 <label htmlFor="email" style={{ fontWeight: "bold" }}>Email</label>
                 <input
                   type="text"
@@ -145,7 +145,7 @@ function PostJobForm() {
                   value={postJob.email}
                   onChange={(e) => dispatch(setEmail(e.target.value))}
                 />
-              </div>
+              </div> */}
               
               <div className="form-group mb-3">
                 <label htmlFor="phone-no" style={{ fontWeight: "bold" }}>Phone Number</label>

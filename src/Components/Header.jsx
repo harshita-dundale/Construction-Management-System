@@ -201,6 +201,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 function Header() {
     const navigate = useNavigate();
     const location = useLocation();
+   // console.log("Current Path:", location.pathname);
     const [activeSection, setActiveSection] = useState("");
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
@@ -250,13 +251,19 @@ function Header() {
         }
     };
 
-    // Check for Worker/Builder pages
-    const isWorkerPage = location.pathname === "/browse-Job" || location.pathname === "/Track-Billing"
-        || location.pathname === "/applications" || location.pathname === "/attendances";
+    const currentPath = location.pathname.toLowerCase();
 
-    const isBuilderPage = location.pathname === "/Builder-Dashboard" || location.pathname === "/MaterialManagement"
-        || location.pathname === "/ProfitAndCostAnalysis" || location.pathname === "/Dashboard"
-        || location.pathname === "/ViewApplications" || location.pathname === "/HiredWorkers";
+const isWorkerPage = ["/browse-job", "/track-billing", "/applications", "/attendances"].includes(currentPath);
+const isBuilderPage = ["/builder-dashboard", "/materialmanagement", "/profitandcostanalysis", "/dashboard", "/viewapplications", "/hiredworkers"].includes(currentPath);
+
+
+    // Check for Worker/Builder pages
+    // const isWorkerPage = location.pathname === "/browse-Job" || location.pathname === "/Track-Billing"
+    //     || location.pathname === "/applications" || location.pathname === "/attendances";
+
+    // const isBuilderPage = location.pathname === "/Builder-Dashboard" || location.pathname === "/MaterialManagement"
+    //     || location.pathname === "/ProfitAndCostAnalysis" || location.pathname === "/Dashboard"
+    //     || location.pathname === "/ViewApplications" || location.pathname === "/HiredWorkers";
 
     return (
         <header style={{ backgroundColor: "#1a4654", position: "fixed", top: 0, width: "100%", zIndex: 1000 }}>
