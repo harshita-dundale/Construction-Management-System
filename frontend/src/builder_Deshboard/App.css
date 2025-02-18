@@ -1,7 +1,7 @@
-/* .post-job {
+.post-job {
   padding-left: 10%;
   padding-right: 10%;
-  margin-top: 0%;
+  margin-top: 10%;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #d6e6e9;
@@ -24,4 +24,4 @@ button {
 
 button[type="reset"] {
   background-color: #f44336;
-} */
+}

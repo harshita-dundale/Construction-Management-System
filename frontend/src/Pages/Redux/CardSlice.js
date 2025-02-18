@@ -36,7 +36,7 @@ const initialState = {
   cardWorker: [
     {
       imgSrc: worker1,
-      title: "Browse and Apply for job",
+      title: "Browse & Apply",
       text: "Explore available projects and apply to the ones that match your skills and expertise.",
       buttonText: "Get start",
     },
