@@ -1,0 +1,115 @@
+.main-content {
+	margin-left: 250px; 
+	padding: 20px; 
+	transition: margin-left 0.3s ease; 
+}
+  .sidebar:not(.open) ~ .main-content {
+	margin-left: 0; 
+  }
+  @media (max-width: 767px) {
+	.main-content {
+	  margin-left: 0; 
+	}
+  }
+.card-flip {
+	position: relative;
+	width: 100%;
+	perspective: 1000px;
+  }
+  .card-flip .card-front,
+  .card-flip .card-back {
+	position: absolute;
+	width: 100%;
+	backface-visibility: hidden;
+	transition: transform 0.6s;
+  }
+  
+  .card-flip .card-front {
+	z-index: 2;
+	transform: rotateY(0deg);
+  }
+  
+  .card-flip .card-back {
+	transform: rotateY(180deg);
+  }
+  
+  .card-flip.is-flipped .card-front {
+	transform: rotateY(-180deg);
+  }
+  
+  .card-flip.is-flipped .card-back {
+	transform: rotateY(0deg);
+  }
+/* Hover Effect for Larger Screens */
+/* @media (hover: hover) and (pointer: fine) {
+	.card-flip:hover .card-front {
+	  transform: rotateY(-180deg);
+	}
+  
+	.card-flip:hover .card-back {
+	  transform: rotateY(0deg);
+	}
+  } */
+  
+  /* Flip on Touch for Mobile Devices */
+  /* @media (hover: none) and (pointer: coarse) {
+	.card-flip:active .card-front {
+	  transform: rotateY(-180deg);
+	}
+  
+	.card-flip:active .card-back {
+	  transform: rotateY(0deg);
+	}
+  } */
+    .row.g-4 {
+	row-gap: 22rem !important;
+  }
+  
+  .card {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	overflow: hidden;
+  }
+  .seeMore {
+	/* background: #266867; */
+	background: #051821;
+	color: #fff;
+	cursor: pointer;
+	bottom: 0;
+	box-shadow: 0 10px 10px hsl(225, 100%, 94%);
+}
+/* Star Rating */
+.stars{
+	font-size: 20px;
+	color: gray;
+	cursor: pointer;
+  }
+  .checked {
+	color: gold;
+  }
+  
+  .rating-section h6 {
+	margin-top: 10px;
+  }
+  
+  .average-rating {
+	font-size: 14px;
+	color: #333;
+  }
+  
+  .sort-input {
+	width: 90%; 
+	height: 45px; 
+	border-radius: 25px; 
+	border: 1px solid #ced4da; 
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+	border-color: #007bff; 
+	padding: 10px; 
+  }
+  
+  .sort-input:focus {
+	outline: none;
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+	border-color: #007bff; 
+  }
+  
