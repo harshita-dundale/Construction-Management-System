@@ -1,87 +1,68 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from '../../Components/Header';
+import { useSelector, useDispatch } from "react-redux";
+import { toggleAttendance, processPayments } from "../../Pages/Redux/workerSlice";
+import Header from "../../Components/Header";
+// import "./Dashboard.css"; 
 
 function Dashboard() {
-  const [workers, setWorkers] = useState([
-    { id: 1, name: 'John Doe', present: false, dailyWage: 500, daysWorked: 0 },
-    { id: 2, name: 'Jane Smith', present: false, dailyWage: 600, daysWorked: 0 },
-    { id: 3, name: 'Michael Brown', present: false, dailyWage: 550, daysWorked: 0 },
-    { id: 4, name: 'Amli Sek', present: false, dailyWage: 550, daysWorked: 0 },
-  ]);
-
-  const [totalDays, setTotalDays] = useState(0);
-
-  const handleAttendanceToggle = (id) => {
-    setWorkers((prevWorkers) =>
-      prevWorkers.map((worker) =>
-        worker.id === id ? { ...worker, present: !worker.present } : worker
-      )
-    );
-  };
-
-  const calculatePayments = () => {
-    setTotalDays((prevDays) => prevDays + 1);
-    setWorkers((prevWorkers) =>
-      prevWorkers.map((worker) => {
-        const daysWorked = worker.present ? worker.daysWorked + 1 : worker.daysWorked;
-        return {
-          ...worker,
-          daysWorked,
-          payment: daysWorked * worker.dailyWage,
-          present: false, // Reset attendance for the next day
-        };
-      })
-    );
-  };
+  const dispatch = useDispatch();
+  const workers = useSelector((state) => state.workers.workers);
+  const totalDays = useSelector((state) => state.workers.totalDays);
 
   return (
     <>
       <Header />
       <div className="container mt-5">
-        <h1 className="mb-4 text-center" style={{ marginTop: '7rem' }}>
-          Worker Attendance and Payment
+        <h1 className="mb-5 text-center" style={{ marginTop: "7rem" }}>
+          Worker Attendance & Payment
         </h1>
-        <div className="table-responsive">
-          <table className="table table-striped">
-            <thead>
+        {/* shadow-lg p-3 mb-5 bg-white rounded */}
+        <div className="table-responsive shadow">
+          <table className="table table-striped table-hover text-center border rounded">
+            <thead className="customTh table-dark"  style={{ backgroundColor: "#f58800", color: "white" }}>
               <tr>
                 <th>#</th>
                 <th>Worker Name</th>
-                <th>Daily Wage</th>
+                <th>Daily Wage (₹)</th>
                 <th>Present</th>
                 <th>Days Worked</th>
-                <th>Total Payment</th>
+                <th>Total Payment (₹)</th>
               </tr>
             </thead>
             <tbody>
               {workers.map((worker) => (
-                <tr key={worker.id}>
+                <tr key={worker.id} className="align-middle">
                   <td>{worker.id}</td>
-                  <td>{worker.name}</td>
-                  <td>{worker.dailyWage}</td>
+                  <td >{worker.name}</td>
+                  <td >₹{worker.dailyWage}</td>
                   <td>
                     <input
                       type="checkbox"
+                      className="form-check-input"
                       checked={worker.present}
-                      onChange={() => handleAttendanceToggle(worker.id)}
+                      onChange={() => dispatch(toggleAttendance(worker.id))}
                     />
                   </td>
-                  <td>{worker.daysWorked}</td>
-                  <td>{worker.payment || 0}</td>
+                  <td >{worker.daysWorked}</td>
+                  <td>₹{worker.payment || 0}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <div className="d-flex justify-content-between align-items-center">
-          <button className="btn btn-primary" onClick={calculatePayments}>
+        <div className="d-flex justify-content-between align-items-center mt-4 p-3 bg-light rounded shadow-sm border">
+          <h5 className="m-0">Total Workdays: <strong className="text-primary">{totalDays}</strong></h5>
+          <button 
+          className="btn btn-light align-self-center px-4 py-2 fw-bold pay-btn"
+          style={{color:"white"}}
+          onMouseEnter={(e) => (e.target.style.backgroundColor = "var(--secondary-color)")}
+           onMouseLeave={(e) => (e.target.style.backgroundColor = "var(--primary-color)")}
+           onClick={() => dispatch(processPayments())}>
             Process Payments
           </button>
-          <h5>Total Workdays: {totalDays}</h5>
         </div>
       </div>
     </>
   );
 }
+
 export default Dashboard;

@@ -6,9 +6,7 @@ body, html {
     padding: 0;
     cursor: pointer;
 }
-.navbar-nav .nav-item :hover{
-    text-decoration: underline;
-}
+
 .navbar-nav .btn {
     margin: 0 auto; 
 }
@@ -27,4 +25,9 @@ body, html {
         padding: 10px;
         text-align: center;
     }
+}
+.nav-link.active {
+    color: #fff !important;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
 }
