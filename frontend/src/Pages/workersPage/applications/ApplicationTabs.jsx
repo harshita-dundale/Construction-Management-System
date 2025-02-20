@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from '../../Redux/AppliModelSlice';
 import { setActiveTab } from '../../Redux/AppliTabsSlice';
 import { FaTasks, FaClock, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-import './ApplicationTabs.css'
 
 const ApplicationTabs = () => {
   const dispatch = useDispatch();
@@ -23,7 +22,7 @@ const ApplicationTabs = () => {
   return (
     <ul className="nav nav-tabs mt-3">
       {tabs.map((tab) => (
-        <li className="nav-item appliNav" key={tab.name}>
+        <li className="nav-item" key={tab.name}>
           <button
             className={`nav-link d-flex align-items-center gap-2 ${activeTab === tab.name ? 'active' : ''}`}
             onClick={() => handleTabClick(tab.name)}
@@ -38,3 +37,4 @@ const ApplicationTabs = () => {
 };
 
 export default ApplicationTabs;
+

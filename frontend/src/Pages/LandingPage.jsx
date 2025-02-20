@@ -1,4 +1,3 @@
-
 import { useSelector } from "react-redux";
 import Cards1 from "../Components/cards/Cards1";
 import Cards2 from "../Components/cards/Cards2";
@@ -23,22 +22,20 @@ function LandingPage() {
   return (
     <>
       <Header />
-      <section className="container mb-5" style={{ marginTop: "100px" }} id="home-section">
-        <div className="row d-flex align-items-center">
-          <div className="col-md-6 col-12">
-            <h1 style={{ color: "#f58800" }} className="text-center text-md-start mt-3 mt-md-0">Builders and workers Collaboration</h1>
-            <p className="mt-5 fs-5 text-center text-md-start">
+      <section className="container mb-5" style={{ marginTop: "100px" }}>
+        <div className="row align-items-center">
+          <div className="col-md-6 col-12 text-center text-md-start">
+            <h1 style={{ color: "#f58800" }}>Builders and workers Collaboration</h1>
+            <p className="align-items-end mt-5 fs-5">
               Welcome to our Builder-Worker Management Platform, where construction meets efficiency, our platform is here to help you succeed.
             </p>
-            <div className="d-flex justify-content-center justify-content-md-start">
             <button
               onClick={handleSeeMore}
-              className="btn btn-light mt-3"
+              className="btn btn-light rounded-pill mt-3"
               id="see-more-btn"
             >
               see more
             </button>
-            </div>
           </div>
           <div className="col-md-6 col-12 text-center mt-4 mt-md-0">
             <img
@@ -52,7 +49,7 @@ function LandingPage() {
         </div>
       </section>
 
-      <div className="container-fluid" id="services-section">
+      <div className="container-fluid">
         <h1 className="text-center my-7">Services</h1>
         <div className="page2" style={{ paddingBottom: "64px" }}>
           <div className="text-center row ">

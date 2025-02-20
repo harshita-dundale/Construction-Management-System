@@ -84,10 +84,4 @@ export const {
   applyFilters,
 } = UsersSlice.actions;
 
-// export const fetchJobs = createAsyncThunk("jobs/fetchJobs", async () => {
-//   const response = await fetch("YOUR_API_URL/api/jobs");
-//   const data = await response.json();
-//   return data;
-// });
- 
 export default UsersSlice.reducer;

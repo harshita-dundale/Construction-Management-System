@@ -1,10 +1,13 @@
-/* .containerTable {
+.containerTable {
     margin-top: 20px;
+    /* background-color: #ffffff; */
+    /* border: 1px solid #e5e7eb; */
     border-radius: 8px;
     padding: 20px;
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
     max-width: 600px;
     margin: 20px auto;
-  } */
+  }
   
   .tableHistory {
     width: 100%;
@@ -15,12 +18,14 @@
   }
   
   .header-row {
-    background-color: #f49929;
+    /* background-color: #1f2937; */
+    background-color: #266867;
     color: #ffffff;
   }
   
   .header-cell {
-    /* padding: 15px; */
+    padding: 15px;
+    text-align: left;
     font-size: 17px;
     font-weight: 600;
     border-bottom: 2px solid #e5e7eb;
@@ -32,7 +37,8 @@
   }
   
   .cell {
-    /* font-size: 15px; */
+    padding: 15px;
+    font-size: 15px;
     color: #374f51;
   }
   

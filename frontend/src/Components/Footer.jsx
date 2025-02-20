@@ -61,15 +61,19 @@ function Footer() {
             <h5>Stay Connected :</h5>
             <a href="https://facebook.com" className="me-3">
             <FontAwesomeIcon icon={faFacebook} style={{height:"1.8vw", color:"white"}}/>   
+            {/* <FontAwesomeIcon icon="fa-brands fa-facebook" />*/}
             </a>
             <a href="https://twitter.com" className="me-3">
             <FontAwesomeIcon icon={faTwitter} style={{height:"1.8vw", color:"white"}}/>
+            {/* <FontAwesomeIcon icon="fa-brands fa-square-twitter" />  */}
             </a>
             <a href="https://linkedin.com" className="me-3"> 
             <FontAwesomeIcon icon={faLinkedin} style={{height:"1.8vw", color:"white"}}/>
+            {/* <FontAwesomeIcon icon="fa-brands fa-linkedin" />  */}
             </a>
             <a href="https://instagram.com">
               <FontAwesomeIcon icon={faInstagram} style={{height:"1.8vw", color:"white"}} /> 
+            {/* <FontAwesomeIcon icon="fa-brands fa-instagram" />  */}
             </a>
           </div>
           <div className="text-center mt-4">

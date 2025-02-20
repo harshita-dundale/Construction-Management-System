@@ -6,9 +6,6 @@
   --text-color: white;
   --hover-text-color: #3b9a89;
 }
-*{
-  font-family: sans-serif;
-}
 .info-btn {
   height: 2.2rem;
   width: 4.8rem;

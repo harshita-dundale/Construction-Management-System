@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.3.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.1",
     "@fortawesome/free-brands-svg-icons": "^6.7.1",
     "@fortawesome/free-regular-svg-icons": "^6.7.1",
@@ -23,7 +22,7 @@
     "@syncfusion/ej2-react-charts": "^28.1.36",
     "@tanstack/react-table": "^8.20.6",
     "@types/react-table": "^7.7.20",
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.0.1",
     "chart.js": "^4.4.7",
     "font-awesome": "^4.7.0",
     "formik": "^2.4.6",
