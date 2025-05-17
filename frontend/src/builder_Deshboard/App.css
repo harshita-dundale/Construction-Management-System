@@ -25,3 +25,20 @@ button {
 button[type="reset"] {
   background-color: #f44336;
 }
+
+
+.react-datepicker {
+  font-family: 'Poppins', sans-serif;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.react-datepicker__header {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.react-datepicker__day--selected {
+  background-color: var(--secondary-color);
+  color: white;
+}

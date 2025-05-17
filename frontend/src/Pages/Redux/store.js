@@ -12,8 +12,6 @@ import materialReducer from "./MaterialSlice";
 import financeReducer from "./FinanceSlice";
 import workerReducer from "./workerSlice";
 import attendanceReducer from "./AttendanceSlice";
-import projectReducer from "./projectSlice";
-
 
 const store = configureStore({
   reducer: {
@@ -30,7 +28,6 @@ const store = configureStore({
     finance: financeReducer,
     workers: workerReducer,
     attendance: attendanceReducer,
-    project: projectReducer,
   },
 });
 export default store;
