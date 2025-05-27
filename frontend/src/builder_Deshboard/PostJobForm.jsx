@@ -34,6 +34,7 @@ function PostJobForm() {
     formData.append("endDate", postJob.endDate);
     formData.append("location", postJob.location);
     formData.append("PhoneNo", postJob.phoneNo);
+    formData.append("Email", postJob.email);
     if (selectedImage) {
       formData.append("image", selectedImage);
     }
@@ -139,6 +140,16 @@ function PostJobForm() {
                   placeholder="Enter location"
                   value={postJob.location}
                   onChange={(e) => dispatch(setLocation(e.target.value))}
+                />
+              </div>
+              <div className="form-group mb-3">
+                <label style={{ fontWeight: "bold" }}>Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Enter email"
+                  value={postJob.email}
+                  onChange={(e) => dispatch(setEmail(e.target.value))}
                 />
               </div>
               <div className="form-group mb-3">
