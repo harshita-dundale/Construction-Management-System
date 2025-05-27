@@ -15,7 +15,7 @@ const UsersSlice = createSlice({
     sortOption: "none",
     ratings: {},
     flippedCards: [],
-    status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+    status: "idle", 
     error: null,
   },
   reducers: {
@@ -67,7 +67,7 @@ const UsersSlice = createSlice({
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.users = action.payload;
-        state.filteredUsers = action.payload; // Default filtered list
+        state.filteredUsers = action.payload; 
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.status = "failed";

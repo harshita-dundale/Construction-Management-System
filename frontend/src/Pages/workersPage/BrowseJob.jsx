@@ -1,85 +1,66 @@
-
-import { useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchUsers, setRatings, setFilterLocation, setSortOption, toggleCardFlip, applyFilters,
-} from "../Redux/UsersSlice";
+import { useEffect, useState } from "react";
 import Header from "../../Components/Header";
-import FilterBuilders from "../../Components/FilterBuilders";
 import "./BrowseJob.css";
 
 function BrowseJob() {
-
-  const dispatch = useDispatch();
-  const { filteredUsers, ratings, flippedCards, filterLocation, sortOption, status,
-  } = useSelector((state) => state.users);
+  const [jobs, setJobs] = useState([]);
+  const [flippedCards, setFlippedCards] = useState([]);
 
   useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchUsers());
-    }
-  }, [status, dispatch]);
+    fetch("http://localhost:5000/api/jobs")
+      .then((res) => res.json())
+      .then((data) => setJobs(data))
+      .catch((err) => console.error("Error fetching jobs:", err));
+  }, []);
 
-  useEffect(() => {
-    dispatch(applyFilters());
-  }, [filterLocation, sortOption, ratings, dispatch]);
+  const toggleCardFlip = (id) => {
+    setFlippedCards((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
 
   return (
     <div>
       <Header />
 
       <div className="container" style={{ marginTop: "100px" }}>
-        {/* Header Content */}
         <div className="row text-center d-flex justify-content-center">
           <h1 className="mt-2" style={{ color: "#051821" }}>
-            Our Best Builders
+            Latest Job Listings
           </h1>
           <p className="fs-5 pt-3 col-md-8">
-            Welcome to ConstrucHub! Join our skilled team for diverse
-            construction projects with fair pay, supportive leadership, and
-            growth opportunities. Apply now and help us build excellence!
+            Explore open positions and apply for suitable construction jobs near you.
           </p>
         </div>
 
-        {/* Filter and Sort */}
-        <FilterBuilders
-          filterLocation={filterLocation}
-          setFilterLocation={(value) => dispatch(setFilterLocation(value))}
-          sortOption={sortOption}
-          setSortOption={(value) => dispatch(setSortOption(value))}
-        />
-
-        {/* Builders Cards */}
         <div className="row g-4 d-flex justify-content-center">
-          {filteredUsers.map((builder, index) => (
+          {jobs.map((job) => (
             <div
               className="col-md-4 col-sm-6 d-flex align-items-stretch"
-              key={index}
+              key={job._id}
             >
               <div
-                className={`card-flip h-100 ${flippedCards.includes(builder.login.uuid) ? "is-flipped" : ""
-                  }`}
+                className={`card-flip h-100 ${
+                  flippedCards.includes(job._id) ? "is-flipped" : ""
+                }`}
               >
-                {/* Card Front */}
+              
                 <div className="card-front">
                   <div className="card text-center h-100">
                     <div className="card-body" style={{ background: "#e2ecea" }}>
                       <img
-                        src={builder.picture.large}
-                        alt={builder.name.first}
+                        src={`http://localhost:5000/uploads/${job.image}`}
+                        alt={job.title}
                         className="rounded-circle mb-3"
-                        style={{ width: "100px", height: "100px" }}
+                        style={{ width: "100px", height: "100px", objectFit: "cover" }}
                       />
-                      <h5 className="card-title">
-                        {builder.name.first} {builder.name.last}
-                      </h5>
-                      <p className="card-text">Phone: {builder.phone}</p>
-                      <p className="card-text">Daily Payment: 400rs</p>
+                      <h5 className="card-title">{job.title}</h5>
+                      <p className="card-text">{job.location}</p>
+                      <p className="card-text">{job.salary} / day</p>
+                      <p className="card-text">{job.Email}</p>
                       <button
                         className="seeMore btn btn-dark mt-auto"
-                        onClick={() =>
-                          dispatch(toggleCardFlip(builder.login.uuid))
-                        }
+                        onClick={() => toggleCardFlip(job._id)}
                       >
                         See More
                       </button>
@@ -91,36 +72,28 @@ function BrowseJob() {
                 <div className="card-back">
                   <div className="card text-center h-100">
                     <div className="card-body" style={{ background: "#e2ecea" }}>
-                      <div className="mt-auto text-dark"
+                     
+                        
+                          <div className="mt-auto text-dark"
                         style={{ height: "30px", width: "40px", color: "black", cursor: "pointer" }}
-                        onClick={() => dispatch(toggleCardFlip(builder.login.uuid))}>
+                        onClick={() => toggleCardFlip(job._id)}
+                      >
+                         Back
+                      </div>
+{/* 
+                          <div className="mt-auto text-dark"
+                        style={{ height: "30px", width: "40px", color: "black", cursor: "pointer" }} */}
+                        {/* onClick={() => dispatch(toggleCardFlip(builder.login.uuid))}>
                         Back
-                      </div>
-                      <h5 className="card-title">
-                        Location: {builder.location.city},{" "}
-                        {builder.location.country}
-                      </h5>
-                      <p className="card-text">{builder.email}</p>
-                      <p className="card-text text-muted">Start: 02-04-2025</p>
-                      <p className="card-text text-muted">End: 17-04-2025</p>
-                      <div >
-                        {[...Array(5)].map((_, starIndex) => (
-                          <i
-                            key={starIndex}
-                            className={`fa fa-star stars ${ratings[builder.login.uuid] > starIndex ? "checked" : ""
-                              }`}
-                            onClick={() =>
-                              dispatch(
-                                setRatings({
-                                  builderId: builder.login.uuid,
-                                  rating: starIndex + 1,
-                                })
-                              )
-                            }
-                          />
-                        ))}
-                      </div>
-                      <button className="seeMore btn btn-dark mt-3"> Apply now
+                      </div> */}
+
+
+                      <h5 className="card-title"> {job.PhoneNo}</h5>
+                      <p className="card-text text-muted">
+                         {job.startDate} to {job.endDate}
+                      </p>
+                      <button className="seeMore btn btn-dark mt-3">
+                        Apply Now
                       </button>
                     </div>
                   </div>
@@ -128,6 +101,12 @@ function BrowseJob() {
               </div>
             </div>
           ))}
+
+          {jobs.length === 0 && (
+            <div className="text-center mt-5">
+              <p>No jobs available at the moment.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -135,3 +114,4 @@ function BrowseJob() {
 }
 
 export default BrowseJob;
+

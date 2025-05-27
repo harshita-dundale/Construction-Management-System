@@ -48,24 +48,24 @@ function PostJobForm() {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("❌ Server responded with error:", errorText);
+        console.error(" Server responded with error:", errorText);
         alert("Server error. Check console for details.");
         return;
       }
 
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
-        console.log("✅ Job posted:", data);
+        console.log("Job posted:", data);
         dispatch(resetForm());
         alert("Job Posted Successfully!");
       } else {
         const text = await response.text();
-        console.warn("⚠️ Response is not JSON:", text);
+        console.warn(" Response is not JSON:", text);
         alert("Unexpected response format from server.");
       }
 
     } catch (error) {
-      console.error("❌ Error:", error);
+      console.error("Error:", error);
       alert("Failed to post job. Server might be down.");
     }
   };
@@ -114,7 +114,7 @@ function PostJobForm() {
               <div className="form-group mb-3">
                 <label style={{ fontWeight: "bold" }}>Start Date</label>
                 <input
-                  type="date" // ✅ calendar input
+                  type="date"
                   className="form-control"
                   value={postJob.startDate}
                   onChange={(e) => dispatch(setStartDate(e.target.value))}
@@ -124,7 +124,7 @@ function PostJobForm() {
               <div className="form-group mb-3">
                 <label style={{ fontWeight: "bold" }}>End Date</label>
                 <input
-                  type="date" // ✅ calendar input
+                  type="date"
                   className="form-control"
                   value={postJob.endDate}
                   onChange={(e) => dispatch(setEndDate(e.target.value))}
