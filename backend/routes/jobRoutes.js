@@ -1,13 +1,9 @@
 
-
 import express from "express";
 import multer from "multer";
 import path from "path";
 import Job from "../models/job.js";
-
 const router = express.Router();
-
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -20,18 +16,17 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
 router.post("/", upload.single("image"), async (req, res) => {
   try {
-    const { title, salary, startDate, endDate, location, PhoneNo } = req.body;
+    const { title, salary, startDate, endDate, location, Email, PhoneNo } = req.body;
     const imagePath = req.file ? req.file.filename : null;
-
     const newJob = new Job({
       title,
       salary,
       startDate,
       endDate,
       location,
+      Email,
       PhoneNo,
       image: imagePath,
     });
@@ -47,7 +42,7 @@ router.post("/", upload.single("image"), async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const jobs = await Job.find().sort({ createdAt: -1 }); // latest jobs first
+    const jobs = await Job.find().sort({ createdAt: -1 }); 
     res.status(200).json(jobs);
   } catch (error) {
     console.error(" Error fetching jobs:", error);

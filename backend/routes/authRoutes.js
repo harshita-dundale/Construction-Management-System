@@ -18,17 +18,12 @@ router.post('/set-role', async (req, res) => {
             user = new User({ auth0Id, name, email, role });
             await user.save();
         } else {
-          //  try {
+
                 await User.findOneAndUpdate(
                   {auth0Id}, 
                   {  email , name, role },
                   { new: true, upsert: true }
                 );
-                // await User.findOneAndUpdate(
-                //     { auth0Id }, 
-                //     { $set: { name, email, role } },
-                //     { new: true, upsert: true }
-                //  );                 
         }
         res.json({ message: "Role updated successfully!" });
 
@@ -48,7 +43,7 @@ router.get("/get-role", async (req, res) => {
         if (!user) return res.status(404).json({ role: null });
     
         res.json({ role: user.role });
-    } catch (error) {  // 🛠️ Yeh pehle err tha, ise error kar diya
+    } catch (error) {  
         console.error("Error fetching role:", error);
         res.status(500).json({ message: "Error fetching user", error });
     }
@@ -56,12 +51,12 @@ router.get("/get-role", async (req, res) => {
 
 router.get('/api/get-user/:email', async (req, res) => {
     const email = req.params.email;
-    console.log("📩 Fetching user for email:", email); 
+    console.log("Fetching user for email:", email); 
 
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            console.log(`❌ No user found for email: ${email}`);  
+            console.log(` No user found for email: ${email}`);  
             return res.status(404).json({ error: 'User not found' });
         }
 

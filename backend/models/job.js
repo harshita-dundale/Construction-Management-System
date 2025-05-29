@@ -30,6 +30,12 @@ const jobSchema = new mongoose.Schema({
   startDate: String,
   endDate: String,
   location: String,
+  Email: String,
+  // builderId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "User",
+  //   required: true,
+  // },
   PhoneNo: String,
   image: String, // new field
 });

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../Components/Header";
+import defaultImage from "../../assets/images/photos/Default.jpg"; 
 import "./BrowseJob.css";
 
 function BrowseJob() {
@@ -44,20 +45,24 @@ function BrowseJob() {
                   flippedCards.includes(job._id) ? "is-flipped" : ""
                 }`}
               >
-              
+                {/* Card Front */}
                 <div className="card-front">
                   <div className="card text-center h-100">
                     <div className="card-body" style={{ background: "#e2ecea" }}>
                       <img
-                        src={`http://localhost:5000/uploads/${job.image}`}
+                        src={
+                          job.image
+                            ? `http://localhost:5000/uploads/${job.image}`
+                            : defaultImage
+                        }
                         alt={job.title}
                         className="rounded-circle mb-3"
                         style={{ width: "100px", height: "100px", objectFit: "cover" }}
                       />
                       <h5 className="card-title">{job.title}</h5>
-                      <p className="card-text">{job.location}</p>
-                      <p className="card-text">{job.salary} / day</p>
-                      <p className="card-text">{job.Email}</p>
+                      <p className="card-text">Location: {job.location}</p>
+                      <p className="card-text">Daily Payment: {job.salary}</p>
+
                       <button
                         className="seeMore btn btn-dark mt-auto"
                         onClick={() => toggleCardFlip(job._id)}
@@ -72,26 +77,44 @@ function BrowseJob() {
                 <div className="card-back">
                   <div className="card text-center h-100">
                     <div className="card-body" style={{ background: "#e2ecea" }}>
-                     
-                        
-                          <div className="mt-auto text-dark"
-                        style={{ height: "30px", width: "40px", color: "black", cursor: "pointer" }}
+                      <div
+                        className="mt-3 text-dark"
+                        style={{
+                          height: "30px",
+                          width: "40px",
+                          color: "black",
+                          cursor: "pointer",
+                        }}
                         onClick={() => toggleCardFlip(job._id)}
                       >
-                         Back
-                      </div>
-{/* 
-                          <div className="mt-auto text-dark"
-                        style={{ height: "30px", width: "40px", color: "black", cursor: "pointer" }} */}
-                        {/* onClick={() => dispatch(toggleCardFlip(builder.login.uuid))}>
                         Back
-                      </div> */}
+                      </div>
 
-
-                      <h5 className="card-title"> {job.PhoneNo}</h5>
+                      <h5 className="card-title"> phone: {job.PhoneNo}</h5>
+                       <p className="card-text">Email: {job.Email}</p>
                       <p className="card-text text-muted">
-                         {job.startDate} to {job.endDate}
+                       Start: {job.startDate}  <br /> to  <br /> 
+                      End: {job.endDate}
                       </p>
+
+                       {/* <div >
+                        {[...Array(5)].map((_, starIndex) => (
+                          <i
+                            key={starIndex}
+                            className={`fa fa-star stars ${ratings[builder.login.uuid] > starIndex ? "checked" : ""
+                              }`}
+                            onClick={() =>
+                              dispatch(
+                                setRatings({
+                                  builderId: builder.login.uuid,
+                                  rating: starIndex + 1,
+                                })
+                              )
+                            }
+                          />
+                        ))}
+                      </div> */}
+                      
                       <button className="seeMore btn btn-dark mt-3">
                         Apply Now
                       </button>
