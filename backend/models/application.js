@@ -1,8 +1,8 @@
-// backend/models/application.js
 import mongoose from "mongoose";
 
 const applicationSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  phoneNo: { type: String }, // optional but matches frontend
   email: { type: String },
   experience: { type: String },
   skills: { type: String },
