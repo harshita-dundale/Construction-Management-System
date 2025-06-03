@@ -8,6 +8,8 @@ const applicationSchema = new mongoose.Schema({
   skills: { type: String },
   jobId: { type: mongoose.Schema.Types.ObjectId, ref: "Job" },
   appliedAt: { type: Date, default: Date.now },
+  status: { type: String, enum: ["under_review", "accepted", "rejected"], default: "under_review" },
 });
+
 
 export default mongoose.model("Application", applicationSchema);

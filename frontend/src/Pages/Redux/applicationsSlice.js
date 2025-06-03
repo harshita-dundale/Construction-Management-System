@@ -94,12 +94,13 @@
 // // export const { setApplications, setFilteredApplications } = applicationsSlice.actions;
 
 // // export default applicationsSlice.reducer;
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+
+
+
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // Backend se data fetch karne ke liye thunk
-export const fetchApplications = createAsyncThunk(
-  'applications/fetchApplications',
-  async (_, { rejectWithValue }) => {
+export const fetchApplications = createAsyncThunk('applications/fetchApplications', async (_, { rejectWithValue }) => {
     try {
       const response = await fetch('http://localhost:5000/api/apply'); // Backend API
       if (!response.ok) throw new Error("Failed to fetch applications");

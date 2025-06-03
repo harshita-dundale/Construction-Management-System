@@ -24,6 +24,7 @@ function ApplyForm() {
       skills: applyJob.skills,
       experience: applyJob.experience,
       appliedAt: new Date().toISOString(),
+      status: "under_review",
     };
 
     try {
