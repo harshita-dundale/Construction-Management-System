@@ -23,6 +23,7 @@ function PostJobForm() {
   const postJob = useSelector((state) => state.postJob);
   const [selectedImage, setSelectedImage] = useState(null);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -76,6 +77,13 @@ function PostJobForm() {
       <div className="row">
         <div className="col-lg-6 mb-4 mb-lg-0">
           <div className="post-job pt-4">
+            <button
+              className="btn mb-4"
+              onClick={() => navigate("/Builder-Dashboard")}
+              style={buttonStyle}
+            >
+              Back
+            </button>
             <h1 style={{ fontWeight: "bold" }}>Post a Job</h1>
             <form onSubmit={handleSubmit}>
               <div className="form-group mb-3">

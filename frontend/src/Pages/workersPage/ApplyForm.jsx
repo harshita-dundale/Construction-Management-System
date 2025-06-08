@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setFullName,
@@ -14,6 +15,7 @@ function ApplyForm() {
   const dispatch = useDispatch();
   const applyJob = useSelector((state) => state.applyJob);
   const [submitStatus, setSubmitStatus] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,7 +52,7 @@ function ApplyForm() {
   return (
     <div className="container my-5">
       <div className="row justify-content-center align-items-center">
-        <div className="col-md-5 text-center">
+        <div className="col-md-7 text-center">
           <img
             src={image1}
             className="img-fluid rounded"
@@ -60,9 +62,16 @@ function ApplyForm() {
         </div>
 
         <div
-          className="col-md-7 p-5 rounded shadow"
+          className="col-md-5 p-5 rounded shadow"
           style={{ backgroundColor: "#e0f7fa" }}
         >
+          <button
+            className="btn mb-4"
+            onClick={() => navigate("/browse-Job")}
+            style={buttonStyle}
+          >
+            Back 
+          </button>
           <h2 className="mb-4 text-center fw-bold text-dark">Apply for Job</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-group mb-3">

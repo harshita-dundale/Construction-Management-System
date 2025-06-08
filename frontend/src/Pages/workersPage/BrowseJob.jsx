@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../Components/Header";
-import defaultImage from "../../assets/images/photos/Default.jpg"; 
+import defaultImage from "../../assets/images/photos/Default.jpg";
 import "./BrowseJob.css";
 
 function BrowseJob() {
   const [jobs, setJobs] = useState([]);
   const [flippedCards, setFlippedCards] = useState([]);
-
+  const navigate = useNavigate(); 
   useEffect(() => {
     fetch("http://localhost:5000/api/jobs")
       .then((res) => res.json())
@@ -41,9 +42,8 @@ function BrowseJob() {
               key={job._id}
             >
               <div
-                className={`card-flip h-100 ${
-                  flippedCards.includes(job._id) ? "is-flipped" : ""
-                }`}
+                className={`card-flip h-100 ${flippedCards.includes(job._id) ? "is-flipped" : ""
+                  }`}
               >
                 {/* Card Front */}
                 <div className="card-front">
@@ -91,13 +91,13 @@ function BrowseJob() {
                       </div>
 
                       <h5 className="card-title"> phone: {job.PhoneNo}</h5>
-                       <p className="card-text">Email: {job.Email}</p>
+                      <p className="card-text">Email: {job.Email}</p>
                       <p className="card-text text-muted">
-                       Start: {job.startDate}  <br /> to  <br /> 
-                      End: {job.endDate}
+                        Start: {job.startDate}  <br /> to  <br />
+                        End: {job.endDate}
                       </p>
 
-                       {/* <div >
+                      {/* <div >
                         {[...Array(5)].map((_, starIndex) => (
                           <i
                             key={starIndex}
@@ -114,8 +114,14 @@ function BrowseJob() {
                           />
                         ))}
                       </div> */}
-                      
-                      <button className="seeMore btn btn-dark mt-3">
+
+                      {/* <button className="seeMore btn btn-dark mt-3">
+                        Apply Now
+                      </button> */}
+                      <button
+                        className="seeMore btn btn-dark mt-3"
+                        onClick={() => navigate("/apply-job")}
+                      >
                         Apply Now
                       </button>
                     </div>
