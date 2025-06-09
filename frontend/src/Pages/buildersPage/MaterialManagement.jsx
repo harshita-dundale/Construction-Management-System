@@ -25,7 +25,6 @@ const MaterialManagement = () => {
 
   const [showAddMaterial, setShowAddMaterial] = useState(false);
 
-  // Fetch all materials
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
@@ -39,7 +38,6 @@ const MaterialManagement = () => {
     fetchMaterials();
   }, [dispatch]);
 
-  // Add new material
   const handleAddMaterial = async (e) => {
     e.preventDefault();
     if (newMaterial.name && newMaterial.quantity > 0 && newMaterial.unitPrice > 0) {
@@ -58,7 +56,6 @@ const MaterialManagement = () => {
     }
   };
 
-  // Update usage
   const handleUpdateUsage = async (e) => {
     e.preventDefault();
     if (materialUsage.name && materialUsage.quantityUsed > 0) {

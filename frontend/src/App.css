@@ -42,3 +42,13 @@ button[type="reset"] {
   background-color: var(--secondary-color);
   color: white;
 }
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto; /* allow scrolling */
+}
+
+body {
+  font-family: Arial, sans-serif;
+}

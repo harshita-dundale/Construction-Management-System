@@ -1,6 +1,5 @@
 // src/Redux/hiredWorkersSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-
 const initialState = {
   users: [],
   filteredUsers: [],
@@ -8,7 +7,6 @@ const initialState = {
   filterLocation: '',
   sortOption: 'none',
 };
-
 const hiredWorkersSlice = createSlice({
   name: 'hiredWorkers',
   initialState,
@@ -31,7 +29,6 @@ const hiredWorkersSlice = createSlice({
     },
   },
 });
-
 export const {
   setUsers,
   setFilteredUsers,
@@ -39,5 +36,4 @@ export const {
   setFilterLocation,
   setSortOption,
 } = hiredWorkersSlice.actions;
-
 export default hiredWorkersSlice.reducer;

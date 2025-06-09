@@ -1,14 +1,47 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+export const fetchWorkers = createAsyncThunk("workers/fetchWorkers", async () => {
+  const response = await fetch("http://localhost:5000/api/apply");
+  const data = await response.json();
+
+  return data.map((worker, index) => ({
+    id: worker._id || index + 1,
+    name:
+      typeof worker.name === "string"
+        ? worker.name
+        : worker.name && typeof worker.name === "object"
+        ? `${worker.name.first || ""} ${worker.name.last || ""}`.trim()
+        : "Unnamed",
+    dailyWage: worker.dailyWage || 500,
+    present: false,
+    daysWorked: 0,
+    payment: 0,
+  }));
+});
+
+export const saveAttendance = createAsyncThunk(
+  "workers/saveAttendance",
+  async (workers) => {
+    const response = await fetch("http://localhost:5000/api/attendance/update", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(workers),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to save attendance");
+    }
+    return await response.json();
+  }
+);
 
 const initialState = {
-  workers: [
-    { id: 1, name: "John Doe", present: false, dailyWage: 500, daysWorked: 0, payment: 0 },
-    { id: 2, name: "Jane Smith", present: false, dailyWage: 600, daysWorked: 0, payment: 0 },
-    { id: 3, name: "Michael Brown", present: false, dailyWage: 550, daysWorked: 0, payment: 0 },
-    { id: 4, name: "Amli Sek", present: false, dailyWage: 550, daysWorked: 0, payment: 0 },
-  ],
+  workers: [],
+  loading: false,
+  error: null,
   totalDays: 0,
+  saveLoading: false,
+  saveError: null,
 };
+
 const workerSlice = createSlice({
   name: "workers",
   initialState,
@@ -26,9 +59,37 @@ const workerSlice = createSlice({
           worker.daysWorked += 1;
         }
         worker.payment = worker.daysWorked * worker.dailyWage;
-        worker.present = false; // Reset attendance
+        worker.present = false;
       });
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchWorkers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchWorkers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.workers = action.payload;
+      })
+      .addCase(fetchWorkers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      .addCase(saveAttendance.pending, (state) => {
+        state.saveLoading = true;
+        state.saveError = null;
+      })
+      .addCase(saveAttendance.fulfilled, (state) => {
+        state.saveLoading = false;
+       
+      })
+      .addCase(saveAttendance.rejected, (state, action) => {
+        state.saveLoading = false;
+        state.saveError = action.error.message;
+      });
   },
 });
 
