@@ -9,7 +9,11 @@ import authRoutes from "./routes/authRoutes.js";
 import jobRoutes from "./routes/jobRoutes.js";
 import applyRoutes from "./routes/apply.js";
 import materialRoutes from "./routes/materialRoutes.js"; // ✅ FIXED
+import workerRecordsRoutes from "./routes/worker-records.js";
 
+
+// import attendanceRoutes from "./routes/attendance.js";
+// import workerRoutes from "./routes/workerRoutes.js";
 dotenv.config();
 const app = express();
 
@@ -24,7 +28,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/apply", applyRoutes);
 app.use("/api/materials", materialRoutes); // ✅ FIXED
-
+app.use("/api/worker-records", workerRecordsRoutes);
+// app.use("/api/attendance", attendanceRoutes);
+// app.use("/api/workers", workerRoutes);
 const mongoURI = process.env.DB_URI || "";
 if (!mongoURI) {
   console.error("MongoDB URI missing!");
