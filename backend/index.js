@@ -4,6 +4,7 @@ import mongoose, { mongo } from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import jobRoutes from "./routes/jobRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json());
 // ✅ Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
+app.use("/api/projects", projectRoutes);
 
 const mongoURI = process.env.DB_URI || "";
 

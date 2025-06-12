@@ -14,7 +14,6 @@ import workerReducer from "./workerSlice";
 import attendanceReducer from "./AttendanceSlice";
 import projectReducer from "./projectSlice";
 
-
 const store = configureStore({
   reducer: {
     builderWorker: builderWorkerReducer,

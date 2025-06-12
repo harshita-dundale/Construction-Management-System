@@ -13,6 +13,9 @@ function Builder_dashboard() {
   const [showProjectModal, setShowProjectModal] = useState(false);
   const selectedProject = useSelector((state) => state.project.selectedProject);
 
+  console.log("🎯 Selected Project:", selectedProject);
+
+
   useEffect(() => {
     // Check if the state passed from navigation indicates to show the modal
     if (location.state && location.state.showProjectModal) {
@@ -31,25 +34,41 @@ function Builder_dashboard() {
       <Header />
       <div className="container-fluid" style={{ marginTop: "8rem" }}>
         <div className="row">
-<div className="col-md-8 text-end d-flex justify-content-end">
-      <h1 className="my-3">Builder Dashboard</h1>
-      </div>
-      <div className="col-md-4 text-end justify-content-end">
-        <Button onClick={() => setShowProjectModal(true)}
-         style={buttonStyle}
-         className="btn btn-light me-2"
-         onMouseEnter={(e) => (e.target.style.backgroundColor = "var(--secondary-color)")}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = "var(--primary-color)")}>
-          Manage Projects
-        </Button>
+          <div className="col-md-8 text-end d-flex justify-content-end">
+            <h1 className="my-3">Builder Dashboard</h1>
+          </div>
+          
+          <div className="col-md-4 text-end justify-content-end">
+            <Button
+              onClick={() => setShowProjectModal(true)}
+              style={buttonStyle}
+              className="btn btn-light me-2"
+              onMouseEnter={(e) =>
+                (e.target.style.backgroundColor = "var(--secondary-color)")
+              }
+              onMouseLeave={(e) =>
+                (e.target.style.backgroundColor = "var(--primary-color)")
+              }
+            >
+              Manage Projects
+            </Button>
+          </div>
         </div>
-        </div>
-  
+         
         <p className="text-center fs-5">
-          Welcome to the Builder Dashboard! Manage your construction projects effectively.
+          Welcome to the Builder Dashboard! Manage your construction projects
+          effectively.
         </p>
-        
-{/* handleClose={() => {
+        {selectedProject ? (
+            <h4 className="text-center mt-3">
+               <strong>for - {selectedProject.name}</strong>
+            </h4>
+          ) : (
+            <h4 className="text-center mt-3 text-danger">
+              No Project Selected
+            </h4>
+          )}
+        {/* handleClose={() => {
             if (selectedProject) {
               setShowProjectModal(false);
             } else {

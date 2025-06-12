@@ -55,6 +55,8 @@ import ProfitAndCostAnalysis from './Pages/buildersPage/ProfitAndCostAnalysis';
 
 import ApplicationSection from './Pages/workersPage/applications/ApplicationSection';
 import MainAttendance from './Pages/workersPage/attendance/MainAttendance';
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const domain = "dev-i7r8hkh5ekl5da21.us.auth0.com";
@@ -68,6 +70,7 @@ function App() {
         redirect_uri: window.location.origin,
       }}>
       <Router>
+      <ToastContainer  position="top-right" autoClose={3000} />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/role-selection" element={<RoleSelectionPage />} />
@@ -81,9 +84,8 @@ function App() {
           <Route path="/ProfitAndCostAnalysis" element={<ProfitAndCostAnalysis />} />
           <Route path="/applications" element={<ApplicationSection />} />
           <Route path="/attendances" element={<MainAttendance />} />
-
         </Routes>
-      </Router>
+      </Router>  
     </Auth0Provider>
   );
 }
