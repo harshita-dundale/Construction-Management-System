@@ -4,9 +4,9 @@ const userSchema = new mongoose.Schema(
   {
     auth0Id: { type: String, required: true, unique: true }, // Unique ID from Auth0
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true, lowercase: true},
     // password: { type: String, required: true },
-    role: { type: String, enum: ["builder", "worker"], default: " " }, // Add roles for builders and workers
+    role: { type: String, enum: ["builder", "worker"], default: " " }, 
   },
   { timestamps: true }
 );

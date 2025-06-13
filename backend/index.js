@@ -4,13 +4,14 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
-
 import authRoutes from "./routes/authRoutes.js";
 import jobRoutes from "./routes/jobRoutes.js";
 import applyRoutes from "./routes/apply.js";
 import materialRoutes from "./routes/materialRoutes.js"; // ✅ FIXED
 import workerRecordsRoutes from "./routes/worker-records.js";
 
+// import jobRoutes from "./routes/jobRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
 
 // import attendanceRoutes from "./routes/attendance.js";
 // import workerRoutes from "./routes/workerRoutes.js";
@@ -29,6 +30,9 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/apply", applyRoutes);
 app.use("/api/materials", materialRoutes); // ✅ FIXED
 app.use("/api/worker-records", workerRecordsRoutes);
+// app.use("/api/jobs", jobRoutes);
+app.use("/api/projects", projectRoutes);
+
 // app.use("/api/attendance", attendanceRoutes);
 // app.use("/api/workers", workerRoutes);
 const mongoURI = process.env.DB_URI || "";
