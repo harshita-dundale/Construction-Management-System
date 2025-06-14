@@ -6,6 +6,11 @@ body, html {
     padding: 0;
     cursor: pointer;
 }
+h3 {
+    margin: 0;
+    padding: 0;
+    color: #fff;
+}
 
 .navbar-nav .btn {
     margin: 0 auto; 
