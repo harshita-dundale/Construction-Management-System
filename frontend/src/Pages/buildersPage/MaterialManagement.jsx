@@ -404,7 +404,7 @@ const MaterialManagement = () => {
                 <th>Quantity</th>
                 <th>Unit Price</th>
                 <th>Total Cost</th>
-                <th>Action</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>

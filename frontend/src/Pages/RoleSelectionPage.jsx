@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +12,7 @@ import { setUserRole } from "../Pages/Redux/roleSelected";
 import { selectProject } from "../Pages/Redux/projectSlice";
 import { fetchProjects } from "../Pages/Redux/projectSlice";
 import Header from "../Components/Header";
+
 function RoleSelectionPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -19,7 +21,6 @@ function RoleSelectionPage() {
   const role = useSelector((state) => state.role.role);
   
   useEffect(() => {
-   
     if (isAuthenticated && user?.email) {
        fetch(`http://localhost:5000/api/auth/get-role?email=${user.email}`)
       //fetch(`http://localhost:5000/get-role?email=${user.email}`)
@@ -35,7 +36,7 @@ function RoleSelectionPage() {
         }
       })
       .catch((error) => {
-        console.warn("No role found, let user select a role.", error);
+        console.warn("⚠️ No role found, let user select a role.", error);
       });
     }
   }, [user?.email]);
@@ -54,14 +55,14 @@ function RoleSelectionPage() {
       const userName = user?.name || "";
 
       if (!userEmail || !role) {
-        console.error("Missing userEmail or role!");
+        console.error("❌ Missing userEmail or role!");
         return false;
       };
 
       const response = await fetch("http://localhost:5000/api/auth/set-role", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
+     
         body: JSON.stringify({ auth0Id, name: userName, email: userEmail, role }),
       }
       );
@@ -72,7 +73,7 @@ function RoleSelectionPage() {
       localStorage.setItem("userRole", role);
       dispatch(setUserRole(role));
 
-      console.log("Role updated successfully:", data);
+      console.log("✅ Role updated successfully:", data);
 
       if (role === "builder") {
         dispatch(fetchProjects(userEmail));
@@ -90,14 +91,13 @@ function RoleSelectionPage() {
       setShowProjectModal(true);
       const selectedProject = JSON.parse(localStorage.getItem("selectedProject"));
       if (selectedProject) {
-        dispatch(selectProject(selectedProject)); // ✅ Store selected project in Redux
+        dispatch(selectProject(selectedProject)); 
       }
     }
   };
 
   const handleWorkerSelect = async () => {
     if (await updateUserRole("worker")) {
-      // navigate("/browse-job", { replace: true });
       setTimeout(() => navigate("/browse-job"), 500);
     }
   };
@@ -121,13 +121,14 @@ function RoleSelectionPage() {
 
   return (
     <>
-     <Header />
+      <Header />
       <Login />
       <div className="container">
         <div className="row">
-          <div className="col-lg-12 text-center " style={{ marginTop: "130px" }}>
+          <div className="col-lg-12 text-center mt-5 "  style={{ marginTop: "120px" }}>
             <h1 style={{ color: "#f58800" }}>Select Your Role ! </h1>
           </div>
+
           {roles.map((role, index) => (
             <SelectRole
               key={index}
@@ -140,11 +141,15 @@ function RoleSelectionPage() {
           ))}
         </div>
       </div>
+
+      {/* Modal component jo builder role select hone par show hoga */}
       <ProjectModal
         show={showProjectModal}
         handleClose={() => {
           setShowProjectModal(false);
-         
+          // Agar Redux ke through project select ho jata hai,
+          // dashboard page par navigate karne ka logic modal ke andar ya Redux middleware me implement kar sakti ho.
+          // Yahan simple example ke liye navigate kar sakti ho agar project selection complete ho jaye.
           if (localStorage.getItem("userRole") === "builder") {
             navigate("/Builder-Dashboard");
           }

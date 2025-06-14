@@ -5,6 +5,7 @@ const materialSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   quantity: { type: Number, required: true },
   unitPrice: { type: Number, required: true },
+  deleted: { type: Boolean, default: false },
 });
 
 export default mongoose.model("Material", materialSchema);
