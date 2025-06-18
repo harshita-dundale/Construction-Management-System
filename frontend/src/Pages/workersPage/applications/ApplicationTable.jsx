@@ -1,16 +1,29 @@
 import { useSelector } from "react-redux";
 
-const ApplicationTable = ({onViewDetails, activeTab}) => {
+const ApplicationTable = ({ onViewDetails, activeTab }) => {
+  const { applications } = useSelector((state) => state.applications);
+  console.log("Applications from Redux:", applications);
+  // console.log("Filtered Applications:", filteredApplications);  
 
-  const { allApplications } = useSelector((state) => state.applicationsModel);
+  // const filteredApplications = activeTab === 'All' 
+  // ? applications 
+  // : applications.filter((app) => app.status === activeTab);
 
-  const filteredApplications = activeTab === 'All' 
-    ? allApplications 
-    : allApplications.filter((app) => app.status === activeTab);
+  const filteredApplications = applications.filter((app) => {
+    console.log("App status:", app.status);
+    return activeTab === 'All' || app.status === activeTab;
+  });
+  console.log("Applications from Redux:", applications);
+  console.log("Filtered Applications:", filteredApplications);  
+  
+  // ✅ No data found message
+  if (!filteredApplications || filteredApplications.length === 0) {
+    return <p className="mt-4">No applications found.</p>;
+  }
 
   return (
     <table className="table table-hover mt-4">
-      <thead style={{ backgroundColor: '#266867', color: '#ffffff' }}>
+      <thead style={{ backgroundColor: "#266867", color: "#ffffff" }}>
         <tr>
           <th>Job Title</th>
           <th>Application Date</th>
@@ -22,19 +35,20 @@ const ApplicationTable = ({onViewDetails, activeTab}) => {
         {filteredApplications.map((app, index) => (
           <tr key={index}>
             <td>{app.title}</td>
-            <td>{app.date}</td>
+            <td>{new Date(app.appliedAt).toLocaleDateString()}</td>
+            {/* <td>{app.appliedAt ? new Date(app.appliedAt).toLocaleDateString() : "Not recorded"}</td> */}
             <td>
               <span className={`badge ${getStatusClass(app.status)}`}>
-                {app.status}
+              {app.status === "under_review" ? "Pending" : app.status.charAt(0).toUpperCase() + app.status.slice(1)}
               </span>
             </td>
             <td>
               <button
                 className="btn"
                 style={{
-                  backgroundColor: '#051821',
-                  color: '#ffffff',
-                  border: 'none',
+                  backgroundColor: "#051821",
+                  color: "#ffffff",
+                  border: "none",
                 }}
                 onClick={() => onViewDetails(app)}
               >
@@ -50,15 +64,24 @@ const ApplicationTable = ({onViewDetails, activeTab}) => {
 
 const getStatusClass = (status) => {
   switch (status) {
-    case 'Pending':
-      return 'bg-warning text-dark';
-    case 'Selected':
-      return 'bg-success text-white';
-    case 'Rejected':
-      return 'bg-danger text-white';
-    default:
-      return 'bg-secondary text-white';
+    case 'accepted': return 'bg-success text-white';
+    case 'rejected': return 'bg-danger text-white';
+    case 'under_review': return 'bg-warning text-dark';
+    default: return 'bg-secondary text-white';
   }
 };
+
+// const getStatusClass = (status) => {
+//   switch (status) {
+//     case "Pending":
+//       return "bg-warning text-dark";
+//     case "Selected":
+//       return "bg-success text-white";
+//     case "Rejected":
+//       return "bg-danger text-white";
+//     default:
+//       return "bg-secondary text-white";
+//   }
+// };
 
 export default ApplicationTable;

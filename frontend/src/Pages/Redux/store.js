@@ -13,6 +13,7 @@ import financeReducer from "./FinanceSlice";
 import workerReducer from "./workerSlice";
 import attendanceReducer from "./AttendanceSlice";
 import projectReducer from "./projectSlice";
+import applyJobReducer from "../Redux/ApplyJobSlice";
 
 const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ const store = configureStore({
     workers: workerReducer,
     attendance: attendanceReducer,
     project: projectReducer,
+     applyJob: applyJobReducer,
   },
 });
 export default store;

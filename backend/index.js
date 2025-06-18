@@ -1,22 +1,32 @@
 import express from "express";
-import authRoutes from "./routes/authRoutes.js";
 import mongoose, { mongo } from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import authRoutes from "./routes/authRoutes.js";
 import jobRoutes from "./routes/jobRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
+import applyRoutes from "./routes/apply.js";
+import materialRoutes from "./routes/materialRoutes.js"; 
+import workerRecordsRoutes from "./routes/worker-records.js";
 
 dotenv.config();
 const app = express();
 
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
 // ✅ Middlewares
 app.use(cors());
 app.use(express.json());
+//app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ✅ Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/apply", applyRoutes);
+app.use("/api/materials", materialRoutes); 
+app.use("/api/worker-records", workerRecordsRoutes);
 
 const mongoURI = process.env.DB_URI || "";
 

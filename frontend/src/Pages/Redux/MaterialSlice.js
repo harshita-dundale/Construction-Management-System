@@ -1,34 +1,42 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  materials: [],
-  filter: "",
-};
-
 const materialSlice = createSlice({
   name: "materials",
-  initialState,
+  initialState: {
+    materials: [],
+    filter: "",
+  },
   reducers: {
-    addMaterial: (state, action) => {
-      state.materials.push({
-        ...action.payload,
-        id: Date.now(),
-        unitPrice: parseFloat(action.payload.unitPrice),
-      });
+    setMaterials(state, action) {
+      state.materials = action.payload;
     },
-    updateUsage: (state, action) => {
-      const { name, quantityUsed } = action.payload;
-      state.materials = state.materials.map((material) =>
-        material.name === name
-          ? { ...material, quantity: material.quantity - quantityUsed }
-          : material
-      );
+    addMaterial(state, action) {
+      state.materials.push(action.payload);
     },
-    setFilter: (state, action) => {
+    updateUsage(state, action) {
+      const updated = action.payload;
+      const index = state.materials.findIndex((m) => m._id === updated._id);
+      if (index !== -1) {
+        state.materials[index] = updated;
+      }
+    },
+    setFilter(state, action) {
       state.filter = action.payload;
+    },
+
+    deleteMaterial(state, action) {
+      const idToDelete = action.payload;
+      state.materials = state.materials.filter((mat) => mat._id !== idToDelete);
     },
   },
 });
 
-export const { addMaterial, updateUsage, setFilter } = materialSlice.actions;
+export const {
+  setMaterials,
+  addMaterial,
+  updateUsage,
+  setFilter,
+  deleteMaterial,  
+} = materialSlice.actions;
+
 export default materialSlice.reducer;

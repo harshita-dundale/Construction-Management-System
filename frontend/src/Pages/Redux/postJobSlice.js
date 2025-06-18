@@ -1,9 +1,8 @@
-// src/Redux/postJobSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   jobTitle: '',
-  skillsRequired: 'masonry', // Default value
+  //skillsRequired: 'masonry', // Default value
   dailyPayment: '',
   startDate: '',
   endDate: '',
@@ -19,9 +18,9 @@ const postJobSlice = createSlice({
     setJobTitle: (state, action) => {
       state.jobTitle = action.payload;
     },
-    setSkillsRequired: (state, action) => {
-      state.skillsRequired = action.payload;
-    },
+    // setSkillsRequired: (state, action) => {
+    //   state.skillsRequired = action.payload;
+    // },
     setDailyPayment: (state, action) => {
       state.dailyPayment = action.payload;
     },
@@ -48,7 +47,7 @@ const postJobSlice = createSlice({
 
 export const {
   setJobTitle,
-  setSkillsRequired,
+ // setSkillsRequired,
   setDailyPayment,
   setStartDate,
   setEndDate,
