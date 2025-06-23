@@ -10,6 +10,7 @@ import {
   setMaterials,
   deleteMaterial, // ✅ import
 } from "../Redux/MaterialSlice";
+import Swal from "sweetalert2";
 
 const MaterialManagement = () => {
   const dispatch = useDispatch();
@@ -78,19 +79,43 @@ const MaterialManagement = () => {
 
   // ✅ Delete Material Handler
   const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This material will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+  
+    if (!result.isConfirmed) return;
+  
     try {
-      await fetch(`http://localhost:5000/api/materials/${id}`, {
+      const res = await fetch(`http://localhost:5000/api/materials/${id}`, {
         method: "DELETE",
       });
-      dispatch(deleteMaterial(id));
+  
+      if (res.ok) {
+        dispatch(deleteMaterial(id));
+        Swal.fire("Deleted!", "Material has been removed.", "success");
+      } else {
+        Swal.fire("Error", "Failed to delete material.", "error");
+      }
     } catch (err) {
       console.error("Delete failed:", err);
+      Swal.fire("Error", "Server error occurred while deleting.", "error");
     }
   };
+  
 
   const filteredMaterials = materials.filter((mat) =>
     mat.name.toLowerCase().includes(filter.toLowerCase())
   );
+
+  const totalCost = filteredMaterials.reduce((acc, mat) => {
+    return acc + (mat.quantity * mat.unitPrice);
+  }, 0);
 
   return (
     <>
@@ -193,7 +218,7 @@ const MaterialManagement = () => {
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Unit Price</th>
-                <th>Total Cost</th>
+                <th> Cost</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -223,6 +248,11 @@ const MaterialManagement = () => {
               )}
             </tbody>
           </table>
+          <div className="text-start mt-3">
+  <h5 className="fw-bold">
+    Total Cost: ₹{totalCost.toFixed(2)}
+  </h5>
+</div>
         </div>
       </div>
     </>

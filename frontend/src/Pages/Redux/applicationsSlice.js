@@ -1,32 +1,66 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Backend se data fetch karne ke liye thunk
+
 export const fetchApplications = createAsyncThunk(
   "applications/fetchApplications",
-  async (workerEmail = null, { rejectWithValue }) => {
+  async ({ workerEmail = null, status = null, experience = null }, { rejectWithValue }) => {
     try {
-      const url = workerEmail
-        ? `http://localhost:5000/api/apply?workerEmail=${encodeURIComponent(
-            workerEmail
-          )}`
-        : `http://localhost:5000/api/apply`;
+      let url = `http://localhost:5000/api/apply`;
+      const queryParams = [];
+
+      if (workerEmail){
+        console.log("🔍 Email passed to thunk:", workerEmail)
+        console.log("💡 typeof workerEmail:", typeof workerEmail);
+        queryParams.push(`workerEmail=${encodeURIComponent(workerEmail)}`);
+        console.log("🔐 fetchApplications received:", { workerEmail, status, experience });
+
+      }    
+        if (status && status !== "all") queryParams.push(`status=${encodeURIComponent(status)}`);
+      if (experience && experience !== "all") queryParams.push(`experience=${encodeURIComponent(experience)}`);
+
+      if (queryParams.length > 0) {
+        url += `?${queryParams.join("&")}`;
+      }
 
       const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch applications");
-      //return await response.json();
 
-      let data;
-      try {
-        data = await response.json();
-      } catch {
-        throw new Error("Invalid JSON response");
-      }
+      const data = await response.json();
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
+
+
+// export const fetchApplications = createAsyncThunk(
+//   "applications/fetchApplications",
+//   async (workerEmail = null, { rejectWithValue }) => {
+//     try {
+//       const url = workerEmail
+//         ? `http://localhost:5000/api/apply?workerEmail=${encodeURIComponent(
+//             workerEmail
+//           )}`
+//         : `http://localhost:5000/api/apply`;
+
+//       const response = await fetch(url);
+//       if (!response.ok) throw new Error("Failed to fetch applications");
+//       //return await response.json();
+
+//       let data;
+//       try {
+//         data = await response.json();
+//       } catch {
+//         throw new Error("Invalid JSON response");
+//       }
+//       return data;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
 
 const applicationsSlice = createSlice({
   name: "applications",

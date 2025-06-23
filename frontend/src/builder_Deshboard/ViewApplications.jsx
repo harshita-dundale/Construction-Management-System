@@ -6,22 +6,26 @@ import {
   fetchApplications,
   setFilteredApplications,
 } from "../Pages/Redux/applicationsSlice";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function ViewApplications() {
   const dispatch = useDispatch();
   const { applications, loading, error } = useSelector(
-    (state) => state.applications
-  );
-
+    (state) => state.applications);
   const [statusFilter, setStatusFilter] = useState("all");
  // const [skillsFilter, setSkillsFilter] = useState("");
   const [experienceFilter, setExperienceFilter] = useState("");
+  const { user, isLoading } = useAuth0();
+  
+  useEffect(() => {
+    if (user && user.email) {
+      dispatch(fetchApplications({status: statusFilter,  experience: experienceFilter, }));
+    }
+  }, [statusFilter, experienceFilter, dispatch]); // 👈 use `user` in dependency
+  // console.log(user.email)
 
   useEffect(() => {
-    dispatch(fetchApplications()); // Redux store me backend se data lana
-  }, [dispatch]);
-
-  useEffect(() => {
+    if (!applications) return;
     let filtered = [...applications];
 
     if (statusFilter !== "all") {
@@ -47,6 +51,10 @@ function ViewApplications() {
     dispatch(setFilteredApplications(filtered));
   }, [statusFilter, experienceFilter, applications, dispatch]); //skillsFilter,
 
+  if (isLoading || !user?.email) {
+    return <p>Loading user...</p>;
+  }
+
   const rows = [];
   for (let i = 0; i < applications.length; i += 3) {
     rows.push(applications.slice(i, i + 3));
@@ -68,7 +76,7 @@ function ViewApplications() {
               <label htmlFor="status" className="form-label" style={labelStyle}>
                 Status
               </label>
-              <select
+              {/* <select
                 id="status"
                 className="form-select shadow-sm"
                 style={inputStyle}
@@ -79,7 +87,23 @@ function ViewApplications() {
                 <option value="shortlisted">Accepted</option>
                 <option value="rejected">Rejected</option>
                 <option value="under_review">Under Review</option>
-              </select>
+              </select> */}
+              <select
+  id="status"
+  className="form-select shadow-sm"
+  value={statusFilter}
+  onChange={(e) => {
+    const value = e.target.value;
+    setStatusFilter(value);
+    dispatch(fetchApplications({ workerEmail: user.email, status: value }));
+  }}
+>
+  <option value="all">All</option>
+  <option value="accepted">Accepted</option>
+  <option value="rejected">Rejected</option>
+  <option value="under_review">Under Review</option>
+</select>
+
             </div>
             {/* <div className="col-md-4">
               <label htmlFor="skills" className="form-label" style={labelStyle}>
@@ -119,22 +143,24 @@ function ViewApplications() {
         </div>
 
         <div className="applications p-4 rounded" style={cardContainerStyle}>
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p>Error: {error}</p>
-          ) : (
-            rows.map((row, index) => (
-              <div className="row mb-4" key={index}>
-                {/* <Card3 application={application} /> */}
-                {row.map((application, index) => (
-                  <div className="col-md-4" key={application._id || index}>
-                    <Card3 application={application} />
-                  </div>
-                ))}
-              </div>
-            ))
-          )}
+        {loading ? (
+  <p>Loading...</p>
+) : error ? (
+  <p className="text-danger">Error: {error}</p>
+) : applications.length === 0 ? (
+  <p className="text-muted text-center">🚫 No applications found for this filter.</p>
+) : (
+  rows.map((row, index) => (
+    <div className="row mb-4" key={index}>
+      {row.map((application, index) => (
+        <div className="col-md-4" key={application._id || index}>
+          <Card3 application={application} />
+        </div>
+      ))}
+    </div>
+  ))
+)}
+
         </div>
       </div>
     </div>

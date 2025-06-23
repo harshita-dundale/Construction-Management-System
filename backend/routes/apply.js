@@ -4,15 +4,30 @@ import Application from "../models/application.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const { workerEmail } = req.query;
+  const { workerEmail ,status, experience } = req.query;
   console.log("Requested workerEmail:", workerEmail); 
 
   try {
-    const filter = workerEmail ? { email: workerEmail } : {}; // if email is present, filter; else return all
+   // const filter = workerEmail ? { email: workerEmail } : {}; // if email is present, filter; else return all
+
+   const filter = {};
     console.log("Mongo Filter:", filter); 
+
+    // For Worker Dashboard
+    if (workerEmail) filter.email = workerEmail;
+    console.log("Requested workerEmail:", workerEmail);
+
+    // Common for both
+    if (status && status !== "all") filter.status = status;
+
+     // For Builder Dashboard only
+     if (experience) {
+      filter.experience = { $gte: experience };  // experience >= selected
+    }
 
     const applications = await Application.find(filter).populate("jobId", "title");
     console.log("Fetched Applications:", applications);
+    
     res.json(applications);
 
   } catch (error) {
@@ -101,5 +116,22 @@ router.patch("/:id/status", async (req, res) => {
     res.status(500).json({ error: "Failed to update status" });
   }
 });
+
+// 🔴 DELETE application by ID
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deleted = await Application.findByIdAndDelete(id);
+    if (!deleted) {
+      return res.status(404).json({ error: "Application not found" });
+    }
+    res.status(200).json({ message: "Application deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting application:", error);
+    res.status(500).json({ error: "Failed to delete application" });
+  }
+});
+
 
 export default router;

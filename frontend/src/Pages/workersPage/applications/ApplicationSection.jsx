@@ -4,7 +4,7 @@ import JobDetailsModal from './JobDetailsModal';
 import Header from '../../../Components/Header';
 import { useDispatch, useSelector } from 'react-redux';
 import {  setShowModal, setCurrentJob } from '../../Redux/AppliModelSlice'
-import { useEffect } from 'react';
+import { useEffect } from 'react';  //, useState
 import { fetchApplications } from '../../Redux/AppliActionSlice';
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -14,6 +14,7 @@ const ApplicationSection = () => {
   const { user } = useAuth0(); // get worker email
   const { activeTab } = useSelector((state) => state.appTabs);
   const { showModal, currentJob } = useSelector((state) => state.applications);
+  //const [statusFilter, setStatusFilter] = useState("all");
 //  const { showModal } = useSelector((state) => state.applicationsModel);
 
   const handleViewDetails = (job) => {
@@ -23,11 +24,15 @@ const ApplicationSection = () => {
 
  // ✅ fetch applications only for logged-in worker
 // const { user } = useAuth0();
-  useEffect(() => {
-    if (user?.email) {
-      dispatch(fetchApplications(user.email));
-    }
-  }, [dispatch, user?.email]);
+useEffect(() => {
+  if (user?.email) {
+    console.log("📨 Dispatching email to thunk:", user.email);
+    dispatch(fetchApplications({
+      workerEmail: user.email,
+      // status: statusFilter,
+    }));
+  }
+}, [dispatch, user?.email]);
 
   return (
     <div>

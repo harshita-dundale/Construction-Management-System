@@ -5,6 +5,7 @@ import { fetchProjects,addProject,selectProject,} from "../Pages/Redux/projectSl
 import { useAuth0 } from "@auth0/auth0-react";
 import { deleteProject } from "../Pages/Redux/projectSlice";
 import { toast } from "react-toastify"; 
+import Swal from "sweetalert2";
 
 const ProjectModal = ({ show, handleClose }) => {
   const dispatch = useDispatch();
@@ -80,8 +81,20 @@ const ProjectModal = ({ show, handleClose }) => {
   };
 
   const handleDeleteProject = async (projectId) => {
-    const confirmDelete = window.confirm("Confirm to delete this project?");
-    if (!confirmDelete) return;
+    // const confirmDelete = window.confirm("Confirm to delete this project?");
+    // if (!confirmDelete) return;
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This project will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+  
+    if (!result.isConfirmed) return;
   
     try {
       await dispatch(deleteProject(projectId)).unwrap();
@@ -142,10 +155,16 @@ const ProjectModal = ({ show, handleClose }) => {
           onChange={(e) => setNewProject(e.target.value)}
           className="my-2"
         />
-        <Button onClick={handleNewProject}>Add New Project</Button>
+        <Button style={buttonStyle} onClick={handleNewProject}>Add New Project</Button>
       </Modal.Body>
     </Modal>
   );
 };
 
 export default ProjectModal;
+
+const buttonStyle = {
+  backgroundColor: "var(--primary-color)",
+  transition: "background-color 0.3s ease, color 0.3s ease",
+  color: "var(--text-color)",
+}

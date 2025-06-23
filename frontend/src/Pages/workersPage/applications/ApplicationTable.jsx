@@ -71,17 +71,4 @@ const getStatusClass = (status) => {
   }
 };
 
-// const getStatusClass = (status) => {
-//   switch (status) {
-//     case "Pending":
-//       return "bg-warning text-dark";
-//     case "Selected":
-//       return "bg-success text-white";
-//     case "Rejected":
-//       return "bg-danger text-white";
-//     default:
-//       return "bg-secondary text-white";
-//   }
-// };
-
 export default ApplicationTable;

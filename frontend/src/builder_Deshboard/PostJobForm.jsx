@@ -97,6 +97,7 @@ function PostJobForm() {
                   placeholder="Enter job title"
                   value={postJob.jobTitle}
                   onChange={(e) => dispatch(setJobTitle(e.target.value))}
+                  required
                 />
               </div>
               
@@ -130,6 +131,7 @@ function PostJobForm() {
                   className="form-control"
                   value={postJob.startDate}
                   onChange={(e) => dispatch(setStartDate(e.target.value))}
+                  required
                 />
               </div>
 
@@ -151,6 +153,7 @@ function PostJobForm() {
                   placeholder="Enter location"
                   value={postJob.location}
                   onChange={(e) => dispatch(setLocation(e.target.value))}
+                  required
                 />
               </div>
               <div className="form-group mb-3">
@@ -161,6 +164,7 @@ function PostJobForm() {
                   placeholder="Enter email"
                   value={postJob.email}
                   onChange={(e) => dispatch(setEmail(e.target.value))}
+                  required
                 />
               </div>
               <div className="form-group mb-3">

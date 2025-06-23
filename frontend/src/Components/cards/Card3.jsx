@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 function Card3({ application, isHiredView = false }) {
   const [status, setStatus] = useState(application.status || "under_review");
@@ -69,37 +70,118 @@ function Card3({ application, isHiredView = false }) {
           </span>
         </p>
       </div>
+         
 
-      {status === "under_review" && !isHiredView && (
-        <div className="card-footer d-flex justify-content-center">
-          <button
-            className="btn btn-success w-50 me-1"
-            onClick={handleAccept}
-            disabled={loading}
-          >
-            Accept
-          </button>
-          <button
-            className="btn btn-danger w-50 ms-1"
-            onClick={handleReject}
-            disabled={loading}
-          >
-            Reject
-          </button>
-        </div>
-      )}
+      {/* ✅ View Applications - Accept/Reject/Undo */}
+{!isHiredView && status === "under_review" && (
+  <div className="card-footer d-flex justify-content-center">
+    <button
+      className="btn btn-success w-50 me-1"
+      onClick={handleAccept}
+      disabled={loading}
+    >
+      Accept
+    </button>
+    <button
+      className="btn btn-danger w-50 ms-1"
+      onClick={handleReject}
+      disabled={loading}
+    >
+      Reject
+    </button>
+  </div>
+)}
 
-      {status !== "under_review" && !isHiredView && (
-        <div className="card-footer">
-          <button
-            className="btn btn-warning w-100"
-            onClick={handleUndo}
-            disabled={loading}
-          >
-            Undo Status
-          </button>
-        </div>
-      )}
+{!isHiredView && status !== "under_review" && (
+  <div className="card-footer">
+    <button
+      className="btn btn-warning w-100"
+      onClick={handleUndo}
+      disabled={loading}
+    >
+      Undo Status
+    </button>
+  </div>
+)}
+
+{/* ✅ Hired View - Only Reject with confirm + delete */}
+{isHiredView && status === "accepted" && (
+  <div className="card-footer">
+    {/* <button
+      className="btn btn-danger w-100"
+      onClick={async () => {
+        const confirmDelete = window.confirm(
+          "Are you sure you want to remove this hired worker?"
+        );
+        if (confirmDelete) {
+          setLoading(true);
+          try {
+            const res = await fetch(
+              `http://localhost:5000/api/apply/${application._id}`,
+              {
+                method: "DELETE",
+              }
+            );
+            if (res.ok) {
+              window.location.reload(); // or you can update parent state if needed
+            } else {
+              alert("Failed to delete the worker.");
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Error while deleting the worker.");
+          } finally {
+            setLoading(false);
+          }
+        }
+      }}
+      disabled={loading}
+    >
+      Remove Worker
+    </button> */}
+    <button
+  className="btn btn-danger w-100"
+  onClick={async () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Do you really want to remove "${application.name}" from hired workers?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, Remove",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setLoading(true);
+        try {
+          const res = await fetch(
+            `http://localhost:5000/api/apply/${application._id}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          if (res.ok) {
+            Swal.fire("Deleted!", "The worker has been removed.", "success");
+            window.location.reload();
+          } else {
+            Swal.fire("Error", "Failed to delete the worker.", "error");
+          }
+        } catch (err) {
+          console.error(err);
+          Swal.fire("Error", "An error occurred while deleting.", "error");
+        } finally {
+          setLoading(false);
+        }
+      }
+    });
+  }}
+  disabled={loading}
+>
+  {loading ? "Removing..." : "Remove Worker"}
+</button>
+  </div>
+)}
     </div>
   );
 }

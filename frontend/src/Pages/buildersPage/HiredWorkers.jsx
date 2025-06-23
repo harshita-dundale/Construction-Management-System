@@ -28,7 +28,7 @@ function HiredWorkers() {
         ) : (
           hired.map((worker) => (
             <div className="col-md-4 mb-3" key={worker._id}>
-              <Card3 application={worker} /> 
+              <Card3 application={worker} isHiredView={true}/> 
             </div>
           ))
         )}
