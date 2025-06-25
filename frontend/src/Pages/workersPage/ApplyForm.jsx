@@ -23,11 +23,16 @@ function ApplyForm() {
   console.log("Logged-in user:", user);
   const jobId = currentJob?._id;
 
-  console.log("Current Job:", currentJob);  // ✅ should show job details
+  //console.log("Current Job:", currentJob);  // ✅ should show job details
+  console.log("jobId to be sent:", jobId);
 
+  if (!jobId) {
+    toast.error("Job ID not found. Please go back and try again.");
+    return;
+  }
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!user || !user.email) {
       alert("User not logged in or email not found!");
       return;
@@ -44,6 +49,7 @@ function ApplyForm() {
     };
     
     try {
+
       const response = await fetch("http://localhost:5000/api/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

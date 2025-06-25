@@ -1,23 +1,25 @@
 import { useSelector } from "react-redux";
 
 const ApplicationTable = ({ onViewDetails, activeTab }) => {
-  const { applications } = useSelector((state) => state.applications);
-  console.log("Applications from Redux:", applications);
-  // console.log("Filtered Applications:", filteredApplications);  
 
-  // const filteredApplications = activeTab === 'All' 
-  // ? applications 
-  // : applications.filter((app) => app.status === activeTab);
+  const { applications } = useSelector((state) => state.applications); 
+
+  //console.log("Applications from Redux:", applications);
 
   const filteredApplications = applications.filter((app) => {
     console.log("App status:", app.status);
     return activeTab === 'All' || app.status === activeTab;
   });
-  console.log("Applications from Redux:", applications);
+
+  //console.log("Applications from Redux:", applications);
   console.log("Filtered Applications:", filteredApplications);  
   
   // ✅ No data found message
-  if (!filteredApplications || filteredApplications.length === 0) {
+  // if (!filteredApplications || filteredApplications.length === 0) {
+  //   return <p className="mt-4">No applications found.</p>;
+  // }
+  
+  if (filteredApplications.length === 0) {
     return <p className="mt-4">No applications found.</p>;
   }
 
@@ -34,9 +36,10 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
       <tbody>
         {filteredApplications.map((app, index) => (
           <tr key={index}>
-            <td>{app.title}</td>
-            <td>{new Date(app.appliedAt).toLocaleDateString()}</td>
-            {/* <td>{app.appliedAt ? new Date(app.appliedAt).toLocaleDateString() : "Not recorded"}</td> */}
+            {/* <td>{app.title}</td> */}
+            <td>{app.jobId?.title || "N/A"}</td>
+            {/* <td>{new Date(app.appliedAt).toLocaleDateString()}</td> */}
+            <td>{app.appliedAt ? new Date(app.appliedAt).toLocaleDateString() : "Not recorded"}</td>
             <td>
               <span className={`badge ${getStatusClass(app.status)}`}>
               {app.status === "under_review" ? "Pending" : app.status.charAt(0).toUpperCase() + app.status.slice(1)}

@@ -107,7 +107,7 @@ function Dashboard() {
         const refreshed = accepted.map((worker) => {
           const record = recordsData.find((r) => r.name === worker.name);
           const daysWorked = record?.daysWorked || 0;
-          const dailyWage = record?.dailyWage || worker.dailyWage || 500;
+          const dailyWage = record?.dailyWage || worker.dailyWage ; // || 500
           const payment = record?.payment || daysWorked * dailyWage;
 
           return {

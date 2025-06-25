@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import builderWorkerReducer from "./CardSlice";
 import roleReducer from "./RoleSlice";
 import usersReducer from "./UsersSlice";
-import appliModelReducer from './AppliModelSlice'
+// import appliModelReducer from './AppliModelSlice'
 import appTabsReducer from "./AppliTabsSlice";
 import builderReducer from "./BuilderSlice";
 import postJobReducer from "./PostJobSlice";
@@ -20,7 +20,7 @@ const store = configureStore({
     builderWorker: builderWorkerReducer,
     role: roleReducer,
     users: usersReducer,
-    applicationsModel : appliModelReducer,
+   // applicationsModel : appliModelReducer,
     appTabs: appTabsReducer,
     builder: builderReducer,
     postJob: postJobReducer,

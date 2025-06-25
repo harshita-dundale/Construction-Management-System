@@ -8,22 +8,33 @@ router.get("/", async (req, res) => {
   console.log("Requested workerEmail:", workerEmail); 
 
   try {
-   // const filter = workerEmail ? { email: workerEmail } : {}; // if email is present, filter; else return all
+  //  const filter = workerEmail ? { email: workerEmail } : {}; // if email is present, filter; else return all
 
    const filter = {};
-    console.log("Mongo Filter:", filter); 
 
     // For Worker Dashboard
-    if (workerEmail) filter.email = workerEmail;
+    if (workerEmail) {
+      filter.email = workerEmail;
+    }
     console.log("Requested workerEmail:", workerEmail);
 
     // Common for both
-    if (status && status !== "all") filter.status = status;
-
+    console.log("🧪 Received status:", status);
+    console.log("📥 Final Mongo Filter:", filter);
+    
+    if (status && status !== "all") {
+      filter.status = new RegExp(`^${status}$`, 'i'); // i = ignore case
+    }
+    
+    // if (status && status.toLowerCase() !== "all") {
+    //   filter.status = status;
+    // }
+    
      // For Builder Dashboard only
      if (experience) {
       filter.experience = { $gte: experience };  // experience >= selected
     }
+    console.log("📥 Final Mongo Filter:", filter);
 
     const applications = await Application.find(filter).populate("jobId", "title");
     console.log("Fetched Applications:", applications);

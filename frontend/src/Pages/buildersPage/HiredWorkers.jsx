@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Card3 from "../../Components/cards/Card3"; 
 import Header from "../../Components/Header";
+
 function HiredWorkers() {
   const [hired, setHired] = useState([]);
 
@@ -10,7 +11,7 @@ function HiredWorkers() {
       .then((res) => res.json())
       .then((data) => {
         const accepted = data.filter((app) => app.status === "accepted");
-        setHired(accepted.slice(0, 3)); 
+        setHired(accepted);  //.slice(0, 3)
       })
       .catch((err) => console.error("Error fetching hired workers:", err));
   }, []);

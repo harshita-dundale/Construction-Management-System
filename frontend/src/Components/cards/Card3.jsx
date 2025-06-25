@@ -107,40 +107,9 @@ function Card3({ application, isHiredView = false }) {
 {/* ✅ Hired View - Only Reject with confirm + delete */}
 {isHiredView && status === "accepted" && (
   <div className="card-footer">
-    {/* <button
-      className="btn btn-danger w-100"
-      onClick={async () => {
-        const confirmDelete = window.confirm(
-          "Are you sure you want to remove this hired worker?"
-        );
-        if (confirmDelete) {
-          setLoading(true);
-          try {
-            const res = await fetch(
-              `http://localhost:5000/api/apply/${application._id}`,
-              {
-                method: "DELETE",
-              }
-            );
-            if (res.ok) {
-              window.location.reload(); // or you can update parent state if needed
-            } else {
-              alert("Failed to delete the worker.");
-            }
-          } catch (err) {
-            console.error(err);
-            alert("Error while deleting the worker.");
-          } finally {
-            setLoading(false);
-          }
-        }
-      }}
-      disabled={loading}
-    >
-      Remove Worker
-    </button> */}
     <button
-  className="btn btn-danger w-100"
+  className="btn btn-secondary w-100"
+  style={buttonStyle}
   onClick={async () => {
     Swal.fire({
       title: "Are you sure?",
@@ -187,3 +156,10 @@ function Card3({ application, isHiredView = false }) {
 }
 
 export default Card3;
+
+
+const buttonStyle = {
+  backgroundColor: "var(--primary-color)",
+  transition: "background-color 0.3s ease, color 0.3s ease",
+  color: "var(--text-color)",
+}

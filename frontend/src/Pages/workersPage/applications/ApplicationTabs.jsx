@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { setFilter } from '../../Redux/AppliModelSlice';
+import { setFilter } from '../../Redux/applicationsSlice';
 import { setActiveTab } from '../../Redux/AppliTabsSlice';
 import { FaTasks, FaClock, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import './ApplicationTabs.css'
@@ -10,9 +10,9 @@ const ApplicationTabs = () => {
 
   const tabs = [
     { name: 'All', icon: <FaTasks /> },
-    { name: 'Pending', icon: <FaClock /> },
-    { name: 'Selected', icon: <FaCheckCircle /> },
-    { name: 'Rejected', icon: <FaTimesCircle /> },
+    { name: 'under_review', icon: <FaClock /> },   // ✅ matches DB
+    { name: 'accepted', icon: <FaCheckCircle /> }, // ✅ matches DB
+    { name: 'rejected', icon: <FaTimesCircle /> }, // ✅ matches DB
   ];
 
   const handleTabClick = (tab) => {

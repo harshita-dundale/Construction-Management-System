@@ -5,26 +5,26 @@ const router = express.Router();
 // const Project = require("../models/Project"); 
 
 router.get("/:userId", async (req, res) => {
-  console.log("📩 Fetch request received for user:", req.params.userId);  
+ // console.log("📩 Fetch request received for user:", req.params.userId);  
   try {
     const userId = decodeURIComponent(req.params.userId); 
-    console.log("🔍 Decoded userId:", userId);
+  //  console.log("🔍 Decoded userId:", userId);
     
     if (!userId) {
       console.log("❌ No userId received in params!");
       return res.status(400).json({ error: "User ID is required" });
     }
 
-    console.log("🔍 Checking database for user ID:", userId);
+  //  console.log("🔍 Checking database for user ID:", userId);
     let userProjects = await Project.findOne({ userId });
-    console.log("🔍 User projects found:", userProjects);
+   // console.log("🔍 User projects found:", userProjects);
 
     if (!userProjects || !userProjects.projects || userProjects.projects.length === 0) {
       console.log("⚠️ No projects found for this user, sending empty array.");
       return res.status(200).json({ projects: [] }); // ✅ Return empty array instead of 404
     }
 
-    console.log("✅ User projects found:", userProjects.projects);
+    //console.log("✅ User projects found:", userProjects.projects);
     res.json({ projects: userProjects.projects  });
     
   } catch (error) {
@@ -35,19 +35,19 @@ router.get("/:userId", async (req, res) => {
 
 // Add new project
 router.post("/", async (req, res) => { 
-  console.log("📥 Request Body:", req.body);
-  console.log("📩 Received POST request at /api/projects"); 
+ // console.log("📥 Request Body:", req.body);
+ // console.log("📩 Received POST request at /api/projects"); 
 
   try {
     const { userId, name } = req.body;
-    console.log("📤 Extracted Data:", { userId, name });  
+   // console.log("📤 Extracted Data:", { userId, name });  
     if (!userId || !name) {
       console.error("Missing userId or name!");
       return res.status(400).json({ error: "User ID and project name required" });
     }
 
     let userProjects = await Project.findOne({ userId });
-    console.log("Existing user projects:", userProjects);
+  //  console.log("Existing user projects:", userProjects);
 
     if (!userProjects) {
       userProjects = new Project({ userId, projects: [{ name, createdAt: new Date() }] 
@@ -70,7 +70,7 @@ router.post("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const projectId = req.params.id;
   try {
-    console.log("🧨 DELETE request received for ID:", req.params.id);
+   // console.log("🧨 DELETE request received for ID:", req.params.id);
     const updatedDoc = await Project.findOneAndUpdate(
       { "projects._id": projectId },
       { $pull: { projects: { _id: projectId } } },
