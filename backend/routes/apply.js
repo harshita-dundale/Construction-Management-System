@@ -8,8 +8,6 @@ router.get("/", async (req, res) => {
   console.log("Requested workerEmail:", workerEmail); 
 
   try {
-  //  const filter = workerEmail ? { email: workerEmail } : {}; // if email is present, filter; else return all
-
    const filter = {};
 
     // For Worker Dashboard
@@ -25,18 +23,15 @@ router.get("/", async (req, res) => {
     if (status && status !== "all") {
       filter.status = new RegExp(`^${status}$`, 'i'); // i = ignore case
     }
-    
-    // if (status && status.toLowerCase() !== "all") {
-    //   filter.status = status;
-    // }
-    
+ 
      // For Builder Dashboard only
      if (experience) {
       filter.experience = { $gte: experience };  // experience >= selected
     }
     console.log("📥 Final Mongo Filter:", filter);
 
-    const applications = await Application.find(filter).populate("jobId", "title");
+    //const applications = await Application.find(filter).populate("jobId", "title");
+    const applications = await Application.find(filter).populate("jobId", "title salary");
     console.log("Fetched Applications:", applications);
     
     res.json(applications);
@@ -73,7 +68,6 @@ router.post("/", async (req, res) => {
     console.log("📦 Received Application:", req.body); 
     const { name, email, phoneNo, experience, skills, jobId } = req.body;
 
-    // Optional: Basic field validation
     if (!name || !email || !jobId) {
       return res.status(400).json({ error: "Name, Email, and Job ID are required" });
     }
@@ -94,17 +88,6 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Failed to save application" });
   }
 });
-//or
-// router.post("/", async (req, res) => {
-//   try {
-//     const newApp = new Application(req.body);
-//     await newApp.save();
-//     res.status(201).json(newApp);
-//   } catch (err) {
-//     console.error("Error saving application:", err);
-//     res.status(500).json({ error: "Failed to save application" });
-//   }
-// });
 
 // 🔹 Update application status (Accept/Reject)
 router.patch("/:id/status", async (req, res) => {

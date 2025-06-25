@@ -169,7 +169,8 @@ function Dashboard() {
                 <tr key={worker._id || index} className="align-middle">
                   <td>{index + 1}</td>
                   <td>{worker.name}</td>
-                  <td>₹{worker.dailyWage}</td>
+                  <td>₹{worker.jobId?.salary}</td>
+                  {/* <td>₹{worker.dailyWage}</td> */}
                   <td>
                     <input
                       type="checkbox"
