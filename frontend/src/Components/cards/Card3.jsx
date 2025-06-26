@@ -1,4 +1,3 @@
-// style={{ backgroundColor: "rgb(226, 236, 234)" }} style={{backgroundColor:" rgb(226, 236, 234);"}}
 /* eslint-disable react/prop-types */
 
 import { useState } from "react";
@@ -41,13 +40,13 @@ function Card3({ application, isHiredView = false }) {
   return (
     <div className="card shadow-sm mb-4 h-100 d-flex flex-column text-center">
       <div
-        className="card-body flex-grow-1"
         style={{ backgroundColor: "rgb(226, 236, 234)" }}
       >
         <h5 className="card-title fw-bold">{application.name}</h5>
         <p className="card-text">
           Applied on: {application.appliedAt?.slice(0, 10)}
         </p>
+        <p className="card-text">Phone nu: {application.phoneNo} </p>
         <p className="card-text">Experience: {application.experience} years</p>
         {/* <p className="card-text">
           Skills:{" "}

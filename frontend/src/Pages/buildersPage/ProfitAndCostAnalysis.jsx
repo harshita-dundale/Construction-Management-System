@@ -18,7 +18,7 @@ const ProfitAndCostAnalysis = () => {
     <>
       <Header />
       <div className="container mt-5 my-5" >
-        <h1 className="text-center mb-4" style={{ marginTop: "7rem", fontFamily: "sans-serif" }}>Profit and Cost Analysis</h1>
+        <h1 className="text-center mb-4" style={{ marginTop: "8rem", fontFamily: "sans-serif" }}>Profit and Cost Analysis</h1>
         {/* Profit or Loss Analysis */}
         <div className="text-center mt-4 mb-2 d-flex justify-content-end">
           <button

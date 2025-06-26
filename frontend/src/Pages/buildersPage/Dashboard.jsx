@@ -145,7 +145,7 @@ function Dashboard() {
     <>
       <Header />
       <div className="container mt-5">
-        <h1 className="mb-5 text-center" style={{ marginTop: "7rem" }}>
+        <h1 className="mb-5 text-center" style={{ marginTop: "8rem" }}>
           Worker Attendance & Payment
         </h1>
 

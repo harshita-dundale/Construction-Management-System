@@ -11,15 +11,21 @@ import { useAuth0 } from "@auth0/auth0-react";
 function ViewApplications() {
   const dispatch = useDispatch();
   const { applications, loading, error } = useSelector(
-    (state) => state.applications);
+    (state) => state.applications
+  );
   const [statusFilter, setStatusFilter] = useState("all");
- // const [skillsFilter, setSkillsFilter] = useState("");
+  // const [skillsFilter, setSkillsFilter] = useState("");
   const [experienceFilter, setExperienceFilter] = useState("");
   const { user, isLoading } = useAuth0();
-  
+
   useEffect(() => {
     if (user && user.email) {
-      dispatch(fetchApplications({status: statusFilter,  experience: experienceFilter, }));
+      dispatch(
+        fetchApplications({
+          status: statusFilter,
+          experience: experienceFilter,
+        })
+      );
     }
   }, [statusFilter, experienceFilter, dispatch]); // 👈 use `user` in dependency
   // console.log(user.email)
@@ -64,10 +70,17 @@ function ViewApplications() {
     <div>
       <Header />
       <div className="container">
-        <h1 className="text-center mb-4" style={{ marginTop: "7rem", color: "#333" }}>
-          View Applications </h1>
+        <h1
+          className="text-center mb-4"
+          style={{ marginTop: "7rem", color: "#333" }}
+        >
+          View Applications{" "}
+        </h1>
 
-        <div className="filters p-4 mb-4 rounded shadow bg-light" style={filterBoxStyle}>
+        <div
+          className="filters p-4 mb-4 rounded shadow bg-light"
+          style={filterBoxStyle}
+        >
           <h3 className="mb-3 text-info" style={headingStyle}>
             Filters
           </h3>
@@ -76,34 +89,26 @@ function ViewApplications() {
               <label htmlFor="status" className="form-label" style={labelStyle}>
                 Status
               </label>
-              {/* <select
+              <select
                 id="status"
                 className="form-select shadow-sm"
-                style={inputStyle}
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setStatusFilter(value);
+                  dispatch(
+                    fetchApplications({
+                      workerEmail: user.email,
+                      status: value,
+                    })
+                  );
+                }}
               >
                 <option value="all">All</option>
-                <option value="shortlisted">Accepted</option>
+                <option value="accepted">Accepted</option>
                 <option value="rejected">Rejected</option>
                 <option value="under_review">Under Review</option>
-              </select> */}
-              <select
-  id="status"
-  className="form-select shadow-sm"
-  value={statusFilter}
-  onChange={(e) => {
-    const value = e.target.value;
-    setStatusFilter(value);
-    dispatch(fetchApplications({ workerEmail: user.email, status: value }));
-  }}
->
-  <option value="all">All</option>
-  <option value="accepted">Accepted</option>
-  <option value="rejected">Rejected</option>
-  <option value="under_review">Under Review</option>
-</select>
-
+              </select>
             </div>
             {/* <div className="col-md-4">
               <label htmlFor="skills" className="form-label" style={labelStyle}>
@@ -143,24 +148,25 @@ function ViewApplications() {
         </div>
 
         <div className="applications p-4 rounded" style={cardContainerStyle}>
-        {loading ? (
-  <p>Loading...</p>
-) : error ? (
-  <p className="text-danger">Error: {error}</p>
-) : applications.length === 0 ? (
-  <p className="text-muted text-center">🚫 No applications found for this filter.</p>
-) : (
-  rows.map((row, index) => (
-    <div className="row mb-4" key={index}>
-      {row.map((application, index) => (
-        <div className="col-md-4" key={application._id || index}>
-          <Card3 application={application} />
-        </div>
-      ))}
-    </div>
-  ))
-)}
-
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p className="text-danger">Error: {error}</p>
+          ) : applications.length === 0 ? (
+            <p className="text-muted text-center">
+              🚫 No applications found for this filter.
+            </p>
+          ) : (
+            rows.map((row, index) => (
+              <div className="row mb-4" key={index}>
+                {row.map((application, index) => (
+                  <div className="col-md-4" key={application._id || index}>
+                    <Card3 application={application} />
+                  </div>
+                ))}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
@@ -173,25 +179,25 @@ const filterBoxStyle = {
   borderRadius: "10px",
   padding: "20px",
   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-}
+};
 
 const headingStyle = {
   fontWeight: "bold",
-}
+};
 
 const labelStyle = {
   fontWeight: "600",
   color: "#555",
-}
+};
 
 const inputStyle = {
   borderRadius: "8px",
   border: "1px solid #ddd",
   padding: "10px",
-}
+};
 
 const cardContainerStyle = {
   borderRadius: "10px",
   border: "2px solid #ccc",
-}
+};
 export default ViewApplications;

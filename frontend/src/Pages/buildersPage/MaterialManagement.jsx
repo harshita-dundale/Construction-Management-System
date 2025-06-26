@@ -121,7 +121,7 @@ const MaterialManagement = () => {
     <>
       <Header />
       <div className="container mt-5">
-        <h1 className="text-center mb-5" style={{ marginTop: "7rem", color: "#333" }}>
+        <h1 className="text-center mb-5" style={{ marginTop: "8rem", color: "#333" }}>
           Material Management
         </h1>
 

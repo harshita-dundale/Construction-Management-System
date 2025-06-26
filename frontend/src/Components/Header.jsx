@@ -3,7 +3,7 @@ import  { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import './Header.css';
 import { useAuth0 } from "@auth0/auth0-react";
-// import logo from "../assets/images/icons/logo3.png";  
+ import logo from "../assets/images/photos/logo.png";  
 
 function Header() {
     const navigate = useNavigate();
@@ -66,7 +66,7 @@ const isBuilderPage = ["/builder-dashboard", "/materialmanagement", "/profitandc
             <nav className="navbar navbar-expand-lg navbar-dark py-4">
                 <div className="container">
                     {/* <a className="navbar-brand" href="#">Brand</a> */}
-                    {/* <img src={logo} alt="" height="50" width="70"/> */}
+                    <img src={logo} alt="" height="50" width="200"/>
                     <button
                         className="navbar-toggler"
                         type="button"

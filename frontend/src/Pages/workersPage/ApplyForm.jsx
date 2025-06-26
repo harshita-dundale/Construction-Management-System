@@ -1,17 +1,17 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 import {
   setFullName,
   setPhoneNo,
- // setSkills,
   setExperience,
   resetForm,
 } from "../Redux/ApplyJobSlice";
 import "bootstrap/dist/css/bootstrap.min.css";
 import image1 from "../../assets/images/photos/postjob.png";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
 
 function ApplyForm() {
   const dispatch = useDispatch();
@@ -19,37 +19,45 @@ function ApplyForm() {
   const applyJob = useSelector((state) => state.applyJob);
   const [submitStatus, setSubmitStatus] = useState("");
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth0();
-  console.log("Logged-in user:", user);
+
+  const { user, isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) return <div>Loading user...</div>;
+
   const jobId = currentJob?._id;
 
-  //console.log("Current Job:", currentJob);  // ✅ should show job details
-  console.log("jobId to be sent:", jobId);
-
-  if (!jobId) {
-    toast.error("Job ID not found. Please go back and try again.");
-    return;
-  }
+  useEffect(() => {
+    if (!jobId) {
+      toast.error("Job ID not found. Please try again.");
+      navigate("/browse-Job");
+    }
+  }, [jobId, navigate]);
   
+  // if (!jobId) {
+  //   toast.error("Job ID not found. Please try again.");
+  //   return;
+  // }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user || !user.email) {
+
+    // ✅ More Reliable Check
+    if (!isAuthenticated || !user || !user.email) {
       alert("User not logged in or email not found!");
       return;
     }
+
     const payload = {
       name: applyJob.fullName,
-      email: user.email, // ✅ Corrected here
+      email: user.email,
       phoneNo: applyJob.phoneNo,
-     // skills: applyJob.skills,
       experience: applyJob.experience,
-      jobId: jobId, 
+      jobId,
       appliedAt: new Date().toISOString(),
       status: "under_review",
     };
-    
-    try {
 
+    try {
       const response = await fetch("http://localhost:5000/api/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -60,11 +68,10 @@ function ApplyForm() {
         setSubmitStatus("Failed to submit application.");
         return;
       }
-     // setSubmitStatus("Application submitted successfully!");
+
       toast.success("Application submitted successfully!");
       dispatch(resetForm());
     } catch (error) {
-     // setSubmitStatus("Server error. Try again later.");
       toast.error("Server error. Try again later.");
       console.error(error);
     }

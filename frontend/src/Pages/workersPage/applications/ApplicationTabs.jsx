@@ -10,9 +10,9 @@ const ApplicationTabs = () => {
 
   const tabs = [
     { name: 'All', icon: <FaTasks /> },
-    { name: 'under_review', icon: <FaClock /> },   // ✅ matches DB
-    { name: 'accepted', icon: <FaCheckCircle /> }, // ✅ matches DB
-    { name: 'rejected', icon: <FaTimesCircle /> }, // ✅ matches DB
+    { name: 'under_review', icon: <FaClock /> },   
+    { name: 'accepted', icon: <FaCheckCircle /> }, 
+    { name: 'rejected', icon: <FaTimesCircle /> }, 
   ];
 
   const handleTabClick = (tab) => {
@@ -21,7 +21,7 @@ const ApplicationTabs = () => {
   };
 
   return (
-    <ul className="nav nav-tabs mt-3">
+    <ul className="nav nav-tabs mt-5 ">
       {tabs.map((tab) => (
         <li className="nav-item appliNav" key={tab.name}>
           <button

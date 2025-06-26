@@ -21,7 +21,7 @@ function HiredWorkers() {
     <Header />
     <br />
     <br />
-    <div className="container mt-5">
+    <div className="container" style={{ marginTop: "90px"}}>
       <h2 className="mb-4 text-center">👷‍♂️ Hired Workers</h2>
       <div className="row">
         {hired.length === 0 ? (
