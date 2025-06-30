@@ -90,18 +90,18 @@ const isBuilderPage = ["/builder-dashboard", "/materialmanagement", "/profitandc
                                             Browse Job
                                         </a>
                                     </li>
-                                    <li className="nav-item">
+                                    <li className="nav-item me-2">
                                         <a className={`nav-link ${location.pathname === "/applications" ? "active bold-underline" : ""}`}
                                             onClick={() => navigate("/applications")}>
                                             Applications
                                         </a>
                                     </li>
-                                    <li className="nav-item me-2">
+                                    {/* <li className="nav-item me-2">
                                         <a className={`nav-link ${location.pathname === "/attendances" ? "active bold-underline" : ""}`}
                                             onClick={() => navigate("/attendances")}>
                                             Payroll Manager
                                         </a>
-                                    </li>
+                                    </li> */}
                                     <li className="nav-item">
                                         <button className="btn btn-light" type="button" onClick={handleLogout}>
                                             Logout

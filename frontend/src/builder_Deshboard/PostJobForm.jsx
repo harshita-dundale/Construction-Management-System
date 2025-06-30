@@ -2,6 +2,7 @@ import "./App.css";
 import image1 from "../assets/images/photos/postjob.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { toast } from "react-toastify";
+//import Header from "../Components/Header";
 
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -101,6 +102,8 @@ function PostJobForm() {
   };
 
   return (
+    <div>
+       {/* <Header /> */}
     <div className="container">
       <div className="row">
         <div className="col-lg-6 mb-4 mb-lg-0">
@@ -254,6 +257,7 @@ function PostJobForm() {
           <img src={image1} className="img-fluid" alt="Post job" />
         </div>
       </div>
+    </div>
     </div>
   );
 }

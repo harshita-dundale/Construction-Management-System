@@ -12,18 +12,6 @@ import {
 } from "../Redux/MaterialSlice";
 import Swal from "sweetalert2";
 
-// import { useEffect, useState } from "react";
-// import Header from "../components/Header";
-// import { useDispatch, useSelector } from "react-redux";
-// import {
-//   setMaterials,
-//   addMaterial,
-//   updateUsage,
-//   deleteMaterial,
-//   setFilter,
-// } from "../slices/materialSlice";
-// import Swal from "sweetalert2";
-
 const MaterialManagement = () => {
   const dispatch = useDispatch();
   const materials = useSelector((state) => state.materials.materials);

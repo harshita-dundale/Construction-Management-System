@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchProjects,addProject,selectProject,} from "../Pages/Redux/projectSlice";
 import { useAuth0 } from "@auth0/auth0-react";
 import { deleteProject } from "../Pages/Redux/projectSlice";
-  import { toast } from "react-toastify"; 
+import { toast } from "react-toastify"; 
 import Swal from "sweetalert2";
 
 const ProjectModal = ({ show, handleClose }) => {
@@ -32,10 +32,17 @@ const ProjectModal = ({ show, handleClose }) => {
       return;
     }
 
+    // const isDuplicate = projects.some(
+    //   (p) => p.name && p.name.toLowerCase() === newProject.trim().toLowerCase()
+    // );
     const isDuplicate = projects.some(
-      (p) => p.name.toLowerCase() === newProject.trim().toLowerCase()
+      (p) =>
+        p.name.toLowerCase() === newProject.trim().toLowerCase() &&
+        p.userId === user.sub
     );
+    
     if (isDuplicate) {
+      toast.error("You already have a project with this name.");
       setLocalError("Project already exists");
       return;
     }
@@ -109,7 +116,7 @@ const ProjectModal = ({ show, handleClose }) => {
         <Form.Control
           type="text"
           value={newProject}
-          placeholder="Enter project name"
+          placeholder="Add New Project"
           onChange={(e) => setNewProject(e.target.value)}
           className="my-2"
         />
