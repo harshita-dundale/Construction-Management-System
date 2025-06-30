@@ -4,7 +4,8 @@ import Project from "../models/project.js";
 export const getProjectsByUserId = async (req, res) => {
   try {
     const userId = decodeURIComponent(req.params.userId);
-
+    console.log("👉 Getting projects for userId:", userId); 
+    
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
     }
@@ -12,6 +13,7 @@ export const getProjectsByUserId = async (req, res) => {
     const userProjects = await Project.findOne({ userId });
 
     if (!userProjects || !userProjects.projects || userProjects.projects.length === 0) {
+      console.log("No projects found for:", userId);
       return res.status(200).json({ projects: [] }); // Return empty array
     }
 
@@ -71,5 +73,23 @@ export const deleteProjectById = async (req, res) => {
   } catch (err) {
     console.error("Error deleting project:", err);
     res.status(500).json({ message: "Server error during deletion" });
+  }
+};
+
+//Optional route for builder project check on refresh
+// GET /api/projects/exists/:userId
+export const checkIfProjectsExist = async (req, res) => {
+  try {
+    const userId = decodeURIComponent(req.params.userId);
+    const projectDoc = await Project.findOne({ userId });
+
+    if (!projectDoc || !projectDoc.projects || projectDoc.projects.length === 0) {
+      return res.json({ exists: false });
+    }
+
+    return res.json({ exists: true });
+  } catch (error) {
+    console.error("Error checking project existence:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };

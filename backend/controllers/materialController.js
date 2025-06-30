@@ -2,8 +2,10 @@ import Material from "../models/Material.js";
 
 // 🔹 Get All Materials
 export const getAllMaterials = async (req, res) => {
+  const { projectId } = req.query;
+
   try {
-    const materials = await Material.find();
+    const materials = await Material.find({ projectId });
     res.json(materials);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -12,8 +14,9 @@ export const getAllMaterials = async (req, res) => {
 
 // 🔹 Create New Material
 export const createMaterial = async (req, res) => {
-  const { name, quantity, unitPrice } = req.body;
-  const newMaterial = new Material({ name, quantity, unitPrice });
+  const { name, quantity, unitPrice, projectId } = req.body;
+
+  const newMaterial = new Material({ name, quantity, unitPrice, projectId });
   try {
     const saved = await newMaterial.save();
     res.status(201).json(saved);

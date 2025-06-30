@@ -9,7 +9,8 @@ const jobSchema = new mongoose.Schema({
   location: String,
   Email: String,
   PhoneNo: String,
-  image: String, // new field
+  image: String, 
+  projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true }, 
 });
 
 const Job = mongoose.model("Job", jobSchema);

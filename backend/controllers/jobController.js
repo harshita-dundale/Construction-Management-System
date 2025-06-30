@@ -4,7 +4,24 @@ import path from "path";
 // 🔹 POST a New Job
 export const postJob = async (req, res) => {
   try {
-    const { title, salary, startDate, endDate, location, Email, PhoneNo } = req.body;
+    const {
+      title,
+      salary,
+      startDate,
+      endDate,
+      location,
+      Email,
+      PhoneNo,
+      projectId,
+    } = req.body;
+
+    // ✅ ProjectId validation
+    if (!projectId) {
+      return res
+        .status(400)
+        .json({ error: "projectId is required" });
+    }
+
     const imagePath = req.file ? req.file.filename : null;
 
     const newJob = new Job({
@@ -16,14 +33,21 @@ export const postJob = async (req, res) => {
       Email,
       PhoneNo,
       image: imagePath,
+      projectId, // ✅ projectId saved
     });
 
     await newJob.save();
 
-    res.status(201).json({ message: "Job Posted Successfully", job: newJob });
+    res.status(201).json({
+      message: "Job Posted Successfully",
+      job: newJob,
+    });
   } catch (error) {
     console.error("Error posting job:", error);
-    res.status(500).json({ error: "Internal Server Error", message: error.message });
+    res.status(500).json({
+      error: "Internal Server Error",
+      message: error.message,
+    });
   }
 };
 
@@ -37,3 +61,34 @@ export const getAllJobs = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch jobs", message: error.message });
   }
 };
+
+// 🔹 POST a New Job
+// export const postJob = async (req, res) => {
+//   try {
+//     const { title, salary, startDate, endDate, location, Email, PhoneNo, projectId } = req.body;
+
+//     if (!projectId) {
+//       return res.status(400).json({ error: "projectId is required" });
+//     }
+//     const imagePath = req.file ? req.file.filename : null;
+      
+//     const newJob = new Job({
+//       title,
+//       salary,
+//       startDate,
+//       endDate,
+//       location,
+//       Email,
+//       PhoneNo,
+//       image: imagePath,
+//       projectId,
+//     });
+
+//     await newJob.save();
+
+//     res.status(201).json({ message: "Job Posted Successfully", job: newJob });
+//   } catch (error) {
+//     console.error("Error posting job:", error);
+//     res.status(500).json({ error: "Internal Server Error", message: error.message });
+//   }
+// };

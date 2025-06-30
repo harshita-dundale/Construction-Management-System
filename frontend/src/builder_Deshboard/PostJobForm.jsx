@@ -1,13 +1,13 @@
-import './App.css';
-import image1 from '../assets/images/photos/postjob.png';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { toast } from "react-toastify"; 
+import "./App.css";
+import image1 from "../assets/images/photos/postjob.png";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { toast } from "react-toastify";
 
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setJobTitle,
-//setSkillsRequired,
+  //setSkillsRequired,
   setDailyPayment,
   setStartDate,
   setEndDate,
@@ -15,28 +15,54 @@ import {
   setEmail,
   setPhoneNo,
   resetForm,
-} from '../Pages/Redux/postJobSlice.js';
-import { useState } from 'react';
+} from "../Pages/Redux/postJobSlice.js";
+import { useState, useEffect } from "react";
+import {
+  selectProject, // ✅ Add this if not already imported
+  fetchProjects, // ✅ If your project list is fetched from backend
+} from "../Pages/Redux/projectSlice.js";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function PostJobForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const postJob = useSelector((state) => state.postJob);
   const [selectedImage, setSelectedImage] = useState(null);
+  const selectedProject = useSelector((state) => state.project.selectedProject);
+  const projects = useSelector((state) => state.project.projects);
 
+  const { user } = useAuth0(); // 👈 Get Auth0 logged-in user
 
+  useEffect(() => {
+    if (projects.length === 0 && user?.sub) {
+      dispatch(fetchProjects(user.sub)); // ✅ Pass userId / ⛳ Only if projects not already loaded
+    }
+  }, [dispatch, projects, user?.sub]);
+  
+  // console.log("👤 Logged-in User:", user?.sub);
+  // console.log("📁 Projects fetched:", projects);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!selectedProject?._id) {
+      toast.error("Please select a project before posting a job.");
+      return;
+    }
+    if (new Date(postJob.endDate) < new Date(postJob.startDate)) {
+      toast.error("End Date cannot be earlier than Start Date.");
+      return;
+    }
     const formData = new FormData();
     formData.append("title", postJob.jobTitle);
-    formData.append("skillsRequired", postJob.skillsRequired);
+    //  formData.append("skillsRequired", postJob.skillsRequired);
     formData.append("salary", postJob.dailyPayment);
     formData.append("startDate", postJob.startDate);
     formData.append("endDate", postJob.endDate);
     formData.append("location", postJob.location);
     formData.append("PhoneNo", postJob.phoneNo);
     formData.append("Email", postJob.email);
+    formData.append("projectId", selectedProject._id);
     if (selectedImage) {
       formData.append("image", selectedImage);
     }
@@ -65,10 +91,9 @@ function PostJobForm() {
       } else {
         const text = await response.text();
         console.warn(" Response is not JSON:", text);
-       // alert("Unexpected response format from server.");
-       toast.error("Server error. Try again later.");
+        // alert("Unexpected response format from server.");
+        toast.error("Server error. Try again later.");
       }
-
     } catch (error) {
       console.error("Error:", error);
       alert("Failed to post job. Server might be down.");
@@ -88,7 +113,32 @@ function PostJobForm() {
               Back
             </button>
             <h1 style={{ fontWeight: "bold" }}>Post a Job</h1>
+
             <form onSubmit={handleSubmit}>
+              {/* ✅ Project Dropdown */}
+              <div className="form-group mb-3">
+                <label style={{ fontWeight: "bold" }}>Select Project</label>
+                <select
+                placeholder="Select Project"
+                  className="form-control"
+                  value={selectedProject?._id || ""}
+                  onChange={(e) => {
+                    const selected = projects.find(
+                      (p) => p._id === e.target.value
+                    );
+                    dispatch(selectProject(selected));
+                  }}
+                  required
+                >
+                  {/* <option value="">-- Select Project --</option> */}
+                  {projects.map((proj) => (
+                    <option key={proj._id} value={proj._id}>
+                      {proj.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="form-group mb-3">
                 <label style={{ fontWeight: "bold" }}>Job Title</label>
                 <input
@@ -100,19 +150,7 @@ function PostJobForm() {
                   required
                 />
               </div>
-              
-              {/* <div className="form-group mb-3">
-                <label htmlFor="skills-required" style={{ fontWeight: "bold" }}>Skills Required</label>
-                <select
-                  className="form-control"
-                  value={postJob.skillsRequired}
-                  onChange={(e) => dispatch(setSkillsRequired(e.target.value))}>
-                  <option value="masonry">Masonry</option>
-                  <option value="plumbing">Plumbing</option>
-                  <option value="carpentry">Carpentry</option>
-                  <option value="electrician">Electrician</option>
-                </select>
-              </div> */}
+
               <div className="form-group mb-3">
                 <label style={{ fontWeight: "bold" }}>Daily Payment</label>
                 <input
@@ -156,6 +194,7 @@ function PostJobForm() {
                   required
                 />
               </div>
+
               <div className="form-group mb-3">
                 <label style={{ fontWeight: "bold" }}>Email</label>
                 <input
@@ -167,6 +206,7 @@ function PostJobForm() {
                   required
                 />
               </div>
+
               <div className="form-group mb-3">
                 <label style={{ fontWeight: "bold" }}>Phone Number</label>
                 <input
@@ -192,7 +232,11 @@ function PostJobForm() {
               </div>
 
               <div className="d-flex justify-content-end mb-3 pb-3">
-                <button type="submit" className="btn btn-light me-2" style={buttonStyle}>
+                <button
+                  type="submit"
+                  className="btn btn-light me-2"
+                  style={buttonStyle}
+                >
                   Post Job
                 </button>
                 <button
@@ -206,7 +250,6 @@ function PostJobForm() {
             </form>
           </div>
         </div>
-
         <div className="col-lg-6 d-flex align-items-center">
           <img src={image1} className="img-fluid" alt="Post job" />
         </div>

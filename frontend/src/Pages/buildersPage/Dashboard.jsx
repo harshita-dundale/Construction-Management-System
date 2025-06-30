@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import Header from "../../Components/Header";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux"; 
 
 function Dashboard() {
   const [hiredWorkers, setHiredWorkers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
+  const selectedProject = useSelector((state) => state.project.selectedProject); // ✅
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [applyRes, recordsRes] = await Promise.all([
-          fetch("http://localhost:5000/api/apply"),
+          // fetch("http://localhost:5000/api/apply"),
+          fetch(`http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`),
           fetch("http://localhost:5000/api/worker-records"),
         ]);
 
@@ -47,7 +50,7 @@ function Dashboard() {
     };
 
     fetchData();
-  }, []);
+  }, [selectedProject]);
 
   const handleAttendanceToggle = (id) => {
     setHiredWorkers((prev) =>
@@ -96,9 +99,15 @@ function Dashboard() {
       .then((res) => res.json())
       .then(async () => {
         const [applyRes, recordsRes] = await Promise.all([
-          fetch("http://localhost:5000/api/apply"),
+          fetch(`http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`),
           fetch("http://localhost:5000/api/worker-records"),
         ]);
+      
+      // .then(async () => {
+      //   const [applyRes, recordsRes] = await Promise.all([
+      //     fetch("http://localhost:5000/api/apply"),
+      //     fetch("http://localhost:5000/api/worker-records"),
+      //   ]);
 
         const applyData = await applyRes.json();
         const recordsData = await recordsRes.json();

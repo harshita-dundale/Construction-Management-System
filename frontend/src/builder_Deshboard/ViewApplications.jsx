@@ -17,17 +17,30 @@ function ViewApplications() {
   // const [skillsFilter, setSkillsFilter] = useState("");
   const [experienceFilter, setExperienceFilter] = useState("");
   const { user, isLoading } = useAuth0();
-
+  const selectedProject = useSelector((state) => state.project.selectedProject);
+  
   useEffect(() => {
-    if (user && user.email) {
+    if (user?.email && selectedProject?._id) {
       dispatch(
         fetchApplications({
+          workerEmail: user.email,
           status: statusFilter,
           experience: experienceFilter,
+          projectId: selectedProject._id, // ✅ Added
         })
       );
     }
-  }, [statusFilter, experienceFilter, dispatch]); // 👈 use `user` in dependency
+  }, [statusFilter, experienceFilter, selectedProject, dispatch, user]);
+  // useEffect(() => {
+  //   if (user && user.email) {
+  //     dispatch(
+  //       fetchApplications({
+  //         status: statusFilter,
+  //         experience: experienceFilter,
+  //       })
+  //     );
+  //   }
+  // }, [statusFilter, experienceFilter, dispatch]); // 👈 use `user` in dependency
   // console.log(user.email)
 
   useEffect(() => {

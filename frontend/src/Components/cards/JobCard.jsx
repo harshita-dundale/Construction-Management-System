@@ -1,11 +1,17 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCurrentJob } from "../../Pages/Redux/applicationsSlice";
-// import defaultImage from "../assets/images/photos/Default.jpg";
+import defaultImage from "../../assets/images/photos/browseJobImg.jpeg";
+import { toast } from "react-toastify";
 
 function JobCard({ job, isFlipped, onToggleFlip }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const projectName =
+    job.projectId && typeof job.projectId === "object"
+      ? job.projectId.name
+      : null;
 
   return (
     <div className="col-md-4 col-sm-6 d-flex align-items-stretch">
@@ -18,7 +24,7 @@ function JobCard({ job, isFlipped, onToggleFlip }) {
                 src={
                   job.image
                     ? `http://localhost:5000/uploads/${job.image}`
-                    : "" //defaultImage
+                    : defaultImage
                 }
                 alt={job.title}
                 className="rounded-circle mb-3"
@@ -31,7 +37,9 @@ function JobCard({ job, isFlipped, onToggleFlip }) {
               <h5 className="card-title">{job.title}</h5>
               <p className="card-text">Location: {job.location}</p>
               <p className="card-text">Daily Payment: {job.salary}</p>
-
+              {projectName && (
+                <p className="card-text text-muted">Project: {projectName}</p>
+              )}
               <button
                 className="seeMore btn btn-dark mt-auto"
                 onClick={() => onToggleFlip(job._id)}
@@ -68,6 +76,12 @@ function JobCard({ job, isFlipped, onToggleFlip }) {
               <button
                 className="seeMore btn btn-dark mt-3"
                 onClick={() => {
+                  // ✅ Safety Check: projectId must exist
+                  if (!job.projectId) {
+                    toast.error("Project ID missing. Cannot apply to this job.");
+                    return;
+                  }
+
                   dispatch(setCurrentJob(job));
                   navigate("/apply-job");
                 }}

@@ -1,20 +1,38 @@
 
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import Card3 from "../../Components/cards/Card3"; 
 import Header from "../../Components/Header";
 
 function HiredWorkers() {
   const [hired, setHired] = useState([]);
+  const selectedProject = useSelector((state) => state.project.selectedProject); 
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/apply")
-      .then((res) => res.json())
-      .then((data) => {
-        const accepted = data.filter((app) => app.status === "accepted");
-        setHired(accepted);  //.slice(0, 3)
-      })
-      .catch((err) => console.error("Error fetching hired workers:", err));
-  }, []);
+    if (!selectedProject?._id) return;
+  const fetchHired = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`
+      );
+      const data = await res.json();
+      setHired(data);
+    } catch (err) {
+      console.error("Error fetching hired workers:", err);
+    }
+  };
+
+  fetchHired();
+}, [selectedProject]);
+  // useEffect(() => {
+  //   fetch("http://localhost:5000/api/apply")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       const accepted = data.filter((app) => app.status === "accepted");
+  //       setHired(accepted);  //.slice(0, 3)
+  //     })
+  //     .catch((err) => console.error("Error fetching hired workers:", err));
+  // }, []);
 
   return (
     <>

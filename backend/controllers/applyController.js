@@ -2,10 +2,13 @@ import Application from "../models/application.js";
 
 // 🔹 GET Applications
 export const getApplications = async (req, res) => {
-  const { workerEmail, status, experience } = req.query;
+  const { workerEmail, status, experience, projectId } = req.query;
  // console.log("Requested workerEmail:", workerEmail);
   try {
     const filter = {};
+    if (projectId) {
+      filter.projectId = projectId;
+    }    
     if (workerEmail) {
       filter.email = workerEmail;
     }
@@ -28,23 +31,36 @@ export const getApplications = async (req, res) => {
 // 🔹 POST New Application
 export const createApplication = async (req, res) => {
   try {
-    const { name, email, phoneNo, experience, skills, jobId } = req.body;
+    const {
+      name,
+      email,
+      phoneNo,
+      experience,
+      jobId,
+      projectId,
+      appliedAt,
+      status,
+    } = req.body;
 
     if (!name || !email || !jobId) {
       return res.status(400).json({ error: "Name, Email, and Job ID are required" });
     }
+
     const newApp = new Application({
       name,
       email,
       phoneNo,
       experience,
-      skills,
       jobId,
+      projectId,
+      appliedAt: appliedAt || new Date(),
+      status: status || "under_review",
     });
+
     await newApp.save();
     res.status(201).json(newApp);
   } catch (err) {
-    console.error("Error saving application:", err);
+    console.error("❌ Error saving application:", err.message, err.stack);
     res.status(500).json({ error: "Failed to save application" });
   }
 };

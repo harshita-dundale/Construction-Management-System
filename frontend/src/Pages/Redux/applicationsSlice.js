@@ -4,10 +4,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchApplications = createAsyncThunk(
   "applications/fetchApplications",
-  async ({ workerEmail = null, status = null, experience = null }, { rejectWithValue }) => {
+  async ({ workerEmail = null, status = null, experience = null, projectId = null }, { rejectWithValue }) => {
     try {
       let url = `http://localhost:5000/api/apply`;
       const queryParams = [];
+      
+      if (projectId) queryParams.push(`projectId=${encodeURIComponent(projectId)}`);
 
       if (workerEmail){
         console.log("🔍 Email passed to thunk:", workerEmail)

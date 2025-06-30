@@ -19,24 +19,30 @@ function ApplyForm() {
   const applyJob = useSelector((state) => state.applyJob);
   const [submitStatus, setSubmitStatus] = useState("");
   const navigate = useNavigate();
-
   const { user, isAuthenticated, isLoading } = useAuth0();
 
+  useEffect(() => {
+    if (!currentJob?._id) {
+      toast.error("Job ID not found. Please try again.");
+      navigate("/browse-Job");
+    }
+  }, [currentJob, navigate]);
+  
   if (isLoading) return <div>Loading user...</div>;
 
   const jobId = currentJob?._id;
 
-  useEffect(() => {
-    if (!jobId) {
-      toast.error("Job ID not found. Please try again.");
-      navigate("/browse-Job");
-    }
-  }, [jobId, navigate]);
+  // useEffect(() => {
+  //   if (!jobId) {
+  //     toast.error("Job ID not found. Please try again.");
+  //     navigate("/browse-Job");
+  //   }
+  // }, [jobId, navigate]);
   
-  // if (!jobId) {
-  //   toast.error("Job ID not found. Please try again.");
-  //   return;
-  // }
+  if (!jobId) {
+    toast.error("Job ID not found. Please try again.");
+    return;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,6 +52,7 @@ function ApplyForm() {
       alert("User not logged in or email not found!");
       return;
     }
+    console.log("🔍 projectId in currentJob:", currentJob?.projectId);
 
     const payload = {
       name: applyJob.fullName,
@@ -53,6 +60,7 @@ function ApplyForm() {
       phoneNo: applyJob.phoneNo,
       experience: applyJob.experience,
       jobId,
+      projectId: currentJob.projectId,
       appliedAt: new Date().toISOString(),
       status: "under_review",
     };

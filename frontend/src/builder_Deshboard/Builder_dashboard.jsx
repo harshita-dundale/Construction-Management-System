@@ -15,7 +15,13 @@ function Builder_dashboard() {
 
   console.log("🎯 Selected Project:", selectedProject);
 
-
+  useEffect(() => {
+    const selected = localStorage.getItem("selectedProject");
+    if (!selected) {
+      setShowProjectModal(true);
+    }
+  }, []);
+  
   useEffect(() => {
     // Check if the state passed from navigation indicates to show the modal
     if (location.state && location.state.showProjectModal) {

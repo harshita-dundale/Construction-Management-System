@@ -12,10 +12,24 @@ import {
 } from "../Redux/MaterialSlice";
 import Swal from "sweetalert2";
 
+// import { useEffect, useState } from "react";
+// import Header from "../components/Header";
+// import { useDispatch, useSelector } from "react-redux";
+// import {
+//   setMaterials,
+//   addMaterial,
+//   updateUsage,
+//   deleteMaterial,
+//   setFilter,
+// } from "../slices/materialSlice";
+// import Swal from "sweetalert2";
+
 const MaterialManagement = () => {
   const dispatch = useDispatch();
   const materials = useSelector((state) => state.materials.materials);
   const filter = useSelector((state) => state.materials.filter);
+  const selectedProject = useSelector((state) => state.project.selectedProject);
+
   const [newMaterial, setNewMaterial] = useState({
     name: "",
     quantity: 0,
@@ -28,27 +42,38 @@ const MaterialManagement = () => {
 
   const [showAddMaterial, setShowAddMaterial] = useState(false);
 
-  useEffect(() => {
-    const fetchMaterials = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/materials");
-        const data = await res.json();
-        dispatch(setMaterials(data));
-      } catch (err) {
-        console.error("Fetch failed:", err);
-      }
-    };
-    fetchMaterials();
-  }, [dispatch]);
+  // ✅ Fetch project-specific materials
+  const fetchMaterials = async () => {
+    if (!selectedProject?._id) return;
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/materials?projectId=${selectedProject._id}`
+      );
+      const data = await res.json();
+      dispatch(setMaterials(data));
+    } catch (err) {
+      console.error("Fetch failed:", err);
+    }
+  };
 
+  useEffect(() => {
+    fetchMaterials();
+  }, [selectedProject]);
+
+  // ✅ Add Material
   const handleAddMaterial = async (e) => {
     e.preventDefault();
-    if (newMaterial.name && newMaterial.quantity > 0 && newMaterial.unitPrice > 0) {
+    if (
+      newMaterial.name &&
+      newMaterial.quantity > 0 &&
+      newMaterial.unitPrice > 0 &&
+      selectedProject?._id
+    ) {
       try {
         const res = await fetch("http://localhost:5000/api/materials", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newMaterial),
+          body: JSON.stringify({ ...newMaterial, projectId: selectedProject._id }),
         });
         const data = await res.json();
         dispatch(addMaterial(data));
@@ -59,6 +84,7 @@ const MaterialManagement = () => {
     }
   };
 
+  // ✅ Update Usage
   const handleUpdateUsage = async (e) => {
     e.preventDefault();
     if (materialUsage.name && materialUsage.quantityUsed > 0) {
@@ -77,7 +103,7 @@ const MaterialManagement = () => {
     }
   };
 
-  // ✅ Delete Material Handler
+  // ✅ Delete Material
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -88,17 +114,18 @@ const MaterialManagement = () => {
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
     });
-  
+
     if (!result.isConfirmed) return;
-  
+
     try {
       const res = await fetch(`http://localhost:5000/api/materials/${id}`, {
         method: "DELETE",
       });
-  
+
       if (res.ok) {
         dispatch(deleteMaterial(id));
         Swal.fire("Deleted!", "Material has been removed.", "success");
+        fetchMaterials(); // refresh
       } else {
         Swal.fire("Error", "Failed to delete material.", "error");
       }
@@ -107,15 +134,15 @@ const MaterialManagement = () => {
       Swal.fire("Error", "Server error occurred while deleting.", "error");
     }
   };
-  
 
   const filteredMaterials = materials.filter((mat) =>
     mat.name.toLowerCase().includes(filter.toLowerCase())
   );
 
-  const totalCost = filteredMaterials.reduce((acc, mat) => {
-    return acc + (mat.quantity * mat.unitPrice);
-  }, 0);
+  const totalCost = filteredMaterials.reduce(
+    (acc, mat) => acc + mat.quantity * mat.unitPrice,
+    0
+  );
 
   return (
     <>
@@ -161,7 +188,9 @@ const MaterialManagement = () => {
                   className="form-control"
                   placeholder="Quantity"
                   value={newMaterial.quantity || ""}
-                  onChange={(e) => setNewMaterial({ ...newMaterial, quantity: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setNewMaterial({ ...newMaterial, quantity: Number(e.target.value) })
+                  }
                 />
               </div>
               <div className="col-md-4">
@@ -170,11 +199,15 @@ const MaterialManagement = () => {
                   className="form-control"
                   placeholder="Unit Price"
                   value={newMaterial.unitPrice || ""}
-                  onChange={(e) => setNewMaterial({ ...newMaterial, unitPrice: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setNewMaterial({ ...newMaterial, unitPrice: Number(e.target.value) })
+                  }
                 />
               </div>
               <div className="col-md-12 text-end mt-3">
-                <button type="submit" className="btn btn-success">Add</button>
+                <button type="submit" className="btn btn-success">
+                  Add
+                </button>
               </div>
             </div>
           </form>
@@ -187,11 +220,15 @@ const MaterialManagement = () => {
               <select
                 className="form-control"
                 value={materialUsage.name}
-                onChange={(e) => setMaterialUsage({ ...materialUsage, name: e.target.value })}
+                onChange={(e) =>
+                  setMaterialUsage({ ...materialUsage, name: e.target.value })
+                }
               >
                 <option value="">Select Material</option>
                 {materials.map((mat) => (
-                  <option key={mat._id} value={mat.name}>{mat.name}</option>
+                  <option key={mat._id} value={mat.name}>
+                    {mat.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -201,11 +238,15 @@ const MaterialManagement = () => {
                 className="form-control"
                 placeholder="Quantity Used"
                 value={materialUsage.quantityUsed || ""}
-                onChange={(e) => setMaterialUsage({ ...materialUsage, quantityUsed: Number(e.target.value) })}
+                onChange={(e) =>
+                  setMaterialUsage({ ...materialUsage, quantityUsed: Number(e.target.value) })
+                }
               />
             </div>
             <div className="col-md-2 text-end">
-              <button type="submit" className="btn btn-warning text-white">Update</button>
+              <button type="submit" className="btn btn-warning text-white">
+                Update
+              </button>
             </div>
           </div>
         </form>
@@ -218,7 +259,7 @@ const MaterialManagement = () => {
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Unit Price</th>
-                <th> Cost</th>
+                <th>Cost</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -228,8 +269,8 @@ const MaterialManagement = () => {
                   <tr key={mat._id}>
                     <td>{mat.name}</td>
                     <td>{mat.quantity}</td>
-                    <td>${mat.unitPrice.toFixed(2)}</td>
-                    <td>${(mat.quantity * mat.unitPrice).toFixed(2)}</td>
+                    <td>₹{mat.unitPrice.toFixed(2)}</td>
+                    <td>₹{(mat.quantity * mat.unitPrice).toFixed(2)}</td>
                     <td>
                       <span
                         style={{ color: "red", cursor: "pointer", fontSize: "1.2rem" }}
@@ -243,16 +284,17 @@ const MaterialManagement = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center">No materials found</td>
+                  <td colSpan="5" className="text-center">
+                    No materials found
+                  </td>
                 </tr>
               )}
             </tbody>
           </table>
+
           <div className="text-start mt-3">
-  <h5 className="fw-bold">
-    Total Cost: ₹{totalCost.toFixed(2)}
-  </h5>
-</div>
+            <h5 className="fw-bold">Total Cost: ₹{totalCost.toFixed(2)}</h5>
+          </div>
         </div>
       </div>
     </>
