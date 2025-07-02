@@ -1,27 +1,3 @@
-
-// import mongoose from "mongoose";
-
-// const jobSchema = new mongoose.Schema(
-//   {
-//     title: { type: String, required: true },
-//     salary: { type: Number, required: true },
-//     startDate: { type: Date, required: true },
-//     endDate: { type: Date, required: true },
-//     location: { type: String, required: true },
-//     PhoneNo: { type: Number, required: true },
-//     builderId: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "User",
-//       required: true,
-//     },
-//   },
-//   { timestamps: true }
-// );
-
-// const Job = mongoose.model("Job", jobSchema);
-// export default Job;
-
-
 import mongoose from "mongoose";
 
 const jobSchema = new mongoose.Schema({
@@ -31,15 +7,12 @@ const jobSchema = new mongoose.Schema({
   endDate: String,
   location: String,
   Email: String,
-  // builderId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "User",
-  //   required: true,
-  // },
   PhoneNo: String,
-  image: String, // new field
+  image: String, 
+  userId: { type: String, required: true },
+  projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true }, 
 });
-
+jobSchema.index({ userId: 1, title: 1 }, { unique: true });
 const Job = mongoose.model("Job", jobSchema);
 
 export default Job;

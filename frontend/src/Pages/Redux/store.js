@@ -2,24 +2,26 @@ import { configureStore } from "@reduxjs/toolkit";
 import builderWorkerReducer from "./CardSlice";
 import roleReducer from "./RoleSlice";
 import usersReducer from "./UsersSlice";
-import appliModelReducer from './AppliModelSlice'
+// import appliModelReducer from './AppliModelSlice'
 import appTabsReducer from "./AppliTabsSlice";
 import builderReducer from "./BuilderSlice";
 import postJobReducer from "./postJobSlice";
 import applicationsReducer from './applicationsSlice';
 import hiredWorkersReducer from './hiredWorkersSlice';
 import materialReducer from "./MaterialSlice";
-import financeReducer from "./financeSlice";
+import financeReducer from "./FinanceSlice";
 import workerReducer from "./workerSlice";
 import attendanceReducer from "./AttendanceSlice";
-import applyJobReducer from "./ApplyJobSlice";
 import projectReducer from "./projectSlice";
+import applyJobReducer from "../Redux/ApplyJobSlice";
+import builderJobsReducer from "./builderJobsSlice";
+
 const store = configureStore({
   reducer: {
     builderWorker: builderWorkerReducer,
     role: roleReducer,
     users: usersReducer,
-    applicationsModel : appliModelReducer,
+   // applicationsModel : appliModelReducer,
     appTabs: appTabsReducer,
     builder: builderReducer,
     postJob: postJobReducer,
@@ -29,9 +31,10 @@ const store = configureStore({
     finance: financeReducer,
     workers: workerReducer,
     attendance: attendanceReducer,
+    project: projectReducer,
     applyJob: applyJobReducer,
- project: projectReducer,
+    builderJobs: builderJobsReducer,
+
   },
 });
 export default store;
-

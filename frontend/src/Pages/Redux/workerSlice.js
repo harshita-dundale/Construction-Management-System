@@ -1,3 +1,4 @@
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const fetchWorkers = createAsyncThunk("workers/fetchWorkers", async () => {
   const response = await fetch("http://localhost:5000/api/apply");

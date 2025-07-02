@@ -1,12 +1,36 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // Backend se data fetch karne ke liye thunk
-export const fetchApplications = createAsyncThunk('applications/fetchApplications', async (_, { rejectWithValue }) => {
+
+export const fetchApplications = createAsyncThunk(
+  "applications/fetchApplications",
+  async ({ workerEmail = null, status = null, experience = null, projectId = null }, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:5000/api/apply'); // Backend API
+      let url = `http://localhost:5000/api/apply`;
+      const queryParams = [];
+      
+      if (projectId) queryParams.push(`projectId=${encodeURIComponent(projectId)}`);
+
+      if (workerEmail){
+        console.log("🔍 Email passed to thunk:", workerEmail)
+        console.log("💡 typeof workerEmail:", typeof workerEmail);
+        queryParams.push(`workerEmail=${encodeURIComponent(workerEmail)}`);
+        console.log("🔐 fetchApplications received:", { workerEmail, status, experience });
+
+      }    
+      if (status && status !== "all") queryParams.push(`status=${encodeURIComponent(status)}`);
+      
+      if (experience && experience !== "all") queryParams.push(`experience=${encodeURIComponent(experience)}`);
+
+      if (queryParams.length > 0) {
+        url += `?${queryParams.join("&")}`;
+      }
+
+      const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch applications");
-      return await response.json();
+
+      const data = await response.json();
+      return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -14,17 +38,30 @@ export const fetchApplications = createAsyncThunk('applications/fetchApplication
 );
 
 const applicationsSlice = createSlice({
-  name: 'applications',
+  name: "applications",
   initialState: {
-    applications: [], // Default empty rakha hai, backend se update hoga
+    filter: 'All',
+    applications: [],
     filteredApplications: [],
     loading: false,
     error: null,
+    showModal: false,
+    currentJob: null,
   },
+
   reducers: {
     setFilteredApplications: (state, action) => {
       state.filteredApplications = action.payload;
     },
+    setShowModal: (state, action) => {
+      state.showModal = action.payload;
+    },
+    setCurrentJob: (state, action) => {
+      state.currentJob = action.payload;
+    },
+    setFilter(state, action) {
+            state.filter = action.payload;
+          },
   },
   extraReducers: (builder) => {
     builder
@@ -43,5 +80,7 @@ const applicationsSlice = createSlice({
   },
 });
 
-export const { setFilteredApplications } = applicationsSlice.actions;
+
+export const {setFilteredApplications, setShowModal,setFilter,  setCurrentJob  } =
+  applicationsSlice.actions;
 export default applicationsSlice.reducer;

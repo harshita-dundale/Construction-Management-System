@@ -21,6 +21,8 @@ import MainAttendance from './Pages/workersPage/attendance/MainAttendance';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
  import ApplyForm from './Pages/workersPage/ApplyForm';
+import ViewPostedJobs from './builder_Deshboard/ViewPostedJob';
+//  import MyPostedJobs from './builder_Deshboard/MyPostedJobs';
 function App() {
   const domain = "dev-i7r8hkh5ekl5da21.us.auth0.com";
   const clientId = "RiNHeQ3WgXZjurVZUUpJ0utwNQMA27lx";
@@ -31,6 +33,10 @@ function App() {
       clientId={clientId}
       authorizationParams={{
         redirect_uri: window.location.origin,
+        
+    audience: "https://construction-api",   // ✅ Yeh add karo
+    scope: "openid profile email",          // ✅ Yeh bhi zaroori hai
+
       }}>
       <Router>
       <ToastContainer  position="top-right" autoClose={3000} />
@@ -48,6 +54,8 @@ function App() {
           <Route path="/applications" element={<ApplicationSection />} />
           <Route path="/attendances" element={<MainAttendance />} />
           <Route path="/apply-job" element={<ApplyForm />} />
+          {/* <Route path="/my-posted-jobs" element={<MyPostedJobs />} /> */}
+          <Route path="/ViewPostedJobs" element={<ViewPostedJobs />} />
         </Routes>
       </Router>  
     </Auth0Provider>

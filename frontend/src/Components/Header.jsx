@@ -1,9 +1,8 @@
 
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import './Header.css';
 import { useAuth0 } from "@auth0/auth0-react";
-// import logo from "../assets/images/icons/logo3.png";  
 import logo from "../assets/images/photos/logo.png";
 
 function Header() {
@@ -12,7 +11,6 @@ function Header() {
     const [activeSection, setActiveSection] = useState("");
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
-    // Scroll observer logic to update active section
     useEffect(() => {
         const sections = document.querySelectorAll("section");
 
@@ -53,26 +51,20 @@ function Header() {
             section.scrollIntoView({ behavior: "smooth" });
             setActiveSection(sectionId);
         } else {
-            navigate(`/${sectionId}`);  // Navigate if section not found on current page
+            navigate(`/${sectionId}`);  
             setActiveSection(sectionId);
         }
     };
 
     const currentPath = location.pathname.toLowerCase();
-
-const isWorkerPage = ["/browse-job", "/track-billing", "/applications", "/attendances"].includes(currentPath);
-const isBuilderPage = ["/builder-dashboard", "/materialmanagement", "/profitandcostanalysis", "/dashboard", "/viewapplications", "/hiredworkers"].includes(currentPath);
-
-
+    const isWorkerPage = ["/browse-job", "/track-billing", "/applications", "/attendances"].includes(currentPath);// "/ViewPostedJobs ,"
+    const isBuilderPage = ["/builder-dashboard", "/viewpostedjobs", "/materialmanagement", "/dashboard", "/profitandcostanalysis", "/viewapplications", "/hiredworkers", "/post-job",].includes(currentPath);
 
     return (
         <header style={{ backgroundColor: "#1a4654", position: "fixed", top: 0, width: "100%", zIndex: 1000 }}>
             <nav className="navbar navbar-expand-lg navbar-dark py-4">
                 <div className="container">
-                {/* <h3>Construction Management</h3> */}
-                {/* <div><img src={logo} alt=""/></div> */}
-                    {/* <a className="navbar-brand" href="#">Brand</a> */}
-                    <img src={logo} alt="" height="50" width="200"/>
+                    <img src={logo} alt="" height="50" width="200" />
                     <button
                         className="navbar-toggler"
                         type="button"
@@ -96,18 +88,18 @@ const isBuilderPage = ["/builder-dashboard", "/materialmanagement", "/profitandc
                                             Browse Job
                                         </a>
                                     </li>
-                                    <li className="nav-item">
+                                    <li className="nav-item me-2">
                                         <a className={`nav-link ${location.pathname === "/applications" ? "active bold-underline" : ""}`}
                                             onClick={() => navigate("/applications")}>
                                             Applications
                                         </a>
                                     </li>
-                                    <li className="nav-item me-2">
-                                        <a className={`nav-link ${location.pathname === "/attendances" ? "active bold-underline" : ""}`}
+                                    {/*<li className="nav-item me-2">
+                                         <a className={`nav-link ${location.pathname === "/attendances" ? "active bold-underline" : ""}`}
                                             onClick={() => navigate("/attendances")}>
                                             Payroll Manager
                                         </a>
-                                    </li>
+                                    </li> */}
                                     <li className="nav-item">
                                         <button className="btn btn-light" type="button" onClick={handleLogout}>
                                             Logout
@@ -125,6 +117,14 @@ const isBuilderPage = ["/builder-dashboard", "/materialmanagement", "/profitandc
                                             Dashboard
                                         </a>
                                     </li>
+
+                                    <li className="nav-item">
+                                        <a className={`nav-link ${location.pathname === "/ViewPostedJobs" ? "active bold-underline" : ""}`}
+                                            onClick={() => navigate("/ViewPostedJobs")}>
+                                           postedjobs
+                                        </a>
+                                    </li>
+
                                     <li className="nav-item">
                                         <a className={`nav-link ${location.pathname === "/MaterialManagement" ? "active bold-underline" : ""}`}
                                             onClick={() => navigate("/MaterialManagement")}>

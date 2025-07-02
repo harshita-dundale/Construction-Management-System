@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   fullName: '',
   phoneNo: '',
-  skills: '', 
+  //skills: '', 
   experience: '',   
   applyDate: '',   
 };
@@ -18,9 +18,9 @@ const applyJobSlice = createSlice({
     setPhoneNo: (state, action) => {
       state.phoneNo = action.payload;
     },
-    setSkills: (state, action) => {
-      state.skills = action.payload;
-    },
+    // setSkills: (state, action) => {
+    //   state.skills = action.payload;
+    // },
     setExperience: (state, action) => {
       state.experience = action.payload;
     },
@@ -36,7 +36,7 @@ const applyJobSlice = createSlice({
 export const {
   setFullName,
   setPhoneNo,
-  setSkills,
+//  setSkills,
   setExperience,
   setApplyDate,
   resetForm,

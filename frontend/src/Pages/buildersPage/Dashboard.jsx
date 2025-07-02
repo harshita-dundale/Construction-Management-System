@@ -1,18 +1,21 @@
-
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../Components/Header";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux"; 
 
 function Dashboard() {
   const [hiredWorkers, setHiredWorkers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
+  const selectedProject = useSelector((state) => state.project.selectedProject); // ✅
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [applyRes, recordsRes] = await Promise.all([
-          fetch("http://localhost:5000/api/apply"),
+          // fetch("http://localhost:5000/api/apply"),
+          fetch(`http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`),
           fetch("http://localhost:5000/api/worker-records"),
         ]);
 
@@ -26,7 +29,7 @@ function Dashboard() {
 
           const daysWorked = record?.daysWorked || 0;
           const dailyWage = record?.dailyWage || worker.dailyWage || 500;
-          const payment = record?.payment || (daysWorked * dailyWage);
+          const payment = record?.payment || daysWorked * dailyWage;
 
           return {
             ...worker,
@@ -47,7 +50,7 @@ function Dashboard() {
     };
 
     fetchData();
-  }, []);
+  }, [selectedProject]);
 
   const handleAttendanceToggle = (id) => {
     setHiredWorkers((prev) =>
@@ -73,7 +76,8 @@ function Dashboard() {
 
   const handleProcessPayments = () => {
     if (!hiredWorkers.some((w) => w.present)) {
-      alert("Kisi ko present mark nahi kiya. Pehle attendance mark karo.");
+      toast.error("Attendance mark Required");
+      // alert("Kisi ko present mark nahi kiya. Pehle attendance mark karo.");
       return;
     }
 
@@ -95,9 +99,15 @@ function Dashboard() {
       .then((res) => res.json())
       .then(async () => {
         const [applyRes, recordsRes] = await Promise.all([
-          fetch("http://localhost:5000/api/apply"),
+          fetch(`http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`),
           fetch("http://localhost:5000/api/worker-records"),
         ]);
+      
+      // .then(async () => {
+      //   const [applyRes, recordsRes] = await Promise.all([
+      //     fetch("http://localhost:5000/api/apply"),
+      //     fetch("http://localhost:5000/api/worker-records"),
+      //   ]);
 
         const applyData = await applyRes.json();
         const recordsData = await recordsRes.json();
@@ -106,8 +116,8 @@ function Dashboard() {
         const refreshed = accepted.map((worker) => {
           const record = recordsData.find((r) => r.name === worker.name);
           const daysWorked = record?.daysWorked || 0;
-          const dailyWage = record?.dailyWage || worker.dailyWage || 500;
-          const payment = record?.payment || (daysWorked * dailyWage);
+          const dailyWage = record?.dailyWage || worker.dailyWage ; // || 500
+          const payment = record?.payment || daysWorked * dailyWage;
 
           return {
             ...worker,
@@ -120,11 +130,13 @@ function Dashboard() {
 
         setHiredWorkers(refreshed);
         setProcessing(false);
-        alert("Payments processed successfully & frontend updated!");
+        toast.success("Payments processed successfully!");
+        //alert("Payments processed successfully & frontend updated!");
       })
       .catch((err) => {
         console.error("Error saving or refreshing data:", err);
-        alert("Error occurred.");
+        // alert("Error occurred.");
+        toast.error("Payments Failed. Please try again.");
         setProcessing(false);
       });
   };
@@ -133,11 +145,16 @@ function Dashboard() {
   if (error)
     return <p className="text-center mt-5 text-danger">Error: {error}</p>;
 
+  const totalPayment = hiredWorkers.reduce(
+    (sum, worker) => sum + (worker.payment || 0),
+    0
+  );
+
   return (
     <>
       <Header />
       <div className="container mt-5">
-        <h1 className="mb-5 text-center" style={{ marginTop: "7rem" }}>
+        <h1 className="mb-5 text-center" style={{ marginTop: "8rem" }}>
           Worker Attendance & Payment
         </h1>
 
@@ -153,7 +170,7 @@ function Dashboard() {
                 <th>Daily Wage (₹)</th>
                 <th>Present</th>
                 <th>Days Worked</th>
-                <th>Total Payment (₹)</th>
+                <th> Payment (₹)</th>
               </tr>
             </thead>
             <tbody>
@@ -161,11 +178,12 @@ function Dashboard() {
                 <tr key={worker._id || index} className="align-middle">
                   <td>{index + 1}</td>
                   <td>{worker.name}</td>
-                  <td>₹{worker.dailyWage}</td>
+                  <td>₹{worker.jobId?.salary}</td>
+                  {/* <td>₹{worker.dailyWage}</td> */}
                   <td>
                     <input
                       type="checkbox"
-                      className="form-check-input"
+                      className="form-check-input border border-dark border-3"
                       checked={worker.present}
                       onChange={() => handleAttendanceToggle(worker._id)}
                     />
@@ -179,9 +197,14 @@ function Dashboard() {
         </div>
 
         <div className="d-flex justify-content-between align-items-center mt-4 p-3 bg-light rounded shadow-sm border">
-          <h5 className="m-0">
+          {/* <h5 className="m-0">
             Total Workers:{" "}
             <strong className="text-primary">{hiredWorkers.length}</strong>
+          </h5> */}
+          <h5 className="text-end mb-3 fw-bold">
+            Total Payment:{" "}
+            <span > ₹{totalPayment.toLocaleString()} </span>
+            {/* className="text-success" */}
           </h5>
           <button
             className="btn btn-light px-4 py-2 fw-bold"

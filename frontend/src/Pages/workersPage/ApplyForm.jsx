@@ -1,30 +1,66 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import {
   setFullName,
   setPhoneNo,
-  setSkills,
   setExperience,
   resetForm,
 } from "../Redux/ApplyJobSlice";
 import "bootstrap/dist/css/bootstrap.min.css";
 import image1 from "../../assets/images/photos/postjob.png";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
 
 function ApplyForm() {
   const dispatch = useDispatch();
+  const currentJob = useSelector((state) => state.applications.currentJob);
   const applyJob = useSelector((state) => state.applyJob);
   const [submitStatus, setSubmitStatus] = useState("");
   const navigate = useNavigate();
+  const { user, isAuthenticated, isLoading } = useAuth0();
+
+  useEffect(() => {
+    if (!currentJob?._id) {
+      toast.error("Job ID not found. Please try again.");
+      navigate("/browse-Job");
+    }
+  }, [currentJob, navigate]);
+  
+  if (isLoading) return <div>Loading user...</div>;
+
+  const jobId = currentJob?._id;
+
+  // useEffect(() => {
+  //   if (!jobId) {
+  //     toast.error("Job ID not found. Please try again.");
+  //     navigate("/browse-Job");
+  //   }
+  // }, [jobId, navigate]);
+  
+  if (!jobId) {
+    toast.error("Job ID not found. Please try again.");
+    return;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // ✅ More Reliable Check
+    if (!isAuthenticated || !user || !user.email) {
+      alert("User not logged in or email not found!");
+      return;
+    }
+    console.log("🔍 projectId in currentJob:", currentJob?.projectId);
+
     const payload = {
       name: applyJob.fullName,
+      email: user.email,
       phoneNo: applyJob.phoneNo,
-      skills: applyJob.skills,
       experience: applyJob.experience,
+      jobId,
+      projectId: currentJob.projectId,
       appliedAt: new Date().toISOString(),
       status: "under_review",
     };
@@ -41,10 +77,10 @@ function ApplyForm() {
         return;
       }
 
-      setSubmitStatus("Application submitted successfully!");
+      toast.success("Application submitted successfully!");
       dispatch(resetForm());
     } catch (error) {
-      setSubmitStatus("Server error. Try again later.");
+      toast.error("Server error. Try again later.");
       console.error(error);
     }
   };
@@ -100,7 +136,7 @@ function ApplyForm() {
               />
             </div>
 
-            <div className="form-group mb-3">
+            {/* <div className="form-group mb-3">
               <label className="fw-bold text-dark">Skills</label>
               <input
                 type="text"
@@ -110,7 +146,7 @@ function ApplyForm() {
                 onChange={(e) => dispatch(setSkills(e.target.value))}
                 required
               />
-            </div>
+            </div> */}
 
             <div className="form-group mb-4">
               <label className="fw-bold text-dark">Experience (years)</label>
