@@ -12,13 +12,18 @@ function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!selectedProject?._id) {
+        setLoading(false);
+        setError("No project selected");
+        return;
+      }
+  
       try {
         const [applyRes, recordsRes] = await Promise.all([
-          // fetch("http://localhost:5000/api/apply"),
           fetch(`http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`),
           fetch("http://localhost:5000/api/worker-records"),
         ]);
-
+  
         const applyData = await applyRes.json();
         const recordsData = await recordsRes.json();
 

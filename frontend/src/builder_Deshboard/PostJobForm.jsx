@@ -67,6 +67,7 @@ function PostJobForm() {
     if (selectedImage) {
       formData.append("image", selectedImage);
     }
+    formData.append("userId", user?.sub); // 👈 Add this line
 
     try {
       const response = await fetch("http://localhost:5000/api/jobs", {
@@ -133,7 +134,7 @@ function PostJobForm() {
                   }}
                   required
                 >
-                  {/* <option value="">-- Select Project --</option> */}
+                  <option value="">-- Select Project --</option>
                   {projects.map((proj) => (
                     <option key={proj._id} value={proj._id}>
                       {proj.name}

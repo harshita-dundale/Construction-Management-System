@@ -10,7 +10,8 @@ const jobSchema = new mongoose.Schema({
   Email: String,
   PhoneNo: String,
   image: String, 
-  projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true }, 
+  projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
+  userId: { type: String, required: true }, 
 });
 
 const Job = mongoose.model("Job", jobSchema);

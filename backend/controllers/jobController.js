@@ -13,10 +13,13 @@ export const postJob = async (req, res) => {
       Email,
       PhoneNo,
       projectId,
+      userId,
     } = req.body;
 
+    //const userId = req.user?.sub || req.body.userId; 
+
     // ✅ ProjectId validation
-    if (!projectId) {
+    if (!projectId || !userId) {
       return res
         .status(400)
         .json({ error: "projectId is required" });
@@ -33,7 +36,8 @@ export const postJob = async (req, res) => {
       Email,
       PhoneNo,
       image: imagePath,
-      projectId, // ✅ projectId saved
+      projectId, 
+      userId,// ✅ projectId saved
     });
 
     await newJob.save();
