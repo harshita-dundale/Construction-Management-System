@@ -27,13 +27,8 @@ const ApplicationSection = () => {
   
   useEffect(() => {
     if (user?.email) {
-     // console.log("📨 activeTab:", activeTab);
-      //console.log("📨 email to thunk:", user.email);
-  
+     
       const normalizedStatus = activeTab === "All" ? null : activeTab;
-  
-     // console.log("📨 Dispatching email to thunk:", user.email);
-     // console.log("📨 Sending status:", normalizedStatus);
   
       dispatch(fetchApplications({
         workerEmail: user.email,

@@ -18,7 +18,7 @@ function ViewApplications() {
   const [experienceFilter, setExperienceFilter] = useState("");
   const { user, isLoading } = useAuth0();
   const selectedProject = useSelector((state) => state.project.selectedProject);
-  
+
   useEffect(() => {
     if (user?.email && selectedProject?._id) {
       dispatch(
@@ -123,20 +123,6 @@ function ViewApplications() {
                 <option value="under_review">Under Review</option>
               </select>
             </div>
-            {/* <div className="col-md-4">
-              <label htmlFor="skills" className="form-label" style={labelStyle}>
-                Skills
-              </label>
-              <input
-                type="text"
-                id="skills"
-                className="form-control shadow-sm"
-                style={inputStyle}
-                placeholder="Search skills"
-                value={skillsFilter}
-                onChange={(e) => setSkillsFilter(e.target.value)}
-              />
-            </div> */}
             <div className="col-md-4">
               <label
                 htmlFor="experience"

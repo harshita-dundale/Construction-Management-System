@@ -1,6 +1,6 @@
 
 /* eslint-disable react/prop-types */
-function Cards({ imgSrc, title, text, buttonText, onClick }) {  
+function Cards1({ imgSrc, title, text, buttonText, onClick }) {  
   return (
     <div className="col-md-3 col-sm-6 text-dark">
       <div className="card h-100 d-flex flex-column">
@@ -19,4 +19,4 @@ function Cards({ imgSrc, title, text, buttonText, onClick }) {
   );
 }
 
-export default Cards;
+export default Cards1;

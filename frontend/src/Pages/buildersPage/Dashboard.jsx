@@ -44,7 +44,7 @@ function Dashboard() {
         setLoading(false);
       } catch (err) {
         console.error("Error loading workers:", err);
-        setError("Failed to load workers.");
+        // setError("Failed to load workers.");
         setLoading(false);
       }
     };
@@ -102,16 +102,9 @@ function Dashboard() {
           fetch(`http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`),
           fetch("http://localhost:5000/api/worker-records"),
         ]);
-      
-      // .then(async () => {
-      //   const [applyRes, recordsRes] = await Promise.all([
-      //     fetch("http://localhost:5000/api/apply"),
-      //     fetch("http://localhost:5000/api/worker-records"),
-      //   ]);
-
-        const applyData = await applyRes.json();
-        const recordsData = await recordsRes.json();
-        const accepted = applyData.filter((app) => app.status === "accepted");
+      const applyData = await applyRes.json();
+      const recordsData = await recordsRes.json();
+      const accepted = applyData.filter((app) => app.status === "accepted");
 
         const refreshed = accepted.map((worker) => {
           const record = recordsData.find((r) => r.name === worker.name);

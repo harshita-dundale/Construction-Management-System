@@ -14,10 +14,6 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
   //console.log("Applications from Redux:", applications);
   console.log("Filtered Applications:", filteredApplications);  
   
-  // ✅ No data found message
-  // if (!filteredApplications || filteredApplications.length === 0) {
-  //   return <p className="mt-4">No applications found.</p>;
-  // }
   
   if (filteredApplications.length === 0) {
     return <p className="mt-4">No applications found.</p>;

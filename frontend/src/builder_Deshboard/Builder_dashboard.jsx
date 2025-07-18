@@ -13,13 +13,12 @@ function Builder_dashboard() {
   const [showProjectModal, setShowProjectModal] = useState(false);
   const selectedProject = useSelector((state) => state.project.selectedProject);
 
-  console.log("🎯 Selected Project:", selectedProject);
+  console.log(" Selected Project:", selectedProject);
 
 
   useEffect(() => {
-    // Check if the state passed from navigation indicates to show the modal
     if (location.state && location.state.showProjectModal) {
-      setShowProjectModal(true); // Corrected the setter function name
+      setShowProjectModal(true); 
     }
   }, [location]);
 
@@ -68,14 +67,7 @@ function Builder_dashboard() {
               No Project Selected
             </h4>
           )}
-        {/* handleClose={() => {
-            if (selectedProject) {
-              setShowProjectModal(false);
-            } else {
-              alert("Please select a project before closing.");
-            }
-          }} */}
-
+        
         <ProjectModal
           show={showProjectModal}
           handleClose={() => {

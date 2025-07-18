@@ -22,8 +22,8 @@ function JobCard1({ job, onEdit, onDelete }) {
 
   return (
     <div
-      className="card h-100 shadow rounded-4 border-0 position-relative"
-      style={{ background: "#e2ecea" }}
+      className="card h-100 border rounded-4 border-0 position-relative"
+      style={{ background: "#ffffff85" }}
     >
       {/* 3-Dot Icon and Menu */}
       <div ref={menuRef} className="position-absolute end-0 top-0 m-2">
@@ -41,7 +41,7 @@ function JobCard1({ job, onEdit, onDelete }) {
               zIndex: 10,
               width: "150px",
               height: "100px",
-              backgroundColor: "rgba(26, 70, 84, 0.8)", // 👈 transparent #1a4654
+              backgroundColor: " #1a4654", // 👈 rgba(26, 70, 84, 0.8)transparent #1a4654
               color: "white",
             }}
           >
