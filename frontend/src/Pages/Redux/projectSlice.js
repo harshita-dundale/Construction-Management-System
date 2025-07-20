@@ -97,7 +97,15 @@ const projectSlice = createSlice({
       .addCase(fetchProjects.fulfilled, (state, action) => {
         state.loading = false;
         state.status = "succeeded";
-        state.projects = action.payload?.projects || [];
+       // state.projects = action.payload?.projects || [];
+       //or
+      //  state.projects = (action.payload?.projects || []).filter(
+      //   (p) => p.userId === state.selectedProject?.userId || true
+      // );
+      //or
+      state.projects = action.payload?.projects || [];
+state.selectedProject = null; // ✅ optional: reset selected project if user changes
+      
       })
       .addCase(fetchProjects.rejected, (state, action) => {
         state.loading = false;

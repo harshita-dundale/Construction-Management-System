@@ -1,7 +1,13 @@
 import express from "express";
 import multer from "multer";
 import path from "path";
-import { postJob, getAllJobs } from "../controllers/jobController.js";
+//import { postJob, getAllJobs } from "../controllers/jobController.js";
+import { 
+  postJob, 
+  getAllJobs, 
+  getBuilderJobsByProjects, 
+  getJobsByProject ,updateJob,deleteJob
+} from "../controllers/jobController.js";
 
 const router = express.Router();
 
@@ -20,7 +26,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // 🔸 Routes
-router.post("/", upload.single("image"), postJob);
+// router.post("/", upload.single("image"), postJob);
+// router.get("/", getAllJobs);
+router.post("/", upload.fields([{ name: "image", maxCount: 1 }]), postJob);
 router.get("/", getAllJobs);
+router.get("/builder/:userId", getBuilderJobsByProjects);
+router.get("/project/:projectId", getJobsByProject);
+router.put("/:id", upload.fields([{ name: "image", maxCount: 1 }]), updateJob);
+router.delete("/:id", deleteJob);
 
 export default router;

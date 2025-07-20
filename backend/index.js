@@ -8,6 +8,7 @@ import projectRoutes from "./routes/projectRoutes.js";
 import applyRoutes from "./routes/apply.js";
 import materialRoutes from "./routes/materialRoutes.js"; 
 import workerRecordsRoutes from "./routes/worker-records.js";
+import attendanceRoutes from "./routes/attendanceRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/apply", applyRoutes);
 app.use("/api/materials", materialRoutes); 
 app.use("/api/worker-records", workerRecordsRoutes);
+app.use("/api/attendance", attendanceRoutes);
 
 const mongoURI = process.env.DB_URI || "";
 

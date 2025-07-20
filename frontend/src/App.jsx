@@ -19,6 +19,8 @@ import MainAttendance from './Pages/workersPage/attendance/MainAttendance';
 import ApplyForm from './Pages/workersPage/ApplyForm'; 
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import WorkerHistory from "./Pages/buildersPage/WorkerHistory"
+import ViewPostedJobs from './builder_Deshboard/ViewPostedJob';
 
 function App() {
   const domain = "dev-i7r8hkh5ekl5da21.us.auth0.com";
@@ -47,6 +49,8 @@ function App() {
           <Route path="/applications" element={<ApplicationSection />} />
           <Route path="/attendances" element={<MainAttendance />} />
           <Route path="/apply-job" element={<ApplyForm />} /> 
+          <Route path="/attendance/worker/:workerId" element={<WorkerHistory />} />
+          <Route path="/ViewPostedJobs" element={<ViewPostedJobs />} />
         </Routes>
       </Router>  
     </Auth0Provider>

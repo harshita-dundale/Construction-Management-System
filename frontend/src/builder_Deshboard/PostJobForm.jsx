@@ -19,8 +19,8 @@ import {
 } from "../Pages/Redux/postJobSlice.js";
 import { useState, useEffect } from "react";
 import {
-  selectProject, // ✅ Add this if not already imported
-  fetchProjects, // ✅ If your project list is fetched from backend
+  selectProject,
+  fetchProjects, 
 } from "../Pages/Redux/projectSlice.js";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -32,11 +32,11 @@ function PostJobForm() {
   const selectedProject = useSelector((state) => state.project.selectedProject);
   const projects = useSelector((state) => state.project.projects);
 
-  const { user } = useAuth0(); // 👈 Get Auth0 logged-in user
+  const { user } = useAuth0(); 
 
   useEffect(() => {
     if (projects.length === 0 && user?.sub) {
-      dispatch(fetchProjects(user.sub)); // ✅ Pass userId / ⛳ Only if projects not already loaded
+      dispatch(fetchProjects(user.sub)); 
     }
   }, [dispatch, projects, user?.sub]);
   
@@ -67,7 +67,7 @@ function PostJobForm() {
     if (selectedImage) {
       formData.append("image", selectedImage);
     }
-    formData.append("userId", user?.sub); // 👈 Add this line
+    formData.append("userId", user?.sub); 
 
     try {
       const response = await fetch("http://localhost:5000/api/jobs", {

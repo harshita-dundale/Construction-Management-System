@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Backend se data fetch karne ke liye thunk
-
 export const fetchApplications = createAsyncThunk(
   "applications/fetchApplications",
   async ({ workerEmail = null, status = null, experience = null, projectId = null }, { rejectWithValue }) => {
@@ -36,7 +35,6 @@ export const fetchApplications = createAsyncThunk(
     }
   }
 );
-
 const applicationsSlice = createSlice({
   name: "applications",
   initialState: {
@@ -68,10 +66,13 @@ const applicationsSlice = createSlice({
       .addCase(fetchApplications.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.applications = [];
+  state.filteredApplications = [];
       })
       .addCase(fetchApplications.fulfilled, (state, action) => {
         state.loading = false;
         state.applications = action.payload;
+        state.filteredApplications = action.payload; 
       })
       .addCase(fetchApplications.rejected, (state, action) => {
         state.loading = false;
@@ -79,67 +80,6 @@ const applicationsSlice = createSlice({
       });
   },
 });
-
-
 export const {setFilteredApplications, setShowModal,setFilter,  setCurrentJob  } =
   applicationsSlice.actions;
 export default applicationsSlice.reducer;
-
-
-
-//AppliActionSlice
-// import { setApplications } from './AppliModelSlice';
-
-// export const fetchApplications = (workerEmail) => async (dispatch) => {
-//   try {
-//     // const response = await fetch(
-//     //   `http://localhost:5000/api/applications?workerEmail=${workerEmail}`
-//     // );
-//     const response = await fetch(`http://localhost:5000/api/apply?workerEmail=${workerEmail}`);
-//     const data = await response.json();
-//     dispatch(setApplications(data));
-//   } catch (error) {
-//     console.error("Error fetching applications:", error);
-//   }
-// };
-
-
-
-
-
-//AppliModelSlice
-//import { createSlice } from "@reduxjs/toolkit";
-
-// const AppliModelSlice = createSlice({
-//   name: 'applicationsModel',
-//   initialState: {
-//     filter: 'All',
-//     showModal: false,
-//     currentJob: null,
-//     allApplications: [], // removed dummy static data
-//   },
-//   reducers: {
-//     setFilter(state, action) {
-//       state.filter = action.payload;
-//     },
-//     setShowModal(state, action) {
-//       state.showModal = action.payload;
-//     },
-//     setCurrentJob(state, action) {
-//       state.currentJob = action.payload;
-//     },
-//     setApplications(state, action) {
-//       state.allApplications = action.payload;
-//     },
-//   },
-// });
-
-// export const {
-//   setFilter,
-//   setShowModal,
-//   setCurrentJob,
-//   setApplications,
-// } = AppliModelSlice.actions;
-
-// export default AppliModelSlice.reducer;
-

@@ -1,19 +1,31 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Cards1 from "../Components/cards/Cards1";
 import Header from "../Components/Header";
 import ProjectModal from "../Components/ProjectModal";
+ import { selectProject } from "../Pages/Redux/projectSlice";
+ import { toast } from "react-toastify";
 
 function Builder_dashboard() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const cardData1 = useSelector((state) => state.builder.cards);
   const location = useLocation();
   const [showProjectModal, setShowProjectModal] = useState(false);
   const selectedProject = useSelector((state) => state.project.selectedProject);
 
-  console.log("🎯 Selected Project:", selectedProject);
+  
+useEffect(() => {
+  const saved = localStorage.getItem("selectedProject");
+  if (saved && !selectedProject) {
+    dispatch(selectProject(JSON.parse(saved)));
+  }
+}, [selectedProject]);
+
+ // console.log("🎯 Selected Project:", selectedProject);
 
   useEffect(() => {
     const selected = localStorage.getItem("selectedProject");
@@ -86,7 +98,10 @@ function Builder_dashboard() {
           show={showProjectModal}
           handleClose={() => {
             if (!selectedProject) {
-              alert("Please select a project before closing.");
+              toast("Please select a project before closing.");
+
+             // console.log("Please select a project before closing.");
+             // alert("Please select a project before closing.");
             } else {
               setShowProjectModal(false);
             }
