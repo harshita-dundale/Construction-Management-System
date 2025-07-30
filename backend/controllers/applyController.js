@@ -183,8 +183,11 @@ export const getAttendanceSummaryByEmail = async (req, res) => {
       if (!app.jobId) continue; // skip if job deleted
 
       const attendanceRecords = await Attendance.find({
-        workerId: app.workerId, // ✅ fixed here
-        jobId: app.jobId._id,
+        // workerId: app.workerId, 
+        // jobId: app.jobId._id,
+        workerId: app._id, 
+        projectId: app.projectId
+
       });
 
       attendanceRecords.forEach((rec) => {

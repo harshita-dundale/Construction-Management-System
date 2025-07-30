@@ -41,16 +41,13 @@ const MainAttendance = () => {
   }, [workerEmail]);
 
   if (isLoading || loadingJobs) {
-    return <div>Loading user info...</div>; // ⏳ Loading screen
+    return <div>Loading user info...</div>; 
   }
 
   if (!isAuthenticated || !user) {
-    return <div>Please login to continue</div>; // 🔒 Not logged in
+    return <div>Please login to continue</div>; 
   }
 
-  // if (jobTitles.length === 0) {
-  //   return <div>No jobs found</div>; // ❌ No jobs for this user
-  // }
   return (
     <div>
       <Header />
@@ -58,7 +55,7 @@ const MainAttendance = () => {
         <Tabs tabs={jobTitles}>
           {jobIds.map((id) => (
             <div key={id}>
-              <PaymentSummary />
+              <PaymentSummary jobId={id}/>
             </div>
           ))}
         </Tabs>

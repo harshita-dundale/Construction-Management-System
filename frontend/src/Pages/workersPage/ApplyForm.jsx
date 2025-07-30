@@ -132,18 +132,6 @@ function ApplyForm() {
               />
             </div>
 
-            {/* <div className="form-group mb-3">
-              <label className="fw-bold text-dark">Skills</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Enter your skills"
-                value={applyJob.skills}
-                onChange={(e) => dispatch(setSkills(e.target.value))}
-                required
-              />
-            </div> */}
-
             <div className="form-group mb-4">
               <label className="fw-bold text-dark">Experience (years)</label>
               <input

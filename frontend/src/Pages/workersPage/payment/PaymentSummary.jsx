@@ -1,69 +1,57 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import PaymentHistory from "../payment/PaymentHistory";
-import AttendanceHistory from "../attendance/AttendanceHistory";
 import pay1 from "../../../assets/images/icons/pay1.gif"
 import pay2 from "../../../assets/images/icons/pay2.gif"
 import { useDispatch } from "react-redux";
 import { fetchAttendanceSummary , fetchAttendanceHistory,  } from "../../Redux/AttendanceSlice"; 
 import { useAuth0 } from "@auth0/auth0-react"; 
 
-const PaymentSummary = () => {
+const PaymentSummary = ({ jobId }) => {
   const [showSection, setShowSection] = useState(null);
-
   const dispatch = useDispatch();
   const { user } = useAuth0();
   const workerEmail = user?.email;
 
-  const { paymentData, paymentHistory, attendanceData, attendanceHistory, loading } = useSelector(
-    (state) => state.attendance
-  );
+  const {
+    history, 
+    summaryStatus,
+    summaryError,
+    loading,
+    paymentData,
+    paymentHistory,
+  } = useSelector((state) => state.attendance);
 
   useEffect(() => {
     if (workerEmail) {
+      dispatch(fetchAttendanceHistory(workerEmail));
       dispatch(fetchAttendanceSummary(workerEmail));
     }
   }, [dispatch, workerEmail]);
 
-  // const handleToggle = (section) => {
-  //   setShowSection((prev) => (prev === section ? null : section));
-  //   if (section === "attendance") {
-  //     // dispatch(fetchAttendanceHistory());
-  //     // dispatch(fetchAttendanceHistory({ workerId, jobId }));
-  //     dispatch(fetchAttendanceHistory(workerEmail));
+  const selectedJob = history?.find((job) => job.jobId === jobId);
 
-  //   }
-  // };
+  if (!selectedJob) {
+    return <div>No attendance records found for this job.</div>;
+  }
+
+  const presentCount = selectedJob?.attendanceRecords?.filter((a) => a.status === "Present").length || 0;
+  const absentCount = selectedJob?.attendanceRecords?.filter((a) => a.status === "Absent").length || 0;
+  const selectedAttendanceRecords = selectedJob?.attendanceRecords || [];
 
   const handleToggle = (section) => {
     setShowSection((prev) => (prev === section ? null : section));
-  
-    if (section === "attendance") {
-      // Fake example values — replace with real logic
-      const workerId = "some_worker_id"; 
-      const jobId = "some_job_id";
-  
-      dispatch(fetchAttendanceHistory({ workerId, jobId }));
-    }
   };
-  
 
-  // Count present/absent days
-  // const presentCount = attendanceHistory.filter((a) => a.status === "Present").length;
-  // const absentCount = attendanceHistory.filter((a) => a.status === "Absent").length;
-
-  const presentCount = Array.isArray(attendanceHistory)
-  ? attendanceHistory.filter((a) => a.status === "Present").length
-  : 0;
-const absentCount = Array.isArray(attendanceHistory)
-  ? attendanceHistory.filter((a) => a.status === "Absent").length
-  : 0;
+  if (summaryStatus === "loading") return <p>Loading...</p>;
+  if (summaryStatus === "failed") return <p>Error: {summaryError}</p>;
 
   return (
     <div style={{ textAlign: "center", fontFamily: "sans-serif" }} className="container">
       <div className="row">
+
         {/* 💰 Payment Box */}
-        <div className="col-md-6" style={boxStyle} onClick={() => handleToggle("payment")}> 
+        <div className="col-md-6" style={boxStyle} onClick={() => handleToggle("payment")}>
           <img src={pay1} className="rounded mb-3 icons" width="80" height="80" />
           <h3 style={headingStyle}>Payment Summary</h3>
           <p><strong>Daily Wage:</strong> ₹{paymentData?.dailyWage ?? "--"}</p>
@@ -71,11 +59,11 @@ const absentCount = Array.isArray(attendanceHistory)
           <p style={{ fontWeight: "bold", color: "#ef4444" }}>
             <strong>Pending Payments:</strong> ₹{paymentData?.pending ?? "--"}
           </p>
-          <p style = {clickTextStyle}>Click to view Payment History</p>
+          <p style={clickTextStyle}>Click to view Payment History</p>
         </div>
 
         {/* 📅 Attendance Box */}
-        <div className="col-md-6" style={boxStyle} onClick={() => handleToggle("attendance")}> 
+        <div className="col-md-6" style={boxStyle} onClick={() => handleToggle("attendance")}>
           <img src={pay2} className="rounded mb-3 icons" width="80" height="80" />
           <h3 style={headingStyle}>Attendance Summary</h3>
 
@@ -87,13 +75,15 @@ const absentCount = Array.isArray(attendanceHistory)
               <p><strong>Days Absent:</strong> {absentCount}</p>
             </>
           )}
-          <p style = {clickTextStyle}>Click to view Attendance History</p>
+          <p style={clickTextStyle}>Click to view Attendance History</p>
         </div>
 
         {/* Section Display */}
         {showSection === "payment" && <PaymentHistory payments={paymentHistory} />}
+
         {showSection === "attendance" && (
           <div className="container my-5">
+            {/* <h5 className="mb-3 text-start"><strong>Attendance History</strong></h5> */}
             <table className="tableHistory">
               <thead>
                 <tr className="header-row">
@@ -102,10 +92,10 @@ const absentCount = Array.isArray(attendanceHistory)
                 </tr>
               </thead>
               <tbody>
-                {attendanceHistory.length > 0 ? (
-                  attendanceHistory.map((entry, index) => (
+                {selectedAttendanceRecords.length > 0 ? (
+                  selectedAttendanceRecords.map((entry, index) => (
                     <tr key={index} className={`body-row ${index % 2 === 0 ? "alternate-row" : ""}`}>
-                      <td className="cell">{entry.date}</td>
+                      <td className="cell">{new Date(entry.date).toLocaleDateString()}</td>
                       <td className="cell" style={{ color: entry.status === "Present" ? "green" : "red" }}>
                         {entry.status}
                       </td>
@@ -122,6 +112,10 @@ const absentCount = Array.isArray(attendanceHistory)
     </div>
   );
 };
+
+export default PaymentSummary;
+
+
 
 const boxStyle = {
   backgroundColor: "white",
@@ -144,6 +138,3 @@ const clickTextStyle = {
   color: "#111",
   marginTop: "20px",
 };
-
-
-export default PaymentSummary;

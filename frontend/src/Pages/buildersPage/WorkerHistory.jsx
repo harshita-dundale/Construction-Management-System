@@ -7,6 +7,7 @@ import Header from "../../Components/Header";
     const [history, setHistory] = useState([]);
     const [workerName, setWorkerName] = useState("");
     const [loading, setLoading] = useState(true);
+    console.log("Using workerId:", workerId);
 
     useEffect(() => {
       const fetchHistory = async () => {
@@ -15,16 +16,21 @@ import Header from "../../Components/Header";
             `http://localhost:5000/api/worker-records/history/${workerId}`
           );
           const data = await res.json();
-
+          if (!Array.isArray(data)) {
+            console.error("❌ Unexpected response:", data);
+            setHistory([]);
+            return;
+          }
+    
+          console.log("✅ History response:", data);
           setHistory(data);
-          console.log("History response:", data);
           
           if (data.length > 0) {
             //setWorkerName(data[0].workerName || "Worker");
             setWorkerName(data[0]?.workerId?.name || "Worker");
           }
 
-          setLoading(false);
+           setLoading(false);
         } catch (err) {
           console.error("Error fetching history", err);
           setLoading(false);

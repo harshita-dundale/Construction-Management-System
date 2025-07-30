@@ -33,9 +33,7 @@ function Dashboard() {
 
         const merged = accepted.map((worker) => ({
           ...worker,
-         // workerId: worker.userId,
-         //workerId: worker.userId._id,
-          workerId: worker.userId || worker._id || "", // fallback
+         workerId: worker.userId?._id || worker.userId || worker._id ,
           present: false,
         }));
 
@@ -72,8 +70,7 @@ function Dashboard() {
     }
 
     const payload = hiredWorkers.map((worker) => ({
-      workerId: worker._id,
-      //workerId: worker.userId,
+        workerId:  worker.userId?._id || worker.userId || worker.workerId || "",
       projectId: selectedProject._id,
       date,
       status: worker.present ? "Present" : "Absent",
@@ -82,13 +79,15 @@ function Dashboard() {
 
     try {
       setProcessing(true);
+      // console.log("📤 Attendance Payload:", payload);
+
       const res = await fetch(
         "http://localhost:5000/api/worker-records/mark-all",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            attendance: payload, // 👈 full data array
+            attendance: payload, 
           }),
         }
       );
@@ -160,14 +159,6 @@ function Dashboard() {
                 <tr key={worker._id || index} className="align-middle">
                   <td>{index + 1}</td>
                   <td>{worker.name}</td>
-                  {/* <td>
-                    <input
-                      type="checkbox"
-                      className="form-check-input border border-dark"
-                      checked={worker.present}
-                      onChange={() => handleAttendanceToggle(worker._id)}
-                    />
-                  </td> */}
                   <td>
                     <div className="d-flex flex-column align-items-center">
                       <input

@@ -24,16 +24,6 @@ function HiredWorkers() {
 
   fetchHired();
 }, [selectedProject]);
-  // useEffect(() => {
-  //   fetch("http://localhost:5000/api/apply")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       const accepted = data.filter((app) => app.status === "accepted");
-  //       setHired(accepted);  //.slice(0, 3)
-  //     })
-  //     .catch((err) => console.error("Error fetching hired workers:", err));
-  // }, []);
-
   return (
     <>
     <Header />

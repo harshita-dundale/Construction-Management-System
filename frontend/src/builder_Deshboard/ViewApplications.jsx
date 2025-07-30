@@ -24,10 +24,10 @@ function ViewApplications() {
     if (user?.email && selectedProject?._id) {
       dispatch(
         fetchApplications({
-          workerEmail: user.email,
+        //  workerEmail: user.email,
           status: statusFilter,
           experience: experienceFilter,
-          projectId: selectedProject._id, // ✅ ensure correct project
+          projectId: selectedProject._id, 
         })
       );
     }
