@@ -11,6 +11,11 @@ import {
   deleteMaterial,
 } from "../Redux/MaterialSlice";
 import Swal from "sweetalert2";
+import { MdEdit } from "react-icons/md";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineSaveAlt } from "react-icons/md";
+import { TbCancel } from "react-icons/tb";
+import { IoMdAdd } from "react-icons/io";
 
 const MaterialManagement = () => {
   const dispatch = useDispatch();
@@ -264,7 +269,7 @@ const MaterialManagement = () => {
               </div>
               <div className="col-md-12 text-end mt-3">
                 <button type="submit" className="btn btn-success">
-                  Add
+                <IoMdAdd />Add
                 </button>
               </div>
             </div>
@@ -320,32 +325,33 @@ const MaterialManagement = () => {
                       {editMaterialId === mat._id ? (
                         <>
                           <button
-                            className="btn btn-sm btn-success me-2"
+                            className="btn btn-sm text-success fw-bold me-2"
                             onClick={() => handleSaveEdit(mat)}
                           >
-                            Save
+                           <MdOutlineSaveAlt /> Save
                           </button>
                           <button
-                            className="btn btn-sm btn-secondary"
+                          //btn-secondary btn-success
+                            className="btn btn-sm "
                             onClick={() => {
                               setEditMaterialId(null);
                               setEditedQty(null);
                             }}
                           >
-                            Cancel
+                           <TbCancel /> Cancel
                           </button>
                         </>
                       ) : (
                         <>
                           <button
-                            className="btn btn-sm btn-primary me-2"
-                            style={buttonStyle}
+                            className="btn btn-sm  me-2"
+                           // style={buttonStyle} btn-primary
                             onClick={() => {
                               setEditMaterialId(mat._id);
                               setEditedQty(mat.quantity);
                             }}
                           >
-                            Edit
+                           <MdEdit /> Edit
                           </button>
                           {/* <span */}
                           <button
@@ -353,12 +359,12 @@ const MaterialManagement = () => {
                             //   color: "red",
                             //   cursor: "pointer",
                             //   fontSize: "1.2rem",
-                            // }}
-                            className="btn btn-sm btn-danger"
+                            // }} btn-danger
+                            className="btn btn-sm text-danger"
                             title="Delete"
                             onClick={() => handleDelete(mat._id)}
                           >
-                            {/* 🗑️ */} Delete
+                             <RiDeleteBin6Line />  Delete
                             </button>
                           {/* </span> */}
                         </>

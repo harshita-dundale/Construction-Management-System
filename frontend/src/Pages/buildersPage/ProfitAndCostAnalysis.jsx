@@ -20,16 +20,16 @@ const ProfitAndCostAnalysis = () => {
       <div className="container mt-5 my-5" >
         <h1 className="text-center mb-4" style={{ marginTop: "8rem", fontFamily: "sans-serif" }}>Profit and Cost Analysis</h1>
         {/* Profit or Loss Analysis */}
-        <div className="text-center mt-4 mb-2 d-flex justify-content-end">
+        {/* <div className="text-center mt-4 mb-2 d-flex justify-content-end">
           <button
             className="btn btn-light  service-btns"
             onClick={() => alert(`Profit/Loss: $${profitOrLoss}`)}
           >
             View Profit / Loss
           </button>
-        </div>
+        </div> */}
         {/* Expenses Section */}
-        <div className="mb-4 p-3" style={{ border: "2px solid #5DADE2", borderRadius: "10px" }}>
+        <div className="mb-4 p-3 mt-5" style={{ border: "2px solid #5DADE2", borderRadius: "10px" }}>
           <h5 className="text-info">Track Expenses</h5>
           <div className="row">
             <div className="col-md-6 mb-3">

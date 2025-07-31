@@ -4,6 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { GrFormView } from "react-icons/gr";
 
 function Dashboard() {
   const [hiredWorkers, setHiredWorkers] = useState([]);
@@ -163,7 +164,7 @@ function Dashboard() {
                     <div className="d-flex flex-column align-items-center">
                       <input
                         type="checkbox"
-                        className="form-check-input border border-dark"
+                        className="form-check-input border border-dark me-5"
                         checked={worker.present}
                         onChange={() => handleAttendanceToggle(worker._id)}
                       />
@@ -183,7 +184,7 @@ function Dashboard() {
                       className="btn btn-outline-primary btn-sm"
                       style={buttonStyle}
                     >
-                      👁️ View History
+                      <GrFormView /> View History
                     </Link>
                   </td>
                 </tr>
@@ -194,10 +195,16 @@ function Dashboard() {
 
         <div className="d-flex justify-content-end mt-4">
           <button
-            className="btn btn-primary px-4 py-2"
             disabled={processing}
             onClick={handleSubmitAttendance}
             style={buttonStyle}
+              className="btn btn-light px-4 py-2"
+              onMouseEnter={(e) =>
+                (e.target.style.backgroundColor = "var(--secondary-color)")
+              }
+              onMouseLeave={(e) =>
+                (e.target.style.backgroundColor = "var(--primary-color)")
+              }
           >
             {processing ? "Submitting..." : "Submit Attendance"}
           </button>
