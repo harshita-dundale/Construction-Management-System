@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
@@ -140,8 +138,13 @@ function Header() {
                     <a className={`nav-link ${currentPath === "/profitandcostanalysis" ? "active bold-underline" : ""}`} onClick={() => navigate("/profitandcostanalysis")}>Profit & Cost</a>
                   </li>
                   <li className="nav-item me-2">
-                    <a className={`nav-link ${currentPath === "/dashboard" ? "active bold-underline" : ""}`} onClick={() => navigate("/dashboard")}>Attendance & Payroll</a>
+                    <a className={`nav-link ${currentPath === "/dashboard" ? "active bold-underline" : ""}`} onClick={() => navigate("/dashboard")}>Attendance</a>
                   </li>
+
+                  <li className="nav-item">
+                    <a className={`nav-link ${currentPath === "/attendance" ? "active bold-underline" : ""}`} onClick={() => navigate("/payroll")}> Payroll</a>
+                  </li>
+
                 </>
               )}
 
