@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "../../Components/Header";
+import { MdCoPresent } from "react-icons/md";
 
   function WorkerHistory() {
     const { workerId } = useParams();
@@ -46,20 +47,21 @@ import Header from "../../Components/Header";
     return (
       <> <Header />
       <div className="container mt-5" style={{ marginTop: "160px"}}>
-        <h2 className="text-center mb-4" style={{ marginTop: "160px"}}>👤 Attendance History</h2>
+        <h2 className="text-center mb-4" style={{ marginTop: "160px"}}><MdCoPresent className="me-3 mb-1" />
+ Attendance History</h2>
 
         {loading ? (
           <p className="text-center">Loading...</p>
         ) : (
           <>
             <div className="text-center mb-3">
-              <h4>{workerName}</h4>
-              <p className="text-muted">🆔 ID: {workerId}</p>
+              {/* <h4>{workerName}</h4> */}
+              {/* <p className="text-muted">🆔 ID: {workerId}</p> */}
             </div>
             <div className="mt-4 text-end fw-bold">
               Summary:  Present: {presentCount} |  Absent: {absentCount}
             </div>
-            <table className="table table-bordered text-center">
+            <table className="table table-striped table-hover text-center border rounded">
               <thead className="table-dark">
                 <tr>
                   <th>Date</th>

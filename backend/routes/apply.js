@@ -6,8 +6,6 @@ import {
   updateApplicationStatus,
   deleteApplication,
   getJobsByWorker,
-  getAttendanceByWorkerAndJob,
-  getAttendanceSummaryByEmail,
 } from "../controllers/applyController.js";
 
 router.get("/", getApplications);

@@ -14,7 +14,7 @@ import attendanceReducer from "./AttendanceSlice";
 import projectReducer from "./projectSlice";
 import applyJobReducer from "../Redux/ApplyJobSlice";
 import authReducer from "../Redux/authSlice";
-
+import PayrollReducer from "./PayrollSlice";
 import storage from 'redux-persist/lib/storage'; // localStorage
 import { persistReducer, persistStore } from 'redux-persist';
 import { combineReducers } from 'redux';
@@ -40,9 +40,10 @@ const rootReducer = combineReducers({
   finance: financeReducer,
   workers: workerReducer,
   attendance: attendanceReducer,
-  project: projectReducer, // this will be persisted
+  project: projectReducer, 
   applyJob: applyJobReducer,
   auth: authReducer,
+  Payroll:PayrollReducer,
 });
 
 // ✅ Wrap rootReducer with persistReducer

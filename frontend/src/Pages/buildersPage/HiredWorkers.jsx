@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Card3 from "../../Components/cards/Card3"; 
 import Header from "../../Components/Header";
+import { GrUserWorker } from "react-icons/gr";
 
 function HiredWorkers() {
   const [hired, setHired] = useState([]);
@@ -30,7 +31,8 @@ function HiredWorkers() {
     <br />
     <br />
     <div className="container" style={{ marginTop: "90px"}}>
-      <h2 className="mb-4 text-center">👷‍♂️ Hired Workers</h2>
+      <h2 className="mb-5 text-center"><GrUserWorker className="mb-2 me-2 "/>
+ Hired Workers</h2>
       <div className="row">
         {hired.length === 0 ? (
           <p className="text-center text-muted">No workers hired yet.</p>

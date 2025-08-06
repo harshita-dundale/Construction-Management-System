@@ -6,6 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { deleteProject } from "../Pages/Redux/projectSlice";
 import { toast } from "react-toastify"; 
 import Swal from "sweetalert2";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
   const ProjectModal = ({ show, handleClose }) => {
     
@@ -70,8 +71,8 @@ import Swal from "sweetalert2";
       text: "This project will be permanently deleted.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "var(--secondary-color)",
+      cancelButtonColor: "gray",
       confirmButtonText: "Yes, delete it!",
     });
 
@@ -109,9 +110,9 @@ import Swal from "sweetalert2";
                 <span onClick={() => handleProjectSelect(p)}>{p.name}</span>
                 <button
                   onClick={() => handleDeleteProject(p._id)}
-                  className="btn btn-sm btn-outline-danger"
-                >
-                  🗑️
+                  className="btn btn-sm text-danger"
+                > 
+                  <RiDeleteBin6Line style={{ transform: "scale(1.3)" }}/>
                 </button>
               </li>
             ))}
@@ -129,7 +130,7 @@ import Swal from "sweetalert2";
         />
         {localError && <p className="text-danger">{localError}</p>}
 
-        <Button style={buttonStyle} onClick={handleNewProject}>
+        <Button style={buttonStyle1} onClick={handleNewProject}>
           Add Project
         </Button>
       </Modal.Body>
@@ -139,10 +140,10 @@ import Swal from "sweetalert2";
 
 export default ProjectModal;
 
-const buttonStyle = {
-  backgroundColor: "var(--primary-color)",
-  color: "var(--text-color)",
-};
+// const buttonStyle = {
+//   backgroundColor: "var(--primary-color)",
+//   color: "var(--text-color)",
+// };
 
 const buttonStyle1 = {
   backgroundColor: "var(--primary-color)",

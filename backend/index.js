@@ -9,6 +9,7 @@ import applyRoutes from "./routes/apply.js";
 import materialRoutes from "./routes/materialRoutes.js"; 
 import workerRecordsRoutes from "./routes/worker-records.js";
 import attendanceRoutes from "./routes/attendanceRoutes.js";
+import payrollRoutes from "./routes/payrollRoutes.js"; 
 
 dotenv.config();
 const app = express();
@@ -30,6 +31,7 @@ app.use("/api/apply", applyRoutes);
 app.use("/api/materials", materialRoutes); 
 app.use("/api/worker-records", workerRecordsRoutes);
 app.use("/api/attendance", attendanceRoutes);
+app.use("/api/payroll", payrollRoutes);
 
 const mongoURI = process.env.DB_URI || "";
 

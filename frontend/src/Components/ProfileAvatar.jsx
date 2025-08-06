@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import ProfileModal from './ProfileModal';
+import { LuLogOut } from "react-icons/lu";
+import { CgProfile } from "react-icons/cg";
+import "./ProfileAvatar.css";
 
 const ProfileAvatar = () => {
   const { user, logout, isAuthenticated } = useAuth0();
@@ -51,17 +54,7 @@ const ProfileAvatar = () => {
         {imageError ? (
           <div
             onClick={toggleDropdown}
-            className="rounded-circle d-flex align-items-center justify-content-center"
-            style={{
-              width: '40px',
-              height: '40px',
-              backgroundColor: '#0d6efd',
-              color: 'white',
-              fontSize: '20px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              userSelect: 'none',
-            }}
+            className="rounded-circle d-flex align-items-center justify-content-center profile-avatar"
             id="profileDropdown"
             data-bs-toggle="dropdown"
             aria-expanded={showDropdown}
@@ -72,13 +65,7 @@ const ProfileAvatar = () => {
           <img
             src={user.picture}
             alt="Profile"
-            className="rounded-circle"
-            style={{
-              width: '40px',
-              height: '40px',
-              objectFit: 'cover',
-              cursor: 'pointer',
-            }}
+            className="rounded-circle profile-avatar-img"
             onClick={toggleDropdown}
             onError={() => setImageError(true)}
             id="profileDropdown"
@@ -103,16 +90,16 @@ const ProfileAvatar = () => {
             <hr className="dropdown-divider" />
           </li>
           <li>
-            <button className="dropdown-item" onClick={() => setShowModal(true)}>
-              My Profile
+            <button className="dropdown-item" onClick={() => setShowModal(true)} >
+            <CgProfile /> My Profile
             </button>
           </li>
           <li>
             <hr className="dropdown-divider" />
           </li>
           <li>
-            <button className="dropdown-item" onClick={handleLogout}>
-              Logout
+            <button className="dropdown-item text-danger" onClick={handleLogout}>
+            <LuLogOut /> Logout
             </button>
           </li>
         </ul>

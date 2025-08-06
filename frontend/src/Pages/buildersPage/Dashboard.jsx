@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { GrFormView } from "react-icons/gr";
+import "./Dashboard.css";
 
 function Dashboard() {
   const [hiredWorkers, setHiredWorkers] = useState([]);
@@ -131,7 +132,8 @@ function Dashboard() {
 
           <div className="btn-group">
             <button
-              className="btn btn-outline-success"
+            //btn-outline-success
+              className="btn btn-outline-dark"
               onClick={() => handleApplyAll(true)}
             >
               Mark All Present
@@ -149,7 +151,7 @@ function Dashboard() {
           <table className="table table-striped table-hover text-center border rounded">
             <thead className="table-dark">
               <tr>
-                <th>#</th>
+                <th>Sr.</th>
                 <th>Worker Name</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -161,17 +163,18 @@ function Dashboard() {
                   <td>{index + 1}</td>
                   <td>{worker.name}</td>
                   <td>
-                    <div className="d-flex flex-column align-items-center">
+                    <div className="d-flex flex-column justify-content-center align-items-center gap-1">
                       <input
                         type="checkbox"
                         className="form-check-input border border-dark me-5"
                         checked={worker.present}
                         onChange={() => handleAttendanceToggle(worker._id)}
+                        // style={{ transform: "scale(1.3)" }}  text-success 
                       />
                       <small
                         className={`fw-bold ${
-                          worker.present ? "text-success" : "text-danger"
-                        }`}
+                          worker.present ? "text-dark" : "text-danger"
+                        } ms-3`}
                       >
                         {worker.present ? " Present" : " Absent"}
                       </small>

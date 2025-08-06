@@ -1,0 +1,19 @@
+@media (max-width: 768px) {
+  .table td,
+  .table th {
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .form-check-input {
+    transform: scale(1.2); /* Makes checkbox more tappable on mobile */
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .btn-sm {
+    font-size: 0.85rem;
+  }
+}

@@ -101,15 +101,6 @@ const MaterialManagement = () => {
       return;
     }
 
-    // const quantityUsed = mat.quantity - editedQty;
-    // if (quantityUsed < 0) {
-    //   Swal.fire(
-    //     "Invalid Input",
-    //     "New quantity cannot be more than existing",
-    //     "warning"
-    //   );
-    //   return;
-    // }
     const qtyUsed = mat.quantity - editedQty;
   if (isNaN(qtyUsed) || qtyUsed < 0) {
     alert("Invalid quantity update");
@@ -141,15 +132,14 @@ const MaterialManagement = () => {
     }
   };
 
-  // ✅ Delete Material
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "This material will be permanently deleted.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "var(--secondary-color)",
+      cancelButtonColor: "gray",
       confirmButtonText: "Yes, delete it!",
     });
 
@@ -332,7 +322,7 @@ const MaterialManagement = () => {
                           </button>
                           <button
                           //btn-secondary btn-success
-                            className="btn btn-sm "
+                            className="btn btn-sm text-secondary fw-bold"
                             onClick={() => {
                               setEditMaterialId(null);
                               setEditedQty(null);

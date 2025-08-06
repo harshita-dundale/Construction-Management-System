@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
@@ -27,7 +26,6 @@ function Header() {
     );
 
     sections.forEach((section) => observer.observe(section));
-
     return () => {
       sections.forEach((section) => observer.unobserve(section));
     };
@@ -62,13 +60,7 @@ function Header() {
 
   const currentPath = location.pathname.toLowerCase();
 
-  const isWorkerPage = [
-    "/browse-job",
-    "/track-billing",
-    "/applications",
-    "/attendances",
-  ].includes(currentPath);
-  const isBuilderPage = [
+  const builderPaths = [
     "/builder-dashboard",
     "/viewpostedjobs",
     "/materialmanagement",
@@ -77,19 +69,24 @@ function Header() {
     "/viewapplications",
     "/hiredworkers",
     "/post-job",
+    "/attendance/worker", 
+    "/payroll",
+  ];
+
+  const isBuilderPage = builderPaths.some((path) =>
+    currentPath.startsWith(path)
+  );
+
+  const isWorkerPage = [
+    "/browse-job",
+    "/track-billing",
+    "/applications",
+    "/attendances",
   ].includes(currentPath);
 
   return (
-    <header
-      style={{
-        backgroundColor: "#1a4654",
-        position: "fixed",
-        top: 0,
-        width: "100%",
-        zIndex: 1000,
-      }}
-    >
-      <nav className="navbar navbar-expand-lg navbar-dark py-4 align-items-sm-start">
+    <header style={{ backgroundColor: "#1a4654", position: "fixed", top: 0, width: "100%", zIndex: 1000 }}>
+      <nav className="navbar navbar-expand-lg navbar-dark py-4 d-flex align-items-sm-center">
         <div className="container d-flex flex-wrap align-items-center">
           <img src={logo} alt="logo" height="50" width="200" />
 
@@ -106,176 +103,74 @@ function Header() {
           </button>
 
           <div className="collapse navbar-collapse text-center" id="navbarNav">
-            {/* Profile avatar on mobile - visible only on mobile */}
             <div className="profile-icon d-block d-lg-none mb-3">
               <ProfileAvatar />
             </div>
 
             <ul className="navbar-nav ms-auto">
-              {/* Worker-specific options */}
+              {/* Worker Navigation */}
               {isWorkerPage && (
                 <>
                   <li className="nav-item">
-                    <a
-                      className={`nav-link ${
-                        location.pathname === "/browse-job"
-                          ? "active bold-underline"
-                          : ""
-                      }`}
-                      onClick={() => navigate("/browse-job")}
-                    >
-                      Browse Job
-                    </a>
+                    <a className={`nav-link ${currentPath === "/browse-job" ? "active bold-underline" : ""}`} onClick={() => navigate("/browse-job")}>Browse Job</a>
                   </li>
                   <li className="nav-item me-2">
-                    <a
-                      className={`nav-link ${
-                        location.pathname === "/applications"
-                          ? "active bold-underline"
-                          : ""
-                      }`}
-                      onClick={() => navigate("/applications")}
-                    >
-                      Applications
-                    </a>
+                    <a className={`nav-link ${currentPath === "/applications" ? "active bold-underline" : ""}`} onClick={() => navigate("/applications")}>Applications</a>
                   </li>
                   <li className="nav-item me-2">
-                    <a
-                      className={`nav-link ${
-                        location.pathname === "/attendances"
-                          ? "active bold-underline"
-                          : ""
-                      }`}
-                      onClick={() => navigate("/attendances")}
-                    >
-                      Payroll Manager
-                    </a>
+                    <a className={`nav-link ${currentPath === "/attendances" ? "active bold-underline" : ""}`} onClick={() => navigate("/attendances")}>Payroll Manager</a>
                   </li>
                 </>
               )}
 
-              {/* Builder-specific options */}
+              {/* Builder Navigation */}
               {isBuilderPage && (
                 <>
                   <li className="nav-item">
-                    <a
-                      className={`nav-link ${
-                        location.pathname === "/builder-dashboard"
-                          ? "active bold-underline"
-                          : ""
-                      }`}
-                      onClick={() => navigate("/builder-dashboard")}
-                    >
-                      Dashboard
-                    </a>
+                    <a className={`nav-link ${currentPath === "/builder-dashboard" ? "active bold-underline" : ""}`} onClick={() => navigate("/builder-dashboard")}>Dashboard</a>
                   </li>
                   <li className="nav-item">
-                    <a
-                      className={`nav-link ${
-                        location.pathname === "/viewpostedjobs"
-                          ? "active bold-underline"
-                          : ""
-                      }`}
-                      onClick={() => navigate("/viewpostedjobs")}
-                    >
-                      Posted Jobs
-                    </a>
+                    <a className={`nav-link ${currentPath === "/viewpostedjobs" ? "active bold-underline" : ""}`} onClick={() => navigate("/viewpostedjobs")}>Posted Jobs</a>
                   </li>
                   <li className="nav-item">
-                    <a
-                      className={`nav-link ${
-                        location.pathname === "/materialmanagement"
-                          ? "active bold-underline"
-                          : ""
-                      }`}
-                      onClick={() => navigate("/materialmanagement")}
-                    >
-                      Materials
-                    </a>
+                    <a className={`nav-link ${currentPath === "/materialmanagement" ? "active bold-underline" : ""}`} onClick={() => navigate("/materialmanagement")}>Materials</a>
                   </li>
+                  {/* <li className="nav-item">
+                    <a className={`nav-link ${currentPath === "/profitandcostanalysis" ? "active bold-underline" : ""}`} onClick={() => navigate("/profitandcostanalysis")}>Profit & Cost</a>
+                  </li> */}
                   <li className="nav-item">
-                    <a
-                      className={`nav-link ${
-                        location.pathname === "/profitandcostanalysis"
-                          ? "active bold-underline"
-                          : ""
-                      }`}
-                      onClick={() => navigate("/profitandcostanalysis")}
-                    >
-                      Profit & Cost
-                    </a>
+                    <a className={`nav-link ${currentPath === "/dashboard" ? "active bold-underline" : ""}`} onClick={() => navigate("/dashboard")}>Attendance</a>
                   </li>
+
                   <li className="nav-item me-2">
-                    <a
-                      className={`nav-link ${
-                        location.pathname === "/dashboard"
-                          ? "active bold-underline"
-                          : ""
-                      }`}
-                      onClick={() => navigate("/dashboard")}
-                    >
-                      Attendance & Payroll
-                    </a>
+                    <a className={`nav-link ${currentPath === "/attendance" ? "active bold-underline" : ""}`} onClick={() => navigate("/payroll")}> Payroll</a>
                   </li>
+
                 </>
               )}
 
-              {/* Common nav items when not worker or builder */}
+              {/* Default Static Page Nav */}
               {!isWorkerPage && !isBuilderPage && (
                 <>
                   <li className="nav-item">
-                    <a
-                      className={`nav-link ${
-                        activeSection === "home-section"
-                          ? "active bold-underline"
-                          : ""
-                      }`}
-                      onClick={() => handleScrollToSection("home-section")}
-                    >
-                      Home
-                    </a>
+                    <a className={`nav-link ${activeSection === "home-section" ? "active bold-underline" : ""}`} onClick={() => handleScrollToSection("home-section")}>Home</a>
                   </li>
                   <li className="nav-item">
-                    <a
-                      className={`nav-link ${
-                        activeSection === "services-section"
-                          ? "active bold-underline"
-                          : ""
-                      }`}
-                      onClick={() => handleScrollToSection("services-section")}
-                    >
-                      Services
-                    </a>
+                    <a className={`nav-link ${activeSection === "services-section" ? "active bold-underline" : ""}`} onClick={() => handleScrollToSection("services-section")}>Services</a>
                   </li>
                   <li className="nav-item me-2">
-                    <a
-                      className={`nav-link ${
-                        activeSection === "about-section"
-                          ? "active bold-underline"
-                          : ""
-                      }`}
-                      onClick={() => handleScrollToSection("about-section")}
-                    >
-                      About Us
-                    </a>
+                    <a className={`nav-link ${activeSection === "about-section" ? "active bold-underline" : ""}`} onClick={() => handleScrollToSection("about-section")}>About Us</a>
                   </li>
                 </>
               )}
 
-              {/* Login / Profile */}
+              {/* Auth Buttons */}
               {!isAuthenticated ? (
                 <li className="nav-item">
-                  <button
-                    className="btn btn-light"
-                    type="button"
-                    onClick={() => loginWithRedirect()}
-                  >
-                    Log In
-                  </button>
+                  <button className="btn btn-light" type="button" onClick={() => loginWithRedirect()}>Log In</button>
                 </li>
               ) : (
                 <li className="nav-item d-none d-lg-block">
-                  {/* Profile avatar on desktop */}
                   <div className="profile-icon ms-3">
                     <ProfileAvatar />
                   </div>
