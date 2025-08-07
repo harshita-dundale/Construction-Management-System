@@ -77,7 +77,7 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
-// export default store;
+export default store;
 
 // const store = configureStore({
 //   reducer: {
