@@ -51,12 +51,13 @@ useEffect(() => {
     <>
       <Header />
       <div className="container-fluid" style={{ marginTop: "8rem" }}>
-        <div className="row">
-          <div className="col-md-8 text-end d-flex justify-content-end">
-            <h1 className="my-3">Builder Dashboard</h1>
-          </div>
+        <div className="row align-items-center text-center text-md-start">
+
+        <div className="col-12">
+      <h1 className="my-3 text-center">Builder Dashboard</h1>
+    </div>
           
-          <div className="col-md-4 text-end justify-content-end">
+          {/* <div className="col-md-4 text-end justify-content-end">
             <Button
               onClick={() => setShowProjectModal(true)}
               style={buttonStyle}
@@ -70,7 +71,23 @@ useEffect(() => {
             >
               Manage Projects
             </Button>
-          </div>
+          </div> */}
+          {/* Button: center on small, end on medium+ */}
+    <div className="col-12 d-flex justify-content-sm-center justify-content-md-end mb-3">
+      <Button
+        onClick={() => setShowProjectModal(true)}
+        style={buttonStyle}
+        className="btn btn-light me-2"
+        onMouseEnter={(e) =>
+          (e.target.style.backgroundColor = "var(--secondary-color)")
+        }
+        onMouseLeave={(e) =>
+          (e.target.style.backgroundColor = "var(--primary-color)")
+        }
+      >
+        Manage Projects
+      </Button>
+    </div>
         </div>
          
         <p className="text-center fs-5">

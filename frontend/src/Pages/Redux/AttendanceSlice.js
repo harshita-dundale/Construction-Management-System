@@ -24,7 +24,7 @@ export const fetchAttendanceHistory = createAsyncThunk(
       fetch(`http://localhost:5000/api/worker-records/full-history?email=${email}`);
       if (!response.ok) throw new Error("Failed to fetch full attendance history");
       const data = await response.json();
-      console.log("Fetched records:", data); 
+     // console.log("Fetched records:", data); 
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message || "Failed to fetch");
@@ -32,21 +32,29 @@ export const fetchAttendanceHistory = createAsyncThunk(
   } 
 );
 
+export const fetchPaymentHistory = createAsyncThunk(
+  "attendance/fetchPaymentHistory",
+  async (email, thunkAPI) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/payroll/full-payment-history?email=${email}`);
+      if (!response.ok) throw new Error("Failed to fetch payment history");
+      const data = await response.json();
+      console.log("✅ Payment history response:", data);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message || "Error fetching payment history");
+    }
+  }
+);
+
+
 const initialState = {
   attendanceSummary: [],
   summaryStatus: "idle",
   summaryError: null,
     attendanceHistory: [], // individual records
-  paymentData: {
-    dailyWage: 500,
-    totalPaid: 10000,
-    pending: 2000,
-  },
-  paymentHistory: [
-    { date: "2025-01-01", amount: 1500, status: "Present" },
-    { date: "2025-01-05", amount: 2000, status: "Absent" },
-    { date: "2025-01-10", amount: 3000, status: "Present" },
-  ],
+    paymentData: [],
+    paymentHistory: [],
   loading: false,
   error: null,
 };
@@ -89,7 +97,20 @@ const attendanceSlice = createSlice({
       .addCase(fetchAttendanceHistory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      })
+      .addCase(fetchPaymentHistory.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPaymentHistory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.paymentHistory = action.payload;
+      })
+      .addCase(fetchPaymentHistory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
       });
+      
   },
 });
 

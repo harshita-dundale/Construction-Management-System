@@ -1,4 +1,7 @@
 import Payroll from '../models/payroll.js';
+import User from "../models/user.js";
+import Application from "../models/application.js";
+import Job from "../models/job.js";
 
 const payrollController = {
   getPayrollsByProject: async (req, res) => {
@@ -66,5 +69,90 @@ const payrollController = {
     }
   }
 };
-
 export default payrollController;
+// controllers/paymentController.js
+
+export const getFullPaymentHistoryByEmail = async (req, res) => {
+  const { email } = req.query;
+  console.log("🔍 Looking up full payment history for:", email);
+
+  if (!email) {
+    return res.status(400).json({ error: "Email is required in query params" });
+  }
+
+  try {
+    const worker = await User.findOne({ email });
+    if (!worker) {
+      return res.status(404).json({ error: "Worker not found" });
+    }
+
+    const acceptedApplications = await Application.find({
+      email,
+      status: "accepted",
+    });
+    console.log("acceptedApplications are", acceptedApplications);
+
+    if (!acceptedApplications.length) {
+      return res.status(404).json({ error: "No accepted jobs found for worker" });
+    }
+
+    const results = [];
+
+    for (const application of acceptedApplications) {
+      const {_id: applicationId,  jobId, projectId } = application;
+
+ console.log("🔎 Searching payment for:");
+    // console.log("  jobtitle:", jobTitle.toString());
+     console.log("  projectId:", projectId.toString());
+    // console.log("  workerId :", applicationId.toString());
+    console.log("  workerId :", worker._id.toString());
+
+      const payrollRecord = await Payroll.findOne({
+        jobId,
+        projectId,
+       workerId: applicationId,
+       // workerId: worker._id,
+      });
+      
+     console.log("📄 payrollRecord found:", payrollRecord);
+//console.log("👀 workers array:", payrollRecord?.workers);
+
+if (payrollRecord) {
+  const {
+    totalSalary = 0,
+    paidAmounts = [],
+    paymentDates = [],
+    status: paymentStatus = "Unpaid"
+  } = payrollRecord;
+
+  const totalPaid = paidAmounts.reduce((sum, amt) => sum + amt, 0);
+  const lastPaymentDate = paymentDates.length
+    ? new Date(paymentDates[paymentDates.length - 1]).toISOString().slice(0, 10)
+    : "-";
+    const job = await Job.findById(jobId).select("jobTitle");
+    if (!job) {
+      console.log("❌ No job found for jobId:", jobId);
+    }
+    
+  results.push({
+    jobId,
+    projectId,
+    //jobTitle,
+    jobTitle: job?.jobTitle || "Untitled",
+    paidAmount: totalPaid,
+    totalSalary,
+    paymentDate: lastPaymentDate,
+    paymentStatus,
+  });
+}
+
+    }
+    console.log("✅ Final response:", results);
+    
+    res.status(200).json(results);
+
+  } catch (error) {
+    console.error("❌ Error fetching payment history:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
