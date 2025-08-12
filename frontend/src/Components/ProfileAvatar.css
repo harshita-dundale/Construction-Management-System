@@ -1,28 +1,45 @@
-/* Avatar container (either image or letter) */
-.profile-avatar {
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  user-select: none;
-}
-
-/* Image inside avatar */
+/* Avatar image */
 .profile-avatar-img {
   width: 40px;
   height: 40px;
+  cursor: pointer;
   object-fit: cover;
+}
+
+/* Fallback Avatar */
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: #6c757d;
   cursor: pointer;
 }
-
-.dropdown-item:focus,
-.dropdown-item:active {
-  background-color: transparent !important;
-  box-shadow: none !important;
-  color:gray;
+.dropdown {
+  position: relative;
+}
+.dropdown-menu.dropdown-menu-end {
+  right: 0;
+  left: auto;
+  transform: none;
+  min-width: 280px;        
+  max-width: 280px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  z-index: 1050;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
-.dropdown-item:hover {
-  background-color: #f8f9fa; /* light gray or custom */
+/* ✅ MOBILE FIX */
+@media (max-width: 768px) {
+  .dropdown-menu.dropdown-menu-end {
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    margin: 0 auto !important;
+    width: 90vw !important;     /* ✅ Wide on mobile */
+    max-width: 320px !important;
+  }
 }

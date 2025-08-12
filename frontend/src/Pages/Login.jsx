@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../Pages/Redux/authSlice"; 
 
 const Login = () => {
-    const { user, isAuthenticated, isLoading } = useAuth0();
+    const { user, isAuthenticated, isLoading, appState } = useAuth0();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -62,16 +62,27 @@ const Login = () => {
                 dispatch(loginSuccess(user));
                  localStorage.setItem("user", JSON.stringify(user));
 
+                // ✅ Check if there's a specific page to redirect to
+                const targetRoute = appState?.returnTo;
+                
                 // ✅ Pehle localStorage check karo
                 const storedRole = localStorage.getItem("userRole");
                 if (storedRole) {
-                    navigate(storedRole === "builder" ? "/builder-dashboard" : "/browse-job", { replace: true });
+                    if (targetRoute) {
+                        navigate(targetRoute, { replace: true });
+                    } else {
+                        navigate(storedRole === "builder" ? "/builder-dashboard" : "/browse-job", { replace: true });
+                    }
                     return;
                 }
                 // ✅ Backend se role fetch karo
                 const role = await fetchUserRole(user.email);
                 if (role) {
-                    navigate(role === "builder" ? "/builder-dashboard" : "/browse-job", { replace: true });
+                    if (targetRoute) {
+                        navigate(targetRoute, { replace: true });
+                    } else {
+                        navigate(role === "builder" ? "/builder-dashboard" : "/browse-job", { replace: true });
+                    }
                 } else {
                     console.log("Redirecting user to role selection...");
                     navigate("/role-selection", { replace: true }); // Role selection page pe bhejo

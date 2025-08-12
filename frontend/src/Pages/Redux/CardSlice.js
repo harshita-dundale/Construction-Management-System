@@ -28,8 +28,8 @@ const initialState = {
     },
     {
       imgSrc: icon4 ,
-      title: "Profit / Cost Analysis",
-      text: "Monitor project budgets and analyze profit/loss in real time to keep your business on track.",
+      title: "Payroll",
+      text: "Manage worker payments, track salaries, and handle payroll efficiently for all your projects.",
       buttonText: "Get start",
     },
   ],

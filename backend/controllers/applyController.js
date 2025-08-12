@@ -25,9 +25,9 @@ export const getApplications = async (req, res) => {
       filter.experience = { $gte: parseFloat(experience) };
     }
     
-   console.log("📥 Final Mongo Filter:", filter);
+  // console.log("📥 Final Mongo Filter:", filter);
     const applications = await Application.find(filter).populate("jobId", "title salary").populate("userId", "_id name");
-    console.log("📤 Applications found:", applications.length);
+ //   console.log("📤 Applications found:", applications.length);
 
     res.json(applications);
   } catch (error) {
@@ -209,5 +209,3 @@ export const getAttendanceSummaryByEmail = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
-

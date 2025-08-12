@@ -1,3 +1,4 @@
+
 /* Tabs Container */
 .tabs-container {
     font-family: 'Arial', sans-serif;
@@ -27,11 +28,11 @@
     border-color: #f58800;
     box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
   }
-  .tab-button:focus{
+  /* .tab-button:focus{
     background-color: #f58800;
     color: white;
     border-color: #f58800;
-  }
+  } */
   .tab-button:hover {
   background-color: #e7e7e7;
   border-color: #888;

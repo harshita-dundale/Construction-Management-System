@@ -8,10 +8,27 @@ function BrowseJob() {
   const [jobs, setJobs] = useState([]);
   const [flippedCards, setFlippedCards] = useState([]);
 
+  // Filter out expired jobs
+  const filterActiveJobs = (jobsList) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    return jobsList.filter(job => {
+      const jobEndDate = new Date(job.endDate);
+      jobEndDate.setHours(0, 0, 0, 0);
+      
+      // Show only jobs that haven't expired (today <= endDate)
+      return today <= jobEndDate;
+    });
+  };
+
   useEffect(() => {
     fetch("http://localhost:5000/api/jobs")
       .then((res) => res.json())
-      .then((data) => setJobs(data))
+      .then((data) => {
+        const activeJobs = filterActiveJobs(data);
+        setJobs(activeJobs);
+      })
       .catch((err) => console.error("Error fetching jobs:", err));
   }, []);
 

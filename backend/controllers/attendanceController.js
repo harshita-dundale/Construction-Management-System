@@ -1,3 +1,4 @@
+
 import Attendance from "../models/WorkerRecord.js";
 import Application from "../models/application.js";
 import mongoose from "mongoose";
@@ -158,7 +159,7 @@ export const getWorkerAttendanceSummary = async (req, res) => {
 export const getFullAttendanceHistoryByEmail = async (req, res) => {
   
   const { email } = req.query;
-  console.log("🔍 Looking up full history for:", email);
+ // console.log("🔍 Looking up full history for:", email);
 
   if (!email) {
     return res.status(400).json({ error: "Email is required in query params" });
@@ -176,23 +177,23 @@ export const getFullAttendanceHistoryByEmail = async (req, res) => {
       email,
       status: "accepted"
     });
-    console.log("acceptedApplications are", acceptedApplications);
+   // console.log("acceptedApplications are", acceptedApplications);
     const results = [];
   
     for (const app of acceptedApplications) {
      // const { jobId, projectId } = app;
     const { _id: applicationId, jobId, projectId } = app;
 
-     console.log("🔎 Searching attendance for:");
-     console.log("  workerId:", applicationId.toString());
-     console.log("  projectId:", projectId.toString());
+    //  console.log("🔎 Searching attendance for:");
+    //  console.log("  workerId:", applicationId.toString());
+    //  console.log("  projectId:", projectId.toString());
 
       const attendanceRecords = await Attendance.find({
        // workerId: worker._id,
         workerId: applicationId, 
         projectId
       }).sort({ date: 1 });
-      console.log("📄 Total Attendance Records Found:", attendanceRecords.length);
+    //  console.log("📄 Total Attendance Records Found:", attendanceRecords.length);
 
       const totalPresent = attendanceRecords.filter(r => r.status === 'Present').length;
       const totalAbsent = attendanceRecords.filter(r => r.status === 'Absent').length;
