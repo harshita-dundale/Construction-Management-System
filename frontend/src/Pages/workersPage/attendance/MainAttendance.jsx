@@ -41,7 +41,20 @@ const MainAttendance = () => {
   }, [workerEmail]);
 
   if (isLoading || loadingJobs) {
-    return <div>Loading user info...</div>; 
+    return (
+      <>
+        <Header />
+        <div className="container mt-5">
+          <div className="text-center" style={{ marginTop: "10rem" }}>
+            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <h4>Loading Attendance Data...</h4>
+            <p className="text-muted">Please wait while we fetch your job information.</p>
+          </div>
+        </div>
+      </>
+    );
   }
 
   if (!isAuthenticated || !user) {

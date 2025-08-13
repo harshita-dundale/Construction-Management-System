@@ -17,6 +17,8 @@ function PayrollPage() {
   const [showModal, setShowModal] = useState(false);
   const [selectedHistory, setSelectedHistory] = useState([]);
   const [selectedName, setSelectedName] = useState("");
+  const [selectedWorkerId, setSelectedWorkerId] = useState(null);
+  const [paymentLoading, setPaymentLoading] = useState(null);
 
   useEffect(() => {
     const fetchHiredWorkers = async () => {
@@ -82,6 +84,8 @@ function PayrollPage() {
               console.error("Error fetching payroll status:", err);
             }
 
+
+
             return {
               _id: workerId,
               name,
@@ -91,7 +95,7 @@ function PayrollPage() {
               present: presentCount,
               absent: absentCount,
               payable: totalPayable,
-              amountPaid: 0,
+              amountPaid: '',
               actualPaid: actualPaidAmount,
               paymentStatus: paymentStatus,
             };
@@ -111,9 +115,16 @@ function PayrollPage() {
   }, [projectId]);
 
   const handleAmountChange = (workerId, value) => {
+    if (value === '') {
+      setHiredWorkers((prev) =>
+        prev.map((w) => (w._id === workerId ? { ...w, amountPaid: '' } : w))
+      );
+      return;
+    }
+    
     const paid = parseInt(value, 10) || 0;
     if (paid < 0) {
-      toast.error("❌ Amount negative nahi ho sakti!");
+      toast.error("❌ could not be negative");
       return;
     }
 
@@ -135,6 +146,8 @@ function PayrollPage() {
       );
       return;
     }
+
+    setPaymentLoading(worker._id);
 
     const payload = {
       workerId: worker._id,
@@ -158,13 +171,13 @@ function PayrollPage() {
       if (!res.ok) throw new Error("Failed to save payroll");
       const saved = await res.json();
 
-      toast.success(` Payment successful!\n${worker.name}: ₹${worker.amountPaid} paid`);
-// toast.success("✅ Payment successful", {
-//   style: {
-//     backgroundColor: "#1a6466ff", // Your primary color
-//     color: "#fff",              // Text color
-//   },
-// });
+      toast.success(`💰 Payment successful!\n${worker.name}: ₹${worker.amountPaid} paid`, {
+        style: {
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: '#fff'
+        }
+      });
+      
       setHiredWorkers((prev) =>
         prev.map((w) => {
           if (w._id === worker._id) {
@@ -172,7 +185,7 @@ function PayrollPage() {
             const newStatus = newTotalPaid >= w.payable ? "Paid" : "Partial";
             return {
               ...w,
-              amountPaid: 0,
+              amountPaid: '',
               actualPaid: newTotalPaid,
               paymentStatus: newStatus,
             };
@@ -183,6 +196,8 @@ function PayrollPage() {
     } catch (err) {
       console.error("Payroll save error:", err);
       toast.error(`❌ Payment failed for ${worker.name}`);
+    } finally {
+      setPaymentLoading(null);
     }
   };
 
@@ -205,11 +220,33 @@ function PayrollPage() {
       setSelectedHistory([]);
     } finally {
       setSelectedName(name);
+      setSelectedWorkerId(workerId);
       setShowModal(true);
     }
   };
 
-  if (loading) return <div className="text-center my-4">Loading payroll...</div>;
+  // Get worker's total payable amount from main table
+  const getWorkerTotalPayable = (workerId) => {
+    const worker = hiredWorkers.find(w => w._id === workerId);
+    return worker?.payable || 0;
+  };
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="container mt-5">
+          <div className="text-center" style={{ marginTop: "10rem" }}>
+            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <h4>Loading Payroll Data...</h4>
+            <p className="text-muted">Please wait while we fetch worker payment information.</p>
+          </div>
+        </div>
+      </>
+    );
+  }
   if (error) return <div className="alert alert-danger">{error}</div>;
 
   return (
@@ -257,10 +294,10 @@ function PayrollPage() {
                       <input
                         type="number"
                         className="form-control form-control-sm text-center"
-                        value={worker.amountPaid}
+                        value={worker.amountPaid || ''}
                         min="0"
                         max={remainingPayable}
-                        placeholder="Enter amount"
+                        placeholder={`₹${remainingPayable}`}
                         onChange={(e) =>
                           handleAmountChange(worker._id, e.target.value)
                         }
@@ -280,10 +317,21 @@ function PayrollPage() {
                       <button
                         className="btn btn-sm"
                         onClick={() => handleConfirmPayment(worker)}
-                        disabled={worker.amountPaid <= 0 || remainingPayable <= 0}
-                        style={buttonStyle}
+                        disabled={worker.amountPaid <= 0 || remainingPayable <= 0 || paymentLoading === worker._id}
+                        style={{
+                          ...buttonStyle,
+                          position: 'relative',
+                          minWidth: '80px'
+                        }}
                       >
-                        Confirm
+                        {paymentLoading === worker._id ? (
+                          <>
+                            <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                            Processing...
+                          </>
+                        ) : (
+                          'Confirm'
+                        )}
                       </button>
                     </td>
                   </tr>
@@ -300,7 +348,10 @@ function PayrollPage() {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title fw-bold">{selectedName}'s Payment History</h5>
-                  <button className="btn-close" onClick={() => setShowModal(false)} />
+                  <div className="d-flex align-items-center">
+                    <span className="me-3 text-success fw-bold">Total: ₹{getWorkerTotalPayable(selectedWorkerId)}</span>
+                    <button className="btn-close" onClick={() => setShowModal(false)} />
+                  </div>
                 </div>
                 <div className="modal-body">
                   {selectedHistory.length === 0 ? (
@@ -311,7 +362,7 @@ function PayrollPage() {
                         <tr>
                           <th>Date</th>
                           <th>Paid</th>
-                          <th>Balance</th>
+                          <th>Remaining</th>
                           <th>Status</th>
                         </tr>
                       </thead>
@@ -326,11 +377,11 @@ function PayrollPage() {
                               record.paymentDates.forEach((date, i) => {
                                 const paid = record.paidAmounts[i] || 0;
                                 runningTotal += paid;
-                                const balance = Math.max(0, totalPayable - runningTotal);
+                                const remaining = Math.max(0, totalPayable - runningTotal);
                                 const status =
-                                  balance === 0
+                                  remaining === 0
                                     ? "Paid"
-                                    : balance < totalPayable
+                                    : remaining < totalPayable
                                     ? "Partial"
                                     : "Unpaid";
 
@@ -338,7 +389,7 @@ function PayrollPage() {
                                   <tr key={`${recordIndex}-${i}`}>
                                     <td>{date?.slice(0, 10) || "N/A"}</td>
                                     <td>₹{paid}</td>
-                                    <td>₹{balance}</td>
+                                    <td>₹{remaining}</td>
                                     <td>
                                       <span
                                         className={`badge ${
@@ -358,11 +409,11 @@ function PayrollPage() {
                             } else {
                               const paid = record.paidAmount || record.totalAmount || 0;
                               runningTotal += paid;
-                              const balance = Math.max(0, totalPayable - runningTotal);
+                              const remaining = Math.max(0, totalPayable - runningTotal);
                               const status =
-                                balance === 0
+                                remaining === 0
                                   ? "Paid"
-                                  : balance < totalPayable
+                                  : remaining < totalPayable
                                   ? "Partial"
                                   : "Unpaid";
 
@@ -374,7 +425,7 @@ function PayrollPage() {
                                       "N/A"}
                                   </td>
                                   <td>₹{paid}</td>
-                                  <td>₹{balance}</td>
+                                  <td>₹{remaining}</td>
                                   <td>
                                     <span
                                       className={`badge ${

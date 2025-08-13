@@ -35,10 +35,14 @@ const MaterialManagement = () => {
   });
 
   const [showAddMaterial, setShowAddMaterial] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Fetch project-specific materials
   const fetchMaterials = async () => {
-    if (!selectedProject?._id) return;
+    if (!selectedProject?._id) {
+      setLoading(false);
+      return;
+    }
     try {
       const res = await fetch(
         `http://localhost:5000/api/materials?projectId=${selectedProject._id}`
@@ -47,6 +51,8 @@ const MaterialManagement = () => {
       dispatch(setMaterials(data));
     } catch (err) {
       console.error("Fetch failed:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -170,6 +176,23 @@ const MaterialManagement = () => {
     (acc, mat) => acc + mat.quantity * mat.unitPrice,
     0
   );
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="container mt-5">
+          <div className="text-center" style={{ marginTop: "10rem" }}>
+            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <h4>Loading Materials...</h4>
+            <p className="text-muted">Please wait while we fetch material information.</p>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

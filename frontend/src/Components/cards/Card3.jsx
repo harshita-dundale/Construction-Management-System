@@ -1,11 +1,25 @@
 /* eslint-disable react/prop-types */
 
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchApplications } from "../../Pages/Redux/applicationsSlice";
 import Swal from "sweetalert2";
 
 function Card3({ application, isHiredView = false }) {
   const [status, setStatus] = useState(application.status || "under_review");
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const selectedProject = useSelector((state) => state.project.selectedProject);
+
+  const refreshApplications = () => {
+    if (selectedProject?._id) {
+      dispatch(fetchApplications({
+        projectId: selectedProject._id,
+        status: "all",
+        experience: ""
+      }));
+    }
+  };
 
   const updateStatusInBackend = async (newStatus) => {
     setLoading(true);
@@ -92,13 +106,54 @@ function Card3({ application, isHiredView = false }) {
 )}
 
 {!isHiredView && status !== "under_review" && (
-  <div className="card-footer">
+  <div className="card-footer d-flex justify-content-center">
     <button
-      className="btn btn-warning w-100"
+      className="btn btn-warning w-50 me-1"
       onClick={handleUndo}
       disabled={loading}
     >
       Undo Status
+    </button>
+    <button
+      className="btn btn-danger w-50 ms-1"
+      onClick={async () => {
+        Swal.fire({
+          title: "Are you sure?",
+          text: `Do you want to delete "${application.name}"'s application?`,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "Yes, Delete",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            setLoading(true);
+            try {
+              const res = await fetch(
+                `http://localhost:5000/api/apply/${application._id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+
+              if (res.ok) {
+                Swal.fire("Deleted!", "Application has been deleted.", "success");
+                refreshApplications();
+              } else {
+                Swal.fire("Error", "Failed to delete application.", "error");
+              }
+            } catch (err) {
+              console.error(err);
+              Swal.fire("Error", "An error occurred while deleting.", "error");
+            } finally {
+              setLoading(false);
+            }
+          }
+        });
+      }}
+      disabled={loading}
+    >
+      {loading ? "Deleting..." : "Delete"}
     </button>
   </div>
 )}
@@ -131,7 +186,7 @@ function Card3({ application, isHiredView = false }) {
 
           if (res.ok) {
             Swal.fire("Deleted!", "The worker has been removed.", "success");
-            window.location.reload();
+            refreshApplications();
           } else {
             Swal.fire("Error", "Failed to delete the worker.", "error");
           }

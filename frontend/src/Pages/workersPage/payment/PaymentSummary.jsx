@@ -64,7 +64,19 @@ const PaymentSummary = ({ jobId }) => {
     setShowSection((prev) => (prev === section ? null : section));
   };
 
-  if (summaryStatus === "loading") return <p>Loading...</p>;
+  if (summaryStatus === "loading") {
+    return (
+      <div className="container">
+        <div className="text-center" style={{ padding: "3rem 0" }}>
+          <div className="spinner-border text-primary mb-3" role="status" style={{ width: "2.5rem", height: "2.5rem" }}>
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <h5>Loading Payment & Attendance Data...</h5>
+          <p className="text-muted">Please wait while we fetch your information.</p>
+        </div>
+      </div>
+    );
+  }
   if (summaryStatus === "failed") return <p>Error: {summaryError}</p>;
 
   return (

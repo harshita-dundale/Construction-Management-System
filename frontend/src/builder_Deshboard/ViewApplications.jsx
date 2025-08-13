@@ -16,8 +16,28 @@ function ViewApplications() {
 
   const [statusFilter, setStatusFilter] = useState("all");
   const [experienceFilter, setExperienceFilter] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const { user, isLoading } = useAuth0();
   const selectedProject = useSelector((state) => state.project.selectedProject);
+
+  const handleCreativeRefresh = async () => {
+    setIsRefreshing(true);
+    
+    // Show loading animation for better UX
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    if (selectedProject?._id) {
+      dispatch(
+        fetchApplications({
+          status: statusFilter,
+          experience: experienceFilter,
+          projectId: selectedProject._id,
+        })
+      );
+    }
+    
+    setTimeout(() => setIsRefreshing(false), 500);
+  };
 
   // 🔁 Fetch fresh data from backend on filter/project change
   useEffect(() => {
@@ -98,15 +118,75 @@ function ViewApplications() {
           </div>
         </div>
 
-        <div className="applications p-4 rounded" style={cardContainerStyle}>
-          {loading ? (
-            <p>Loading...</p>
+        <div className="applications p-4 rounded" style={{
+          ...cardContainerStyle,
+          opacity: isRefreshing ? 0.7 : 1,
+          transform: isRefreshing ? 'scale(0.98)' : 'scale(1)',
+          transition: 'all 0.5s ease'
+        }}>
+          {loading || isRefreshing ? (
+            <div className="text-center py-5" style={loadingStateStyle}>
+              <div className="mb-4">
+                <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+              <h4 className="text-muted mb-3">
+                {isRefreshing ? '🔄 Refreshing Applications...' : '🔍 Loading Applications...'}
+              </h4>
+              <p className="text-muted">
+                {isRefreshing ? 'Getting the latest data for you!' : 'Please wait while we fetch the applications.'}
+              </p>
+            </div>
           ) : error ? (
             <p className="text-danger">Error: {error}</p>
           ) : filteredApplications.length === 0 ? (
-            <p className="text-muted text-center">
-              🚫 No applications found for this filter.
-            </p>
+            <div className="text-center py-5" style={emptyStateStyle}>
+              <div className="mb-4">
+                <div style={emptyIconStyle}>📋</div>
+              </div>
+              <h3 className="text-muted mb-3" style={{ fontWeight: '600' }}>
+                No Applications Found
+              </h3>
+              <p className="text-muted mb-4" style={{ fontSize: '16px', lineHeight: '1.6' }}>
+                It looks like there are no applications matching your current filters.
+                <br />
+                Try adjusting your search criteria or check back later for new applications.
+              </p>
+              <div className="d-flex justify-content-center gap-3">
+                <button 
+                  className="btn btn-outline-primary"
+                  onClick={() => {
+                    setStatusFilter("all");
+                    setExperienceFilter("");
+                  }}
+                  style={clearFiltersButtonStyle}
+                >
+                  🔄 Clear Filters
+                </button>
+                <button 
+                  className="btn btn-outline-secondary"
+                  onClick={handleCreativeRefresh}
+                  disabled={isRefreshing}
+                  style={{
+                    ...refreshButtonStyle,
+                    transform: isRefreshing ? 'rotate(360deg)' : 'rotate(0deg)',
+                    transition: 'all 0.8s ease'
+                  }}
+                >
+                  {isRefreshing ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                      Refreshing...
+                    </>
+                  ) : (
+                    <>
+                      🔄 Refresh Data
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           ) : (
             rows.map((row, index) => (
               <div className="row mb-4" key={index}>
@@ -150,6 +230,43 @@ const inputStyle = {
 const cardContainerStyle = {
   borderRadius: "10px",
   border: "2px solid #ccc",
+};
+
+const emptyStateStyle = {
+  background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+  borderRadius: "15px",
+  padding: "40px 20px",
+  margin: "20px 0",
+  boxShadow: "0 8px 25px rgba(0,0,0,0.1)",
+};
+
+const emptyIconStyle = {
+  fontSize: "4rem",
+  marginBottom: "20px",
+  filter: "grayscale(20%)",
+};
+
+const clearFiltersButtonStyle = {
+  borderRadius: "25px",
+  padding: "10px 20px",
+  fontWeight: "600",
+  transition: "all 0.3s ease",
+};
+
+const refreshButtonStyle = {
+  borderRadius: "25px",
+  padding: "10px 20px",
+  fontWeight: "600",
+  transition: "all 0.3s ease",
+};
+
+const loadingStateStyle = {
+  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  borderRadius: "15px",
+  padding: "40px 20px",
+  margin: "20px 0",
+  boxShadow: "0 8px 25px rgba(102, 126, 234, 0.3)",
+  color: "white",
 };
 
 export default ViewApplications;

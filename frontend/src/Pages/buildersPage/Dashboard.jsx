@@ -105,7 +105,22 @@ function Dashboard() {
     }
   };
 
-  if (loading) return <p className="text-center mt-5">Loading workers...</p>;
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="container mt-5">
+          <div className="text-center" style={{ marginTop: "10rem" }}>
+            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <h4>Loading Workers...</h4>
+            <p className="text-muted">Please wait while we fetch worker information for attendance.</p>
+          </div>
+        </div>
+      </>
+    );
+  }
   if (error)
     return <p className="text-center mt-5 text-danger">Error: {error}</p>;
 

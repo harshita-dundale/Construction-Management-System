@@ -7,6 +7,7 @@ import JobCard from "../../Components/cards/JobCard";
 function BrowseJob() {
   const [jobs, setJobs] = useState([]);
   const [flippedCards, setFlippedCards] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Filter out expired jobs
   const filterActiveJobs = (jobsList) => {
@@ -29,7 +30,8 @@ function BrowseJob() {
         const activeJobs = filterActiveJobs(data);
         setJobs(activeJobs);
       })
-      .catch((err) => console.error("Error fetching jobs:", err));
+      .catch((err) => console.error("Error fetching jobs:", err))
+      .finally(() => setLoading(false));
   }, []);
 
   const toggleCardFlip = (id) => {
@@ -37,6 +39,23 @@ function BrowseJob() {
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
   };
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="container mt-5">
+          <div className="text-center" style={{ marginTop: "10rem" }}>
+            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <h4>Loading Job Listings...</h4>
+            <p className="text-muted">Please wait while we fetch available jobs for you.</p>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <div>
