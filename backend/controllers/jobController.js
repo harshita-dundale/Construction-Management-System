@@ -78,59 +78,6 @@ export const postJob = async (req, res) => {
   }
 };
 
-// export const postJob = async (req, res) => {
-//   try {
-//     const {
-//       title,
-//       salary,
-//       startDate,
-//       endDate,
-//       location,
-//       Email,
-//       PhoneNo,
-//       projectId,
-//     } = req.body;
-
-//     if (!projectId) {
-//       return res.status(400).json({ error: "Project ID is required" });
-//     }
-
-//     const project = await Project.findById(projectId);
-//     if (!project) {
-//       return res.status(404).json({ error: "Project not found" });
-//     }
-
-//     const userId = project.userId;
-//     const imagePath = req.file ? req.file.filename : null;
-
-//     const newJob = new Job({
-//       title,
-//       salary,
-//       startDate,
-//       endDate,
-//       location,
-//       Email,
-//       PhoneNo,
-//       image: imagePath,
-//       projectId,
-//       userId,
-//     });
-
-//     await newJob.save();
-
-//     res.status(201).json({
-//       message: "Job Posted Successfully",
-//       job: newJob,
-//     });
-//   } catch (error) {
-//     console.error("🚨 Error posting job:", error);
-//     res.status(500).json({
-//       error: "Internal Server Error",
-//       message: error.message,
-//     });
-//   }
-// };
-
 // 🔹 GET /api/jobs
 export const getAllJobs = async (req, res) => {
   try {

@@ -19,22 +19,17 @@ const ApplicationSection = () => {
   const { showModal, currentJob } = useSelector((state) => state.applications);
   //const [statusFilter, setStatusFilter] = useState("all");
   //  const { showModal } = useSelector((state) => state.applicationsModel);
-
   const handleViewDetails = (job) => {
     dispatch(setCurrentJob(job));
     dispatch(setShowModal(true));
   };
-  
   useEffect(() => {
     if (user?.email) {
      // console.log("📨 activeTab:", activeTab);
       //console.log("📨 email to thunk:", user.email);
-  
       const normalizedStatus = activeTab === "All" ? null : activeTab;
-  
      // console.log("📨 Dispatching email to thunk:", user.email);
      // console.log("📨 Sending status:", normalizedStatus);
-  
       dispatch(fetchApplications({
         workerEmail: user.email,
         status: normalizedStatus,

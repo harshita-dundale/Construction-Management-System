@@ -20,7 +20,7 @@ const applicationSchema = new mongoose.Schema({
   appliedAt: { type: Date, default: Date.now },
   status: {
     type: String,
-    enum: ["under_review", "accepted", "rejected"],
+    enum: ["under_review", "accepted", "rejected", "joined"],
     default: "under_review",
   },
 });

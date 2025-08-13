@@ -1,7 +1,8 @@
 import Application from "../models/application.js";
 import Attendance from "../models/WorkerRecord.js";
-
+import Job from "../models/job.js"
 import mongoose from "mongoose";
+
 // 🔹 GET Applications
 export const getApplications = async (req, res) => {
   const { workerEmail, status, experience, projectId } = req.query;
@@ -26,7 +27,8 @@ export const getApplications = async (req, res) => {
     }
     
   // console.log("📥 Final Mongo Filter:", filter);
-    const applications = await Application.find(filter).populate("jobId", "title salary").populate("userId", "_id name");
+  //.populate("jobId", "title salary")
+    const applications = await Application.find(filter).populate("jobId").populate("userId", "_id name");
  //   console.log("📤 Applications found:", applications.length);
 
     res.json(applications);
@@ -35,7 +37,26 @@ export const getApplications = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch applications" });
   }
 };
+// Get jobs applied by a worker (with job titles)
+export const getJobsByWorker = async (req, res) => {
+  const { email } = req.query;
 
+  if (!email) return res.status(400).json({ error: "Email is required" });
+ // console.log("📥 Received Email:", req.query.email);
+
+  try {
+    const applications = await Application.find({ email, status: "joined" }).populate("jobId");
+
+    const jobs = applications
+      .map((app) => app.jobId)
+      .filter((job) => job !== null);
+
+    res.status(200).json(jobs);
+  } catch (error) {
+    console.error("Error fetching jobs for user:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 // 🔹 POST New Application
 export const createApplication = async (req, res) => {
   try {
@@ -72,7 +93,6 @@ export const createApplication = async (req, res) => {
     res.status(500).json({ error: "Failed to save application" });
   }
 };
-
 // 🔹 PATCH Update Application Status
 export const updateApplicationStatus = async (req, res) => {
   const { id } = req.params;
@@ -91,7 +111,6 @@ export const updateApplicationStatus = async (req, res) => {
     res.status(500).json({ error: "Failed to update status" });
   }
 };
-
 // 🔴 DELETE Application
 export const deleteApplication = async (req, res) => {
   const { id } = req.params;
@@ -105,31 +124,6 @@ export const deleteApplication = async (req, res) => {
   } catch (error) {
     console.error("Error deleting application:", error);
     res.status(500).json({ error: "Failed to delete application" });
-  }
-};
-
-// Get jobs applied by a worker (with job titles)
-export const getJobsByWorker = async (req, res) => {
-  const { email } = req.query;
-
-  if (!email) return res.status(400).json({ error: "Email is required" });
- // console.log("📥 Received Email:", req.query.email);
-
-  try {
-    // const applications = await Application.find({ email }).populate({
-    //   path: "jobId",
-    //   select: "title _id", 
-    // });
-    const applications = await Application.find({ email, status: "accepted" }).populate("jobId");
-
-    const jobs = applications
-      .map((app) => app.jobId)
-      .filter((job) => job !== null);
-
-    res.status(200).json(jobs);
-  } catch (error) {
-    console.error("Error fetching jobs for user:", error);
-    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -174,7 +168,7 @@ export const getAttendanceSummaryByEmail = async (req, res) => {
 
   try {
     // Find all accepted applications by email and populate job info
-    const applications = await Application.find({ email, status: "accepted" }).populate("jobId");
+    const applications = await Application.find({ email, status: "joined" }).populate("jobId");
 
     let totalDays = 0;
     let absentDays = 0;
@@ -207,6 +201,83 @@ export const getAttendanceSummaryByEmail = async (req, res) => {
   } catch (error) {
     console.error("Error in attendance summary:", error);
     res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+export const joinAndRejectApplication = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { action } = req.body; // "join" or "reject"
+    
+    console.log("Received action:", action);
+    console.log("Application ID:", id);
+
+    const application = await Application.findById(id).populate("jobId");
+
+    if (!application) {
+      console.log("Application not found for ID:", id);
+      return res.status(404).json({ message: "Application not found" });
+    }
+    
+    console.log("Application status:", application.status);
+
+    // ====== REJECT LOGIC ======
+    if (action === "reject") {
+      application.status = "rejected";
+      await application.save();
+      return res.json({ message: "Application rejected successfully", application });
+    }
+
+    // ====== JOIN LOGIC ======
+    if (action === "join") {
+      if (application.status !== "accepted") {
+        return res.status(400).json({ message: "Only accepted applications can be joined" });
+      }
+
+      const job = application.jobId;
+      if (!job || !job.startDate || !job.endDate) {
+        return res.status(400).json({ message: "Job dates are missing" });
+      }
+
+      await Application.updateMany(
+        {
+          userId: application.userId,
+          status: "accepted",
+          _id: { $ne: application._id }
+        },
+        [
+          {
+            $set: {
+              status: {
+                $cond: [
+                  {
+                    $and: [
+                      { $lte: ["$jobId.startDate", job.endDate] },
+                      { $gte: ["$jobId.endDate", job.startDate] }
+                    ]
+                  },
+                  "rejected",
+                  "$status"
+                ]
+              }
+            }
+          }
+        ]
+      );
+
+      // Mark this one as joined
+      application.status = "joined";
+      await application.save();
+
+      return res.json({ message: "Job joined successfully", application });
+    }
+
+    return res.status(400).json({ message: "Invalid action" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 

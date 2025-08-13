@@ -74,6 +74,7 @@ function ViewApplications() {
               >
                 <option value="all">All</option>
                 <option value="accepted">Accepted</option>
+                <option value="joined">Joined</option>
                 <option value="rejected">Rejected</option>
                 <option value="under_review">Under Review</option>
               </select>

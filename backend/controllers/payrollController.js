@@ -88,7 +88,7 @@ export const getFullPaymentHistoryByEmail = async (req, res) => {
 
     const acceptedApplications = await Application.find({
       email,
-      status: "accepted",
+      status: "joined",
     });
     console.log("acceptedApplications are", acceptedApplications);
 

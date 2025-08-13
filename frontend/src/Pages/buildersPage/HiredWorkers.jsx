@@ -14,7 +14,7 @@ function HiredWorkers() {
   const fetchHired = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`
+        `http://localhost:5000/api/apply?status=joined&projectId=${selectedProject._id}`
       );
       const data = await res.json();
       setHired(data);

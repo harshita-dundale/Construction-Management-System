@@ -174,7 +174,7 @@ export const getFullAttendanceHistoryByEmail = async (req, res) => {
     // ✅ Then: Get all accepted applications
     const acceptedApplications = await Application.find({
       email,
-      status: "accepted"
+      status: "joined"
     });
    // console.log("acceptedApplications are", acceptedApplications);
     const results = [];

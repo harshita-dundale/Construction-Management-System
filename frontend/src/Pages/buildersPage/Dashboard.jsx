@@ -27,11 +27,11 @@ function Dashboard() {
 
       try {
         const applyRes = await fetch(
-          `http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`
+          `http://localhost:5000/api/apply?status=joined&projectId=${selectedProject._id}`
         );
         const applyData = await applyRes.json();
 
-        const accepted = applyData.filter((app) => app.status === "accepted");
+        const accepted = applyData.filter((app) => app.status === "joined");
 
         const merged = accepted.map((worker) => ({
           ...worker,

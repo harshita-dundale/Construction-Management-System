@@ -10,8 +10,9 @@ const ApplicationTabs = () => {
 
   const tabs = [
     { name: 'All', icon: <FaTasks /> },
-    { name: 'under_review', icon: <FaClock /> },   
+    { name: 'joined', icon: <FaCheckCircle /> }, 
     { name: 'accepted', icon: <FaCheckCircle /> }, 
+    { name: 'under_review', icon: <FaClock /> },   
     { name: 'rejected', icon: <FaTimesCircle /> }, 
   ];
 
