@@ -369,7 +369,7 @@ function PayrollPage() {
                       <tbody>
                         {(() => {
                           let runningTotal = 0;
-                          const totalPayable = selectedHistory[0]?.totalSalary || 0;
+                          const totalPayable = getWorkerTotalPayable(selectedWorkerId);
                           const rows = [];
 
                           selectedHistory.forEach((record, recordIndex) => {

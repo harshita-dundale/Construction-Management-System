@@ -14,6 +14,7 @@ import "./PaymentSummary.css";
 
 const PaymentSummary = ({ jobId }) => {
   const [showSection, setShowSection] = useState(null);
+  const [jobSalary, setJobSalary] = useState(1000);
   const dispatch = useDispatch();
   const { user } = useAuth0();
   const workerEmail = user?.email;
@@ -34,13 +35,33 @@ const PaymentSummary = ({ jobId }) => {
       dispatch(fetchPaymentHistory(workerEmail));
     }
   }, [dispatch, workerEmail]);
-  useEffect(() => {
-    console.log("✅ paymentHistory:", paymentHistory);
-  }, [paymentHistory]);
 
+  // Fetch job salary
+  useEffect(() => {
+    const fetchJobSalary = async () => {
+      if (jobId) {
+        try {
+          const response = await fetch(`http://localhost:5000/api/jobs/${jobId}`);
+          if (response.ok) {
+            const jobData = await response.json();
+            setJobSalary(jobData.salary || 1000);
+          }
+        } catch (error) {
+          console.error('Error fetching job salary:', error);
+        }
+      }
+    };
+    fetchJobSalary();
+  }, [jobId]);
   const selectedJob = history?.find((job) => job.jobId === jobId);
   const selectedPaymentRecords =
     paymentHistory?.filter((record) => record.jobId === jobId) || [];
+
+  useEffect(() => {
+    console.log("✅ paymentHistory:", paymentHistory);
+    console.log("✅ selectedJob:", selectedJob);
+    console.log("✅ selectedPaymentRecords:", selectedPaymentRecords);
+  }, [paymentHistory, selectedJob, selectedPaymentRecords]);
   if (!selectedJob) {
     return <div>No attendance records found for this job.</div>;
   }
@@ -52,13 +73,21 @@ const PaymentSummary = ({ jobId }) => {
     selectedJob?.attendanceRecords?.filter((a) => a.status === "Absent")
       .length || 0;
   const selectedAttendanceRecords = selectedJob?.attendanceRecords || [];
-
-  const dailyWage = selectedPaymentRecords[0]?.totalSalary || 0;
+  
+  // Get daily wage from job salary
+  const dailyWage = jobSalary;
+  
+  // Calculate total earned based on attendance
+  const totalEarned = presentCount * dailyWage;
+  
+  // Calculate total paid from payment records
   const totalPaid = selectedPaymentRecords.reduce(
     (sum, rec) => sum + rec.paidAmount,
     0
   );
-  const pendingPayments = Math.max(dailyWage - totalPaid, 0);
+  
+  // Calculate remaining amount
+  const pendingPayments = Math.max(totalEarned - totalPaid, 0);
 
   const handleToggle = (section) => {
     setShowSection((prev) => (prev === section ? null : section));
@@ -102,10 +131,13 @@ const PaymentSummary = ({ jobId }) => {
             <strong>Daily Wage:</strong> ₹{dailyWage}
           </p>
           <p>
+            <strong>Total Earned:</strong> ₹{totalEarned}
+          </p>
+          <p>
             <strong>Total Paid:</strong> ₹{totalPaid}
           </p>
           <p style={{ fontWeight: "bold", color: "#ef4444" }}>
-            <strong>Pending Payments:</strong> ₹{pendingPayments}
+            <strong>Remaining Amount:</strong> ₹{pendingPayments}
           </p>
 
           <p style={clickTextStyle}>Click to view Payment History</p>
