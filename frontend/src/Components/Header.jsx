@@ -88,7 +88,7 @@ function Header() {
     <header style={{ backgroundColor: "#1a4654", position: "fixed", top: 0, width: "100%", zIndex: 1000 }}>
       <nav className="navbar navbar-expand-lg navbar-dark py-4 d-flex align-items-sm-center">
         <div className="container d-flex flex-wrap align-items-center">
-          <img src={logo} alt="logo" height="50" width="200" />
+          <img src={logo} alt="logo" height="50" width="200" style={{ alignSelf: 'center' }} />
 
 
           <button
@@ -112,13 +112,13 @@ function Header() {
               {/* Worker Navigation */}
               {isWorkerPage && (
                 <>
-                  <li className="nav-item">
+                  <li className="nav-item me-2">
                     <a className={`nav-link ${currentPath === "/browse-job" ? "active bold-underline" : ""}`} onClick={() => navigate("/browse-job")}>Browse Job</a>
                   </li>
                   <li className="nav-item me-2">
                     <a className={`nav-link ${currentPath === "/applications" ? "active bold-underline" : ""}`} onClick={() => navigate("/applications")}>Applications</a>
                   </li>
-                  <li className="nav-item me-2">
+                  <li className="nav-item me-4">
                     <a className={`nav-link ${currentPath === "/attendances" ? "active bold-underline" : ""}`} onClick={() => navigate("/attendances")}>Payroll Manager</a>
                   </li>
                 </>
@@ -127,23 +127,23 @@ function Header() {
               {/* Builder Navigation */}
               {isBuilderPage && (
                 <>
-                  <li className="nav-item">
+                  <li className="nav-item me-2">
                     <a className={`nav-link ${currentPath === "/builder-dashboard" ? "active bold-underline" : ""}`} onClick={() => navigate("/builder-dashboard")}>Dashboard</a>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item me-2">
                     <a className={`nav-link ${currentPath === "/viewpostedjobs" ? "active bold-underline" : ""}`} onClick={() => navigate("/viewpostedjobs")}>Posted Jobs</a>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item me-2">
                     <a className={`nav-link ${currentPath === "/materialmanagement" ? "active bold-underline" : ""}`} onClick={() => navigate("/materialmanagement")}>Materials</a>
                   </li>
                   {/* <li className="nav-item">
                     <a className={`nav-link ${currentPath === "/profitandcostanalysis" ? "active bold-underline" : ""}`} onClick={() => navigate("/profitandcostanalysis")}>Profit & Cost</a>
                   </li> */}
-                  <li className="nav-item">
+                  <li className="nav-item me-2">
                     <a className={`nav-link ${currentPath === "/dashboard" ? "active bold-underline" : ""}`} onClick={() => navigate("/dashboard")}>Attendance</a>
                   </li>
 
-                  <li className="nav-item me-2">
+                  <li className="nav-item me-4">
                     <a className={`nav-link ${currentPath === "/attendance" ? "active bold-underline" : ""}`} onClick={() => navigate("/payroll")}> Payroll</a>
                   </li>
 
@@ -153,13 +153,13 @@ function Header() {
               {/* Default Static Page Nav */}
               {!isWorkerPage && !isBuilderPage && (
                 <>
-                  <li className="nav-item">
+                  <li className="nav-item me-2">
                     <a className={`nav-link ${activeSection === "home-section" ? "active bold-underline" : ""}`} onClick={() => handleScrollToSection("home-section")}>Home</a>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item me-2">
                     <a className={`nav-link ${activeSection === "services-section" ? "active bold-underline" : ""}`} onClick={() => handleScrollToSection("services-section")}>Services</a>
                   </li>
-                  <li className="nav-item me-2">
+                  <li className="nav-item me-4">
                     <a className={`nav-link ${activeSection === "about-section" ? "active bold-underline" : ""}`} onClick={() => handleScrollToSection("about-section")}>About Us</a>
                   </li>
                 </>

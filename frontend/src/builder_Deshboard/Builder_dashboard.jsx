@@ -54,7 +54,7 @@ useEffect(() => {
         <div className="row align-items-center text-center text-md-start">
 
         <div className="col-12">
-      <h1 className="my-3 text-center">Builder Dashboard</h1>
+      <h1 className="my-3 fw-bold text-center">Builder Dashboard</h1>
     </div>
           
           {/* <div className="col-md-4 text-end justify-content-end">
@@ -73,27 +73,13 @@ useEffect(() => {
             </Button>
           </div> */}
           {/* Button: center on small, end on medium+ */}
-    <div className="col-12 d-flex justify-content-sm-center justify-content-md-end mb-3">
-      <Button
-        onClick={() => setShowProjectModal(true)}
-        style={buttonStyle}
-        className="btn btn-light me-2"
-        onMouseEnter={(e) =>
-          (e.target.style.backgroundColor = "var(--secondary-color)")
-        }
-        onMouseLeave={(e) =>
-          (e.target.style.backgroundColor = "var(--primary-color)")
-        }
-      >
-        Manage Projects
-      </Button>
-    </div>
         </div>
          
         <p className="text-center fs-5">
           Welcome to the Builder Dashboard! Manage your construction projects
           effectively.
         </p>
+        
         {selectedProject ? (
             <h4 className="text-center mt-3">
                <strong>for - {selectedProject.name}</strong>
@@ -124,6 +110,22 @@ useEffect(() => {
             }
           }}
         />
+
+      <div className="col-11 d-flex justify-content-center justify-content-md-end mb-3">
+      <Button
+        onClick={() => setShowProjectModal(true)}
+        style={buttonStyle}
+        className="btn btn-light me-5"
+        onMouseEnter={(e) =>
+          (e.target.style.backgroundColor = "var(--secondary-color)")
+        }
+        onMouseLeave={(e) =>
+          (e.target.style.backgroundColor = "var(--primary-color)")
+        }
+      >
+        Manage Projects
+      </Button>
+    </div>
         <div className="row g-3 px-2 my-4 justify-content-center text-center">
           {cardData1.map((card, index) => (
             <Cards1

@@ -61,28 +61,34 @@ import { MdCoPresent } from "react-icons/md";
             <div className="mt-4 text-end fw-bold">
               Summary:  Present: {presentCount} |  Absent: {absentCount}
             </div>
-            <table className="table table-striped table-hover text-center border rounded">
-              <thead className="table-dark">
-                <tr>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {history.map((record, index) => (
-                  <tr key={index}>
-                    <td>{new Date(record.date).toLocaleDateString("en-IN")}</td>
-                    <td>
-                      {record.status === "Present" ? (
-                        <span className="text-success fw-bold"> Present</span>
-                      ) : (
-                        <span className="text-danger fw-bold"> Absent</span>
-                      )}
-                    </td>
+            {history.length === 0 ? (
+              <div className="text-center mt-5">
+                <p className="text-muted fs-5">No History Available</p>
+              </div>
+            ) : (
+              <table className="table table-striped table-hover text-center border rounded">
+                <thead className="table-dark">
+                  <tr>
+                    <th>Date</th>
+                    <th>Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {history.map((record, index) => (
+                    <tr key={index}>
+                      <td>{new Date(record.date).toLocaleDateString("en-IN")}</td>
+                      <td>
+                        {record.status === "Present" ? (
+                          <span className="text-success fw-bold"> Present</span>
+                        ) : (
+                          <span className="text-danger fw-bold"> Absent</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
 
           </>
         )}

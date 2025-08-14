@@ -105,8 +105,22 @@ function Dashboard() {
     }
   };
 
-  if (loading) return <p className="text-center mt-5">Loading workers...</p>;
-  if (error)
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="container mt-5">
+          <div className="text-center" style={{ marginTop: "10rem" }}>
+            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <h4>Loading Workers...</h4>
+            <p className="text-muted">Please wait while we fetch worker information for attendance.</p>
+          </div>
+        </div>
+      </>
+    );
+  }  if (error)
     return <p className="text-center mt-5 text-danger">Error: {error}</p>;
 
   return (
@@ -147,8 +161,13 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="table-responsive shadow">
-          <table className="table table-striped table-hover text-center border rounded">
+        {hiredWorkers.length === 0 ? (
+          <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+            <p className="text-muted fs-5">No workers available. Please hire workers first.</p>
+          </div>
+        ) : (
+        <div className="table-responsive shadow" style={{ overflowX: 'auto' }}>
+          <table className="table table-striped table-hover text-center border rounded" style={{ minWidth: '600px' }}>
             <thead className="table-dark">
               <tr>
                 <th>Sr.</th>
@@ -195,6 +214,7 @@ function Dashboard() {
             </tbody>
           </table>
         </div>
+        )}
 
         <div className="d-flex justify-content-end mt-4">
           <button

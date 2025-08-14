@@ -35,10 +35,14 @@ const MaterialManagement = () => {
   });
 
   const [showAddMaterial, setShowAddMaterial] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch project-specific materials
+  // Fetch project-specific materials
   const fetchMaterials = async () => {
-    if (!selectedProject?._id) return;
+    if (!selectedProject?._id) {
+      setLoading(false);
+      return;
+    }
     try {
       const res = await fetch(
         `http://localhost:5000/api/materials?projectId=${selectedProject._id}`
@@ -47,6 +51,8 @@ const MaterialManagement = () => {
       dispatch(setMaterials(data));
     } catch (err) {
       console.error("Fetch failed:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,7 +60,7 @@ const MaterialManagement = () => {
     fetchMaterials();
   }, [selectedProject]);
 
-  // ✅ Add Material
+  // Add Material
   const handleAddMaterial = async (e) => {
     e.preventDefault();
     if (
@@ -75,7 +81,6 @@ const MaterialManagement = () => {
           }),
         });
         const data = await res.json();
-      //  console.log("Added Material Response:", data);
 
         if (!res.ok) {
           Swal.fire("Error", data.message || "Material add failed", "error");
@@ -91,7 +96,7 @@ const MaterialManagement = () => {
     }
   };
 
-  // ✅ Update Usage
+  // Update Usage
   const [editMaterialId, setEditMaterialId] = useState(null);
   const [editedQty, setEditedQty] = useState(0);
 
@@ -102,10 +107,10 @@ const MaterialManagement = () => {
     }
 
     const qtyUsed = mat.quantity - editedQty;
-  if (isNaN(qtyUsed) || qtyUsed < 0) {
-    alert("Invalid quantity update");
-    return;
-  }
+    if (isNaN(qtyUsed) || qtyUsed < 0) {
+      alert("Invalid quantity update");
+      return;
+    }
 
     try {
       const res = await fetch(`http://localhost:5000/api/materials/usage`, {
@@ -123,7 +128,7 @@ const MaterialManagement = () => {
         Swal.fire("Error", data.message || "Update failed", "error");
         return;
       }
-  
+
       dispatch(updateUsage(data));
       setEditMaterialId(null);
       setEditedQty(null);
@@ -172,16 +177,33 @@ const MaterialManagement = () => {
     0
   );
 
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="container mt-5">
+          <div className="text-center" style={{ marginTop: "10rem" }}>
+            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <h4>Loading Materials...</h4>
+            <p className="text-muted">Please wait while we fetch material information.</p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Header />
       <div className="container mt-5">
-        <h1
-          className="text-center mb-5"
+        <h2
+          className="text-center mb-5 fw-bold"
           style={{ marginTop: "8rem", color: "#333" }}
         >
           Material Management
-        </h1>
+        </h2>
 
         <div className="d-flex justify-content-between align-items-center mb-3">
           <input
@@ -259,118 +281,104 @@ const MaterialManagement = () => {
               </div>
               <div className="col-md-12 text-end mt-3">
                 <button type="submit" className="btn btn-success">
-                <IoMdAdd />Add
+                  <IoMdAdd />Add
                 </button>
               </div>
             </div>
           </form>
         )}
+
         <div className="p-4 bg-light border border-info rounded">
           <h5 className="text-info">Material List</h5>
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Cost</th>
-                <th>Actions</th>
-                {/* <th>Edit</th>
-                <th>Delete</th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredMaterials.length > 0 ? (
-                filteredMaterials.map((mat) => (
-                  <tr key={mat._id}>
-                    <td>{mat.name.trim()}</td>
-
-                    {/* Quantity Cell */}
-                    <td>
-                      {editMaterialId === mat._id ? (
-                        <input
-                          type="number"
-                          className="form-control"
-                          value={
-                            editedQty === null || editedQty === undefined
-                              ? ""
-                              : editedQty
-                          }
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setEditedQty(val === "" ? "" : Number(val));
-                          }}
-                        />
-                      ) : (
-                        `${mat.quantity} ${mat.unit}`
-                      )}
-                    </td>
-                    {/* Unit Price */}
-                    <td>₹{mat.unitPrice.toFixed(2)}</td>
-                    {/* Cost */}
-                    <td>₹{(mat.quantity * mat.unitPrice).toFixed(2)}</td>
-
-                    {/* Actions */}
-                    <td>
-                      {editMaterialId === mat._id ? (
-                        <>
-                          <button
-                            className="btn btn-sm text-success fw-bold me-2"
-                            onClick={() => handleSaveEdit(mat)}
-                          >
-                           <MdOutlineSaveAlt /> Save
-                          </button>
-                          <button
-                          //btn-secondary btn-success
-                            className="btn btn-sm text-secondary fw-bold"
-                            onClick={() => {
-                              setEditMaterialId(null);
-                              setEditedQty(null);
+          <div className="table-responsive">
+            <table className="table table-striped table-hover text-center border rounded">
+              <thead className="table-dark">
+                <tr>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Cost</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredMaterials.length > 0 ? (
+                  filteredMaterials.map((mat) => (
+                    <tr key={mat._id}>
+                      <td>{mat.name.trim()}</td>
+                      <td>
+                        {editMaterialId === mat._id ? (
+                          <input
+                            type="number"
+                            className="form-control"
+                            value={
+                              editedQty === null || editedQty === undefined
+                                ? ""
+                                : editedQty
+                            }
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setEditedQty(val === "" ? "" : Number(val));
                             }}
-                          >
-                           <TbCancel /> Cancel
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            className="btn btn-sm  me-2"
-                           // style={buttonStyle} btn-primary
-                            onClick={() => {
-                              setEditMaterialId(mat._id);
-                              setEditedQty(mat.quantity);
-                            }}
-                          >
-                           <MdEdit /> Edit
-                          </button>
-                          {/* <span */}
-                          <button
-                            // style={{
-                            //   color: "red",
-                            //   cursor: "pointer",
-                            //   fontSize: "1.2rem",
-                            // }} btn-danger
-                            className="btn btn-sm text-danger"
-                            title="Delete"
-                            onClick={() => handleDelete(mat._id)}
-                          >
-                             <RiDeleteBin6Line />  Delete
+                          />
+                        ) : (
+                          `${mat.quantity} ${mat.unit}`
+                        )}
+                      </td>
+                      <td>₹{mat.unitPrice.toFixed(2)}</td>
+                      <td>₹{(mat.quantity * mat.unitPrice).toFixed(2)}</td>
+                      <td>
+                        {editMaterialId === mat._id ? (
+                          <>
+                            <button
+                              className="btn btn-sm text-success fw-bold me-2"
+                              onClick={() => handleSaveEdit(mat)}
+                            >
+                              <MdOutlineSaveAlt /> Save
                             </button>
-                          {/* </span> */}
-                        </>
-                      )}
+                            <button
+                              className="btn btn-sm text-secondary fw-bold"
+                              onClick={() => {
+                                setEditMaterialId(null);
+                                setEditedQty(null);
+                              }}
+                            >
+                              <TbCancel /> Cancel
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className="btn btn-sm  me-2"
+                              onClick={() => {
+                                setEditMaterialId(mat._id);
+                                setEditedQty(mat.quantity);
+                              }}
+                            >
+                              <MdEdit /> Edit
+                            </button>
+                            <button
+                              className="btn btn-sm text-danger"
+                              title="Delete"
+                              onClick={() => handleDelete(mat._id)}
+                            >
+                              <RiDeleteBin6Line /> Delete
+                            </button>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center">
+                      No materials found
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="text-center">
-                    No materials found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
 
           <div className="text-start mt-3">
             <h5 className="fw-bold">Total Cost: ₹{totalCost.toFixed(2)}</h5>
@@ -382,8 +390,3 @@ const MaterialManagement = () => {
 };
 
 export default MaterialManagement;
-const buttonStyle = {
-  backgroundColor: "var(--primary-color)",
-  transition: "background-color 0.3s ease, color 0.3s ease",
-  color: "var(--text-color)",
-}

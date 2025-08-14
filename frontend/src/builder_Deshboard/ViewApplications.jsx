@@ -47,12 +47,12 @@ function ViewApplications() {
     <div>
       <Header />
       <div className="container">
-        <h1
-          className="text-center mb-4"
-          style={{ marginTop: "7rem", color: "#333" }}
+        <h2
+          className="text-center mb-5 fw-bold"
+          style={{ marginTop: "8rem", color: "#333" }}
         >
           View Applications
-        </h1>
+        </h2>
 
         <div
           className="filters p-4 mb-4 rounded shadow bg-light"

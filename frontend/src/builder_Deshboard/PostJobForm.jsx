@@ -1,7 +1,8 @@
 import "./App.css";
 import image1 from "../assets/images/photos/postjob.png";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import Header from "../Components/Header";
 
 import { useNavigate } from "react-router-dom";
@@ -40,9 +41,6 @@ function PostJobForm() {
     }
   }, [dispatch, projects, user?.sub]);
   
-  // console.log("👤 Logged-in User:", user?.sub);
-  // console.log("📁 Projects fetched:", projects);
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -50,8 +48,34 @@ function PostJobForm() {
       toast.error("Please select a project before posting a job.");
       return;
     }
-    if (new Date(postJob.endDate) < new Date(postJob.startDate)) {
-      toast.error("End Date cannot be earlier than Start Date.");
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const startDate = new Date(postJob.startDate);
+    const endDate = new Date(postJob.endDate);
+    
+    // Check if start date is in the past
+    if (startDate < today) {
+      toast.error("Start date cannot be in the past.");
+      return;
+    }
+    
+    // Check if end date is in the past
+    if (endDate < today) {
+      toast.error("End date cannot be in the past.");
+      return;
+    }
+    
+    // Check if end date is before start date
+    if (endDate < startDate) {
+      toast.error("End date cannot be earlier than start date.");
+      return;
+    }
+    
+    // Check minimum 1 day gap between start and end date
+    const timeDiff = endDate.getTime() - startDate.getTime();
+    const dayDiff = timeDiff / (1000 * 3600 * 24);
+    if (dayDiff < 1) {
+      toast.error("There must be at least 1 day gap between start and end date.");
       return;
     }
     const formData = new FormData();
@@ -64,9 +88,7 @@ function PostJobForm() {
     formData.append("PhoneNo", postJob.phoneNo);
     formData.append("Email", postJob.email);
     formData.append("projectId", selectedProject._id);
-    // if (selectedImage) {
-    //   formData.append("image", selectedImage);
-    // }
+   
 
     try {
       const response = await fetch("http://localhost:5000/api/jobs", {
@@ -171,6 +193,7 @@ function PostJobForm() {
                   type="date"
                   className="form-control"
                   value={postJob.startDate}
+                  min={new Date().toISOString().split('T')[0]}
                   onChange={(e) => dispatch(setStartDate(e.target.value))}
                   required
                 />
@@ -182,6 +205,7 @@ function PostJobForm() {
                   type="date"
                   className="form-control"
                   value={postJob.endDate}
+                  min={postJob.startDate ? new Date(new Date(postJob.startDate).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
                   onChange={(e) => dispatch(setEndDate(e.target.value))}
                 />
               </div>
@@ -258,6 +282,17 @@ function PostJobForm() {
         </div>
       </div>
     </div>
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="colored"
+    />
     </div>
   );
 }

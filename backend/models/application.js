@@ -23,6 +23,14 @@ const applicationSchema = new mongoose.Schema({
     enum: ["under_review", "accepted", "rejected", "joined"],
     default: "under_review",
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+  deletedAt: {
+    type: Date,
+    default: null,
+  },
 });
 
 export default mongoose.model("Application", applicationSchema);

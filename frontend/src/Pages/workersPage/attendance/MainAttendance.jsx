@@ -39,10 +39,24 @@ const MainAttendance = () => {
       fetchJobs();
     }
   }, [workerEmail]);
-
+  
   if (isLoading || loadingJobs) {
-    return <div>Loading user info...</div>; 
+    return (
+      <>
+        <Header />
+        <div className="container mt-5">
+          <div className="text-center" style={{ marginTop: "10rem" }}>
+            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <h4>Loading Attendance Data...</h4>
+            <p className="text-muted">Please wait while we fetch your job information.</p>
+          </div>
+        </div>
+      </>
+    );
   }
+
 
   if (!isAuthenticated || !user) {
     return <div>Please login to continue</div>; 
@@ -52,13 +66,19 @@ const MainAttendance = () => {
     <div>
       <Header />
       <div style={{ marginTop: "6rem" }}>
-        <Tabs tabs={jobTitles}>
-          {jobIds.map((id) => (
-            <div key={id}>
-              <PaymentSummary jobId={id}/>
-            </div>
-          ))}
-        </Tabs>
+        {jobTitles.length === 0 ? (
+          <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+            <p className="text-muted fs-5">No jobs available. Please join a job first.</p>
+          </div>
+        ) : (
+          <Tabs tabs={jobTitles}>
+            {jobIds.map((id) => (
+              <div key={id}>
+                <PaymentSummary jobId={id}/>
+              </div>
+            ))}
+          </Tabs>
+        )}
       </div>
     </div>
   );

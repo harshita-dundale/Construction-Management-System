@@ -149,7 +149,7 @@ function ViewPostedJobs() {
     <>
       <Header />
       <div className="container" style={{ marginTop: "7rem" }}>
-        <h1 className="text-center mb-4">My Posted Jobs</h1>
+        <h1 className="text-center mb-4 fw-bold">My Posted Jobs</h1>
 
         <div className="mb-4 d-flex justify-content-between align-items-center">
           <h5>Total Jobs: {displayJobs.length}</h5>
@@ -161,11 +161,13 @@ function ViewPostedJobs() {
         </div>
 
         {displayJobs.length === 0 ? (
-          <p className="text-muted text-center">
-            {selectedProject
-              ? "No jobs posted for this project yet."
-              : "No jobs posted yet."}
-          </p>
+          <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+            <p className="text-muted fs-5">
+              {selectedProject
+                ? "No jobs posted for this project yet."
+                : "No jobs posted yet."}
+            </p>
+          </div>
         ) : (
           <>
             {!selectedProject &&

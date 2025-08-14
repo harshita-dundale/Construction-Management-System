@@ -31,7 +31,7 @@ function HiredWorkers() {
     <br />
     <br />
     <div className="container" style={{ marginTop: "90px"}}>
-      <h2 className="mb-5 text-center"><GrUserWorker className="mb-2 me-2 "/>
+      <h2 className="mb-5 text-center fw-bold" style={{ marginTop: "8rem", color: "#333" }}><GrUserWorker className="mb-2 me-2 fw-bold"/>
  Hired Workers</h2>
       <div className="row">
         {hired.length === 0 ? (

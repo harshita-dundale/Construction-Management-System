@@ -53,7 +53,7 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
     return <p className="mt-4">No applications found.</p>;
   }
   return (
-    <table className="table table-hover mt-4">
+    <table className="table table-striped table-hover text-center border rounded mt-3">
       <thead style={{ backgroundColor: "#266867", color: "#ffffff" }}>
         <tr>
           <th>Job Title</th>
