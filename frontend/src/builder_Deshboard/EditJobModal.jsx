@@ -34,7 +34,7 @@ function EditJobModal({ job, onClose, onSave }) {
 
   return (
     <>
-      <Modal show={true} onHide={onClose} centered size="lg" className="modern-edit-modal">
+      <Modal show={true} onHide={onClose} centered size="lg" >
         <div className="modal-content-wrapper">
           <div className="modal-header-modern">
             <div className="header-content">

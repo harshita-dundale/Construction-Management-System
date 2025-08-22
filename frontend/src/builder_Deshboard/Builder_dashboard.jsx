@@ -6,6 +6,7 @@ import Header from "../Components/Header";
 import ProjectModal from "../Components/ProjectModal";
 import { selectProject } from "../Pages/Redux/projectSlice";
 import { toast } from "react-toastify";
+// import { setPayrollList } from "../Pages/Redux/PayrollSlice"; // Add this import if you have such an action
 
 function Builder_dashboard() {
   const navigate = useNavigate();
@@ -62,16 +63,17 @@ function Builder_dashboard() {
         <div className="container-fluid px-3 px-md-4">
           <div className="row align-items-center">
             <div className="col-lg-8">
-              <div className="header-content">
-                <div className="dashboard-badge">
-                  <i className="fas fa-tachometer-alt me-2"></i>
-                  Builder Dashboard
-                </div>
+              {/* <div className="header-content"> */}
+                
                 <h1 className="dashboard-title">Project Management Hub</h1>
                 <p className="dashboard-subtitle">
                   Streamline your construction projects with powerful management tools
                 </p>
-              </div>
+                <div className="dashboard-badge">
+                  <i className="fas fa-tachometer-alt me-2 "></i>
+                  Builder Dashboard
+                </div>
+              {/* </div> */}
             </div>
             <div className="col-lg-4 text-center text-lg-end">
               <div className="header-actions d-flex flex-column align-items-end gap-3">
@@ -96,7 +98,8 @@ function Builder_dashboard() {
                     }}
                   >
                     <i className="fas fa-coins me-2"></i>
-                    Total Project Cost: ₹{totalProjectCost.toLocaleString()}
+                                      Total Project Cost: ₹{totalProjectCost.toLocaleString()}
+
                   </span>
                 </div>
                 <Button
