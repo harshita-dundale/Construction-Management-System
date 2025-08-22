@@ -1,11 +1,135 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../Components/Header";
 import { toast, ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { GrFormView } from "react-icons/gr";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import EmptyState from "../../components/EmptyState";
 import "./Dashboard.css";
+
+// Modern table styles
+const modernTableStyles = `
+  .attendance-table-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  
+  .table-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .table-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  .table-summary {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .summary-item {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+  
+  .modern-table {
+    margin: 0;
+  }
+  
+  .modern-table thead th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+    color: white;
+    border-bottom: 2px solid #667eea;
+  }
+  
+  .attendance-row {
+    transition: all 0.3s ease;
+  }
+  
+  .attendance-row:hover {
+    background: rgba(102, 126, 234, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .attendance-row td {
+    padding: 1rem;
+    vertical-align: middle;
+  }
+  
+  .worker-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+  }
+  
+  .worker-name {
+    color: #2c3e50;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .worker-number {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 768px) {
+    .table-header {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+    
+    .table-summary {
+      justify-content: center;
+    }
+    
+    .worker-info .d-flex {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+  }
+`;
+
+// Inject styles
+if (typeof document !== 'undefined') {
+  const styleSheet = document.createElement('style');
+  styleSheet.type = 'text/css';
+  styleSheet.innerText = modernTableStyles;
+  document.head.appendChild(styleSheet);
+}
 
 function Dashboard() {
   const [hiredWorkers, setHiredWorkers] = useState([]);
@@ -27,11 +151,11 @@ function Dashboard() {
 
       try {
         const applyRes = await fetch(
-          `http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`
+          `http://localhost:5000/api/apply?status=joined&projectId=${selectedProject._id}`
         );
         const applyData = await applyRes.json();
 
-        const accepted = applyData.filter((app) => app.status === "accepted");
+        const accepted = applyData.filter((app) => app.status === "joined");
 
         const merged = accepted.map((worker) => ({
           ...worker,
@@ -110,24 +234,21 @@ function Dashboard() {
       <>
         <Header />
         <div className="container mt-5">
-          <div className="text-center" style={{ marginTop: "10rem" }}>
-            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <h4>Loading Workers...</h4>
-            <p className="text-muted">Please wait while we fetch worker information for attendance.</p>
-          </div>
+          <LoadingSpinner 
+            message="Loading Workers..." 
+            size="large" 
+          />
         </div>
       </>
     );
-  }
-  if (error)
+  }  if (error)
     return <p className="text-center mt-5 text-danger">Error: {error}</p>;
 
   return (
     <>
       <Header />
       <ToastContainer />
+
       <div className="container mt-5">
         <h2 className="text-center mb-4">Mark Attendance</h2>
 
@@ -147,9 +268,15 @@ function Dashboard() {
 
           <div className="btn-group">
             <button
-            //btn-outline-success
-              className="btn btn-outline-dark"
+              className="btn"
               onClick={() => handleApplyAll(true)}
+              style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                border: 'none',
+                color: 'white',
+                borderRadius: '10px',
+                fontWeight: '600'
+              }}
             >
               Mark All Present
             </button>
@@ -162,21 +289,43 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="table-responsive shadow">
-          <table className="table table-striped table-hover text-center border rounded">
-            <thead className="table-dark">
-              <tr>
-                <th>Sr.</th>
-                <th>Worker Name</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
+        {hiredWorkers.length === 0 ? (
+          <EmptyState 
+            icon="fas fa-users"
+            title="No Workers Available"
+            message="Please hire workers first to manage attendance."
+            actionButton={
+              <button className="btn btn-primary" onClick={() => window.location.href = '/builder-dashboard'}>
+                <i className="fas fa-plus me-2"></i>Hire Workers
+              </button>
+            }
+          />
+        ) : (
+        <div className="modern-table-container">
+          <div className="table-responsive">
+            <table className="modern-applications-table">
+              <thead>
+                <tr>
+                  <th><i className="fas fa-hashtag me-2"></i>Sr.</th>
+                  <th><i className="fas fa-user me-2"></i>Worker Name</th>
+                  <th><i className="fas fa-check-circle me-2"></i>Status</th>
+                  <th><i className="fas fa-cogs me-2"></i>Action</th>
+                </tr>
+              </thead>
             <tbody>
               {hiredWorkers.map((worker, index) => (
-                <tr key={worker._id || index} className="align-middle">
-                  <td>{index + 1}</td>
-                  <td>{worker.name}</td>
+                <tr key={worker._id || index} className="table-row">
+                  <td className="text-center">
+                    <div className="worker-number">{index + 1}</div>
+                  </td>
+                  <td className="worker-name-cell">
+                    <div className="worker-info">
+                      <div className="worker-avatar me-3">
+                        <i className="fas fa-hard-hat"></i>
+                      </div>
+                      <span className="worker-name">{worker.name}</span>
+                    </div>
+                  </td>
                   <td>
                     <div className="d-flex flex-column justify-content-center align-items-center gap-1">
                       <input
@@ -199,8 +348,15 @@ function Dashboard() {
                   <td>
                     <Link
                       to={`/attendance/worker/${worker.workerId}`}
-                      className="btn btn-outline-primary btn-sm"
-                      style={buttonStyle}
+                      className="btn btn-sm"
+                      style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        border: 'none',
+                        color: 'white',
+                        borderRadius: '10px',
+                        fontWeight: '600',
+                        textDecoration: 'none'
+                      }}
                     >
                       <GrFormView /> View History
                     </Link>
@@ -210,19 +366,106 @@ function Dashboard() {
             </tbody>
           </table>
         </div>
+        
+        <style jsx>{`
+          .modern-table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 1rem;
+          }
+          
+          .modern-applications-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+          }
+          
+          .modern-applications-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+          }
+          
+          .modern-applications-table th {
+            padding: 1rem;
+            font-weight: 600;
+            text-align: left;
+            border: none;
+            font-size: 0.9rem;
+          }
+          
+          .modern-applications-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          }
+          
+          .table-row {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #e9ecef;
+          }
+          
+          .table-row:hover {
+            background: rgba(102, 126, 234, 0.05);
+            transform: translateY(-1px);
+          }
+          
+          .modern-applications-table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border: none;
+          }
+          
+          .worker-number {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin: 0 auto;
+          }
+          
+          .worker-info {
+            display: flex;
+            align-items: center;
+          }
+          
+          .worker-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+          }
+          
+          .worker-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1rem;
+          }
+        `}</style>
+      </div>
+        )}
 
         <div className="d-flex justify-content-end mt-4">
           <button
             disabled={processing}
             onClick={handleSubmitAttendance}
-            style={buttonStyle}
-              className="btn btn-light px-4 py-2"
-              onMouseEnter={(e) =>
-                (e.target.style.backgroundColor = "var(--secondary-color)")
-              }
-              onMouseLeave={(e) =>
-                (e.target.style.backgroundColor = "var(--primary-color)")
-              }
+            className="btn px-4 py-2"
+            style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              border: 'none',
+              color: 'white',
+              borderRadius: '10px',
+              fontWeight: '600'
+            }}
           >
             {processing ? "Submitting..." : "Submit Attendance"}
           </button>

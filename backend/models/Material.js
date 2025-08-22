@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const materialSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // 👈 No unique
+  name: { type: String, required: true },
   quantity: { type: Number, required: true },
   unitPrice: { type: Number, required: true },
   unit: { type: String, required: true },
@@ -11,5 +11,7 @@ const materialSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+// No unique constraint - allow duplicate material names
 
 export default mongoose.model("Material", materialSchema);

@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Backend se data fetch karne ke liye thunk
 export const fetchApplications = createAsyncThunk(
   "applications/fetchApplications",
   async ({ workerEmail = null, status = null, experience = null, projectId = null }, { rejectWithValue }) => {
@@ -35,6 +34,29 @@ export const fetchApplications = createAsyncThunk(
     }
   }
 );
+
+export const joinAndRejectAppli = createAsyncThunk(
+  "applications/updateAction",
+  async ({ applicationId, action }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/apply/${applicationId}/action`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        return rejectWithValue(errorData.message || "Failed to update application");
+      }
+
+      return await res.json();
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const applicationsSlice = createSlice({
   name: "applications",
   initialState: {
@@ -59,7 +81,10 @@ const applicationsSlice = createSlice({
     },
     setFilter(state, action) {
             state.filter = action.payload;
-          },
+    },
+    setApplications(state, action) {
+      state.list = action.payload;
+    },    
   },
   extraReducers: (builder) => {
     builder
@@ -77,9 +102,28 @@ const applicationsSlice = createSlice({
       .addCase(fetchApplications.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(joinAndRejectAppli.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(joinAndRejectAppli.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedApp = action.payload.application;
+        // Replace updated application in both lists
+        state.applications = state.applications.map((app) =>
+          app._id === updatedApp._id ? updatedApp : app
+        );
+        state.filteredApplications = state.filteredApplications.map((app) =>
+          app._id === updatedApp._id ? updatedApp : app
+        );
+      })
+      .addCase(joinAndRejectAppli.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
-export const {setFilteredApplications, setShowModal,setFilter,  setCurrentJob  } =
+export const {setFilteredApplications, setShowModal,setFilter,  setCurrentJob,setApplications } =
   applicationsSlice.actions;
 export default applicationsSlice.reducer;

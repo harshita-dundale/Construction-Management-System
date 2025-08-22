@@ -8,12 +8,11 @@ function HiredWorkers() {
   const [hired, setHired] = useState([]);
   const selectedProject = useSelector((state) => state.project.selectedProject); 
 
-  useEffect(() => {
-    if (!selectedProject?._id) return;
   const fetchHired = async () => {
+    if (!selectedProject?._id) return;
     try {
       const res = await fetch(
-        `http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`
+        `http://localhost:5000/api/apply?status=joined&projectId=${selectedProject._id}`
       );
       const data = await res.json();
       setHired(data);
@@ -22,15 +21,16 @@ function HiredWorkers() {
     }
   };
 
-  fetchHired();
-}, [selectedProject]);
+  useEffect(() => {
+    fetchHired();
+  }, [selectedProject]);
   return (
     <>
     <Header />
     <br />
     <br />
     <div className="container" style={{ marginTop: "90px"}}>
-      <h2 className="mb-5 text-center"><GrUserWorker className="mb-2 me-2 "/>
+      <h2 className="mb-5 text-center fw-bold" style={{ marginTop: "8rem", color: "#333" }}><GrUserWorker className="mb-2 me-2 fw-bold"/>
  Hired Workers</h2>
       <div className="row">
         {hired.length === 0 ? (
@@ -38,7 +38,7 @@ function HiredWorkers() {
         ) : (
           hired.map((worker) => (
             <div className="col-md-4 mb-3" key={worker._id}>
-              <Card3 application={worker} isHiredView={true}/> 
+              <Card3 application={worker} isHiredView={true} onDelete={fetchHired}/> 
             </div>
           ))
         )}

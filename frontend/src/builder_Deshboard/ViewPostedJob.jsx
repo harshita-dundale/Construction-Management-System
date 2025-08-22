@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import Header from "../Components/Header";
 import { useEffect, useState } from "react";
@@ -8,15 +7,18 @@ import EditJobModal from "./EditJobModal";
 import { toast } from "react-toastify";
 import { FaRegAddressBook } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function ViewPostedJobs() {
   const { user } = useAuth0();
+  const navigate = useNavigate();
   const selectedProject = useSelector((state) => state.project.selectedProject);
   const [projectsWithJobs, setProjectsWithJobs] = useState([]);
   const [allJobs, setAllJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [jobToEdit, setJobToEdit] = useState(null);
+  const [actionLoading, setActionLoading] = useState(null);
 
   useEffect(() => {
     if (!user?.sub) return;
@@ -129,22 +131,14 @@ function ViewPostedJobs() {
 
 
   if (error) return <p className="text-danger text-center">Error: {error}</p>;
-  if (loading) {
-    return (
-      <>
-        <Header />
-        <div className="container mt-5">
-          <div className="text-center" style={{ marginTop: "10rem" }}>
-            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <h4>Loading Posted Jobs...</h4>
-            <p className="text-muted">Please wait while we fetch your job postings.</p>
-          </div>
-        </div>
-      </>
-    );
-  }
+  if (loading) return (
+    <div className="loading-container">
+      <div className="loading-spinner">
+        <i className="fas fa-spinner fa-spin"></i>
+      </div>
+      <p>Loading your jobs...</p>
+    </div>
+  );
 
   const displayJobs = selectedProject
     ? allJobs.filter((job) =>
@@ -164,64 +158,168 @@ function ViewPostedJobs() {
   return (
     <>
       <Header />
-      <div className="container" style={{ marginTop: "7rem" }}>
-        <h1 className="text-center mb-4">My Posted Jobs</h1>
-
-        <div className="mb-4 d-flex justify-content-between align-items-center">
-          <h5>Total Jobs: {displayJobs.length}</h5>
-          {selectedProject && (
-            <p className="text-muted">
-              Showing jobs for project: <strong>{selectedProject.name}</strong>
-            </p>
-          )}
+      <div className="jobs-page-container">
+        {/* Header Section */}
+        <div className="jobs-header-section">
+          <div className="container">
+            <div className="row align-items-center">
+              <div className="col-md-8">
+                <div className="header-content">
+                  <div className="header-badge">
+                    <i className="fas fa-briefcase me-2"></i>
+                    Job Management
+                  </div>
+                  <h1 className="header-title">My Posted Jobs</h1>
+                  <p className="header-subtitle">Manage and track all your job postings efficiently</p>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="stats-card">
+                  <div className="stat-icon">
+                    <i className="fas fa-clipboard-list"></i>
+                  </div>
+                  <div className="stat-content">
+                    <div className="stat-number">{displayJobs.length}</div>
+                    <div className="stat-label">Total Jobs</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Quick Actions */}
+            <div className="row mt-4">
+              <div className="col-12">
+                <div className="quick-actions">
+                  <button 
+                    className="action-btn primary-btn"
+                    onClick={() => navigate('/post-job')}
+                  >
+                    <i className="fas fa-plus me-2"></i>
+                    Post New Job
+                  </button>
+                  <button 
+                    className="action-btn secondary-btn"
+                    onClick={() => navigate('/ViewApplications')}
+                  >
+                    <i className="fas fa-users me-2"></i>
+                    View Applications
+                  </button>
+                  <button 
+                    className="action-btn tertiary-btn"
+                    onClick={() => toast.info('Analytics feature coming soon!')}
+                  >
+                    <i className="fas fa-chart-bar me-2"></i>
+                    Analytics
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {displayJobs.length === 0 ? (
-          <p className="text-muted text-center">
-            {selectedProject
-              ? "No jobs posted for this project yet."
-              : "No jobs posted yet."}
-          </p>
-        ) : (
-          <>
-            {!selectedProject &&
-              projectsWithJobs.map((project) => (
-                <div key={project.projectId} className="mb-5">
-                  <h4 className="mb-3 border-bottom pb-2">
-                  <FaRegAddressBook className="me-2"/>
- {project.projectName} (<span style={{fontSize : "17px"}}>{project.jobs.length} jobs</span>)
-                  </h4>
-                  <div className="row">
-                    {project.jobs.map((job) => (
-                      <div className="col-md-4 mb-5" key={job._id}>
-                        <JobCard1
-                          job={job}
-                          onEdit={setJobToEdit}
-                          onDelete={handleDeleteJob}
-                        />
+
+
+        {/* Project Filter */}
+        {selectedProject && (
+          <div className="container mb-4">
+            <div className="project-filter">
+              <div className="filter-icon">
+                <i className="fas fa-building"></i>
+              </div>
+              <div className="filter-content">
+                <h6 className="filter-title">{selectedProject.name}</h6>
+                <span className="filter-subtitle">Project Filter Active</span>
+              </div>
+              <div className="filter-badge">
+                {displayJobs.length} Jobs
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="container">
+          {displayJobs.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-icon">
+                <i className="fas fa-briefcase"></i>
+              </div>
+              <h3 className="empty-title">No Jobs Posted Yet</h3>
+              <p className="empty-description">
+                {selectedProject
+                  ? `No jobs have been posted for ${selectedProject.name} project yet.`
+                  : "Ready to start hiring? Create your first job posting and find the perfect candidates."}
+              </p>
+            </div>
+          ) : (
+            <div className="jobs-content">
+              {!selectedProject &&
+                projectsWithJobs.map((project) => (
+                  <div key={project.projectId} className="project-section">
+                    <div className="project-header">
+                      <div className="project-info">
+                        <div className="project-icon">
+                          <i className="fas fa-building"></i>
+                        </div>
+                        <div className="project-details">
+                          <h4 className="project-name">{project.projectName}</h4>
+                          <span className="project-meta">
+                            {project.jobs.length} job{project.jobs.length !== 1 ? 's' : ''} posted
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="jobs-grid">
+                      <div className="row g-4">
+                        {project.jobs.map((job) => (
+                          <div className="col-xl-4 col-lg-6 col-md-6" key={job._id}>
+                            <div className="job-card-wrapper">
+                              {actionLoading === job._id ? (
+                                <div className="job-card-loading">
+                                  <i className="fas fa-spinner fa-spin"></i>
+                                  <p>Processing...</p>
+                                </div>
+                              ) : (
+                                <JobCard1
+                                  job={job}
+                                  onEdit={setJobToEdit}
+                                  onDelete={handleDeleteJob}
+                                />
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+              {selectedProject && (
+                <div className="jobs-grid">
+                  <div className="row g-4">
+                    {displayJobs.map((job) => (
+                      <div className="col-xl-4 col-lg-6 col-md-6" key={job._id}>
+                        <div className="job-card-wrapper">
+                          {actionLoading === job._id ? (
+                            <div className="job-card-loading">
+                              <i className="fas fa-spinner fa-spin"></i>
+                              <p>Processing...</p>
+                            </div>
+                          ) : (
+                            <JobCard1
+                              job={job}
+                              onEdit={setJobToEdit}
+                              onDelete={handleDeleteJob}
+                            />
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
-              ))}
-
-            {/* If project selected, show jobs in rows of 3 */}
-            {selectedProject &&
-              rows.map((row, index) => (
-                <div className="row mb-4" key={index}>
-                  {row.map((job) => (
-                    <div className="col-md-4" key={job._id}>
-                      <JobCard1
-                        job={job}
-                        onEdit={setJobToEdit}
-                        onDelete={handleDeleteJob}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ))}
-          </>
-        )}
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {jobToEdit && (
@@ -231,6 +329,293 @@ function ViewPostedJobs() {
           onSave={handleJobUpdate}
         />
       )}
+      
+      <style jsx>{`
+        .jobs-page-container {
+          min-height: 100vh;
+          background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+          padding-top: 6rem;
+        }
+        
+        .jobs-header-section {
+          background: white;
+          padding: 3rem 0;
+          margin-bottom: 2rem;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-badge {
+          display: inline-block;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 25px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+        }
+        
+        .header-title {
+          font-size: 2.5rem;
+          font-weight: 800;
+          color: #2c3e50;
+          margin-bottom: 0.5rem;
+        }
+        
+        .header-subtitle {
+          font-size: 1.1rem;
+          color: #6c757d;
+          margin: 0;
+        }
+        
+        .stats-card {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 2rem;
+          border-radius: 15px;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .stat-icon {
+          width: 50px;
+          height: 50px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+        }
+        
+        .stat-number {
+          font-size: 2rem;
+          font-weight: 800;
+          line-height: 1;
+        }
+        
+        .stat-label {
+          font-size: 0.9rem;
+          opacity: 0.9;
+        }
+        
+        .project-filter {
+          background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+          color: white;
+          padding: 1.5rem;
+          border-radius: 15px;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .filter-icon {
+          width: 40px;
+          height: 40px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.2rem;
+        }
+        
+        .filter-content {
+          flex: 1;
+        }
+        
+        .filter-title {
+          margin: 0;
+          font-size: 1.1rem;
+          font-weight: 700;
+        }
+        
+        .filter-subtitle {
+          font-size: 0.85rem;
+          opacity: 0.8;
+        }
+        
+        .filter-badge {
+          background: rgba(255, 255, 255, 0.2);
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-weight: 600;
+        }
+        
+        .empty-state {
+          text-align: center;
+          padding: 4rem 2rem;
+          background: white;
+          border-radius: 20px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+          margin: 2rem 0;
+        }
+        
+        .empty-icon {
+          width: 100px;
+          height: 100px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 2rem;
+          font-size: 3rem;
+          color: white;
+        }
+        
+        .empty-title {
+          font-size: 1.8rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+        }
+        
+        .empty-description {
+          color: #6c757d;
+          font-size: 1rem;
+          max-width: 500px;
+          margin: 0 auto;
+        }
+        
+        .project-section {
+          background: white;
+          border-radius: 20px;
+          padding: 2rem;
+          margin-bottom: 2rem;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .project-header {
+          margin-bottom: 2rem;
+          padding-bottom: 1rem;
+          border-bottom: 2px solid #f8f9fa;
+        }
+        
+        .project-info {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+        
+        .project-icon {
+          width: 50px;
+          height: 50px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 1.3rem;
+        }
+        
+        .project-name {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin: 0;
+        }
+        
+        .project-meta {
+          color: #6c757d;
+          font-size: 0.9rem;
+        }
+        
+        .job-card-wrapper {
+          transition: all 0.3s ease;
+        }
+        
+        .job-card-wrapper:hover {
+          transform: translateY(-5px);
+        }
+        
+        .loading-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 50vh;
+          color: #6c757d;
+        }
+        
+        .loading-spinner {
+          font-size: 3rem;
+          margin-bottom: 1rem;
+          color: #667eea;
+        }
+        
+        .quick-actions {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+        }
+        
+        .action-btn {
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 10px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        
+        .primary-btn {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+        }
+        
+        .secondary-btn {
+          background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+          color: white;
+        }
+        
+        .tertiary-btn {
+          background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+          color: white;
+        }
+        
+        .action-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+
+        
+        .job-card-loading {
+          background: white;
+          border-radius: 15px;
+          padding: 3rem 2rem;
+          text-align: center;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+          color: #6c757d;
+        }
+        
+        .job-card-loading i {
+          font-size: 2rem;
+          color: #667eea;
+          margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+          .header-title {
+            font-size: 2rem;
+          }
+          
+          .stats-card {
+            margin-top: 2rem;
+          }
+          
+          .project-info {
+            flex-direction: column;
+            text-align: center;
+          }
+        }
+      `}</style>
+
     </>
   );
 }

@@ -1,8 +1,8 @@
-import React from 'react';
 import ApplicationTabs from "./ApplicationTabs";
 import ApplicationTable from "./ApplicationTable";
 import JobDetailsModal from "./JobDetailsModal";
 import Header from "../../../Components/Header";
+import LoadingSpinner from "../../../Components/LoadingSpinner";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setShowModal,
@@ -43,23 +43,19 @@ const ApplicationSection = () => {
       <>
         <Header />
         <div className="container mt-5">
-          <div className="text-center" style={{ marginTop: "10rem" }}>
-            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <h4>Loading Applications...</h4>
-            <p className="text-muted">Please wait while we fetch your job applications.</p>
-          </div>
+          <LoadingSpinner 
+            message="Loading Applications..." 
+            size="large" 
+          />
         </div>
       </>
     );
   }
 
   return (
-    <div>
+    <div className="applications-page">
       <Header />
       <div className="container mt-5 pt-5">
-        {/* <h3 className="mb-3">Applications</h3> */}
         <ApplicationTabs />
         <div className="table-responsive">
           <ApplicationTable
@@ -69,6 +65,13 @@ const ApplicationSection = () => {
         </div>
         {showModal && <JobDetailsModal job={currentJob} />}
       </div>
+      
+      <style jsx>{`
+        .applications-page {
+          min-height: 100vh;
+          background: #f8f9fa;
+        }
+      `}</style>
     </div>
   );
 };
