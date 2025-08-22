@@ -98,10 +98,10 @@ function LandingPage() {
         <div className="container">
           <div className="row d-flex align-items-center min-vh-100">
             <div className="col-md-6 col-12 hero-content">
-              <div className="hero-badge mb-4">
+              {/* <div className="hero-badge mb-4">
                 <i className="fas fa-hard-hat me-2"></i>
                 Construction Management Platform
-              </div>
+              </div> */}
               <h1 className="hero-title text-center text-md-start">
                 Builders & Workers
                 <span className="text-gradient"> Collaboration</span>

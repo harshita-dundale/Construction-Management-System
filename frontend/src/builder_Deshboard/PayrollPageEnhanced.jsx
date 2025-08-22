@@ -290,11 +290,11 @@ function PayrollPageEnhanced() {
                 </h1>
                 <p className="text-muted text-center mb-4">Manage worker payments and track payroll status</p>
                 {/* Total Project Cost in Header */}
-                <div className="mt-2">
+                {/* <div className="mt-2">
                   <span className="badge bg-secondary fs-5 px-4 py-2">
                     Total Project Cost: ₹{totalProjectCost.toLocaleString()}
                   </span>
-                </div>
+                </div> */}
               </div>
               <div className="text-end">
                 <span className="badge bg-primary fs-6 px-3 py-2">

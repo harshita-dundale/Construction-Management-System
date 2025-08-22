@@ -19,7 +19,7 @@ export const getProjectsByUserId = async (req, res) => {
 // 🔹 Add New Project
 export const addProject = async (req, res) => {
   try {
-    const { userId, name } = req.body;
+    const { userId, name, type, location, clientName } = req.body;
 
     if (!userId || !name) {
       return res.status(400).json({ error: "User ID and Project name required" });
@@ -33,12 +33,16 @@ export const addProject = async (req, res) => {
     const newProject = new Project({
       userId,
       name,
+      type: type || "",
+      location: location || "",
+      clientName: clientName || "",
       createdAt: new Date(),
     });
 
     await newProject.save();
+    const allProjects = await Project.find({ userId });
 
-    res.status(201).json({ message: "Project created", project: newProject });
+    res.status(201).json({ message: "Project created", projects: allProjects });
   } catch (error) {
     console.error("🚨 Error in addProject:", error.message, error.stack);
     res.status(500).json({ error: "Failed to add project" });
@@ -50,7 +54,7 @@ export const addProject = async (req, res) => {
 export const updateProject = async (req, res) => {
   try {
     const projectId = req.params.id;
-    const { name } = req.body;
+    const { name, type, location, clientName } = req.body;
 
     if (!name) {
       return res.status(400).json({ error: "Project name is required" });
@@ -58,7 +62,12 @@ export const updateProject = async (req, res) => {
 
     const updatedProject = await Project.findByIdAndUpdate(
       projectId,
-      { name },
+      { 
+        name,
+        type: type || "",
+        location: location || "",
+        clientName: clientName || ""
+      },
       { new: true }
     );
 

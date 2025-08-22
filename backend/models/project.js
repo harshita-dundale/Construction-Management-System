@@ -23,6 +23,9 @@ import mongoose from "mongoose";
 const projectSchema = new mongoose.Schema({
   userId: { type: String, required: true },
   name: { type: String, required: true },
+  type: { type: String, default: "" },
+  location: { type: String, default: "" },
+  clientName: { type: String, default: "" },
   createdAt: { type: Date, default: Date.now },
 });
 projectSchema.index({ userId: 1, name: 1 }, { unique: true });
