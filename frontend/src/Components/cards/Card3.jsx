@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchApplications } from "../../Pages/Redux/applicationsSlice";
 import Swal from "sweetalert2";
 
-function Card3({ application, isHiredView = false }) {
+function Card3({ application, isHiredView = false, onDelete }) {
   const [status, setStatus] = useState(application.status || "under_review");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -52,169 +52,745 @@ function Card3({ application, isHiredView = false }) {
   const handleUndo = () => updateStatusInBackend("under_review");
 
   return (
-    <div className="card shadow-sm mb-4 h-100 d-flex flex-column text-center">
-      <div
-        style={{ backgroundColor: "rgb(226, 236, 234)" }}
-      >
-        <h5 className="card-title fw-bold">{application.name}</h5>
-        <p className="card-text">
-          Applied on: {application.appliedAt?.slice(0, 10)}
-        </p>
-        <p className="card-text">Phone nu: {application.phoneNo} </p>
-        <p className="card-text">Experience: {application.experience} years</p>
-        {/* <p className="card-text">
-          Skills:{" "}
-          {Array.isArray(application.skills)
-            ? application.skills.join(", ")
-            : application.skills}
-        </p> */}
-        <p className="card-text">
-          <strong>Status:</strong>{" "}
-          <span
-            className={`fw-bold ${
-              status === "accepted"
-                ? "text-dark"
-                : status === "rejected"
-                ? "text-danger"
-                : status === "joined"
-                ? "text-success"
-                : "text-warning"
-            }`}
-          >
-            {status.replace("_", " ")}
+    <div className="application-card">
+      <div className="card-header">
+        <div className="header-content">
+          <div className="applicant-avatar">
+            <i className="fas fa-hard-hat"></i>
+          </div>
+          <div className="applicant-info">
+            <h3 className="applicant-name">{application.name}</h3>
+            <div className="job-title">
+              <i className="fas fa-briefcase me-1"></i>
+              {application.jobId?.title || "Job Title Not Available"}
+            </div>
+            <div className="application-date">
+              <i className="fas fa-calendar-check me-1"></i>
+              Applied {new Date(application.appliedAt).toLocaleDateString()}
+            </div>
+          </div>
+        </div>
+        {/* <div className="status-badge">
+          <span className={`status-indicator status-${status}`}>
+            {status === "accepted" && "✅"}
+            {status === "rejected" && "❌"}
+            {status === "joined" && "🎯"}
+            {status === "under_review" && "⏳"}
           </span>
-        </p>
+        </div> */}
       </div>
-         
-
-      {/* ✅ View Applications - Accept/Reject/Undo */}
-{!isHiredView && status === "under_review" && (
-  <div className="card-footer d-flex justify-content-center">
-    <button
-      className="btn btn-dark w-50 me-1"
-      onClick={handleAccept}
-      disabled={loading}
-    >
-      Accept
-    </button>
-    <button
-      className="btn btn-danger w-50 ms-1"
-      onClick={handleReject}
-      disabled={loading}
-    >
-      Reject
-    </button>
-  </div>
-)}
-
-{!isHiredView && status !== "under_review" && (
-  <div className="card-footer d-flex justify-content-center">
-    <button
-      className="btn btn-warning w-50 me-1"
-      onClick={handleUndo}
-      disabled={loading}
-    >
-      Undo Status
-    </button>
-    <button
-      className="btn btn-danger w-50 ms-1"
-      onClick={async () => {
-        Swal.fire({
-          title: "Are you sure?",
-          text: `Do you want to delete "${application.name}"'s application?`,
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#d33",
-          cancelButtonColor: "#3085d6",
-          confirmButtonText: "Yes, Delete",
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            setLoading(true);
-            try {
-              const res = await fetch(
-                `http://localhost:5000/api/apply/${application._id}`,
-                {
-                  method: "DELETE",
+      
+      <div className="card-content">
+        <div className="info-section">
+          <div className="info-row">
+            <div className="info-item">
+              {/* <div className="info-icon phone-icon">
+                <i className="fas fa-phone"></i>
+              </div> */}
+              <div className="info-details">
+                <span className="info-label">Contact</span>
+                <span className="info-value">{application.phoneNo}</span>
+              </div>
+            </div>
+            
+            <div className="info-item">
+              {/* <div className="info-icon experience-icon">
+                <i className="fas fa-medal"></i>
+              </div> */}
+              <div className="info-details">
+                <span className="info-label">Experience</span>
+                <span className="info-value">{application.experience} years</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="status-section">
+          {/* Builder Status */}
+          <div className="status-container">
+            <span className="status-label">Builder Status</span>
+            <div className={`status-pill builder-status-${application.builderStatus || status}`}>
+              <span className="status-emoji">
+                {(application.builderStatus === "accepted" || (status === "accepted" && !application.workerAction)) && "✅"}
+                {(application.builderStatus === "rejected" || (status === "rejected" && !application.workerAction)) && "❌"}
+                {(application.builderStatus === "under_review" || status === "under_review") && "⏳"}
+              </span>
+              <span className="status-text">
+                {application.builderStatus ? 
+                  application.builderStatus.replace("_", " ").toUpperCase() : 
+                  (status === "joined" || status === "rejected" ? "ACCEPTED" : status.replace("_", " ").toUpperCase())
                 }
-              );
+              </span>
+            </div>
+          </div>
+            
+          {/* Worker Action Status */}
+          {(status === "joined" || status === "rejected") && (
+            <div className="worker-status-container">
+              <span className="status-label">Worker Response</span>
+              <div className={`action-indicator ${status === "joined" ? "joined-by-worker" : "rejected-by-worker"}`}>
+                <i className={`fas ${status === "joined" ? "fa-user-check" : "fa-user-times"} me-1`}></i>
+                <span className="action-text">
+                  {status === "joined" ? "JOINED" : "REJECTED"}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
-              if (res.ok) {
-                Swal.fire("Deleted!", "Application has been deleted.", "success");
-                refreshApplications();
-              } else {
-                Swal.fire("Error", "Failed to delete application.", "error");
-              }
-            } catch (err) {
-              console.error(err);
-              Swal.fire("Error", "An error occurred while deleting.", "error");
-            } finally {
-              setLoading(false);
-            }
-          }
-        });
-      }}
-      disabled={loading}
-    >
-      {loading ? "Deleting..." : "Delete"}
-    </button>
-  </div>
-)}
+      {/* Action Buttons */}
+      {!isHiredView && status === "under_review" && (
+        <div className="card-actions">
+          <button
+            className="action-btn accept-btn"
+            onClick={handleAccept}
+            disabled={loading}
+          >
+            <i className="fas fa-check me-2"></i>
+            Accept
+          </button>
+          <button
+            className="action-btn reject-btn"
+            onClick={handleReject}
+            disabled={loading}
+          >
+            <i className="fas fa-times me-2"></i>
+            Reject
+          </button>
+        </div>
+      )}
 
-{/* ✅ Hired View - Only Reject with confirm + delete */}
-{isHiredView && status === "accepted" && (
-  <div className="card-footer">
-    <button
-  className="btn btn-secondary w-100"
-  style={buttonStyle}
-  onClick={async () => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: `Do you really want to remove "${application.name}" from hired workers?`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, Remove",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        setLoading(true);
-        try {
-          const res = await fetch(
-            `http://localhost:5000/api/apply/${application._id}`,
-            {
-              method: "DELETE",
-            }
-          );
+      {!isHiredView && status !== "under_review" && (
+        <div className="card-actions">
+          <button
+            className="action-btn undo-btn"
+            onClick={handleUndo}
+            disabled={loading}
+          >
+            <i className="fas fa-undo me-2"></i>
+            Undo
+          </button>
+          <button
+            className="action-btn delete-btn"
+            onClick={async () => {
+              Swal.fire({
+                title: "Are you sure?",
+                text: `Do you want to delete "${application.name}"'s application?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, Delete",
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  setLoading(true);
+                  try {
+                    const res = await fetch(
+                      `http://localhost:5000/api/apply/${application._id}`,
+                      {
+                        method: "DELETE",
+                      }
+                    );
 
-          if (res.ok) {
-            Swal.fire("Deleted!", "The worker has been removed.", "success");
-            refreshApplications();
-          } else {
-            Swal.fire("Error", "Failed to delete the worker.", "error");
-          }
-        } catch (err) {
-          console.error(err);
-          Swal.fire("Error", "An error occurred while deleting.", "error");
-        } finally {
-          setLoading(false);
+                    if (res.ok) {
+                      Swal.fire("Deleted!", "Application has been deleted.", "success");
+                      refreshApplications();
+                    } else {
+                      Swal.fire("Error", "Failed to delete application.", "error");
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    Swal.fire("Error", "An error occurred while deleting.", "error");
+                  } finally {
+                    setLoading(false);
+                  }
+                }
+              });
+            }}
+            disabled={loading}
+          >
+            <i className="fas fa-trash me-2"></i>
+            {loading ? "Deleting..." : "Delete"}
+          </button>
+        </div>
+      )}
+
+      {isHiredView && (
+        <div className="card-actions">
+          <button
+            className="action-btn remove-btn"
+            onClick={async () => {
+              Swal.fire({
+                title: "Are you sure?",
+                text: `Do you really want to remove "${application.name}" from hired workers?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, Remove",
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  setLoading(true);
+                  try {
+                    const res = await fetch(
+                      `http://localhost:5000/api/apply/${application._id}`,
+                      {
+                        method: "DELETE",
+                      }
+                    );
+
+                    if (res.ok) {
+                      Swal.fire("Deleted!", "The worker has been removed.", "success");
+                      if (onDelete) {
+                        onDelete();
+                      } else {
+                        refreshApplications();
+                      }
+                    } else {
+                      Swal.fire("Error", "Failed to delete the worker.", "error");
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    Swal.fire("Error", "An error occurred while deleting.", "error");
+                  } finally {
+                    setLoading(false);
+                  }
+                }
+              });
+            }}
+            disabled={loading}
+          >
+            <i className="fas fa-user-minus me-2"></i>
+            {loading ? "Removing..." : "Remove Worker"}
+          </button>
+        </div>
+      )}
+      
+      <style jsx>{`
+        .application-card {
+          background: white;
+          border-radius: 20px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+          overflow: hidden;
+          transition: all 0.4s ease;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          border: 1px solid rgba(102, 126, 234, 0.1);
         }
-      }
-    });
-  }}
-  disabled={loading}
->
-  {loading ? "Removing..." : "Remove Worker"}
-</button>
-  </div>
-)}
+        
+        .application-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+          border-color: rgba(102, 126, 234, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+          .application-card:hover {
+            transform: translateY(-4px);
+          }
+        }
+        
+        .card-header {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          padding: 1.5rem;
+          position: relative;
+        }
+        
+        .header-content {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+        
+        .applicant-avatar {
+          width: 50px;
+          height: 50px;
+          background: rgba(255, 255, 255, 0.25);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.3rem;
+          color: white;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          flex-shrink: 0;
+        }
+        
+        .applicant-info {
+          flex-grow: 1;
+          color: white;
+        }
+        
+        .applicant-name {
+          font-size: 1.2rem;
+          font-weight: 700;
+          margin-bottom: 0.25rem;
+          color: white;
+        }
+        
+        .job-title {
+          font-size: 0.9rem;
+          opacity: 0.95;
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.25rem;
+          font-weight: 600;
+        }
+        
+        .application-date {
+          font-size: 0.85rem;
+          opacity: 0.9;
+          display: flex;
+          align-items: center;
+        }
+        
+        .status-badge {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          background: white;
+          border-radius: 12px;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.3rem;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-content {
+          padding: 1rem;
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .info-section {
+          margin-bottom: 0.5rem;
+        }
+        
+        .info-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.75rem;
+        }
+        
+        .info-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem;
+          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+          border-radius: 10px;
+          border-left: 3px solid #667eea;
+          min-width: 0;
+          overflow: visible;
+        }
+        
+        .info-icon {
+          width: 28px;
+          height: 28px;
+          border-radius: 6px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.7rem;
+          color: white;
+        }
+        
+        .phone-icon {
+          background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        
+        .experience-icon {
+          background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+        
+        .info-details {
+          flex-grow: 1;
+          min-width: 0;
+          overflow: visible;
+        }
+        
+        .info-label {
+          display: block;
+          font-size: 0.65rem;
+          color: #6c757d;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 0.25rem;
+        }
+        
+        .info-value {
+          display: block;
+          font-size: 0.75rem;
+          color: #2c3e50;
+          font-weight: 700;
+        }
+        
+        .status-section {
+          margin-top: auto;
+        }
+        
+        .status-container {
+          text-align: center;
+        }
+        
+        .status-label {
+          display: block;
+          font-size: 0.75rem;
+          color: #6c757d;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 0.4rem;
+        }
+        
+        .status-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.4rem 0.8rem;
+          border-radius: 20px;
+          font-weight: 600;
+          font-size: 0.75rem;
+        }
+        
+        .status-pill .status-text {
+          font-size: 0.7rem;
+        }
+        
+        .status-pill.status-accepted {
+          background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+          color: #155724;
+          border: 1px solid #c3e6cb;
+        }
+        
+        .status-pill.status-rejected {
+          background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+          color: #721c24;
+          border: 1px solid #f5c6cb;
+        }
+        
+        .status-pill.status-joined {
+          background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+          color: #0c5460;
+          border: 1px solid #bee5eb;
+        }
+        
+        .status-pill.status-under_review,
+        .status-pill.builder-status-under_review {
+          background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+          color: #856404;
+          border: 1px solid #ffeaa7;
+        }
+        
+        .status-pill.builder-status-accepted {
+          background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+          color: #155724;
+          border: 1px solid #c3e6cb;
+        }
+        
+        .status-pill.builder-status-rejected {
+          background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+          color: #721c24;
+          border: 1px solid #f5c6cb;
+        }
+        
+        .worker-status-container {
+          margin-top: 0.75rem;
+          text-align: center;
+        }
+        
+        .status-container {
+          margin-bottom: 0.5rem;
+        }
+        
+        .action-indicator {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.4rem 0.8rem;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .joined-by-worker {
+          background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+          color: #0c5460;
+          border: 1px solid #bee5eb;
+        }
+        
+        .rejected-by-worker {
+          background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+          color: #721c24;
+          border: 1px solid #f5c6cb;
+        }
+        
+        .action-text {
+          font-size: 0.7rem;
+        }
+        
+        .card-actions {
+          padding: 0.75rem 1rem;
+          background: #f8f9fa;
+          display: flex;
+          gap: 0.5rem;
+          border-top: 1px solid #e9ecef;
+        }
+        
+        .action-btn {
+          flex: 1;
+          padding: 0.75rem 1rem;
+          border: none;
+          border-radius: 12px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+        
+        .accept-btn {
+          background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+          color: white;
+          box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+        
+        .accept-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+        }
+        
+        .reject-btn {
+          background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+          color: white;
+          box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+        
+        .reject-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
+        }
+        
+        .undo-btn {
+          background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+          color: #212529;
+          box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+        }
+        
+        .undo-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4);
+        }
+        
+        .delete-btn,
+        .remove-btn {
+          background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+          color: white;
+          box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+        
+        .delete-btn:hover,
+        .remove-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(108, 117, 125, 0.4);
+        }
+        
+        .action-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
+          box-shadow: none;
+        }
+        
+        /* Tablet Styles */
+        @media (max-width: 1024px) {
+          .card-header {
+            padding: 1.25rem;
+          }
+          
+          .applicant-avatar {
+            width: 45px;
+            height: 45px;
+            font-size: 1.1rem;
+          }
+          
+          .applicant-name {
+            font-size: 1.1rem;
+          }
+          
+          .card-content {
+            padding: 1rem;
+          }
+          
+          .info-row {
+            gap: 0.5rem;
+          }
+          
+          .info-item {
+            padding: 0.65rem;
+          }
+        }
+        
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+          .application-card {
+            border-radius: 15px;
+            margin: 0.2rem;
+          }
+          
+          .card-header {
+            padding: 1rem;
+          }
+          
+          .applicant-avatar {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+          }
+          
+          .applicant-name {
+            font-size: 1rem;
+          }
+          
+          .application-date {
+            font-size: 0.8rem;
+          }
+          
+          .card-content {
+            padding: 0.75rem;
+          }
+          
+          .info-row {
+            grid-template-columns: 1fr;
+            gap: 0.4rem;
+          }
+          
+          .info-item {
+            padding: 0.6rem;
+            gap: 0.4rem;
+          }
+          
+          .info-icon {
+            width: 24px;
+            height: 24px;
+            font-size: 0.6rem;
+          }
+          
+          .info-label {
+            font-size: 0.6rem;
+          }
+          
+          .info-value {
+            font-size: 0.7rem;
+          }
+          
+          .status-pill {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+          }
+          
+          .card-actions {
+            flex-direction: column;
+            padding: 0.75rem 1rem;
+            gap: 0.5rem;
+          }
+          
+          .action-btn {
+            width: 100%;
+            padding: 0.65rem;
+            font-size: 0.85rem;
+          }
+        }
+        
+        /* Small Mobile Styles */
+        @media (max-width: 480px) {
+          .application-card {
+            border-radius: 12px;
+            margin: 0.1rem;
+          }
+          
+          .card-header {
+            padding: 0.75rem;
+          }
+          
+          .header-content {
+            gap: 0.75rem;
+          }
+          
+          .applicant-avatar {
+            width: 35px;
+            height: 35px;
+            font-size: 0.9rem;
+          }
+          
+          .applicant-name {
+            font-size: 0.95rem;
+          }
+          
+          .application-date {
+            font-size: 0.75rem;
+          }
+          
+          .card-content {
+            padding: 0.6rem;
+          }
+          
+          .info-section {
+            margin-bottom: 0.3rem;
+          }
+          
+          .info-item {
+            padding: 0.5rem;
+          }
+          
+          .info-icon {
+            width: 22px;
+            height: 22px;
+            font-size: 0.55rem;
+          }
+          
+          .info-label {
+            font-size: 0.55rem;
+          }
+          
+          .info-value {
+            font-size: 0.65rem;
+          }
+          
+          .status-label {
+            font-size: 0.65rem;
+            margin-bottom: 0.3rem;
+          }
+          
+          .status-pill {
+            padding: 0.35rem 0.7rem;
+            font-size: 0.75rem;
+          }
+          
+          .card-actions {
+            padding: 0.5rem 0.75rem;
+          }
+          
+          .action-btn {
+            padding: 0.6rem;
+            font-size: 0.8rem;
+          }
+        }
+      `}</style>
     </div>
   );
 }
 
 export default Card3;
-
-const buttonStyle = {
-  backgroundColor: "var(--primary-color)",
-  transition: "background-color 0.3s ease, color 0.3s ease",
-  color: "var(--text-color)",
-}

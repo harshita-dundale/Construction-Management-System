@@ -49,6 +49,82 @@ import { MdCoPresent } from "react-icons/md";
       <div className="container mt-5" style={{ marginTop: "160px"}}>
         <h2 className="text-center mb-4" style={{ marginTop: "160px"}}><MdCoPresent className="me-3 mb-1" />
  Attendance History</h2>
+        
+        <style>{`
+          .history-table-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+          }
+          
+          .table-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          
+          .table-title {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+          }
+          
+          .table-summary {
+            display: flex;
+            gap: 1rem;
+          }
+          
+          .summary-item {
+            font-size: 0.9rem;
+            opacity: 0.9;
+          }
+          
+          .modern-table {
+            margin: 0;
+          }
+          
+          .modern-table thead th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 1rem;
+            font-weight: 600;
+            color: white;
+            border-bottom: 2px solid #667eea;
+          }
+          
+          .modern-table tbody tr {
+            transition: all 0.3s ease;
+          }
+          
+          .modern-table tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          }
+          
+          .modern-table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+          }
+          
+          @media (max-width: 768px) {
+            .table-header {
+              flex-direction: column;
+              gap: 1rem;
+              text-align: center;
+            }
+            
+            .table-summary {
+              justify-content: center;
+            }
+          }
+        `}</style>
 
         {loading ? (
           <p className="text-center">Loading...</p>
@@ -58,36 +134,69 @@ import { MdCoPresent } from "react-icons/md";
               {/* <h4>{workerName}</h4> */}
               {/* <p className="text-muted">🆔 ID: {workerId}</p> */}
             </div>
-            <div className="mt-4 text-end fw-bold">
-              Summary:  Present: {presentCount} |  Absent: {absentCount}
-            </div>
+
             {history.length === 0 ? (
               <div className="text-center mt-5">
                 <p className="text-muted fs-5">No History Available</p>
               </div>
             ) : (
-              <table className="table table-striped table-hover text-center border rounded">
-                <thead className="table-dark">
-                  <tr>
-                    <th>Date</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {history.map((record, index) => (
-                    <tr key={index}>
-                      <td>{new Date(record.date).toLocaleDateString("en-IN")}</td>
-                      <td>
-                        {record.status === "Present" ? (
-                          <span className="text-success fw-bold"> Present</span>
-                        ) : (
-                          <span className="text-danger fw-bold"> Absent</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="history-table-card g-4">
+                <div className="table-header mb-2">
+                  <h5 className="table-title">
+                    <i className="fas fa-calendar-check me-2"></i>
+                    Worker Attendance History
+                  </h5>
+                  <div className="table-summary">
+                    <span className="summary-item">
+                      <i className="fas fa-check me-1"></i>
+                      {presentCount} Present
+                    </span>
+                    <span className="summary-item">
+                      <i className="fas fa-times me-1"></i>
+                      {absentCount} Absent
+                    </span>
+                  </div>
+                </div>
+                <div className="table-responsive">
+                  <table className="table modern-table">
+                    <thead>
+                      <tr className="gap-2">
+                        <th className="text-center"><i className="fas fa-calendar-day me-2"></i>Date</th>
+                        <th className="text-center"><i className="fas fa-check-circle me-2"></i>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {history.map((record, index) => (
+                        <tr key={index}>
+                          <td className="text-center">
+                            <div className="d-flex align-items-center justify-content-center">
+                              <i className="fas fa-calendar text-primary me-2"></i>
+                              <span className="fw-medium">
+                                {new Date(record.date).toLocaleDateString("en-IN", {
+                                  day: 'numeric',
+                                  month: 'short',
+                                  year: 'numeric'
+                                })}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="text-center">
+                            {record.status === "Present" ? (
+                              <span className="badge bg-success px-3 py-2">
+                                <i className="fas fa-check me-1"></i>Present
+                              </span>
+                            ) : (
+                              <span className="badge bg-danger px-3 py-2">
+                                <i className="fas fa-times me-1"></i>Absent
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             )}
 
           </>

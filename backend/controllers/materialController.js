@@ -41,7 +41,7 @@ export const updateMaterialUsage = async (req, res) => {
   try {
     const material = await Material.findOne({
       name: name.trim().toLowerCase(),
-      projectId: new mongoose.Types.ObjectId(projectId), // ✅ correct comparison
+      projectId: new mongoose.Types.ObjectId(projectId),
     });
 
     if (!material) {

@@ -36,23 +36,8 @@ const PaymentSummary = ({ jobId }) => {
     }
   }, [dispatch, workerEmail]);
 
-  // Fetch job salary
-  useEffect(() => {
-    const fetchJobSalary = async () => {
-      if (jobId) {
-        try {
-          const response = await fetch(`http://localhost:5000/api/jobs/${jobId}`);
-          if (response.ok) {
-            const jobData = await response.json();
-            setJobSalary(jobData.salary || 1000);
-          }
-        } catch (error) {
-          console.error('Error fetching job salary:', error);
-        }
-      }
-    };
-    fetchJobSalary();
-  }, [jobId]);
+  // Use default daily wage
+  // const dailyWage = 1000; // Fixed value for now
   const selectedJob = history?.find((job) => job.jobId === jobId);
   const selectedPaymentRecords =
     paymentHistory?.filter((record) => record.jobId === jobId) || [];
@@ -74,8 +59,8 @@ const PaymentSummary = ({ jobId }) => {
       .length || 0;
   const selectedAttendanceRecords = selectedJob?.attendanceRecords || [];
   
-  // Get daily wage from job salary
-  const dailyWage = jobSalary;
+  // Get daily wage - use payment record or default
+  const dailyWage = selectedPaymentRecords[0]?.totalSalary / (presentCount || 1) || 1000;
   
   // Calculate total earned based on attendance
   const totalEarned = presentCount * dailyWage;
@@ -118,198 +103,462 @@ const PaymentSummary = ({ jobId }) => {
   }
   if (summaryStatus === "failed") return <p>Error: {summaryError}</p>;
 
+  const paymentProgress = totalEarned > 0 ? (totalPaid / totalEarned) * 100 : 0;
+  const attendanceTotal = presentCount + absentCount;
+  const attendanceProgress = attendanceTotal > 0 ? (presentCount / attendanceTotal) * 100 : 0;
+
   return (
-    <div
-      style={{ textAlign: "center", fontFamily: "sans-serif" }}
-      className="container"
-    >
-      <div className="row">
-        {/* 💰 Payment Box */}
-        <div
-          className="col-md-6"
-          style={boxStyle}
-          onClick={() => handleToggle("payment")}
-        >
-          <img
-            src={pay1}
-            className="rounded mb-3 icons"
-            width="80"
-            height="80"
-          />
-          <h3 style={headingStyle}>Payment Summary</h3>
-          <p>
-            <strong>Daily Wage:</strong> ₹{dailyWage}
-          </p>
-          <p>
-            <strong>Total Earned:</strong> ₹{totalEarned}
-          </p>
-          <p>
-            <strong>Total Paid:</strong> ₹{totalPaid}
-          </p>
-          <p style={{ fontWeight: "bold", color: "#ef4444" }}>
-            <strong>Remaining Amount:</strong> ₹{pendingPayments}
-          </p>
-
-          <p style={clickTextStyle}>Click to view Payment History</p>
+    <div className="container py-4">
+      {/* Summary Cards Row */}
+      <div className="row g-4 mb-4">
+        {/* Payment Summary Card */}
+        <div className="col-lg-6">
+          <div className="card h-100 shadow-lg border-0 payment-card" onClick={() => handleToggle("payment")}>
+            <div className="card-body p-4">
+              <div className="d-flex align-items-center mb-3">
+                <div className="icon-wrapper payment-icon me-3">
+                  <i className="fas fa-wallet" style={{fontSize: '2rem', color: '#3498db'}}></i>
+                </div>
+                <div>
+                  <h4 className="card-title mb-1 fw-bold" style={{color: '#2c3e50'}}>Payment Summary</h4>
+                  <p className="text-muted mb-0">Track your earnings</p>
+                </div>
+              </div>
+              
+              <div className="payment-metrics">
+                <div className="metric-item mb-3">
+                  <div className="d-flex justify-content-between align-items-center mb-1">
+                    <span className="metric-label fw-bold">Daily Wage</span>
+                    <span className="metric-value fw-bold">₹{dailyWage}</span>
+                  </div>
+                </div>
+                
+                <div className="metric-item mb-3">
+                  <div className="d-flex justify-content-between align-items-center mb-1">
+                    <span className="metric-label fw-bold">Total Earned</span>
+                    <span className="metric-value fw-bold text-success">₹{totalEarned}</span>
+                  </div>
+                </div>
+                
+                <div className="metric-item mb-3">
+                  <div className="d-flex justify-content-between align-items-center mb-1">
+                    <span className="metric-label fw-bold">Total Paid</span>
+                    <span className="metric-value fw-bold text-info">₹{totalPaid}</span>
+                  </div>
+                  <div className="progress mb-2" style={{height: '8px'}}>
+                    <div 
+                      className="progress-bar bg-info" 
+                      style={{width: `${paymentProgress}%`}}
+                    ></div>
+                  </div>
+                  <small className="text-muted">{paymentProgress.toFixed(1)}% of earnings paid</small>
+                </div>
+                
+                <div className="metric-item">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className="metric-label fw-bold">Remaining</span>
+                    <span className="metric-value fw-bold text-warning">₹{pendingPayments}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 text-center">
+                <small className="text-muted"><i className="fas fa-click"></i> Click to view payment history</small>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* 📅 Attendance Box */}
-        <div
-          className="col-md-6"
-          style={boxStyle}
-          onClick={() => handleToggle("attendance")}
-        >
-          <img
-            src={pay2}
-            className="rounded mb-3 icons"
-            width="80"
-            height="80"
-          />
-          <h3 style={headingStyle}>Attendance Summary</h3>
-
-          {loading ? (
-            <p>Loading attendance summary...</p>
-          ) : (
-            <>
-              <p>
-                <strong>Days Present:</strong> {presentCount}
-              </p>
-              <p>
-                <strong>Days Absent:</strong> {absentCount}
-              </p>
-            </>
-          )}
-          <p style={clickTextStyle}>Click to view Attendance History</p>
+        {/* Attendance Summary Card */}
+        <div className="col-lg-6">
+          <div className="card h-100 shadow-lg border-0 attendance-card" onClick={() => handleToggle("attendance")}>
+            <div className="card-body p-4">
+              <div className="d-flex align-items-center mb-3">
+                <div className="icon-wrapper attendance-icon me-3">
+                  <i className="fas fa-user-check" style={{fontSize: '2rem', color: '#28a745'}}></i>
+                </div>
+                <div>
+                  <h4 className="card-title mb-1 fw-bold" style={{color: '#2c3e50'}}>Attendance Summary</h4>
+                  <p className="text-muted mb-0">Track your presence</p>
+                </div>
+              </div>
+              
+              {loading ? (
+                <div className="text-center py-4">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  <p className="mt-2 text-muted">Loading attendance data...</p>
+                </div>
+              ) : (
+                <div className="attendance-metrics">
+                  <div className="row text-center mb-3">
+                    <div className="col-6">
+                      <div className="stat-box present-stat">
+                        <h3 className="stat-number text-success">{presentCount}</h3>
+                        <p className="stat-label mb-0">Days Present</p>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="stat-box absent-stat">
+                        <h3 className="stat-number text-danger">{absentCount}</h3>
+                        <p className="stat-label mb-0">Days Absent</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="attendance-progress mb-3">
+                    <div className="d-flex justify-content-between mb-1">
+                      <span className="small text-muted fw-bold">Attendance Rate</span>
+                      <span className="small fw-bold">{attendanceProgress.toFixed(1)}%</span>
+                    </div>
+                    <div className="progress" style={{height: '10px'}}>
+                      <div 
+                        className="progress-bar bg-success" 
+                        style={{width: `${attendanceProgress}%`}}
+                      ></div>
+                    </div>
+                  </div>
+                  
+                  <div className="total-days text-center">
+                    <span className="badge bg-light text-dark fw-bold fs-6">Total Working Days: {attendanceTotal}</span>
+                  </div>
+                </div>
+              )}
+              
+              <div className="mt-4 text-center">
+                <small className="text-muted"><i className="fas fa-click"></i> Click to view attendance history</small>
+              </div>
+            </div>
+          </div>
         </div>
-
-        {/* Section Display */}
-        {showSection === "payment" && (
-          <div className="container my-5">
-            <table className="tableHistory table table-striped table-hover text-center border rounded">
-              <thead
-                style={{ backgroundColor: "var(--secondary-color)" }}
-                className="table-dark"
-              >
-                <tr className="header-row">
-                  <th className="header-cell">Date</th>
-                  <th className="header-cell">Amount</th>
-                  {/* <th className="header-cell">Status</th> */}
-                </tr>
-              </thead>
-              <tbody>
-                {selectedPaymentRecords.length > 0 ? (
-                  selectedPaymentRecords.map((entry, index) => (
-                    <tr
-                      key={index}
-                      className={`body-row ${
-                        index % 2 === 0 ? "alternate-row" : ""
-                      } align-middle`}
-                    >
-                      <td className="cell">
-                        {entry.paymentDate
-                          ? new Date(entry.paymentDate).toLocaleDateString(
-                              "en-IN"
-                            )
-                          : "N/A"}
-                      </td>
-                      <td className="cell">
-                        {entry.paidAmount !== undefined
-                          ? `₹${entry.paidAmount}`
-                          : "N/A"}
-                      </td>
-                      {/* <td
-                        className="cell"
-                        style={{
-                          color: entry.status === "Present" ? "green" : "red",
-                        }}
-                      >
-                        {entry.status}
-                      </td> */}
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td className="cell" colSpan="3">
-                      No payment records available for this job.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {showSection === "attendance" && (
-          <div className="container my-5">
-            {/* <h5 className="mb-3 text-start"><strong>Attendance History</strong></h5>var(--secondary-color)*/}
-            <table className="tableHistory table table-striped table-hover text-center border rounded">
-              <thead
-                style={{ backgroundColor: "var(--secondary-color)" }}
-                className="table-dark"
-              >
-                <tr className="header-row">
-                  <th className="header-cell">Date</th>
-                  <th className="header-cell">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedAttendanceRecords.length > 0 ? (
-                  selectedAttendanceRecords.map((entry, index) => (
-                    <tr
-                      key={index}
-                      className={`body-row ${
-                        index % 2 === 0 ? "alternate-row" : ""
-                      } align-middle`}
-                    >
-                      <td className="cell">
-                        {new Date(entry.date).toLocaleDateString()}
-                      </td>
-                      <td
-                        className="cell"
-                        style={{
-                          color: entry.status === "Present" ? "green" : "red",
-                        }}
-                      >
-                        {entry.status}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td className="cell" colSpan="2">
-                      No attendance records available.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
       </div>
+
+      {/* Enhanced Section Display */}
+      {showSection === "payment" && (
+        <div className="row">
+          <div className="col-12">
+            <div className="card shadow-lg border-0">
+              <div className="card-header text-white" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+                <h5 className="mb-0"><i className="fas fa-history me-2"></i>Payment History</h5>
+              </div>
+              <div className="card-body p-0">
+                {selectedPaymentRecords.length > 0 ? (
+                  <div className="table-responsive">
+                    <table className="table table-hover mb-0">
+                      <thead className="table-light">
+                        <tr>
+                          <th className="px-4 py-3"><i className="fas fa-calendar me-2"></i>Date</th>
+                          <th className="px-4 py-3"><i className="fas fa-rupee-sign me-2"></i>Amount</th>
+                          <th className="px-4 py-3"><i className="fas fa-chart-line me-2"></i>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedPaymentRecords.map((entry, index) => (
+                          <tr key={index} className="border-bottom">
+                            <td className="px-4 py-3">
+                              <div className="d-flex align-items-center">
+                                <div className="date-badge me-2">
+                                  <i className="fas fa-calendar-day text-primary"></i>
+                                </div>
+                                <span className="fw-medium">
+                                  {entry.paymentDate
+                                    ? new Date(entry.paymentDate).toLocaleDateString("en-IN", {
+                                        day: 'numeric',
+                                        month: 'short',
+                                        year: 'numeric'
+                                      })
+                                    : "N/A"}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className="badge bg-success fs-6 px-3 py-2">
+                                ₹{entry.paidAmount || 0}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className="badge bg-info px-3 py-2">
+                                <i className="fas fa-check-circle me-1"></i>Paid
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="text-center py-5">
+                    <div className="empty-state">
+                      <i className="fas fa-receipt fa-3x text-muted mb-3"></i>
+                      <h5 className="text-muted">No Payment Records</h5>
+                      <p className="text-muted">No payment history available for this job yet.</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSection === "attendance" && (
+        <div className="row">
+          <div className="col-12">
+            <div className="card shadow-lg border-0">
+              <div className="card-header text-white" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+                <h5 className="mb-0"><i className="fas fa-user-check me-2"></i>Attendance History</h5>
+              </div>
+              <div className="card-body p-0">
+                {selectedAttendanceRecords.length > 0 ? (
+                  <div className="table-responsive">
+                    <table className="table table-hover mb-0">
+                      <thead className="table-light">
+                        <tr>
+                          <th className="px-4 py-3"><i className="fas fa-calendar me-2"></i>Date</th>
+                          <th className="px-4 py-3"><i className="fas fa-user-clock me-2"></i>Status</th>
+                          <th className="px-4 py-3"><i className="fas fa-info-circle me-2"></i>Details</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedAttendanceRecords.map((entry, index) => (
+                          <tr key={index} className="border-bottom">
+                            <td className="px-4 py-3">
+                              <div className="d-flex align-items-center">
+                                <div className="date-badge me-2">
+                                  <i className="fas fa-calendar-day text-success"></i>
+                                </div>
+                                <span className="fw-medium">
+                                  {new Date(entry.date).toLocaleDateString("en-IN", {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    year: 'numeric',
+                                    weekday: 'short'
+                                  })}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className={`badge fs-6 px-3 py-2 ${
+                                entry.status === "Present" 
+                                  ? "bg-success" 
+                                  : "bg-danger"
+                              }`}>
+                                <i className={`fas ${
+                                  entry.status === "Present" 
+                                    ? "fa-check-circle" 
+                                    : "fa-times-circle"
+                                } me-1`}></i>
+                                {entry.status}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3">
+                              <small className="text-muted">
+                                {entry.status === "Present" 
+                                  ? "Earned ₹" + dailyWage 
+                                  : "No earnings"}
+                              </small>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="text-center py-5">
+                    <div className="empty-state">
+                      <i className="fas fa-user-times fa-3x text-muted mb-3"></i>
+                      <h5 className="text-muted">No Attendance Records</h5>
+                      <p className="text-muted">No attendance history available yet.</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
+const cardStyles = `
+  .payment-card {
+    background: white;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 15px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .payment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  }
+  
+  .attendance-card {
+    background: white;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 15px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .attendance-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  }
+  
+  .icon-wrapper {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 10px;
+    border: 1px solid #e9ecef;
+  }
+  
+  .metric-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #e9ecef;
+  }
+  
+  .metric-label {
+    font-size: 14px;
+    color: #6c757d;
+  }
+  
+  .metric-value {
+    font-size: 18px;
+    color: #2c3e50;
+  }
+  
+  .stat-box {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e9ecef;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+    opacity: 0.9;
+  }
+  
+  .progress {
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .progress-bar {
+    border-radius: 10px;
+  }
+  
+  .wage-indicator {
+    height: 4px;
+    background: #e9ecef;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  
+  .wage-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #28a745, #20c997);
+    animation: slideIn 1s ease-out;
+  }
+  
+  .earning-animation {
+    text-align: center;
+    margin-top: 5px;
+  }
+  
+  .earning-pulse {
+    color: #28a745;
+    font-size: 0.8rem;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+  }
+  
+  .payment-status {
+    color: #6c757d;
+    font-weight: 500;
+  }
+  
+  .pending-alert {
+    color: #856404;
+    font-size: 0.75rem;
+    margin-top: 5px;
+    animation: blink 2s infinite;
+  }
+  
+  .stat-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .stat-trend {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+  
+  .progress-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #495057;
+  }
+  
+  .progress-percentage {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #28a745;
+  }
+  
+  .attendance-status {
+    text-align: center;
+  }
+  
+  .working-days-card {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+  }
+  
+  .days-breakdown {
+    margin-top: 0.5rem;
+  }
+  
+  @keyframes slideIn {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+  
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+`;
+
+// Add styles to document
+if (typeof document !== 'undefined') {
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = cardStyles;
+  document.head.appendChild(styleSheet);
+}
+
 export default PaymentSummary;
-
-const boxStyle = {
-  backgroundColor: "white",
-  border: "1px solid #e5e7eb",
-  borderRadius: "8px",
-  padding: "20px",
-  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-  maxWidth: "400px",
-  margin: "10px auto",
-  cursor: "pointer",
-};
-
-const headingStyle = {
-  color: "#1f2937",
-  marginBottom: "20px",
-};
-
-const clickTextStyle = {
-  fontSize: "14px",
-  color: "#111",
-  marginTop: "20px",
-};

@@ -9,9 +9,8 @@ function HiredWorkers() {
   const [hired, setHired] = useState([]);
   const selectedProject = useSelector((state) => state.project.selectedProject); 
 
-  useEffect(() => {
-    if (!selectedProject?._id) return;
   const fetchHired = async () => {
+    if (!selectedProject?._id) return;
     try {
       const res = await fetch(
         `http://localhost:5000/api/apply?status=joined&projectId=${selectedProject._id}`
@@ -23,8 +22,9 @@ function HiredWorkers() {
     }
   };
 
-  fetchHired();
-}, [selectedProject]);
+  useEffect(() => {
+    fetchHired();
+  }, [selectedProject]);
   return (
     <>
     <Header />
@@ -39,7 +39,7 @@ function HiredWorkers() {
         ) : (
           hired.map((worker) => (
             <div className="col-md-4 mb-3" key={worker._id}>
-              <Card3 application={worker} isHiredView={true}/> 
+              <Card3 application={worker} isHiredView={true} onDelete={fetchHired}/> 
             </div>
           ))
         )}

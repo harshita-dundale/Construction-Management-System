@@ -6,6 +6,10 @@
   font-weight: bold;
   cursor: pointer;
   user-select: none;
+  border-radius: 50% !important;
+  clip-path: circle(50%);
+  overflow: hidden;
+  background: transparent;
 }
 
 /* Image inside avatar */
@@ -14,6 +18,8 @@
   height: 40px;
   object-fit: cover;
   cursor: pointer;
+  border-radius: 50% !important;
+  clip-path: circle(50%);
 }
 
 .dropdown-item:focus,

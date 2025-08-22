@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { CgProfile } from "react-icons/cg";
 
-const CLOUD_NAME = "dalh0rbn1"; // Cloudinary cloud name
-const UPLOAD_PRESET = "ml_default"; // Cloudinary upload preset
-
-const DEFAULT_PROFILE_IMAGE =
-  "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";
+const CLOUD_NAME = "dalh0rbn1";
+const UPLOAD_PRESET = "ml_default";
+const DEFAULT_PROFILE_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";
 
 const ProfileModal = ({ show, handleClose }) => {
   const { user } = useAuth0();
@@ -104,98 +102,134 @@ const ProfileModal = ({ show, handleClose }) => {
 
   return (
     <>
-      {show && <div className="modal-backdrop fade show"></div>}
+      {show && <div className="modal-backdrop-modern"></div>}
 
-      <div
-        className={`modal fade ${show ? "show d-block" : "d-none"}`}
-        tabIndex="-1"
-        role="dialog"
-        aria-modal="true"
-      >
-        <div className="modal-dialog modal-dialog-centered modal-lg">
-          <div className="modal-content rounded-4 shadow">
-            <div className="modal-header border-bottom-0 justify-content-center position-relative">
-              <h5 className="modal-title fw-bold text-center w-100">
-                <CgProfile
-                  className="mb-1 me-2"
-                  style={{ transform: "scale(1.3)" }}
-                />
-                My Profile
-              </h5>
-              <button
-                type="button"
-                className="btn-close position-absolute end-0 top-50 translate-middle-y me-3"
-                onClick={handleClose}
-              ></button>
+      <div className={`modern-profile-modal ${show ? "show" : ""}`}>
+        <div className="modal-container">
+          <div className="modal-content-modern">
+            {/* Header */}
+            <div className="modal-header-modern">
+              <div className="header-content">
+                <div className="header-icon">
+                  <CgProfile />
+                </div>
+                <div className="header-text">
+                  <h4 className="modal-title-modern">My Profile</h4>
+                  <p className="modal-subtitle">View and manage your account information</p>
+                </div>
+              </div>
+              <button className="close-button-simple" onClick={handleClose}>
+                <i className="fas fa-times"></i>
+              </button>
             </div>
 
-            <div className="modal-body px-4 py-4">
-              <div className="row gy-4">
-                {/* Left Side */}
-                <div className="col-12 col-md-4 text-center">
-                  <img
-                    src={profileSrc}
-                    alt="Profile"
-                    className="rounded-circle shadow"
-                    width="180"
-                    height="180"
-                    style={{ objectFit: "cover", border: "2px solid gray" }}
-                    onError={() => setImageError(true)}
-                  />
-                  <p className="mt-3 fw-semibold text-dark mb-1">{user.name}</p>
-                  <p className="mb-1 text-muted" style={{ fontSize: "14px" }}>
-                    {/* </strong><strong> */}
-                    Email Verified: {user.email_verified ? "Yes" : "No"}
-                  </p>
-                  <p className="text-muted" style={{ fontSize: "15px" }}>
-                    <strong>Role:</strong>{" "}
-                    {localStorage.getItem("userRole") || "Not selected"}
-                  </p>
-
-                  {/* Upload Section */}
-                  <div className="mt-3">
-                    <label className="btn btn-sm btn-outline-secondary">
-                      {isUploading ? "Uploading..." : "Change Profile Picture"}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        hidden
-                        onChange={handleImageUpload}
-                        disabled={isUploading}
+            {/* Body */}
+            <div className="modal-body-modern">
+              <div className="profile-layout">
+                {/* Profile Section */}
+                <div className="profile-section">
+                  <div className="profile-image-container">
+                    <div className="image-wrapper">
+                      <img
+                        src={profileSrc}
+                        alt="Profile"
+                        className="profile-image"
+                        onError={() => setImageError(true)}
                       />
-                    </label>
+                      <div className="image-overlay">
+                        <i className="fas fa-camera"></i>
+                      </div>
+                    </div>
+                    
+                    <div className="upload-section">
+                      <label className="upload-button">
+                        {isUploading ? (
+                          <>
+                            <i className="fas fa-spinner fa-spin me-2"></i>
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <i className="fas fa-upload me-2"></i>
+                            Change Picture
+                          </>
+                        )}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          hidden
+                          onChange={handleImageUpload}
+                          disabled={isUploading}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div className="profile-basic-info">
+                    <h5 className="user-name">{user.name}</h5>
+                    <div className="user-meta">
+                      <div className="meta-item">
+                        <i className="fas fa-shield-alt me-2"></i>
+                        <span className={`verification-badge ${
+                          user.email_verified ? 'verified' : 'unverified'
+                        }`}>
+                          {user.email_verified ? 'Verified Account' : 'Unverified'}
+                        </span>
+                      </div>
+                      <div className="meta-item">
+                        <i className="fas fa-user-tag me-2"></i>
+                        <span className="role-badge">
+                          {localStorage.getItem("userRole") || "No Role Selected"}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Right Side */}
-                <div className="col-12 col-md-8">
-                  <div className="row g-3 mb-4">
+                {/* Details Section */}
+                <div className="details-section">
+                  <h6 className="section-title">
+                    <i className="fas fa-info-circle me-2"></i>
+                    Account Details
+                  </h6>
+                  
+                  <div className="details-grid">
                     {[
-                      { label: "Username", value: user.nickname },
-                      { label: "Email", value: user.email },
-                      {
-                        label: "Last Updated",
-                        value: new Date(user.updated_at).toLocaleString(),
+                      { 
+                        icon: "fas fa-user", 
+                        label: "Username", 
+                        value: user.nickname || "Not set" 
                       },
-                      { label: "User ID", value: user.sub },
+                      { 
+                        icon: "fas fa-envelope", 
+                        label: "Email Address", 
+                        value: user.email 
+                      },
+                      {
+                        icon: "fas fa-clock",
+                        label: "Last Updated",
+                        value: new Date(user.updated_at).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        }),
+                      },
+                      { 
+                        icon: "fas fa-id-card", 
+                        label: "User ID", 
+                        value: user.sub.substring(0, 20) + '...' 
+                      },
                     ].map((field, index) => (
-                      <div className="col-12 text-start " key={index}>
-                        <label
-                          className="fw-bold text-dark mb-0 me-3 "
-                          style={{ width: "120px" }}
-                        >
-                          {field.label}:
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control text-muted rounded-2"
-                          value={field.value}
-                          readOnly
-                          style={{
-                            backgroundColor: "#f9f9f9",
-                            cursor: "default",
-                          }}
-                        />
+                      <div className="detail-item" key={index}>
+                        <div className="detail-icon">
+                          <i className={field.icon}></i>
+                        </div>
+                        <div className="detail-content">
+                          <label className="detail-label">{field.label}</label>
+                          <div className="detail-value">{field.value}</div>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -203,18 +237,344 @@ const ProfileModal = ({ show, handleClose }) => {
               </div>
             </div>
 
-            {/* <div className="modal-footer border-top-0 ">
-              <button
-                type="button"
-                className="btn btn-outline-dark"
-                onClick={handleClose}
-              >
-                Close
-              </button>
-            </div> */}
+            {/* Footer */}
+            <div className="modal-footer-modern">
+              <div className="footer-info">
+                <small className="text-muted">
+                  <i className="fas fa-info-circle me-1"></i>
+                  Profile information is synced with your authentication provider
+                </small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      
+      {/* Enhanced Styles */}
+      <style jsx>{`
+        .modal-backdrop-modern {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(5px);
+          z-index: 1040;
+        }
+        
+        .modern-profile-modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          z-index: 1050;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.3s ease;
+          padding: 1rem;
+        }
+        
+        .modern-profile-modal.show {
+          opacity: 1;
+          visibility: visible;
+        }
+        
+        .modal-container {
+          width: 100%;
+          max-width: 900px;
+          margin: auto;
+        }
+        
+        .modal-content-modern {
+          background: white;
+          border-radius: 20px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+          overflow: hidden;
+          transform: scale(0.9);
+          transition: transform 0.3s ease;
+        }
+        
+        .modern-profile-modal.show .modal-content-modern {
+          transform: scale(1);
+        }
+        
+        .modal-header-modern {
+          background: white;
+          color: #2c3e50;
+          padding: 2rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid #e9ecef;
+        }
+        
+        .header-content {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+        
+        .header-icon {
+          width: 50px;
+          height: 50px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+          color: white;
+        }
+        
+        .modal-title-modern {
+          margin: 0;
+          font-size: 1.5rem;
+          font-weight: 700;
+        }
+        
+        .modal-subtitle {
+          margin: 0;
+          opacity: 0.9;
+          font-size: 0.9rem;
+        }
+        
+        .close-button-simple {
+          background: none;
+          border: none;
+          color: #6c757d;
+          font-size: 1.5rem;
+          transition: all 0.3s ease;
+          padding: 0.5rem;
+        }
+        
+        .close-button-simple:hover {
+          color: #495057;
+          transform: scale(1.1);
+        }
+        
+        .modal-body-modern {
+          padding: 2rem;
+        }
+        
+        .profile-layout {
+          display: grid;
+          grid-template-columns: 1fr 2fr;
+          gap: 2rem;
+        }
+        
+        .profile-section {
+          text-align: center;
+        }
+        
+        .profile-image-container {
+          margin-bottom: 1.5rem;
+        }
+        
+        .image-wrapper {
+          position: relative;
+          display: inline-block;
+          margin-bottom: 1rem;
+        }
+        
+        .profile-image {
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 4px solid #f8f9fa;
+          transition: all 0.3s ease;
+        }
+        
+        .image-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(102, 126, 234, 0.8);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 1.5rem;
+          opacity: 0;
+          transition: all 0.3s ease;
+        }
+        
+        .image-wrapper:hover .image-overlay {
+          opacity: 1;
+        }
+        
+        .upload-button {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border: none;
+          border-radius: 25px;
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+        }
+        
+        .upload-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .profile-basic-info {
+          text-align: center;
+        }
+        
+        .user-name {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+        }
+        
+        .user-meta {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        
+        .meta-item {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.9rem;
+        }
+        
+        .verification-badge.verified {
+          color: #11998e;
+          font-weight: 600;
+        }
+        
+        .verification-badge.unverified {
+          color: #ff6b6b;
+          font-weight: 600;
+        }
+        
+        .role-badge {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 0.25rem 0.75rem;
+          border-radius: 15px;
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+        
+        .details-section {
+          background: #f8f9fa;
+          border-radius: 15px;
+          padding: 1.5rem;
+        }
+        
+        .section-title {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #2c3e50;
+          margin-bottom: 1.5rem;
+          display: flex;
+          align-items: center;
+        }
+        
+        .details-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .detail-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+          background: white;
+          padding: 1rem;
+          border-radius: 10px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .detail-icon {
+          width: 35px;
+          height: 35px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 0.9rem;
+          flex-shrink: 0;
+        }
+        
+        .detail-content {
+          flex: 1;
+          min-width: 0;
+        }
+        
+        .detail-label {
+          display: block;
+          font-size: 0.8rem;
+          color: #6c757d;
+          font-weight: 600;
+          margin-bottom: 0.25rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .detail-value {
+          font-size: 0.95rem;
+          color: #2c3e50;
+          font-weight: 500;
+          word-break: break-word;
+        }
+        
+        .modal-footer-modern {
+          background: white;
+          padding: 1.5rem 2rem;
+          text-align: center;
+          border-top: 1px solid #e9ecef;
+        }
+        
+
+        
+        @media (max-width: 768px) {
+          .modal-container {
+            width: 95%;
+            max-height: 95vh;
+          }
+          
+          .profile-layout {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+          
+          .modal-header-modern {
+            padding: 1.5rem;
+          }
+          
+          .modal-body-modern {
+            padding: 1.5rem;
+          }
+          
+          .profile-image {
+            width: 120px;
+            height: 120px;
+          }
+          
+
+        }
+      `}</style>
     </>
   );
 };

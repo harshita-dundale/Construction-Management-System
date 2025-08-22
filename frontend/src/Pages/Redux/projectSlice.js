@@ -47,6 +47,30 @@ export const addProject = createAsyncThunk(
   }
 );
 
+// 🔹 Update Project
+export const updateProject = createAsyncThunk(
+  "projects/updateProject",
+  async ({ projectId, name }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/projects/${projectId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData?.error || "Failed to update project");
+      }
+
+      const data = await response.json();
+      return data; // { message, project: {...} }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 // 🔹 Delete Project by ID
 export const deleteProject = createAsyncThunk(
   "projects/deleteProject",
@@ -122,6 +146,27 @@ state.selectedProject = null; // ✅ optional: reset selected project if user ch
         }
       })
       .addCase(addProject.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+
+      // 🔸 UPDATE
+      .addCase(updateProject.fulfilled, (state, action) => {
+        const updatedProject = action.payload?.project;
+        if (updatedProject) {
+          const index = state.projects.findIndex((p) => p._id === updatedProject._id);
+          if (index !== -1) {
+            state.projects[index] = updatedProject;
+          }
+          // Update selected project if it's the one being edited
+          if (state.selectedProject && state.selectedProject._id === updatedProject._id) {
+            state.selectedProject = updatedProject;
+            localStorage.setItem("selectedProject", JSON.stringify(updatedProject));
+          }
+        }
+        state.status = "succeeded";
+      })
+      .addCase(updateProject.rejected, (state, action) => {
+        state.status = "failed";
         state.error = action.payload;
       })
 
