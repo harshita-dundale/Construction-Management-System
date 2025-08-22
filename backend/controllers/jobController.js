@@ -1,5 +1,8 @@
 import Job from "../models/job.js";
 import Project from "../models/project.js";
+import cloudinary from "../cloudinaryConfig.js";
+import streamifier from "streamifier";
+
 export const postJob = async (req, res) => {
   try {
     const {
@@ -23,8 +26,30 @@ export const postJob = async (req, res) => {
     }
 
     const userId = project.userId;
-    const imagePath = req.file ? req.file.filename : null;
 
+    let imageUrl = null;
+    // if (req.file) {
+    //   const uploadedImage = await cloudinary.uploader.upload(req.file.path, {
+    //     folder: "job_images",
+    //   });
+    //   imageUrl = uploadedImage.secure_url; // Cloud URL
+    // }
+    if (req.file) {
+      const uploadedImage = await cloudinary.uploader.upload_stream(
+        { folder: "job_images" },
+        (error, result) => {
+          if (error) {
+            console.error("Cloudinary Upload Error:", error);
+            return res.status(500).json({ error: "Image upload failed" });
+          }
+          imageUrl = result.secure_url;
+        }
+      );
+    
+      // Pipe file buffer to Cloudinary
+      streamifier.createReadStream(req.file.buffer).pipe(uploadedImage);
+    }
+    
     const newJob = new Job({
       title,
       salary,
@@ -33,7 +58,7 @@ export const postJob = async (req, res) => {
       location,
       Email,
       PhoneNo,
-      image: imagePath,
+      image: imageUrl,
       projectId,
       userId,
     });
@@ -53,6 +78,59 @@ export const postJob = async (req, res) => {
   }
 };
 
+// export const postJob = async (req, res) => {
+//   try {
+//     const {
+//       title,
+//       salary,
+//       startDate,
+//       endDate,
+//       location,
+//       Email,
+//       PhoneNo,
+//       projectId,
+//     } = req.body;
+
+//     if (!projectId) {
+//       return res.status(400).json({ error: "Project ID is required" });
+//     }
+
+//     const project = await Project.findById(projectId);
+//     if (!project) {
+//       return res.status(404).json({ error: "Project not found" });
+//     }
+
+//     const userId = project.userId;
+//     const imagePath = req.file ? req.file.filename : null;
+
+//     const newJob = new Job({
+//       title,
+//       salary,
+//       startDate,
+//       endDate,
+//       location,
+//       Email,
+//       PhoneNo,
+//       image: imagePath,
+//       projectId,
+//       userId,
+//     });
+
+//     await newJob.save();
+
+//     res.status(201).json({
+//       message: "Job Posted Successfully",
+//       job: newJob,
+//     });
+//   } catch (error) {
+//     console.error("🚨 Error posting job:", error);
+//     res.status(500).json({
+//       error: "Internal Server Error",
+//       message: error.message,
+//     });
+//   }
+// };
+
 // 🔹 GET /api/jobs
 export const getAllJobs = async (req, res) => {
   try {
@@ -64,7 +142,6 @@ export const getAllJobs = async (req, res) => {
   }
 };
 
-// 🔹 GET Builder's Posted Jobs (Project-wise)
 export const getBuilderJobsByProjects = async (req, res) => {
   try {
     const { userId } = req.params;

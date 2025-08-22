@@ -52,9 +52,9 @@ function ApplyForm() {
       alert("User not logged in or email not found!");
       return;
     }
-    console.log("🔍 projectId in currentJob:", currentJob?.projectId);
-
+   // console.log("🔍 projectId in currentJob:", currentJob?.projectId);
     const payload = {
+      userId: user._id,
       name: applyJob.fullName,
       email: user.email,
       phoneNo: applyJob.phoneNo,
@@ -64,19 +64,16 @@ function ApplyForm() {
       appliedAt: new Date().toISOString(),
       status: "under_review",
     };
-
     try {
       const response = await fetch("http://localhost:5000/api/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-
       if (!response.ok) {
         setSubmitStatus("Failed to submit application.");
         return;
       }
-
       toast.success("Application submitted successfully!");
       dispatch(resetForm());
     } catch (error) {
@@ -84,7 +81,6 @@ function ApplyForm() {
       console.error(error);
     }
   };
-
   return (
     <div className="container my-5">
       <div className="row justify-content-center align-items-center">
@@ -135,18 +131,6 @@ function ApplyForm() {
                 required
               />
             </div>
-
-            {/* <div className="form-group mb-3">
-              <label className="fw-bold text-dark">Skills</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Enter your skills"
-                value={applyJob.skills}
-                onChange={(e) => dispatch(setSkills(e.target.value))}
-                required
-              />
-            </div> */}
 
             <div className="form-group mb-4">
               <label className="fw-bold text-dark">Experience (years)</label>

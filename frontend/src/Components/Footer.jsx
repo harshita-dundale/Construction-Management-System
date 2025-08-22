@@ -22,7 +22,7 @@ function Footer() {
     
     <div className="col-md-4 col-sm-6 mb-4">
       <div className="w-100 ms-5">
-        <h6>Contact Us</h6>
+        <h6 className="fw-bold">Contact Us</h6>
         <p>Phone: +91 9325411885</p>
         <p>Email: harshitad.bca2023@ssism.org</p>
         <p>Address: 123, Sandalpur, Dewas, India</p>
@@ -31,7 +31,7 @@ function Footer() {
 
     <div className="col-md-4 col-sm-6 d-flex justify-content-center mb-4">
       <div className="w-100 ms-5">
-        <h6>For Builders</h6>
+        <h6 className="fw-bold">Builder Services</h6>
         <ul className="list-unstyled">
           <li><a href="#login" className="text-white text-decoration-none">Hire Workers</a></li>
           <li><a href="#login" className="text-white text-decoration-none">Manage Material</a></li>
@@ -43,7 +43,7 @@ function Footer() {
 
     <div className="col-md-4 col-sm-6 d-flex justify-content-center mb-4">
       <div className="w-100 ms-5">
-        <h6>For Workers</h6>
+        <h6 className="fw-bold">Worker Services</h6>
         <ul className="list-unstyled">
           <li><a href="#login" className="text-white text-decoration-none">Apply for Jobs</a></li>
           <li><a href="#login" className="text-white text-decoration-none">View Attendance</a></li>

@@ -69,7 +69,8 @@ function Header() {
     "/viewapplications",
     "/hiredworkers",
     "/post-job",
-    "/attendance/worker", // ✅ added dynamic route prefix
+    "/attendance/worker", 
+    "/payroll",
   ];
 
   const isBuilderPage = builderPaths.some((path) =>
@@ -85,7 +86,7 @@ function Header() {
 
   return (
     <header style={{ backgroundColor: "#1a4654", position: "fixed", top: 0, width: "100%", zIndex: 1000 }}>
-      <nav className="navbar navbar-expand-lg navbar-dark py-4 align-items-sm-start">
+      <nav className="navbar navbar-expand-lg navbar-dark py-4 d-flex align-items-sm-center">
         <div className="container d-flex flex-wrap align-items-center">
           <img src={logo} alt="logo" height="50" width="200" />
 
@@ -134,14 +135,14 @@ function Header() {
                   <li className="nav-item">
                     <a className={`nav-link ${currentPath === "/materialmanagement" ? "active bold-underline" : ""}`} onClick={() => navigate("/materialmanagement")}>Materials</a>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <a className={`nav-link ${currentPath === "/profitandcostanalysis" ? "active bold-underline" : ""}`} onClick={() => navigate("/profitandcostanalysis")}>Profit & Cost</a>
-                  </li>
-                  <li className="nav-item me-2">
+                  </li> */}
+                  <li className="nav-item">
                     <a className={`nav-link ${currentPath === "/dashboard" ? "active bold-underline" : ""}`} onClick={() => navigate("/dashboard")}>Attendance</a>
                   </li>
 
-                  <li className="nav-item">
+                  <li className="nav-item me-2">
                     <a className={`nav-link ${currentPath === "/attendance" ? "active bold-underline" : ""}`} onClick={() => navigate("/payroll")}> Payroll</a>
                   </li>
 

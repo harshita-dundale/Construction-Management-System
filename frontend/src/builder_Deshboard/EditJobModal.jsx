@@ -131,7 +131,12 @@ function EditJobModal({ job, onClose, onSave }) {
             <Button variant="secondary" onClick={onClose} className="me-2">
               Cancel
             </Button>
-            <Button variant="primary" type="submit">
+            <Button variant="light" type="submit" style={buttonStyle}onMouseEnter={(e) =>
+                (e.target.style.backgroundColor = "var(--secondary-color)")
+              }
+              onMouseLeave={(e) =>
+                (e.target.style.backgroundColor = "var(--primary-color)")
+              }>
               Save Changes
             </Button>
           </div>
@@ -143,3 +148,8 @@ function EditJobModal({ job, onClose, onSave }) {
 }
 
 export default EditJobModal;
+const buttonStyle = {
+  backgroundColor: "var(--primary-color)",
+  transition: "background-color 0.3s ease, color 0.3s ease",
+  color: "var(--text-color)",
+};

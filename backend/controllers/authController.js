@@ -1,9 +1,9 @@
-
 // import User from "../models/user.js";
 
 // // 🔹 Set or Update User Role
 // export const setUserRole = async (req, res) => {
 //   const { auth0Id, name, email, role } = req.body;
+//   console.log("📩 Received in Backend:", { auth0Id, name, email, role });
 
 //   if (!auth0Id || !role) {
 //     return res.status(400).json({ message: "User ID and role are required" });
@@ -19,12 +19,13 @@
 //       await User.findOneAndUpdate(
 //         { auth0Id },
 //         { $set: { name, email: email.toLowerCase(), role } },
-//         { new: true }
+//         { new: true, upsert: true }
 //       );
 //     }
 
 //     res.json({ message: "Role updated successfully!" });
 //   } catch (error) {
+//     console.error("Error updating role:", error);
 //     res.status(500).json({ message: "Error updating role", error });
 //   }
 // };
@@ -41,6 +42,7 @@
 
 //     res.json({ role: user.role });
 //   } catch (error) {
+//     console.error("Error fetching role:", error);
 //     res.status(500).json({ message: "Error fetching user", error });
 //   }
 // };
@@ -48,6 +50,7 @@
 // // 🔹 Get Full User Details by Email
 // export const getUserByEmail = async (req, res) => {
 //   const email = req.params.email;
+//   console.log("📩 Fetching user for email:", email);
 
 //   try {
 //     const user = await User.findOne({ email: email.toLowerCase() });
@@ -57,32 +60,11 @@
 
 //     res.json(user);
 //   } catch (error) {
+//     console.error("Error fetching user:", error);
 //     res.status(500).json({ message: "Error fetching user", error });
 //   }
 // };
 
-// // 🔹 Save Uploaded Profile Image to DB
-// export const uploadProfileImage = async (req, res) => {
-//   const { auth0Id, imageUrl } = req.body;
-
-//   if (!auth0Id || !imageUrl) {
-//     return res.status(400).json({ error: 'Missing data' });
-//   }
-
-//   try {
-//     const user = await User.findOneAndUpdate(
-//       { auth0Id },
-//       { profileImage: imageUrl },
-//       { new: true }
-//     );
-
-//     if (!user) return res.status(404).json({ error: 'User not found' });
-
-//     res.json({ success: true, profileImage: user.profileImage });
-//   } catch (err) {
-//     res.status(500).json({ error: 'Server error' });
-//   }
-// };
 import User from "../models/user.js";
 
 // 🔹 Set or Update User Role

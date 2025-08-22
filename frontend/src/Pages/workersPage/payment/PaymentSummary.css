@@ -1,0 +1,26 @@
+.tableHistory thead {
+  background-color: var(--primary-color) !important;
+  color: white; /* for better contrast */
+}
+
+/* .boxStyle {
+  background-color: "white";
+  border: "1px solid #e5e7eb";
+border-radius: "8px";
+  padding: "20px";
+box-shadow: "0 2px 8px rgba(0, 0, 0, 0.1)";
+  max-width: "400px";
+  margin: "10px auto";
+  cursor: "pointer";
+}
+
+.headingStyle {
+  color: "#1f2937";
+  margin-bottom: "20px";
+};
+
+.clickTextStyle {
+  font-size: "14px";
+  color: "#111";
+  margin-top: "20px";
+}; */

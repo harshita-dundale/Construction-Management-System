@@ -1,3 +1,4 @@
+
 import mongoose from "mongoose";
 
 const jobSchema = new mongoose.Schema({
@@ -9,10 +10,10 @@ const jobSchema = new mongoose.Schema({
   Email: String,
   PhoneNo: String,
   image: String, 
-  userId: { type: String, required: true },
-  projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true }, 
+  projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
+  userId: { type: String, required: true }, 
 });
-jobSchema.index({ userId: 1, title: 1 }, { unique: true });
+
 const Job = mongoose.model("Job", jobSchema);
 
 export default Job;

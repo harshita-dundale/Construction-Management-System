@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Backend se data fetch karne ke liye thunk
-
 export const fetchApplications = createAsyncThunk(
   "applications/fetchApplications",
   async ({ workerEmail = null, status = null, experience = null, projectId = null }, { rejectWithValue }) => {
@@ -36,7 +35,6 @@ export const fetchApplications = createAsyncThunk(
     }
   }
 );
-
 const applicationsSlice = createSlice({
   name: "applications",
   initialState: {
@@ -68,10 +66,13 @@ const applicationsSlice = createSlice({
       .addCase(fetchApplications.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.applications = [];
+  state.filteredApplications = [];
       })
       .addCase(fetchApplications.fulfilled, (state, action) => {
         state.loading = false;
         state.applications = action.payload;
+        state.filteredApplications = action.payload; 
       })
       .addCase(fetchApplications.rejected, (state, action) => {
         state.loading = false;
@@ -79,8 +80,6 @@ const applicationsSlice = createSlice({
       });
   },
 });
-
-
 export const {setFilteredApplications, setShowModal,setFilter,  setCurrentJob  } =
   applicationsSlice.actions;
 export default applicationsSlice.reducer;

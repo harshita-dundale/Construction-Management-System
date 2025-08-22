@@ -5,15 +5,12 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
   const { applications } = useSelector((state) => state.applications); 
 
   //console.log("Applications from Redux:", applications);
-
   const filteredApplications = applications.filter((app) => {
     console.log("App status:", app.status);
     return activeTab === 'All' || app.status === activeTab;
   });
-
   //console.log("Applications from Redux:", applications);
   console.log("Filtered Applications:", filteredApplications);  
-  
   
   if (filteredApplications.length === 0) {
     return <p className="mt-4">No applications found.</p>;
@@ -26,7 +23,7 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
           <th>Job Title</th>
           <th>Application Date</th>
           <th>Status</th>
-          <th>Action</th>
+          {/* <th>Action</th> */}
         </tr>
       </thead>
       <tbody>
@@ -41,7 +38,7 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
               {app.status === "under_review" ? "Pending" : app.status.charAt(0).toUpperCase() + app.status.slice(1)}
               </span>
             </td>
-            <td>
+            {/* <td>
               <button
                 className="btn"
                 style={{
@@ -53,7 +50,7 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
               >
                 View
               </button>
-            </td>
+            </td> */}
           </tr>
         ))}
       </tbody>

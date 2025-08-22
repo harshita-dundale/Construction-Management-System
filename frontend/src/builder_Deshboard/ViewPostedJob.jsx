@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 import JobCard1 from "../Components/cards/JobCard1";
 import EditJobModal from "./EditJobModal";
 import { toast } from "react-toastify";
+import { FaRegAddressBook } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 function ViewPostedJobs() {
   const { user } = useAuth0();
@@ -67,8 +69,19 @@ function ViewPostedJobs() {
   };
 
   const handleDeleteJob = async (job) => {
-  const confirm = window.confirm("Are you sure you want to delete this job?");
-  if (!confirm) return;
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This job post will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "var(--secondary-color)",
+      cancelButtonColor: "gray",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (!result.isConfirmed) return;
+  // const confirm = window.confirm("Are you sure you want to delete this job?");
+  // if (!confirm) return;
 
   try {
     const res = await fetch(`http://localhost:5000/api/jobs/${job._id}`, {
@@ -77,7 +90,14 @@ function ViewPostedJobs() {
 
     const data = await res.json();
     if (res.ok) {
-      alert("Job deleted successfully!");
+      //alert("Job deleted successfully!");
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: "The job has been deleted successfully.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
 
       setAllJobs((prev) => prev.filter((j) => j._id !== job._id));
 
@@ -88,17 +108,42 @@ function ViewPostedJobs() {
         }))
       );
     } else {
-      alert("Failed to delete: " + data.message);
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: data.message || "Failed to delete the job.",
+      });
+    //  alert("Failed to delete: " + data.message);
     }
   } catch (err) {
     console.error("Delete Error:", err);
-    alert("Error deleting job");
+    Swal.fire({
+      icon: "error",
+      title: "Error!",
+      text: "Something went wrong while deleting the job.",
+    });
+   // alert("Error deleting job");
   }
 };
 
 
   if (error) return <p className="text-danger text-center">Error: {error}</p>;
-  if (loading) return <p className="text-center">Loading...</p>;
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="container mt-5">
+          <div className="text-center" style={{ marginTop: "10rem" }}>
+            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <h4>Loading Posted Jobs...</h4>
+            <p className="text-muted">Please wait while we fetch your job postings.</p>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   const displayJobs = selectedProject
     ? allJobs.filter((job) =>
@@ -142,7 +187,8 @@ function ViewPostedJobs() {
               projectsWithJobs.map((project) => (
                 <div key={project.projectId} className="mb-5">
                   <h4 className="mb-3 border-bottom pb-2">
-                    📋 {project.projectName} ({project.jobs.length} jobs)
+                  <FaRegAddressBook className="me-2"/>
+ {project.projectName} (<span style={{fontSize : "17px"}}>{project.jobs.length} jobs</span>)
                   </h4>
                   <div className="row">
                     {project.jobs.map((job) => (

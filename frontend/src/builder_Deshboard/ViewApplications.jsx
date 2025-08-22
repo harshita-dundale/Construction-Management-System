@@ -10,73 +10,57 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 function ViewApplications() {
   const dispatch = useDispatch();
-  const { applications, loading, error } = useSelector(
+  const { applications, filteredApplications, loading, error } = useSelector(
     (state) => state.applications
   );
+
   const [statusFilter, setStatusFilter] = useState("all");
-  // const [skillsFilter, setSkillsFilter] = useState("");
   const [experienceFilter, setExperienceFilter] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const { user, isLoading } = useAuth0();
   const selectedProject = useSelector((state) => state.project.selectedProject);
 
+  const handleCreativeRefresh = async () => {
+    setIsRefreshing(true);
+    
+    // Show loading animation for better UX
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    if (selectedProject?._id) {
+      dispatch(
+        fetchApplications({
+          status: statusFilter,
+          experience: experienceFilter,
+          projectId: selectedProject._id,
+        })
+      );
+    }
+    
+    setTimeout(() => setIsRefreshing(false), 500);
+  };
+
+  // 🔁 Fetch fresh data from backend on filter/project change
   useEffect(() => {
     if (user?.email && selectedProject?._id) {
       dispatch(
         fetchApplications({
-          workerEmail: user.email,
+        //  workerEmail: user.email,
           status: statusFilter,
           experience: experienceFilter,
-          projectId: selectedProject._id, // ✅ Added
+          projectId: selectedProject._id, 
         })
       );
     }
-  }, [statusFilter, experienceFilter, selectedProject, dispatch, user]);
-  // useEffect(() => {
-  //   if (user && user.email) {
-  //     dispatch(
-  //       fetchApplications({
-  //         status: statusFilter,
-  //         experience: experienceFilter,
-  //       })
-  //     );
-  //   }
-  // }, [statusFilter, experienceFilter, dispatch]); // 👈 use `user` in dependency
-  // console.log(user.email)
+  }, [statusFilter, experienceFilter, selectedProject, dispatch, user?.email]);
 
-  useEffect(() => {
-    if (!applications) return;
-    let filtered = [...applications];
-
-    if (statusFilter !== "all") {
-      filtered = filtered.filter(
-        (application) => application.status === statusFilter
-      );
-    }
-
-    // if (skillsFilter) {
-    //   filtered = filtered.filter((application) =>
-    //     application.skills.some((skill) =>
-    //       skill.toLowerCase().includes(skillsFilter.toLowerCase())
-    //     )
-    //   );
-    // }
-
-    if (experienceFilter) {
-      filtered = filtered.filter(
-        (application) => application.experience >= experienceFilter
-      );
-    }
-
-    dispatch(setFilteredApplications(filtered));
-  }, [statusFilter, experienceFilter, applications, dispatch]); //skillsFilter,
 
   if (isLoading || !user?.email) {
     return <p>Loading user...</p>;
   }
 
   const rows = [];
-  for (let i = 0; i < applications.length; i += 3) {
-    rows.push(applications.slice(i, i + 3));
+  for (let i = 0; i < filteredApplications.length; i += 3) {
+    rows.push(filteredApplications.slice(i, i + 3));
   }
 
   return (
@@ -87,7 +71,7 @@ function ViewApplications() {
           className="text-center mb-4"
           style={{ marginTop: "7rem", color: "#333" }}
         >
-          View Applications{" "}
+          View Applications
         </h1>
 
         <div
@@ -106,16 +90,7 @@ function ViewApplications() {
                 id="status"
                 className="form-select shadow-sm"
                 value={statusFilter}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setStatusFilter(value);
-                  dispatch(
-                    fetchApplications({
-                      workerEmail: user.email,
-                      status: value,
-                    })
-                  );
-                }}
+                onChange={(e) => setStatusFilter(e.target.value)}
               >
                 <option value="all">All</option>
                 <option value="accepted">Accepted</option>
@@ -123,12 +98,9 @@ function ViewApplications() {
                 <option value="under_review">Under Review</option>
               </select>
             </div>
+
             <div className="col-md-4">
-              <label
-                htmlFor="experience"
-                className="form-label"
-                style={labelStyle}
-              >
+              <label htmlFor="experience" className="form-label" style={labelStyle}>
                 Experience
               </label>
               <input
@@ -146,15 +118,75 @@ function ViewApplications() {
           </div>
         </div>
 
-        <div className="applications p-4 rounded" style={cardContainerStyle}>
-          {loading ? (
-            <p>Loading...</p>
+        <div className="applications p-4 rounded" style={{
+          ...cardContainerStyle,
+          opacity: isRefreshing ? 0.7 : 1,
+          transform: isRefreshing ? 'scale(0.98)' : 'scale(1)',
+          transition: 'all 0.5s ease'
+        }}>
+          {loading || isRefreshing ? (
+            <div className="text-center py-5" style={loadingStateStyle}>
+              <div className="mb-4">
+                <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+              <h4 className="text-muted mb-3">
+                {isRefreshing ? '🔄 Refreshing Applications...' : '🔍 Loading Applications...'}
+              </h4>
+              <p className="text-muted">
+                {isRefreshing ? 'Getting the latest data for you!' : 'Please wait while we fetch the applications.'}
+              </p>
+            </div>
           ) : error ? (
             <p className="text-danger">Error: {error}</p>
-          ) : applications.length === 0 ? (
-            <p className="text-muted text-center">
-              🚫 No applications found for this filter.
-            </p>
+          ) : filteredApplications.length === 0 ? (
+            <div className="text-center py-5" style={emptyStateStyle}>
+              <div className="mb-4">
+                <div style={emptyIconStyle}>📋</div>
+              </div>
+              <h3 className="text-muted mb-3" style={{ fontWeight: '600' }}>
+                No Applications Found
+              </h3>
+              <p className="text-muted mb-4" style={{ fontSize: '16px', lineHeight: '1.6' }}>
+                It looks like there are no applications matching your current filters.
+                <br />
+                Try adjusting your search criteria or check back later for new applications.
+              </p>
+              <div className="d-flex justify-content-center gap-3">
+                <button 
+                  className="btn btn-outline-primary"
+                  onClick={() => {
+                    setStatusFilter("all");
+                    setExperienceFilter("");
+                  }}
+                  style={clearFiltersButtonStyle}
+                >
+                  🔄 Clear Filters
+                </button>
+                <button 
+                  className="btn btn-outline-secondary"
+                  onClick={handleCreativeRefresh}
+                  disabled={isRefreshing}
+                  style={{
+                    ...refreshButtonStyle,
+                    transform: isRefreshing ? 'rotate(360deg)' : 'rotate(0deg)',
+                    transition: 'all 0.8s ease'
+                  }}
+                >
+                  {isRefreshing ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                      Refreshing...
+                    </>
+                  ) : (
+                    <>
+                      🔄 Refresh Data
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           ) : (
             rows.map((row, index) => (
               <div className="row mb-4" key={index}>
@@ -199,4 +231,42 @@ const cardContainerStyle = {
   borderRadius: "10px",
   border: "2px solid #ccc",
 };
+
+const emptyStateStyle = {
+  background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+  borderRadius: "15px",
+  padding: "40px 20px",
+  margin: "20px 0",
+  boxShadow: "0 8px 25px rgba(0,0,0,0.1)",
+};
+
+const emptyIconStyle = {
+  fontSize: "4rem",
+  marginBottom: "20px",
+  filter: "grayscale(20%)",
+};
+
+const clearFiltersButtonStyle = {
+  borderRadius: "25px",
+  padding: "10px 20px",
+  fontWeight: "600",
+  transition: "all 0.3s ease",
+};
+
+const refreshButtonStyle = {
+  borderRadius: "25px",
+  padding: "10px 20px",
+  fontWeight: "600",
+  transition: "all 0.3s ease",
+};
+
+const loadingStateStyle = {
+  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  borderRadius: "15px",
+  padding: "40px 20px",
+  margin: "20px 0",
+  boxShadow: "0 8px 25px rgba(102, 126, 234, 0.3)",
+  color: "white",
+};
+
 export default ViewApplications;

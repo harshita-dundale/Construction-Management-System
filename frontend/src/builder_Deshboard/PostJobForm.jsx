@@ -19,8 +19,8 @@ import {
 } from "../Pages/Redux/postJobSlice.js";
 import { useState, useEffect } from "react";
 import {
-  selectProject, // ✅ Add this if not already imported
-  fetchProjects, // ✅ If your project list is fetched from backend
+  selectProject, 
+  fetchProjects, 
 } from "../Pages/Redux/projectSlice.js";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -28,20 +28,17 @@ function PostJobForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const postJob = useSelector((state) => state.postJob);
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
   const selectedProject = useSelector((state) => state.project.selectedProject);
   const projects = useSelector((state) => state.project.projects);
 
-  const { user } = useAuth0(); // 👈 Get Auth0 logged-in user
+  const { user } = useAuth0(); 
 
   useEffect(() => {
     if (projects.length === 0 && user?.sub) {
-      dispatch(fetchProjects(user.sub)); // ✅ Pass userId / ⛳ Only if projects not already loaded
+      dispatch(fetchProjects(user.sub)); 
     }
   }, [dispatch, projects, user?.sub]);
-  
-  // console.log("👤 Logged-in User:", user?.sub);
-  // console.log("📁 Projects fetched:", projects);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,9 +61,7 @@ function PostJobForm() {
     formData.append("PhoneNo", postJob.phoneNo);
     formData.append("Email", postJob.email);
     formData.append("projectId", selectedProject._id);
-    if (selectedImage) {
-      formData.append("image", selectedImage);
-    }
+   
 
     try {
       const response = await fetch("http://localhost:5000/api/jobs", {
@@ -104,7 +99,7 @@ function PostJobForm() {
   return (
     <div>
        <Header />
-    <div className="container">
+    <div className="container mt-4">
       <div className="row">
         <div className="col-lg-6 mb-4 mb-lg-0 mt-5" >
           <div className="post-job pt-4">
@@ -224,7 +219,7 @@ function PostJobForm() {
                 />
               </div>
 
-              <div className="form-group mb-3">
+              {/* <div className="form-group mb-3">
                 <label style={{ fontWeight: "bold" }}>Upload Image</label>
                 <input
                   type="file"
@@ -232,7 +227,7 @@ function PostJobForm() {
                   accept="image/*"
                   onChange={(e) => setSelectedImage(e.target.files[0])}
                 />
-              </div>
+              </div> */}
 
               <div className="d-flex justify-content-end mb-3 pb-3">
                 <button

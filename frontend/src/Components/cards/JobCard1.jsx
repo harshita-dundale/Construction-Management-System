@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi"; // 3-dot icon
 import defaultImage from "../../assets/images/photos/browseJobImg.jpeg";
+import { MdEdit } from "react-icons/md";
+import { RiDeleteBin6Line } from "react-icons/ri";
+ 
 function JobCard1({ job, onEdit, onDelete }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef();
@@ -41,19 +44,19 @@ function JobCard1({ job, onEdit, onDelete }) {
               zIndex: 10,
               width: "150px",
               height: "100px",
-              backgroundColor: " #1a4654", // 👈 rgba(26, 70, 84, 0.8)transparent #1a4654
-              color: "white",
+              backgroundColor: "white", //  text-white👈 rgba(26, 70, 84, 0.8)transparent #1a4654
+              color: "#212529",
             }}
           >
-            <button className="dropdown-item text-white pt-2 ps-4" onClick={() => onEdit(job)}>
-              Edit
+            <button className="dropdown-item pt-2 ps-4" onClick={() => onEdit(job)}>
+            <MdEdit /> Edit
             </button>
             <button
-              className="dropdown-item text-white pt-2 ps-4"
+              className="dropdown-item pt-2 ps-4 mb-0 pb-0 text-danger"
               onClick={() => onDelete(job)}
             >
             
-              Delete
+            <RiDeleteBin6Line /> Delete
             </button>
           </div>
 

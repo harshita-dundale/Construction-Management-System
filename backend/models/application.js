@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
 
 const applicationSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+   // required: true,
+  },
   name: { type: String, required: true },
   email: { type: String, required: true },
-  phoneNo: { type: String }, // optional but matches frontend
+  phoneNo: { type: String }, 
   experience: { type: String },
   // skills: { type: String },
   jobId: { type: mongoose.Schema.Types.ObjectId, ref: "Job" },
@@ -17,6 +22,14 @@ const applicationSchema = new mongoose.Schema({
     type: String,
     enum: ["under_review", "accepted", "rejected"],
     default: "under_review",
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+  deletedAt: {
+    type: Date,
+    default: null,
   },
 });
 

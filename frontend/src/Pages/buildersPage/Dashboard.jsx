@@ -1,50 +1,49 @@
 import { useEffect, useState } from "react";
 import Header from "../../Components/Header";
-import { toast } from "react-toastify";
-import { useSelector } from "react-redux"; 
+import { toast, ToastContainer } from "react-toastify";
+import { useSelector } from "react-redux";
+import { FaCalendarAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { GrFormView } from "react-icons/gr";
+import "./Dashboard.css";
 
 function Dashboard() {
   const [hiredWorkers, setHiredWorkers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
-  const selectedProject = useSelector((state) => state.project.selectedProject); // ✅
+  const [date, setDate] = useState(
+    () => new Date().toISOString().split("T")[0]
+  );
+  const selectedProject = useSelector((state) => state.project.selectedProject);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const [applyRes, recordsRes] = await Promise.all([
-          // fetch("http://localhost:5000/api/apply"),
-          fetch(`http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`),
-          fetch("http://localhost:5000/api/worker-records"),
-        ]);
+      if (!selectedProject?._id) {
+        setLoading(false);
+        setError("No project selected");
+        return;
+      }
 
+      try {
+        const applyRes = await fetch(
+          `http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`
+        );
         const applyData = await applyRes.json();
-        const recordsData = await recordsRes.json();
 
         const accepted = applyData.filter((app) => app.status === "accepted");
 
-        const merged = accepted.map((worker) => {
-          const record = recordsData.find((r) => r.name === worker.name);
-
-          const daysWorked = record?.daysWorked || 0;
-          const dailyWage = record?.dailyWage || worker.dailyWage || 500;
-          const payment = record?.payment || daysWorked * dailyWage;
-
-          return {
-            ...worker,
-            present: false,
-            daysWorked,
-            dailyWage,
-            payment,
-          };
-        });
+        const merged = accepted.map((worker) => ({
+          ...worker,
+         workerId: worker.userId?._id || worker.userId || worker._id ,
+          present: false,
+        }));
 
         setHiredWorkers(merged);
         setLoading(false);
       } catch (err) {
         console.error("Error loading workers:", err);
-        // setError("Failed to load workers.");
+        setError("Failed to load workers.");
         setLoading(false);
       }
     };
@@ -54,116 +53,123 @@ function Dashboard() {
 
   const handleAttendanceToggle = (id) => {
     setHiredWorkers((prev) =>
-      prev.map((worker) => {
-        if (worker._id === id) {
-          const wasPresent = worker.present;
-          const updatedDaysWorked = wasPresent
-            ? Math.max(0, worker.daysWorked - 1)
-            : worker.daysWorked + 1;
-          const updatedPayment = updatedDaysWorked * worker.dailyWage;
-
-          return {
-            ...worker,
-            present: !wasPresent,
-            daysWorked: updatedDaysWorked,
-            payment: updatedPayment,
-          };
-        }
-        return worker;
-      })
+      prev.map((worker) =>
+        worker._id === id ? { ...worker, present: !worker.present } : worker
+      )
     );
   };
 
-  const handleProcessPayments = () => {
-    if (!hiredWorkers.some((w) => w.present)) {
-      toast.error("Attendance mark Required");
-      // alert("Kisi ko present mark nahi kiya. Pehle attendance mark karo.");
+  const handleApplyAll = (status) => {
+    setHiredWorkers((prev) =>
+      prev.map((worker) => ({ ...worker, present: status }))
+    );
+  };
+
+  const handleSubmitAttendance = async () => {
+    if (!date || new Date(date) > new Date()) {
+      toast.error("Please select a valid date (no future dates)");
       return;
     }
 
-    setProcessing(true);
+    const payload = hiredWorkers.map((worker) => ({
+        workerId:  worker.userId?._id || worker.userId || worker.workerId || "",
+      projectId: selectedProject._id,
+      date,
+      status: worker.present ? "Present" : "Absent",
+    }));
+    console.log("🚀 Sending attendance:", payload);
 
-    fetch("http://localhost:5000/api/worker-records/save", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(
-        hiredWorkers.map((worker) => ({
-          _id: worker._id,
-          name: worker.name,
-          dailyWage: worker.dailyWage,
-          daysWorked: worker.daysWorked,
-          payment: worker.payment,
-        }))
-      ),
-    })
-      .then((res) => res.json())
-      .then(async () => {
-        const [applyRes, recordsRes] = await Promise.all([
-          fetch(`http://localhost:5000/api/apply?status=accepted&projectId=${selectedProject._id}`),
-          fetch("http://localhost:5000/api/worker-records"),
-        ]);
-      const applyData = await applyRes.json();
-      const recordsData = await recordsRes.json();
-      const accepted = applyData.filter((app) => app.status === "accepted");
+    try {
+      setProcessing(true);
+      // console.log("📤 Attendance Payload:", payload);
 
-        const refreshed = accepted.map((worker) => {
-          const record = recordsData.find((r) => r.name === worker.name);
-          const daysWorked = record?.daysWorked || 0;
-          const dailyWage = record?.dailyWage || worker.dailyWage ; // || 500
-          const payment = record?.payment || daysWorked * dailyWage;
+      const res = await fetch(
+        "http://localhost:5000/api/worker-records/mark-all",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            attendance: payload, 
+          }),
+        }
+      );
 
-          return {
-            ...worker,
-            present: false,
-            daysWorked,
-            dailyWage,
-            payment,
-          };
-        });
-
-        setHiredWorkers(refreshed);
-        setProcessing(false);
-        toast.success("Payments processed successfully!");
-        //alert("Payments processed successfully & frontend updated!");
-      })
-      .catch((err) => {
-        console.error("Error saving or refreshing data:", err);
-        // alert("Error occurred.");
-        toast.error("Payments Failed. Please try again.");
-        setProcessing(false);
-      });
+      if (!res.ok) throw new Error("Failed to mark attendance");
+      toast.success("Attendance marked successfully");
+      setProcessing(false);
+      setHiredWorkers((prev) => prev.map((w) => ({ ...w, present: false })));
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to mark attendance");
+      setProcessing(false);
+    }
   };
 
-  if (loading) return <p className="text-center mt-5">Loading workers...</p>;
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="container mt-5">
+          <div className="text-center" style={{ marginTop: "10rem" }}>
+            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <h4>Loading Workers...</h4>
+            <p className="text-muted">Please wait while we fetch worker information for attendance.</p>
+          </div>
+        </div>
+      </>
+    );
+  }
   if (error)
     return <p className="text-center mt-5 text-danger">Error: {error}</p>;
-
-  const totalPayment = hiredWorkers.reduce(
-    (sum, worker) => sum + (worker.payment || 0),
-    0
-  );
 
   return (
     <>
       <Header />
+      <ToastContainer />
       <div className="container mt-5">
-        <h1 className="mb-5 text-center" style={{ marginTop: "8rem" }}>
-          Worker Attendance & Payment
-        </h1>
+        <h2 className="text-center mb-4">Mark Attendance</h2>
+
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <div className="input-group w-50">
+            <span className="input-group-text">
+              <FaCalendarAlt />
+            </span>
+            <input
+              type="date"
+              className="form-control"
+              max={new Date().toISOString().split("T")[0]}
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </div>
+
+          <div className="btn-group">
+            <button
+            //btn-outline-success
+              className="btn btn-outline-dark"
+              onClick={() => handleApplyAll(true)}
+            >
+              Mark All Present
+            </button>
+            <button
+              className="btn btn-outline-danger"
+              onClick={() => handleApplyAll(false)}
+            >
+              Mark All Absent
+            </button>
+          </div>
+        </div>
 
         <div className="table-responsive shadow">
           <table className="table table-striped table-hover text-center border rounded">
-            <thead
-              className="table-dark"
-              style={{ backgroundColor: "#f58800", color: "white" }}
-            >
+            <thead className="table-dark">
               <tr>
-                <th>#</th>
+                <th>Sr.</th>
                 <th>Worker Name</th>
-                <th>Daily Wage (₹)</th>
-                <th>Present</th>
-                <th>Days Worked</th>
-                <th> Payment (₹)</th>
+                <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -171,53 +177,54 @@ function Dashboard() {
                 <tr key={worker._id || index} className="align-middle">
                   <td>{index + 1}</td>
                   <td>{worker.name}</td>
-                  <td>₹{worker.jobId?.salary}</td>
-                  {/* <td>₹{worker.dailyWage}</td> */}
                   <td>
-                    <input
-                      type="checkbox"
-                      className="form-check-input border border-dark border-3"
-                      checked={worker.present}
-                      onChange={() => handleAttendanceToggle(worker._id)}
-                    />
+                    <div className="d-flex flex-column justify-content-center align-items-center gap-1">
+                      <input
+                        type="checkbox"
+                        className="form-check-input border border-dark me-5"
+                        checked={worker.present}
+                        onChange={() => handleAttendanceToggle(worker._id)}
+                        // style={{ transform: "scale(1.3)" }}  text-success 
+                      />
+                      <small
+                        className={`fw-bold ${
+                          worker.present ? "text-dark" : "text-danger"
+                        } ms-3`}
+                      >
+                        {worker.present ? " Present" : " Absent"}
+                      </small>
+                    </div>
                   </td>
-                  <td>{worker.daysWorked}</td>
-                  <td>₹{worker.payment}</td>
+
+                  <td>
+                    <Link
+                      to={`/attendance/worker/${worker.workerId}`}
+                      className="btn btn-outline-primary btn-sm"
+                      style={buttonStyle}
+                    >
+                      <GrFormView /> View History
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        <div className="d-flex justify-content-between align-items-center mt-4 p-3 bg-light rounded shadow-sm border">
-          {/* <h5 className="m-0">
-            Total Workers:{" "}
-            <strong className="text-primary">{hiredWorkers.length}</strong>
-          </h5> */}
-          <h5 className="text-end mb-3 fw-bold">
-            Total Payment:{" "}
-            <span > ₹{totalPayment.toLocaleString()} </span>
-            {/* className="text-success" */}
-          </h5>
+        <div className="d-flex justify-content-end mt-4">
           <button
-            className="btn btn-light px-4 py-2 fw-bold"
-            style={{
-              color: "white",
-              backgroundColor: "#f58800",
-              border: "none",
-              cursor: processing ? "not-allowed" : "pointer",
-              opacity: processing ? 0.6 : 1,
-            }}
             disabled={processing}
-            onMouseEnter={(e) =>
-              !processing && (e.target.style.backgroundColor = "#d17000")
-            }
-            onMouseLeave={(e) =>
-              !processing && (e.target.style.backgroundColor = "#f58800")
-            }
-            onClick={handleProcessPayments}
+            onClick={handleSubmitAttendance}
+            style={buttonStyle}
+              className="btn btn-light px-4 py-2"
+              onMouseEnter={(e) =>
+                (e.target.style.backgroundColor = "var(--secondary-color)")
+              }
+              onMouseLeave={(e) =>
+                (e.target.style.backgroundColor = "var(--primary-color)")
+              }
           >
-            {processing ? "Processing..." : "Process Payments"}
+            {processing ? "Submitting..." : "Submit Attendance"}
           </button>
         </div>
       </div>
@@ -226,3 +233,9 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
+const buttonStyle = {
+  backgroundColor: "var(--primary-color)",
+  transition: "background-color 0.3s ease, color 0.3s ease",
+  color: "var(--text-color)",
+};

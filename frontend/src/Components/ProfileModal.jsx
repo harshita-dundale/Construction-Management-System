@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { CgProfile } from "react-icons/cg";
 
 const CLOUD_NAME = "dalh0rbn1"; // Cloudinary cloud name
 const UPLOAD_PRESET = "ml_default"; // Cloudinary upload preset
@@ -28,7 +29,9 @@ const ProfileModal = ({ show, handleClose }) => {
 
         const encodedEmail = encodeURIComponent(user.email);
 
-        const res = await fetch(`http://localhost:5000/api/auth/get-user/${encodedEmail}`);
+        const res = await fetch(
+          `http://localhost:5000/api/auth/get-user/${encodedEmail}`
+        );
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -72,16 +75,19 @@ const ProfileModal = ({ show, handleClose }) => {
       const data = await res.json();
 
       // Save uploaded image URL to backend
-      const saveRes = await fetch("http://localhost:5000/api/auth/profile-image", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          auth0Id: user.sub,
-          imageUrl: data.secure_url,
-        }),
-      });
+      const saveRes = await fetch(
+        "http://localhost:5000/api/auth/profile-image",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            auth0Id: user.sub,
+            imageUrl: data.secure_url,
+          }),
+        }
+      );
 
       if (!saveRes.ok) {
         throw new Error("Failed to save profile image URL to backend");
@@ -109,7 +115,13 @@ const ProfileModal = ({ show, handleClose }) => {
         <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content rounded-4 shadow">
             <div className="modal-header border-bottom-0 justify-content-center position-relative">
-              <h5 className="modal-title fw-bold text-center w-100">👤 My Profile</h5>
+              <h5 className="modal-title fw-bold text-center w-100">
+                <CgProfile
+                  className="mb-1 me-2"
+                  style={{ transform: "scale(1.3)" }}
+                />
+                My Profile
+              </h5>
               <button
                 type="button"
                 className="btn-close position-absolute end-0 top-50 translate-middle-y me-3"
@@ -125,22 +137,24 @@ const ProfileModal = ({ show, handleClose }) => {
                     src={profileSrc}
                     alt="Profile"
                     className="rounded-circle shadow"
-                    width="140"
-                    height="140"
-                    style={{ objectFit: "cover", border: "4px solid #0d6efd" }}
+                    width="180"
+                    height="180"
+                    style={{ objectFit: "cover", border: "2px solid gray" }}
                     onError={() => setImageError(true)}
                   />
                   <p className="mt-3 fw-semibold text-dark mb-1">{user.name}</p>
-                  <p className="mb-1 text-muted">
-                    <strong>Email Verified:</strong> {user.email_verified ? "Yes" : "No"}
+                  <p className="mb-1 text-muted" style={{ fontSize: "14px" }}>
+                    {/* </strong><strong> */}
+                    Email Verified: {user.email_verified ? "Yes" : "No"}
                   </p>
-                  <p className="text-muted">
-                    <strong>Role:</strong> {localStorage.getItem("userRole") || "Not selected"}
+                  <p className="text-muted" style={{ fontSize: "15px" }}>
+                    <strong>Role:</strong>{" "}
+                    {localStorage.getItem("userRole") || "Not selected"}
                   </p>
 
                   {/* Upload Section */}
                   <div className="mt-3">
-                    <label className="btn btn-sm btn-outline-primary">
+                    <label className="btn btn-sm btn-outline-secondary">
                       {isUploading ? "Uploading..." : "Change Profile Picture"}
                       <input
                         type="file"
@@ -155,26 +169,33 @@ const ProfileModal = ({ show, handleClose }) => {
 
                 {/* Right Side */}
                 <div className="col-12 col-md-8">
-                  <div className="row g-3">
+                  <div className="row g-3 mb-4">
                     {[
                       { label: "Username", value: user.nickname },
                       { label: "Email", value: user.email },
-                      { label: "Last Updated", value: new Date(user.updated_at).toLocaleString() },
+                      {
+                        label: "Last Updated",
+                        value: new Date(user.updated_at).toLocaleString(),
+                      },
                       { label: "User ID", value: user.sub },
                     ].map((field, index) => (
-                      <div className="col-12" key={index}>
-                        <div
-                          className="bg-light rounded p-2 text-start text-truncate"
-                          title={`${field.label}: ${field.value}`}
-                          style={{
-                            maxWidth: "100%",
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                          }}
+                      <div className="col-12 text-start " key={index}>
+                        <label
+                          className="fw-bold text-dark mb-0 me-3 "
+                          style={{ width: "120px" }}
                         >
-                          <strong className="text-secondary">{field.label}:</strong>{" "}
-                          <span className="text-dark">{field.value}</span>
-                        </div>
+                          {field.label}:
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control text-muted rounded-2"
+                          value={field.value}
+                          readOnly
+                          style={{
+                            backgroundColor: "#f9f9f9",
+                            cursor: "default",
+                          }}
+                        />
                       </div>
                     ))}
                   </div>
@@ -182,11 +203,15 @@ const ProfileModal = ({ show, handleClose }) => {
               </div>
             </div>
 
-            <div className="modal-footer border-top-0">
-              <button type="button" className="btn btn-outline-dark" onClick={handleClose}>
+            {/* <div className="modal-footer border-top-0 ">
+              <button
+                type="button"
+                className="btn btn-outline-dark"
+                onClick={handleClose}
+              >
                 Close
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
