@@ -15,7 +15,7 @@ function Builder_dashboard() {
   const [showProjectModal, setShowProjectModal] = useState(false);
   const selectedProject = useSelector((state) => state.project.selectedProject);
   const materials = useSelector((state) => state.materials.materials);
-  const hiredUsers = useSelector((state) => state.hiredWorkers.users);
+  const payrollList = useSelector((state) => state.Payroll.payrollList);
 
   useEffect(() => {
     const saved = localStorage.getItem("selectedProject");
@@ -43,11 +43,13 @@ function Builder_dashboard() {
     }
   }, [selectedProject]);
 
+  // Total material value
   const totalMaterialCost = Array.isArray(materials)
     ? materials.reduce((sum, m) => sum + (m.unitPrice * (m.quantity || 1)), 0)
     : 0;
-  const totalWorkerPayable = Array.isArray(hiredUsers)
-    ? hiredUsers.reduce((sum, u) => sum + (u.payable || 0), 0)
+  // Total payable from payrollList
+  const totalWorkerPayable = Array.isArray(payrollList)
+    ? payrollList.reduce((sum, p) => sum + (p.totalSalary || 0), 0)
     : 0;
   const totalProjectCost = totalMaterialCost + totalWorkerPayable;
 
