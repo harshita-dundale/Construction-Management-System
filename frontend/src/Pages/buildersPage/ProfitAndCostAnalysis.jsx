@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { setWorkerPayments, setMaterialCosts, setRevenue } from "../Redux/FinanceSlice";
 import "bootstrap/dist/css/bootstrap.min.css";

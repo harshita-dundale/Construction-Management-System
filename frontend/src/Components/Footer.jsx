@@ -1,4 +1,4 @@
-// import React from 'react'
+import React from 'react';
 import { faFacebook, faLinkedin } from "@fortawesome/free-brands-svg-icons"
 import { faInstagram } from "@fortawesome/free-brands-svg-icons/faInstagram"
 import { faTwitter } from "@fortawesome/free-brands-svg-icons/faTwitter"

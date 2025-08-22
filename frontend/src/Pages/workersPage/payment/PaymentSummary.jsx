@@ -1,5 +1,4 @@
-
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import pay1 from "../../../assets/images/icons/pay1.gif";
 import pay2 from "../../../assets/images/icons/pay2.gif";

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi"; // 3-dot icon
 import defaultImage from "../../assets/images/photos/browseJobImg.jpeg";
 import { MdEdit } from "react-icons/md";

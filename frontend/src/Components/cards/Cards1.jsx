@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import React from 'react';
+
 function Cards({ imgSrc, title, text, buttonText, onClick }) {  
   return (
     <div className="col-md-3 col-sm-6 text-dark">

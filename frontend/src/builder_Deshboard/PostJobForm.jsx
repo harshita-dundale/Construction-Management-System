@@ -1,3 +1,4 @@
+import React from 'react';
 import "./App.css";
 import image1 from "../assets/images/photos/postjob.png";
 import "bootstrap/dist/css/bootstrap.min.css";

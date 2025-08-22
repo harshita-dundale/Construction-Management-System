@@ -1,4 +1,6 @@
 // eslint-disable-next-line
+import React from 'react';
+
 function FilterBuilders({ filterLocation, setFilterLocation, sortOption, setSortOption }) {
   return (
     <div className="row mb-4">

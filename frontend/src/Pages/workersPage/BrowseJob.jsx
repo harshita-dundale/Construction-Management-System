@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../Components/Header";
 import "./BrowseJob.css";
 //import { setCurrentJob } from "../../Pages/Redux/applicationsSlice";

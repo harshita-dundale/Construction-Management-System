@@ -1,3 +1,4 @@
+import React from 'react';
 import ApplicationTabs from "./ApplicationTabs";
 import ApplicationTable from "./ApplicationTable";
 import JobDetailsModal from "./JobDetailsModal";

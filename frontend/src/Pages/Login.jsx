@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useDispatch } from "react-redux";
@@ -20,7 +20,7 @@ const Login = () => {
             if (storedRole) {
                 return storedRole; // Backend call ki zaroorat nahi
             }
-            console.log("Fetching role from backend for:", email);
+            console.log("Fetching role from backend for:", encodeURIComponent(email));
 
              const response = await fetch(`http://localhost:5000/api/auth/get-role?email=${email}`);
             if (!response.ok) {
@@ -42,7 +42,7 @@ const Login = () => {
                 return null;
             }
         } catch (err) {
-            console.error("Error fetching role:", err.message);
+            console.error("Error fetching role:", encodeURIComponent(err.message || 'Unknown error'));
             setError("Error fetching user role. Please try again.");
             return null;
         } finally {
@@ -88,7 +88,7 @@ const Login = () => {
                     navigate("/role-selection", { replace: true }); // Role selection page pe bhejo
                 }
             } catch (err) {
-                console.error("❌ Error in checkAndNavigate:", err.message);
+                console.error("❌ Error in checkAndNavigate:", encodeURIComponent(err.message || 'Unknown error'));
                 setError("Error fetching user role. Please try again.");
             } finally {
                 setLoading(false);

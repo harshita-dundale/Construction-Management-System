@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchApplications } from "../../Pages/Redux/applicationsSlice";
 import Swal from "sweetalert2";

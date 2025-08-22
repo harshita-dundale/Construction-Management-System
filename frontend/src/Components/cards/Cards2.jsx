@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import React from 'react';
+
 function Cards2({ imgSrc, title, text, buttonText, onClick }) {
   return (
     <div className="col-md-4 col-12 mb-5 worker-card text-center mx-4">
