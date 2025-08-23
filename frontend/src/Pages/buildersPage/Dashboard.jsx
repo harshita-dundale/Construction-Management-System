@@ -400,7 +400,6 @@ function Dashboard() {
           }
           
           .table-row {
-            transition: all 0.3s ease;
             border-bottom: 1px solid #e9ecef;
           }
           
