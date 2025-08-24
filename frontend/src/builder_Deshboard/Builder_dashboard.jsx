@@ -12,27 +12,49 @@ import "./Builder_dashboard.css";
 function Builder_dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cardData1 = useSelector((state) => state.builder.cards);
   const location = useLocation();
+
+  const cardData1 = useSelector((state) => state.builder.cards);
   const [showProjectModal, setShowProjectModal] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [projectsPerPage] = useState(3);
+  const [projectsPerPage, setProjectsPerPage] = useState(3);
+  //const projectsPerPage = 6;
   const selectedProject = useSelector((state) => state.project.selectedProject);
+  
   const projects = useSelector((state) => state.project.projects);
+  const reversedProjects = [...(projects || [])].reverse();
+   // Pagination logic
+   const indexOfLastProject = currentPage * projectsPerPage;
+   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+   const currentProjects = reversedProjects?.slice(indexOfFirstProject, indexOfLastProject) || [];
+   
   const materials = useSelector((state) => state.materials.materials);
   const payrollList = useSelector((state) => state.Payroll.payrollList);
   
   // Enhanced payroll data state
   const [enhancedPayrollTotal, setEnhancedPayrollTotal] = useState(0);
 
-  // Pagination logic
-  const indexOfLastProject = currentPage * projectsPerPage;
-  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
-  const currentProjects = projects?.slice(indexOfFirstProject, indexOfLastProject) || [];
-  const totalPages = Math.ceil((projects?.length || 0) / projectsPerPage);
+  const totalPages = Math.ceil((reversedProjects?.length || 0) / projectsPerPage);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  useEffect(() => {
+    const updateProjectsPerPage = () => {
+      if (window.innerWidth < 576) {
+        setProjectsPerPage(1); // mobile
+      } else if (window.innerWidth < 992) {
+        setProjectsPerPage(2); // tablet
+      } else {
+        setProjectsPerPage(3); // desktop
+      }
+    };
+  
+    updateProjectsPerPage(); // set initially
+    window.addEventListener("resize", updateProjectsPerPage);
+    return () => window.removeEventListener("resize", updateProjectsPerPage);
+  }, []);
+
+  const handlePageChange = (page) => {
+    if (page > 0 && page <= totalPages) setCurrentPage(page);
   };
 
   useEffect(() => {
@@ -170,27 +192,29 @@ Organize workers and job roles without hassle.
 
       {/* Project Status Cards */}
       <div className="container-fluid px-3 px-md-4 mb-4">
-        <div className="section-header text-center mb-4">
+        <div className="section-header text-center mb-1">
           <h2 className="section-title">Your Projects</h2>
-          <p className="section-subtitle">Manage and monitor all your construction projects</p>
+          {/* <p className="section-subtitle">Manage and monitor all your construction projects, Stay organized, efficient, and always in control.</p> */}
         </div>
         
         {projects && projects.length > 0 ? (
           <>
-            {/* <div className="projects-info mb-3">
+            <div className="projects-info mb-3">
               <span className="text-muted">
                 Showing {indexOfFirstProject + 1}-{Math.min(indexOfLastProject, projects.length)} of {projects.length} projects
               </span>
-            </div> */}
-            <div className="row g-3">
-              {currentProjects.map((project) => (
-              <div key={project._id} className="col-12 col-md-6 col-lg-4">
+            </div>
+            {/* <div className="row g-3"> */}
+            <div className={`row g-3 ${projects.length % 3 === 1 ? "justify-content-center" : ""}`}>
+              {[...currentProjects].reverse().map((project) => (
+              <div key={project._id} className="col-12 col-sm-6 col-lg-4">
                 <div 
                   className={`project-card ${selectedProject?._id === project._id ? 'active' : ''}`}
                   onClick={() => {
                     dispatch(selectProject(project));
                     localStorage.setItem("selectedProject", JSON.stringify(project));
                   }}
+                 
                 >
                   <div className="project-header">
                     <div className="project-status-badge">
