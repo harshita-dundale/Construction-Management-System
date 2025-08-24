@@ -477,8 +477,8 @@ function Dashboard() {
 
 export default Dashboard;
 
-const buttonStyle = {
-  backgroundColor: "var(--primary-color)",
-  transition: "background-color 0.3s ease, color 0.3s ease",
-  color: "var(--text-color)",
-};
+// const buttonStyle = {
+//   backgroundColor: "var(--primary-color)",
+//   transition: "background-color 0.3s ease, color 0.3s ease",
+//   color: "var(--text-color)",
+// };

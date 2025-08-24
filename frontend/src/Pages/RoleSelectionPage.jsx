@@ -1,5 +1,4 @@
-
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -29,7 +28,7 @@ function RoleSelectionPage() {
         .then((data) => {
           if (data.role) dispatch(setUserRole(data.role));
         })
-        .catch((err) => console.warn("⚠️ No role found, ask to select role.", err));
+        .catch((err) => console.warn("⚠️ No role found, ask to select role.", encodeURIComponent(err.message || 'Unknown error')));
     }
   }, [user?.email]);
 
@@ -73,7 +72,7 @@ function RoleSelectionPage() {
       dispatch(setUserRole(role));
       return true;
     } catch (error) {
-      console.error("Role update error:", error.message);
+      console.error("Role update error:", encodeURIComponent(error.message || 'Unknown error'));
       return false;
     }
   };

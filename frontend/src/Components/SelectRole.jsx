@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import React from 'react';
+
 function SelectRole({imgSrc, h1Text, pText, buttonText, onClick }) {
   return (
       <> 

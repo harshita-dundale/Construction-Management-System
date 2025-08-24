@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import React from 'react';
+
 function Cards2({ imgSrc, title, text, buttonText, onClick }) {
   return (
     <div className="worker-card-wrapper">

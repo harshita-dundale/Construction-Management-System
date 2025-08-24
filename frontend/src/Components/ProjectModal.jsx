@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProjects,addProject,selectProject,updateProject} from "../Pages/Redux/projectSlice";
@@ -17,10 +17,20 @@ import { FiCheck, FiX } from "react-icons/fi";
     const { projects, status } = useSelector((state) => state.project); //selectedProject,
     const userProjects = projects.filter((p) => p.userId === user?.sub);
 
-    const [newProject, setNewProject] = useState("");
+    const [newProject, setNewProject] = useState({
+      name: "",
+      type: "",
+      location: "",
+      clientName: ""
+    });
     const [localError, setLocalError] = useState(null);
     const [editingProject, setEditingProject] = useState(null);
-    const [editProjectName, setEditProjectName] = useState("");
+    const [editProjectData, setEditProjectData] = useState({
+      name: "",
+      type: "",
+      location: "",
+      clientName: ""
+    });
 
     useEffect(() => {
       if (isAuthenticated && user?.sub) {
@@ -35,18 +45,14 @@ import { FiCheck, FiX } from "react-icons/fi";
     };
 
     const handleNewProject = async () => {
-      if (!newProject.trim()) {
+      if (!newProject.name.trim()) {
         setLocalError("Project name is required");
         return;
       }
 
-      // const isDuplicate = projects.some(
-      //   (p) => p.name && p.name.toLowerCase() === newProject.trim().toLowerCase()
-      // );
-      // const isDuplicate = projects.some(
       const isDuplicate = userProjects.some(
         (p) =>
-          p.name.toLowerCase() === newProject.trim().toLowerCase() &&
+          p.name.toLowerCase() === newProject.name.trim().toLowerCase() &&
           p.userId === user.sub
       );
       
@@ -57,10 +63,16 @@ import { FiCheck, FiX } from "react-icons/fi";
       }
 
       try {
-        await dispatch(addProject({ userId: user.sub, name: newProject }));
+        await dispatch(addProject({ 
+          userId: user.sub, 
+          name: newProject.name.trim(),
+          type: newProject.type.trim(),
+          location: newProject.location.trim(),
+          clientName: newProject.clientName.trim()
+        }));
         await dispatch(fetchProjects(user.sub));
         toast.success("Project added successfully!");
-        setNewProject("");
+        setNewProject({ name: "", type: "", location: "", clientName: "" });
         setLocalError(null);
         handleClose();
       } catch (err) {
@@ -71,18 +83,23 @@ import { FiCheck, FiX } from "react-icons/fi";
 
   const handleEditProject = (project) => {
     setEditingProject(project);
-    setEditProjectName(project.name);
+    setEditProjectData({
+      name: project.name || "",
+      type: project.type || "",
+      location: project.location || "",
+      clientName: project.clientName || ""
+    });
   };
 
   const handleUpdateProject = async () => {
-    if (!editProjectName.trim()) {
+    if (!editProjectData.name.trim()) {
       setLocalError("Project name is required");
       return;
     }
 
     const isDuplicate = userProjects.some(
       (p) =>
-        p.name.toLowerCase() === editProjectName.trim().toLowerCase() &&
+        p.name.toLowerCase() === editProjectData.name.trim().toLowerCase() &&
         p.userId === user.sub &&
         p._id !== editingProject._id
     );
@@ -96,12 +113,15 @@ import { FiCheck, FiX } from "react-icons/fi";
     try {
       await dispatch(updateProject({ 
         projectId: editingProject._id, 
-        name: editProjectName.trim() 
+        name: editProjectData.name.trim(),
+        type: editProjectData.type.trim(),
+        location: editProjectData.location.trim(),
+        clientName: editProjectData.clientName.trim()
       }));
       await dispatch(fetchProjects(user.sub));
       toast.success("Project updated successfully!");
       setEditingProject(null);
-      setEditProjectName("");
+      setEditProjectData({ name: "", type: "", location: "", clientName: "" });
       setLocalError(null);
     } catch (err) {
       console.error("Error updating project:", err);
@@ -111,7 +131,7 @@ import { FiCheck, FiX } from "react-icons/fi";
 
   const handleCancelEdit = () => {
     setEditingProject(null);
-    setEditProjectName("");
+    setEditProjectData({ name: "", type: "", location: "", clientName: "" });
     setLocalError(null);
   };
 
@@ -157,37 +177,73 @@ import { FiCheck, FiX } from "react-icons/fi";
                 style={{ borderBottom: "1px solid #ccc", padding: "8px 0" }}
               >
                 {editingProject && editingProject._id === p._id ? (
-                  <div className="d-flex align-items-center flex-grow-1">
+                  <div className="flex-grow-1">
                     <Form.Control
                       type="text"
-                      value={editProjectName}
-                      onChange={(e) => setEditProjectName(e.target.value)}
-                      className="me-2"
+                      value={editProjectData.name}
+                      onChange={(e) => setEditProjectData({...editProjectData, name: e.target.value})}
+                      placeholder="Project Name *"
+                      className="mb-2"
                       size="sm"
                     />
-                    <button
-                      onClick={handleUpdateProject}
-                      className="btn btn-sm text-success me-1"
-                      title="Save Changes"
-                    > 
-                      <FiCheck style={{ transform: "scale(1.3)" }}/>
-                    </button>
-                    <button
-                      onClick={handleCancelEdit}
-                      className="btn btn-sm text-danger"
-                      title="Cancel Edit"
-                    > 
-                      <FiX style={{ transform: "scale(1.3)" }}/>
-                    </button>
+                    <Form.Select
+                      value={editProjectData.type}
+                      onChange={(e) => setEditProjectData({...editProjectData, type: e.target.value})}
+                      className="mb-2"
+                      size="sm"
+                    >
+                      <option value="">Select Project Type</option>
+                      <option value="Residential">Residential</option>
+                      <option value="Commercial">Commercial</option>
+                      <option value="Road">Road</option>
+                      <option value="Renovation">Renovation</option>
+                      <option value="Industrial">Industrial</option>
+                      <option value="Infrastructure">Infrastructure</option>
+                    </Form.Select>
+                    <Form.Control
+                      type="text"
+                      value={editProjectData.location}
+                      onChange={(e) => setEditProjectData({...editProjectData, location: e.target.value})}
+                      placeholder="Project Location"
+                      className="mb-2"
+                      size="sm"
+                    />
+                    <Form.Control
+                      type="text"
+                      value={editProjectData.clientName}
+                      onChange={(e) => setEditProjectData({...editProjectData, clientName: e.target.value})}
+                      placeholder="Client Name"
+                      className="mb-2"
+                      size="sm"
+                    />
+                    <div className="d-flex gap-2">
+                      <button
+                        onClick={handleUpdateProject}
+                        className="btn btn-sm btn-success"
+                        title="Save Changes"
+                      > 
+                        <FiCheck /> Save
+                      </button>
+                      <button
+                        onClick={handleCancelEdit}
+                        className="btn btn-sm btn-secondary"
+                        title="Cancel Edit"
+                      > 
+                        <FiX /> Cancel
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <>
-                    <span 
+                    <div 
                       onClick={() => handleProjectSelect(p)}
                       style={{ cursor: "pointer", flexGrow: 1 }}
                     >
-                      {p.name}
-                    </span>
+                      <div className="fw-bold">{p.name}</div>
+                      {p.type && <small className="text-muted">Type: {p.type}</small>}<br/>
+                      {p.location && <small className="text-muted">Location: {p.location}</small>}<br/>
+                      {p.clientName && <small className="text-muted">Client: {p.clientName}</small>}
+                    </div>
                     <div>
                       <button
                         onClick={() => handleEditProject(p)}
@@ -215,13 +271,48 @@ import { FiCheck, FiX } from "react-icons/fi";
 
         {!editingProject && (
           <>
-            <Form.Control
-              type="text"
-              value={newProject}
-              placeholder="Add New Project"
-              onChange={(e) => setNewProject(e.target.value)}
-              className="my-2"
-            />
+            <div className="mt-3">
+              <h6 className="mb-3">Add New Project</h6>
+              
+              <Form.Control
+                type="text"
+                value={newProject.name}
+                placeholder="Project Name *"
+                onChange={(e) => setNewProject({...newProject, name: e.target.value})}
+                className="mb-2"
+              />
+              
+              <Form.Select
+                value={newProject.type}
+                onChange={(e) => setNewProject({...newProject, type: e.target.value})}
+                className="mb-2"
+              >
+                <option value="">Select Project Type</option>
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Road">Road</option>
+                <option value="Renovation">Renovation</option>
+                <option value="Industrial">Industrial</option>
+                <option value="Infrastructure">Infrastructure</option>
+              </Form.Select>
+              
+              <Form.Control
+                type="text"
+                value={newProject.location}
+                placeholder="Project Location (Address, City, State)"
+                onChange={(e) => setNewProject({...newProject, location: e.target.value})}
+                className="mb-2"
+              />
+              
+              <Form.Control
+                type="text"
+                value={newProject.clientName}
+                placeholder="Client/Owner Name"
+                onChange={(e) => setNewProject({...newProject, clientName: e.target.value})}
+                className="mb-2"
+              />
+            </div>
+            
             {localError && <p className="text-danger">{localError}</p>}
             <Button style={buttonStyle1} onClick={handleNewProject}>
               Add Project

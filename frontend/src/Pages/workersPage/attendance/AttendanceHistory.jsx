@@ -1,4 +1,5 @@
 // src/components/AttendanceHistory.jsx
+import React from 'react';
 import { useSelector } from "react-redux";
 import "../historyTables.css";
 

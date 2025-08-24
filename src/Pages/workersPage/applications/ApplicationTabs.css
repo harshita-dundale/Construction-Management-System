@@ -1,0 +1,18 @@
+.nav-tabs .nav-link {
+    color: #051821; /* Default text color */
+    background-color: transparent;
+    border: none;
+    transition: all 0.3s ease-in-out;
+}
+
+/* .nav-tabs .nav-link:hover {
+    color: #0d6efd; 
+} */
+
+.nav-tabs .nav-link.active {
+    /* background-color: #f49929 !important;  */
+    background-color: #051821 !important; 
+    color: #ffffff !important; 
+    font-weight: bold;
+    border-radius: 5px;
+}

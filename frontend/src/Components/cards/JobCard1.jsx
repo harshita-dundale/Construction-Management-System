@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi"; // 3-dot icon
 import defaultImage from "../../assets/images/photos/browseJobImg.jpeg";
 import { MdEdit } from "react-icons/md";
@@ -183,23 +183,8 @@ function JobCard1({ job, onEdit, onDelete }) {
           position: relative;
         }
         
-        .action-trigger {
-          background: #f8f9fa;
-          border: none;
-          border-radius: 50%;
-          width: 35px;
-          height: 35px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #6c757d;
-          transition: all 0.3s ease;
-        }
         
-        .action-trigger:hover {
-          background: #e9ecef;
-          color: #495057;
-        }
+        
         
         .action-menu {
           position: absolute;
@@ -226,11 +211,7 @@ function JobCard1({ job, onEdit, onDelete }) {
           display: flex;
           align-items: center;
         }
-        
-        .edit-action {
-          color: #667eea;
-        }
-        
+       
         .edit-action:hover {
           background: rgba(102, 126, 234, 0.1);
           color: #667eea;
