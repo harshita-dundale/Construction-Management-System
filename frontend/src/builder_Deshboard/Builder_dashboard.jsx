@@ -5,8 +5,10 @@ import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Header from "../Components/Header";
 import ProjectModal from "../Components/ProjectModal";
-import { selectProject } from "../Pages/Redux/projectSlice";
+import { selectProject, updateProject, deleteProject, fetchProjects } from "../Pages/Redux/projectSlice";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import { useAuth0 } from "@auth0/auth0-react";
 import "./Builder_dashboard.css";
 
 function Builder_dashboard() {
@@ -31,9 +33,87 @@ function Builder_dashboard() {
    
   const materials = useSelector((state) => state.materials.materials);
   const payrollList = useSelector((state) => state.Payroll.payrollList);
+  const { user } = useAuth0();
   
   // Enhanced payroll data state
   const [enhancedPayrollTotal, setEnhancedPayrollTotal] = useState(0);
+  const [editingProject, setEditingProject] = useState(null);
+  const [editProjectData, setEditProjectData] = useState({ name: "", type: "", location: "", clientName: "" });
+  const [dropdownOpen, setDropdownOpen] = useState(null);
+
+  // Edit project function
+  const handleEditProject = (project, e) => {
+    e.stopPropagation();
+    setEditingProject(project);
+    setEditProjectData({
+      name: project.name || "",
+      type: project.type || "",
+      location: project.location || "",
+      clientName: project.clientName || ""
+    });
+  };
+
+  // Update project function
+  const handleUpdateProject = async () => {
+    if (!editProjectData.name.trim()) {
+      toast.error("Project name is required");
+      return;
+    }
+
+    try {
+      await dispatch(updateProject({ 
+        projectId: editingProject._id, 
+        name: editProjectData.name.trim(),
+        type: editProjectData.type.trim(),
+        location: editProjectData.location.trim(),
+        clientName: editProjectData.clientName.trim()
+      }));
+      await dispatch(fetchProjects(user.sub));
+      toast.success("Project updated successfully!");
+      setEditingProject(null);
+      setEditProjectData({ name: "", type: "", location: "", clientName: "" });
+    } catch (err) {
+      console.error("Error updating project:", err);
+      toast.error("Failed to update project.");
+    }
+  };
+
+  // Delete project function
+  const handleDeleteProject = async (projectId, e) => {
+    e.stopPropagation();
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This project will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc3545",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      await dispatch(deleteProject(projectId));
+      await dispatch(fetchProjects(user.sub));
+      toast.success("Project deleted successfully!");
+    } catch (err) {
+      console.error("Delete error:", err);
+      toast.error("Delete failed.");
+    }
+  };
+
+  // Cancel edit function
+  const handleCancelEdit = () => {
+    setEditingProject(null);
+    setEditProjectData({ name: "", type: "", location: "", clientName: "" });
+  };
+
+  // Toggle dropdown function
+  const toggleDropdown = (projectId, e) => {
+    e.stopPropagation();
+    setDropdownOpen(dropdownOpen === projectId ? null : projectId);
+  };
 
   const totalPages = Math.ceil((reversedProjects?.length || 0) / projectsPerPage);
 
@@ -206,55 +286,137 @@ Organize workers and job roles without hassle.
             </div>
             {/* <div className="row g-3"> */}
             <div className={`row g-3 ${projects.length % 3 === 1 ? "justify-content-center" : ""}`}>
-              {[...currentProjects].reverse().map((project) => (
+              {[...currentProjects] .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((project) => (
               <div key={project._id} className="col-12 col-sm-6 col-lg-4">
                 <div 
                   className={`project-card ${selectedProject?._id === project._id ? 'active' : ''}`}
                   onClick={() => {
-                    dispatch(selectProject(project));
-                    localStorage.setItem("selectedProject", JSON.stringify(project));
+                    if (editingProject?._id !== project._id) {
+                      dispatch(selectProject(project));
+                      localStorage.setItem("selectedProject", JSON.stringify(project));
+                    }
                   }}
-                 
                 >
                   <div className="project-header">
                     <div className="project-status-badge">
                       <i className={`fas ${selectedProject?._id === project._id ? 'fa-check-circle' : 'fa-circle'} me-2`}></i>
                       {selectedProject?._id === project._id ? 'Active' : 'Available'}
                     </div>
-                    <div className="project-icon-small">
-                      <i className="fas fa-building"></i>
+                    <div className="project-actions">
+                      <div className="dropdown">
+                        <button 
+                          className="dropdown-toggle-btn"
+                          onClick={(e) => toggleDropdown(project._id, e)}
+                          title="More Options"
+                        >
+                          <i className="fas fa-ellipsis-v"></i>
+                        </button>
+                        {dropdownOpen === project._id && (
+                          <div className="dropdown-menu show">
+                            <button 
+                              className="dropdown-item"
+                              onClick={(e) => {
+                                handleEditProject(project, e);
+                                setDropdownOpen(null);
+                              }}
+                            >
+                              <i className="fas fa-edit me-2"></i>
+                              Edit Project
+                            </button>
+                            <button 
+                              className="dropdown-item delete-item"
+                              onClick={(e) => {
+                                handleDeleteProject(project._id, e);
+                                setDropdownOpen(null);
+                              }}
+                            >
+                              <i className="fas fa-trash me-2"></i>
+                              Delete Project
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                   
-                  <h4 className="project-card-name">{project.name}</h4>
-                  
-                  <div className="project-card-details">
-                    {project.type && (
-                      <div className="detail-row">
-                        <i className="fas fa-tag"></i>
-                        <span>{project.type}</span>
+                  {editingProject && editingProject._id === project._id ? (
+                    <div className="edit-form">
+                      <input
+                        type="text"
+                        value={editProjectData.name}
+                        onChange={(e) => setEditProjectData({...editProjectData, name: e.target.value})}
+                        placeholder="Project Name"
+                        className="form-control mb-2"
+                      />
+                      <select
+                        value={editProjectData.type}
+                        onChange={(e) => setEditProjectData({...editProjectData, type: e.target.value})}
+                        className="form-control mb-2"
+                      >
+                        <option value="">Select Project Type</option>
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Road">Road</option>
+                        <option value="Renovation">Renovation</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Infrastructure">Infrastructure</option>
+                      </select>
+                      <input
+                        type="text"
+                        value={editProjectData.location}
+                        onChange={(e) => setEditProjectData({...editProjectData, location: e.target.value})}
+                        placeholder="Project Location"
+                        className="form-control mb-2"
+                      />
+                      <input
+                        type="text"
+                        value={editProjectData.clientName}
+                        onChange={(e) => setEditProjectData({...editProjectData, clientName: e.target.value})}
+                        placeholder="Client Name"
+                        className="form-control mb-3"
+                      />
+                      <div className="edit-actions">
+                        <button className="btn btn-success btn-sm me-2" onClick={handleUpdateProject}>
+                          <i className="fas fa-check me-1"></i>Save
+                        </button>
+                        <button className="btn btn-secondary btn-sm" onClick={handleCancelEdit}>
+                          <i className="fas fa-times me-1"></i>Cancel
+                        </button>
                       </div>
-                    )}
-                    {project.location && (
-                      <div className="detail-row">
-                        <i className="fas fa-map-marker-alt"></i>
-                        <span>{project.location}</span>
+                    </div>
+                  ) : (
+                    <>
+                      <h4 className="project-card-name">{project.name}</h4>
+                      
+                      <div className="project-card-details">
+                        {project.type && (
+                          <div className="detail-row">
+                            <i className="fas fa-tag"></i>
+                            <span>{project.type}</span>
+                          </div>
+                        )}
+                        {project.location && (
+                          <div className="detail-row">
+                            <i className="fas fa-map-marker-alt"></i>
+                            <span>{project.location}</span>
+                          </div>
+                        )}
+                        {project.clientName && (
+                          <div className="detail-row">
+                            <i className="fas fa-user-tie"></i>
+                            <span>{project.clientName}</span>
+                          </div>
+                        )}
                       </div>
-                    )}
-                    {project.clientName && (
-                      <div className="detail-row">
-                        <i className="fas fa-user-tie"></i>
-                        <span>{project.clientName}</span>
+                      
+                      <div className="project-card-footer">
+                        <small className="text-muted">
+                          <i className="fas fa-calendar me-1"></i>
+                          Created: {new Date(project.createdAt).toLocaleDateString()}
+                        </small>
                       </div>
-                    )}
-                  </div>
-                  
-                  <div className="project-card-footer">
-                    <small className="text-muted">
-                      <i className="fas fa-calendar me-1"></i>
-                      Created: {new Date(project.createdAt).toLocaleDateString()}
-                    </small>
-                  </div>
+                    </>
+                  )}
                 </div>
               </div>
               ))}

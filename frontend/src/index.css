@@ -1,4 +1,4 @@
-/* Global Reset & Base Styles */
+/* Global Reset & Base Styles
 * {
   padding: 0;
   margin: 0;
@@ -380,7 +380,7 @@ p {
   background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
 }
 
-/* Selection Styling */
+/* Selection Styling 
 ::selection {
   background: rgba(102, 126, 234, 0.3);
   color: var(--dark-color);
@@ -389,4 +389,4 @@ p {
 ::-moz-selection {
   background: rgba(102, 126, 234, 0.3);
   color: var(--dark-color);
-}
+} */
