@@ -11,7 +11,33 @@ const ProfileAvatar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
   const navigate = useNavigate();
+
+  // Fetch profile image from backend
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        if (!user?.email) return;
+
+        const encodedEmail = encodeURIComponent(user.email);
+        const res = await fetch(
+          `http://localhost:5000/api/auth/get-user/${encodedEmail}`
+        );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const data = await res.json();
+        setProfileImage(data.profileImage);
+      } catch (err) {
+        console.error("Failed to fetch profile image", err);
+      }
+    };
+
+    fetchProfileImage();
+  }, [user]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -35,18 +61,19 @@ const ProfileAvatar = () => {
   };
 
   const firstLetter = user.name?.charAt(0)?.toUpperCase() || '?';
+  const displayImage = profileImage || user.picture;
 
   return (
     <>
       <div className="modern-profile-dropdown">
         <div className="profile-trigger" onClick={toggleDropdown} style={{background: 'none', backgroundColor: 'transparent', boxShadow: 'none', border: 'none'}}>
-          {imageError ? (
+          {imageError || !displayImage ? (
             <div className="profile-avatar-fallback">
               {firstLetter}
             </div>
           ) : (
             <img
-              src={user.picture}
+              src={displayImage}
               alt="Profile"
               className="profile-avatar-image"
               onError={() => setImageError(true)}
@@ -60,10 +87,10 @@ const ProfileAvatar = () => {
             {/* User Info Header */}
             <div className="dropdown-header">
               <div className="user-avatar">
-                {imageError ? (
+                {imageError || !displayImage ? (
                   <div className="avatar-fallback">{firstLetter}</div>
                 ) : (
-                  <img src={user.picture} alt="Profile" className="avatar-image" onError={() => setImageError(true)} />
+                  <img src={displayImage} alt="Profile" className="avatar-image" onError={() => setImageError(true)} />
                 )}
               </div>
               <div className="user-info">

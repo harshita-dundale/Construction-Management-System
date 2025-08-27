@@ -100,6 +100,39 @@ const ProfileModal = ({ show, handleClose }) => {
     }
   };
 
+  // Delete profile image
+  const handleDeleteImage = async () => {
+    if (!profileImage) return;
+    
+    setIsUploading(true);
+    try {
+      const saveRes = await fetch(
+        "http://localhost:5000/api/auth/profile-image",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            auth0Id: user.sub,
+            imageUrl: null,
+          }),
+        }
+      );
+
+      if (!saveRes.ok) {
+        throw new Error("Failed to delete profile image");
+      }
+
+      setProfileImage(null);
+      setImageError(false);
+    } catch (err) {
+      console.error("Image delete failed", err);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <>
       {show && <div className="modal-backdrop-modern"></div>}
@@ -162,6 +195,26 @@ const ProfileModal = ({ show, handleClose }) => {
                           disabled={isUploading}
                         />
                       </label>
+                      
+                      {profileImage && (
+                        <button 
+                          className="delete-button"
+                          onClick={handleDeleteImage}
+                          disabled={isUploading}
+                        >
+                          {isUploading ? (
+                            <>
+                              <i className="fas fa-spinner fa-spin me-2"></i>
+                              Deleting...
+                            </>
+                          ) : (
+                            <>
+                              <i className="fas fa-trash me-2"></i>
+                              Delete Picture
+                            </>
+                          )}
+                        </button>
+                      )}
                     </div>
                   </div>
                   
@@ -428,6 +481,33 @@ const ProfileModal = ({ show, handleClose }) => {
         .upload-button:hover {
           transform: translateY(-2px);
           box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .delete-button {
+          background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+          color: white;
+          border: none;
+          border-radius: 25px;
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+          margin-left: 0.5rem;
+          margin-top: 0.5rem;
+        }
+        
+        .delete-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .delete-button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
         }
         
         .profile-basic-info {

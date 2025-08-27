@@ -567,6 +567,7 @@ const MaterialManagement = () => {
         }
         
         .header-title {
+        
           font-size: 3rem;
           font-weight: 800;
           color: #2c3e50;

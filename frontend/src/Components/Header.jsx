@@ -142,7 +142,7 @@ function Header() {
                       <i className="fas fa-file-alt me-2"></i>Applications
                     </a>
                   </li>
-                  <li className="nav-item me-4">
+                  {/* <li className="nav-item me-4">
                     <a
                       className={`nav-link modern-nav-link ${
                         currentPath === "/attendances" ? "active" : ""
@@ -151,7 +151,7 @@ function Header() {
                     >
                       <i className="fas fa-wallet me-2"></i>Payroll Manager
                     </a>
-                  </li>
+                  </li> */}
                 </>
               )}
 
