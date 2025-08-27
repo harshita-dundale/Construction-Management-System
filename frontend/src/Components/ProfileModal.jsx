@@ -499,14 +499,14 @@ const ProfileModal = ({ show, handleClose }) => {
           align-items: flex-start;
           gap: 1rem;
           background: white;
-          padding: 1rem;
+          padding: 0.5rem;
           border-radius: 10px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
         .detail-icon {
-          width: 35px;
-          height: 35px;
+          width: 25px;
+          height: 25px;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           border-radius: 8px;
           display: flex;

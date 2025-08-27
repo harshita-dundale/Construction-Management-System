@@ -138,12 +138,12 @@ function ViewPostedJobs() {
 
   const displayJobs = selectedProject
     ? allJobs.filter((job) =>
-        projectsWithJobs.some(
-          (project) =>
-            project.projectId === selectedProject._id &&
-            project.jobs.some((pJob) => pJob._id === job._id)
-        )
+      projectsWithJobs.some(
+        (project) =>
+          project.projectId === selectedProject._id &&
+          project.jobs.some((pJob) => pJob._id === job._id)
       )
+    )
     : allJobs;
 
   return (
@@ -155,38 +155,43 @@ function ViewPostedJobs() {
           <div className="container">
             <div className="row align-items-center">
               <div className="col-md-8">
-                <div className="header-content">
-                  <div className="header-badge">
-                    <i className="fas fa-briefcase me-2"></i>
-                    Job Management
-                  </div>
-                  <h1 className="header-title">My Posted Jobs</h1>
-                  <p className="header-subtitle">
-                    Manage and track all your job postings efficiently
-                  </p>
+                <div className="header-badge">
+                  <i className="fas fa-briefcase me-2"></i>
+                  Job Management
                 </div>
+                <div className="header-content">
+
+                  <h1 className="header-title">My Posted Jobs</h1>
+
+                </div><p className="header-subtitle">
+                  Manage and track all your job postings efficiently
+                </p>
               </div>
               <div className="col-md-4">
-                <div className="stats-card">
-                  <div className="stat-icon">
-                    <i className="fas fa-clipboard-list"></i>
+              
+                {selectedProject && (
+                  <div className="container mb-4  mt-3">
+                    <div className="project-filter">
+                      <div className="filter-icon">
+                        <i className="fas fa-building"></i>
+                      </div>
+                      <div className="filter-content">
+                        <h6 className="filter-title">{selectedProject.name}</h6>
+                        <span className="filter-subtitle">Project Filter Active</span>
+                      </div>
+                      <div className="filter-badge">{displayJobs.length} Jobs</div>
+                    </div>
                   </div>
-                  <div className="stat-content">
-                    <div className="stat-number">{displayJobs.length}</div>
-                    <div className="stat-label">Total Jobs</div>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
-
             {/* Quick Actions */}
             <div className="row mt-4">
               <div className="col-12">
                 <div className="quick-actions">
                   <button
                     className="action-btn primary-btn"
-                    onClick={() => navigate("/post-job")}
-                  >
+                    onClick={() => navigate("/post-job")}>
                     <i className="fas fa-plus me-2"></i>
                     Post New Job
                   </button>
@@ -211,7 +216,7 @@ function ViewPostedJobs() {
         </div>
 
         {/* Project Filter */}
-        {selectedProject && (
+        {/* {selectedProject && (
           <div className="container mb-4">
             <div className="project-filter">
               <div className="filter-icon">
@@ -224,7 +229,7 @@ function ViewPostedJobs() {
               <div className="filter-badge">{displayJobs.length} Jobs</div>
             </div>
           </div>
-        )}
+        )} */}
 
         <div className="container">
           {displayJobs.length === 0 ? (
@@ -240,24 +245,12 @@ function ViewPostedJobs() {
               </p>
             </div>
           ) : (
+
             <div className="jobs-content">
               {!selectedProject &&
                 projectsWithJobs.map((project) => (
                   <div key={project.projectId} className="project-section">
-                    <div className="project-header">
-                      <div className="project-info">
-                        <div className="project-icon">
-                          <i className="fas fa-building"></i>
-                        </div>
-                        <div className="project-details">
-                          <h4 className="project-name">{project.projectName}</h4>
-                          <span className="project-meta">
-                            {project.jobs.length} job
-                            {project.jobs.length !== 1 ? "s" : ""} posted
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+
                     <div className="jobs-grid">
                       <div className="row g-4">
                         {project.jobs.map((job) => (
@@ -311,7 +304,6 @@ function ViewPostedJobs() {
           )}
         </div>
       </div>
-
       {jobToEdit && (
         <EditJobModal
           job={jobToEdit}
@@ -322,5 +314,4 @@ function ViewPostedJobs() {
     </>
   );
 }
-
 export default ViewPostedJobs;
