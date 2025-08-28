@@ -20,12 +20,12 @@ export const fetchProjects = createAsyncThunk(
 // 🔹 Add Project
 export const addProject = createAsyncThunk(
   "projects/addProject",
-  async ({ userId, name, type, location, clientName }, { rejectWithValue }) => {
+  async ({ userId, name, type, location, clientName, phoneNumber, email, startDate, expectedEndDate, expectedCost }, { rejectWithValue }) => {
     try {
       const response = await fetch("http://localhost:5000/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, name, type, location, clientName }),
+        body: JSON.stringify({ userId, name, type, location, clientName, phoneNumber, email, startDate, expectedEndDate, expectedCost }),
       });
       if (!response.ok) {
         const errorData = await response.json();
@@ -42,12 +42,12 @@ export const addProject = createAsyncThunk(
 // 🔹 Update Project
 export const updateProject = createAsyncThunk(
   "projects/updateProject",
-  async ({ projectId, name, type, location, clientName }, { rejectWithValue }) => {
+  async ({ projectId, name, type, location, clientName, phoneNumber, email, startDate, expectedEndDate, expectedCost }, { rejectWithValue }) => {
     try {
       const response = await fetch(`http://localhost:5000/api/projects/${projectId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, type, location, clientName }),
+        body: JSON.stringify({ name, type, location, clientName, phoneNumber, email, startDate, expectedEndDate, expectedCost }),
       });
 
       if (!response.ok) {

@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Header from "../Components/Header";
-
+import "./PostJobForm.css"
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -140,7 +140,7 @@ function PostJobForm() {
          </div>
        </div>
     
-    <div className="container py-5">
+    <div className="container py-4">
       <div className="row justify-content-center">
         <div className="col-lg-8">
           <div className="post-job-card">
@@ -157,13 +157,13 @@ function PostJobForm() {
             </div>
 
             <form onSubmit={handleSubmit} className="job-form">
-              <div className="form-section">
-                <h3 className="section-title">
+              <div className="post-form-section">
+                <h3 className="post-title">
                   <i className="fas fa-project-diagram me-2"></i>
                   Project Information
                 </h3>
                 
-                <div className="form-group">
+                <div className="post-form-group">
                   <label className="form-label">
                     <i className="fas fa-folder me-2"></i>
                     Select Project
@@ -176,6 +176,18 @@ function PostJobForm() {
                         (p) => p._id === e.target.value
                       );
                       dispatch(selectProject(selected));
+                      // Auto-fill fields from selected project
+                      if (selected) {
+                        if (selected.location) {
+                          dispatch(setLocation(selected.location));
+                        }
+                        if (selected.email) {
+                          dispatch(setEmail(selected.email));
+                        }
+                        if (selected.phoneNumber) {
+                          dispatch(setPhoneNo(selected.phoneNumber));
+                        }
+                      }
                     }}
                     required
                   >
@@ -189,15 +201,15 @@ function PostJobForm() {
                 </div>
               </div>
 
-              <div className="form-section">
-                <h3 className="section-title">
+              <div className="post-form-section">
+                {/* <h3 className="section-title">
                   <i className="fas fa-briefcase me-2"></i>
                   Job Details
-                </h3>
+                </h3> */}
                 
                 <div className="row">
                   <div className="col-md-8">
-                    <div className="form-group">
+                    <div className="post-form-group">
                       <label className="form-label">
                         <i className="fas fa-tag me-2"></i>
                         Job Title
@@ -213,7 +225,7 @@ function PostJobForm() {
                     </div>
                   </div>
                   <div className="col-md-4">
-                    <div className="form-group">
+                    <div className="post-form-group">
                       <label className="form-label">
                         <i className="fas fa-rupee-sign me-2"></i>
                         Daily Payment
@@ -231,15 +243,15 @@ function PostJobForm() {
                 </div>
               </div>
 
-              <div className="form-section">
-                <h3 className="section-title">
+              <div className="post-form-section">
+                {/* <h3 className="section-title">
                   <i className="fas fa-calendar me-2"></i>
                   Timeline
-                </h3>
+                </h3> */}
                 
                 <div className="row">
                   <div className="col-md-6">
-                    <div className="form-group">
+                    <div className="post-form-group">
                       <label className="form-label">
                         <i className="fas fa-play me-2"></i>
                         Start Date
@@ -255,7 +267,7 @@ function PostJobForm() {
                     </div>
                   </div>
                   <div className="col-md-6">
-                    <div className="form-group">
+                    <div className="post-form-group">
                       <label className="form-label">
                         <i className="fas fa-stop me-2"></i>
                         End Date
@@ -272,13 +284,13 @@ function PostJobForm() {
                 </div>
               </div>
 
-              <div className="form-section">
-                <h3 className="section-title">
+              <div className="post-form-section">
+                {/* <h3 className="section-title">
                   <i className="fas fa-address-card me-2"></i>
                   Contact Information
-                </h3>
+                </h3> */}
                 
-                <div className="form-group">
+                <div className="post-form-group">
                   <label className="form-label">
                     <i className="fas fa-map-marker-alt me-2"></i>
                     Job Location
@@ -293,9 +305,9 @@ function PostJobForm() {
                   />
                 </div>
                 
-                <div className="row">
+                <div className="row mt-3">
                   <div className="col-md-6">
-                    <div className="form-group">
+                    <div className="post-form-group">
                       <label className="form-label">
                         <i className="fas fa-envelope me-2"></i>
                         Email Address
@@ -311,7 +323,7 @@ function PostJobForm() {
                     </div>
                   </div>
                   <div className="col-md-6">
-                    <div className="form-group">
+                    <div className="post-form-group">
                       <label className="form-label">
                         <i className="fas fa-phone me-2"></i>
                         Phone Number
@@ -331,7 +343,7 @@ function PostJobForm() {
                 </div>
               </div>
 
-              {/* <div className="form-group mb-3">
+              {/* <div className="post-form-group mb-3">
                 <label style={{ fontWeight: "bold" }}>Upload Image</label>
                 <input
                   type="file"
@@ -374,227 +386,7 @@ function PostJobForm() {
       pauseOnHover
       theme="colored"
     />
-    
-    <style jsx>{`
-      .post-job-wrapper {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        padding-top: 80px;
-      }
-      
-      .post-job-hero {
-        background: white;
-        padding: 6rem 0 3rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      }
-      
-      .hero-badge {
-        display: inline-block;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 25px;
-        font-size: 0.9rem;
-        font-weight: 500;
-      }
-      
-      .hero-title {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #2c3e50;
-        margin-bottom: 1rem;
-      }
-      
-      .hero-subtitle {
-        font-size: 1.1rem;
-        color: #6c757d;
-        max-width: 500px;
-        margin: 0 auto;
-      }
-      
-      .post-job-card {
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-      }
-      
-      .card-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 2rem;
-        text-align: center;
-      }
-      
-      .btn-back {
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 25px;
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
-      }
-      
-      .btn-back:hover {
-        background: rgba(255, 255, 255, 0.3);
-        color: white;
-        transform: translateY(-2px);
-      }
-      
-      .form-title {
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-      }
-      
-      .form-subtitle {
-        opacity: 0.9;
-        margin-bottom: 0;
-      }
-      
-      .job-form {
-        padding: 2rem;
-      }
-      
-      .form-section {
-        margin-bottom: 2.5rem;
-        padding-bottom: 2rem;
-        border-bottom: 1px solid #e9ecef;
-      }
-      
-      .form-section:last-of-type {
-        border-bottom: none;
-        margin-bottom: 0;
-      }
-      
-      .section-title {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: center;
-      }
-      
-      .section-title i {
-        color: #667eea;
-      }
-      
-      .form-group {
-        margin-bottom: 1.5rem;
-      }
-      
-      .form-label {
-        font-weight: 600;
-        color: #495057;
-        margin-bottom: 0.5rem;
-        display: flex;
-        align-items: center;
-      }
-      
-      .form-label i {
-        color: #667eea;
-        width: 16px;
-      }
-      
-      .modern-input,
-      .modern-select {
-        border: 2px solid #e9ecef;
-        border-radius: 10px;
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        background: #f8f9fa;
-      }
-      
-      .modern-input:focus,
-      .modern-select:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        background: white;
-        outline: none;
-      }
-      
-      .form-actions {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        padding-top: 2rem;
-        border-top: 1px solid #e9ecef;
-      }
-      
-      .btn-primary-action {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        border-radius: 25px;
-        padding: 0.75rem 2rem;
-        font-weight: 600;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-      }
-      
-      .btn-primary-action:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        color: white;
-      }
-      
-      .btn-secondary-action {
-        background: transparent;
-        color: #6c757d;
-        border: 2px solid #e9ecef;
-        border-radius: 25px;
-        padding: 0.75rem 2rem;
-        font-weight: 600;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-      }
-      
-      .btn-secondary-action:hover {
-        background: #f8f9fa;
-        border-color: #6c757d;
-        color: #495057;
-        transform: translateY(-2px);
-      }
-      
-      @media (max-width: 768px) {
-        .post-job-hero {
-          padding: 5rem 0 2rem;
-        }
-        
-        .hero-title {
-          font-size: 2rem;
-        }
-        
-        .job-form {
-          padding: 1.5rem;
-        }
-        
-        .card-header {
-          padding: 1.5rem;
-        }
-        
-        .form-actions {
-          flex-direction: column;
-          align-items: center;
-        }
-        
-        .btn-primary-action,
-        .btn-secondary-action {
-          width: 100%;
-          max-width: 250px;
-        }
-      }
-    `}</style>
     </div>
   );
 }
 export default PostJobForm;
-const buttonStyle = {
-  backgroundColor: "var(--primary-color)",
-  transition: "background-color 0.3s ease, color 0.3s ease",
-  color: "var(--text-color)",
-};

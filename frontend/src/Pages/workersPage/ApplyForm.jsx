@@ -317,7 +317,6 @@ function ApplyForm() {
           padding: 0.75rem 1.5rem;
           border-radius: 25px;
           font-weight: 600;
-          transition: all 0.3s ease;
           margin-bottom: 2rem;
         }
         
@@ -388,7 +387,6 @@ function ApplyForm() {
           border: 2px solid #e9ecef;
           border-radius: 12px;
           font-size: 1rem;
-          transition: all 0.3s ease;
           background: #f8f9fa;
         }
         
@@ -414,7 +412,6 @@ function ApplyForm() {
           border-radius: 12px;
           font-weight: 600;
           font-size: 1rem;
-          transition: all 0.3s ease;
           box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
         
@@ -431,7 +428,6 @@ function ApplyForm() {
           padding: 1rem;
           border-radius: 12px;
           font-weight: 600;
-          transition: all 0.3s ease;
         }
         
         .reset-btn:hover {

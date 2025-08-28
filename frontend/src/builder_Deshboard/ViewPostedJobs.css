@@ -1,7 +1,7 @@
 .jobs-page-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding-top: 6rem;
+  padding-top: 5rem;
 }
 
 .jobs-header-section {
@@ -24,19 +24,28 @@
 }
 
 .header-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #2c3e50;
+}
+
+.header-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+/* .header-title {
    align-items: center;
           justify-content: center;
   font-size: 2.5rem;
   font-weight: 800;
-  color: #fcfcfc;
   margin-bottom: 0.5rem;
 }
 
 .header-subtitle {
   font-size: 1.1rem;
-  color: #fdfdfd;
   margin: 0;
-}
+} */
 
 .stats-card {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -115,7 +124,7 @@
   font-weight: 600;
 }
 
-.empty-state {
+.empty-state-parent {
   text-align: center;
   padding: 4rem 2rem;
   background: white;
