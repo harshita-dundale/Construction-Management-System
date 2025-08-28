@@ -38,8 +38,19 @@ function Builder_dashboard() {
   // Enhanced payroll data state
   const [enhancedPayrollTotal, setEnhancedPayrollTotal] = useState(0);
   const [editingProject, setEditingProject] = useState(null);
-  const [editProjectData, setEditProjectData] = useState({ name: "", type: "", location: "", clientName: "" });
+  const [editProjectData, setEditProjectData] = useState({ 
+    name: "", 
+    type: "", 
+    location: "", 
+    clientName: "", 
+    phoneNumber: "", 
+    email: "", 
+    startDate: "", 
+    expectedEndDate: "", 
+    expectedCost: "" 
+  });
   const [dropdownOpen, setDropdownOpen] = useState(null);
+  const [flippedProject, setFlippedProject] = useState(null);
 
   // Edit project function
   const handleEditProject = (project, e) => {
@@ -49,7 +60,12 @@ function Builder_dashboard() {
       name: project.name || "",
       type: project.type || "",
       location: project.location || "",
-      clientName: project.clientName || ""
+      clientName: project.clientName || "",
+      phoneNumber: project.phoneNumber || "",
+      email: project.email || "",
+      startDate: project.startDate ? project.startDate.split('T')[0] : "",
+      expectedEndDate: project.expectedEndDate ? project.expectedEndDate.split('T')[0] : "",
+      expectedCost: project.expectedCost || ""
     });
   };
 
@@ -66,12 +82,27 @@ function Builder_dashboard() {
         name: editProjectData.name.trim(),
         type: editProjectData.type.trim(),
         location: editProjectData.location.trim(),
-        clientName: editProjectData.clientName.trim()
+        clientName: editProjectData.clientName.trim(),
+        phoneNumber: editProjectData.phoneNumber.trim(),
+        email: editProjectData.email.trim(),
+        startDate: editProjectData.startDate,
+        expectedEndDate: editProjectData.expectedEndDate,
+        expectedCost: editProjectData.expectedCost.trim()
       }));
       await dispatch(fetchProjects(user.sub));
       toast.success("Project updated successfully!");
       setEditingProject(null);
-      setEditProjectData({ name: "", type: "", location: "", clientName: "" });
+      setEditProjectData({ 
+        name: "", 
+        type: "", 
+        location: "", 
+        clientName: "", 
+        phoneNumber: "", 
+        email: "", 
+        startDate: "", 
+        expectedEndDate: "", 
+        expectedCost: "" 
+      });
     } catch (err) {
       console.error("Error updating project:", err);
       toast.error("Failed to update project.");
@@ -106,7 +137,17 @@ function Builder_dashboard() {
   // Cancel edit function
   const handleCancelEdit = () => {
     setEditingProject(null);
-    setEditProjectData({ name: "", type: "", location: "", clientName: "" });
+    setEditProjectData({ 
+      name: "", 
+      type: "", 
+      location: "", 
+      clientName: "", 
+      phoneNumber: "", 
+      email: "", 
+      startDate: "", 
+      expectedEndDate: "", 
+      expectedCost: "" 
+    });
   };
 
   // Toggle dropdown function
@@ -288,134 +329,246 @@ Organize workers and job roles without hassle.
             <div className={`row g-3 ${projects.length % 3 === 1 ? "justify-content-center" : ""}`}>
               {[...currentProjects] .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((project) => (
               <div key={project._id} className="col-12 col-sm-6 col-lg-4">
-                <div 
-                  className={`project-card ${selectedProject?._id === project._id ? 'active' : ''}`}
-                  onClick={() => {
-                    if (editingProject?._id !== project._id) {
-                      dispatch(selectProject(project));
-                      localStorage.setItem("selectedProject", JSON.stringify(project));
-                    }
-                  }}
-                >
-                  <div className="project-header">
-                    <div className="project-status-badge">
-                      <i className={`fas ${selectedProject?._id === project._id ? 'fa-check-circle' : 'fa-circle'} me-2`}></i>
-                      {selectedProject?._id === project._id ? 'Active' : 'Available'}
-                    </div>
-                    <div className="project-actions">
-                      <div className="dropdown">
-                        <button 
-                          className="dropdown-toggle-btn"
-                          onClick={(e) => toggleDropdown(project._id, e)}
-                          title="More Options"
+                <div className={`project-card ${selectedProject?._id === project._id ? 'active' : ''}`}>
+                  <div className={`card h-100 ${flippedProject === project._id ? 'flipped' : ''}`}>
+                    {flippedProject !== project._id ? (
+                      // Front Side
+                      <>
+                        <div className="project-header">
+                          <div className="project-status-badge">
+                            <i className={`fas ${selectedProject?._id === project._id ? 'fa-check-circle' : 'fa-circle'} me-2`}></i>
+                            {selectedProject?._id === project._id ? 'Active' : 'Available'}
+                          </div>
+                          <div className="project-actions">
+                            <div className="dropdown">
+                              <button 
+                                className="dropdown-toggle-btn"
+                                onClick={(e) => toggleDropdown(project._id, e)}
+                                title="More Options"
+                              >
+                                <i className="fas fa-ellipsis-v"></i>
+                              </button>
+                              {dropdownOpen === project._id && (
+                                <div className="dropdown-menu show">
+                                  <button 
+                                    className="dropdown-item"
+                                    onClick={(e) => {
+                                      handleEditProject(project, e);
+                                      setDropdownOpen(null);
+                                    }}
+                                  >
+                                    <i className="fas fa-edit me-2"></i>
+                                    Edit Project
+                                  </button>
+                                  <button 
+                                    className="dropdown-item delete-item"
+                                    onClick={(e) => {
+                                      handleDeleteProject(project._id, e);
+                                      setDropdownOpen(null);
+                                    }}
+                                  >
+                                    <i className="fas fa-trash me-2"></i>
+                                    Delete Project
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>                                      
+                        <div className="card-body d-flex flex-column">
+                          <h5 className="card-title mb-3">{project.name}</h5>
+                          <div className="project-details mb-3">
+                            <div className="detail-row">
+                              <i className="fas fa-calendar-alt text-primary"></i>
+                              <span>
+                                {project.startDate && project.expectedEndDate 
+                                  ? `${new Date(project.startDate).toLocaleDateString()} - ${new Date(project.expectedEndDate).toLocaleDateString()}`
+                                  : project.startDate 
+                                  ? `Start: ${new Date(project.startDate).toLocaleDateString()}`
+                                  : project.expectedEndDate
+                                  ? `End: ${new Date(project.expectedEndDate).toLocaleDateString()}`
+                                  : 'Duration: Not specified'
+                                }
+                              </span>
+                            </div>
+                            
+                            <div className="detail-row ">
+                              <i className="fas fa-rupee-sign text-success"></i>
+                              <span className="fw-bold text-success">
+                                {project.expectedCost ? `₹${parseInt(project.expectedCost).toLocaleString()}` : 'Budget: Not specified'}
+                              </span>
+                            </div>
+                            
+                            <div className="detail-row">
+                              <i className="fas fa-map-marker-alt text-primary"></i>
+                              <span>{project.location || 'Location: Not specified'}</span>
+                            </div>
+                          </div>
+                          
+                          <button
+                            className="btn btn-primary mt-auto"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setFlippedProject(project._id);
+                            }}
+                          >
+                            View Details
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      // Back Side
+                      <div className="card-body d-flex flex-column">
+                        <button
+                          className="btn btn-outline-secondary btn-sm align-self-start mt-3 mb-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFlippedProject(null);
+                          }}
                         >
-                          <i className="fas fa-ellipsis-v"></i>
+                          ← Back
                         </button>
-                        {dropdownOpen === project._id && (
-                          <div className="dropdown-menu show">
-                            <button 
-                              className="dropdown-item"
-                              onClick={(e) => {
-                                handleEditProject(project, e);
-                                setDropdownOpen(null);
-                              }}
-                            >
-                              <i className="fas fa-edit me-2"></i>
-                              Edit Project
-                            </button>
-                            <button 
-                              className="dropdown-item delete-item"
-                              onClick={(e) => {
-                                handleDeleteProject(project._id, e);
-                                setDropdownOpen(null);
-                              }}
-                            >
-                              <i className="fas fa-trash me-2"></i>
-                              Delete Project
-                            </button>
+                        
+                        {project.type && (
+                          <div className="contact-info mt-3">
+                            <div className="detail-row">
+                            {/* <h6 className="mb-2">Project Type - </h6> */}
+                              <i className="fas fa-tag text-info"></i>
+                              <span>{project.type}</span>
+                            </div>
                           </div>
                         )}
+                        
+                        {(project.clientName || project.phoneNumber || project.email) && (
+                          <div className="contact-info mb-3">
+                            {/* <h6 className="mb-2">Contact Details</h6> */}
+                            {project.clientName && (
+                              <div className="detail-row">
+                                <i className="fas fa-user-tie text-info"></i>
+                                <span>{project.clientName}</span>
+                              </div>
+                            )}
+                            {project.phoneNumber && (
+                              <div className="detail-row">
+                                <i className="fas fa-phone text-info"></i>
+                                <span>{project.phoneNumber}</span>
+                              </div>
+                            )}
+                            {project.email && (
+                              <div className="detail-row">
+                                <i className="fas fa-envelope text-info"></i>
+                                <span>{project.email}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                        <div className="duration-info mb-3">
+                          {/* <h6 className="mb-2">Project Info</h6> */}
+                          <div className="text-muted small">
+                            <div>Created: {new Date(project.createdAt).toLocaleDateString()}</div>
+                          </div>
+                        </div>
+                        
+                        <button
+                          className="btn btn-success mt-auto"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(selectProject(project));
+                            localStorage.setItem("selectedProject", JSON.stringify(project));
+                          }}
+                        >
+                          Select Project
+                        </button>
                       </div>
-                    </div>
+                    )}
                   </div>
                   
-                  {editingProject && editingProject._id === project._id ? (
-                    <div className="edit-form">
-                      <input
-                        type="text"
-                        value={editProjectData.name}
-                        onChange={(e) => setEditProjectData({...editProjectData, name: e.target.value})}
-                        placeholder="Project Name"
-                        className="form-control mb-2"
-                      />
-                      <select
-                        value={editProjectData.type}
-                        onChange={(e) => setEditProjectData({...editProjectData, type: e.target.value})}
-                        className="form-control mb-2"
-                      >
-                        <option value="">Select Project Type</option>
-                        <option value="Residential">Residential</option>
-                        <option value="Commercial">Commercial</option>
-                        <option value="Road">Road</option>
-                        <option value="Renovation">Renovation</option>
-                        <option value="Industrial">Industrial</option>
-                        <option value="Infrastructure">Infrastructure</option>
-                      </select>
-                      <input
-                        type="text"
-                        value={editProjectData.location}
-                        onChange={(e) => setEditProjectData({...editProjectData, location: e.target.value})}
-                        placeholder="Project Location"
-                        className="form-control mb-2"
-                      />
-                      <input
-                        type="text"
-                        value={editProjectData.clientName}
-                        onChange={(e) => setEditProjectData({...editProjectData, clientName: e.target.value})}
-                        placeholder="Client Name"
-                        className="form-control mb-3"
-                      />
-                      <div className="edit-actions">
-                        <button className="btn btn-success btn-sm me-2" onClick={handleUpdateProject}>
-                          <i className="fas fa-check me-1"></i>Save
-                        </button>
-                        <button className="btn btn-secondary btn-sm" onClick={handleCancelEdit}>
-                          <i className="fas fa-times me-1"></i>Cancel
-                        </button>
+                  {editingProject && editingProject._id === project._id && (
+                    <div className="edit-form-overlay">
+                      <div className="edit-form">
+                        <input
+                          type="text"
+                          value={editProjectData.name}
+                          onChange={(e) => setEditProjectData({...editProjectData, name: e.target.value})}
+                          placeholder="Project Name"
+                          className="form-control mb-2"
+                        />
+                        {/* <select
+                          value={editProjectData.type}
+                          onChange={(e) => setEditProjectData({...editProjectData, type: e.target.value})}
+                          className="form-control mb-2"
+                        >
+                          <option value="">Select Project Type</option>
+                          <option value="Residential">Residential</option>
+                          <option value="Commercial">Commercial</option>
+                          <option value="Road">Road</option>
+                          <option value="Renovation">Renovation</option>
+                          <option value="Industrial">Industrial</option>
+                          <option value="Infrastructure">Infrastructure</option>
+                        </select> */}
+                        {/* <input
+                          type="text"
+                          value={editProjectData.location}
+                          onChange={(e) => setEditProjectData({...editProjectData, location: e.target.value})}
+                          placeholder="Project Location"
+                          className="form-control mb-2"
+                        /> */}
+                        <input
+                          type="text"
+                          value={editProjectData.clientName}
+                          onChange={(e) => setEditProjectData({...editProjectData, clientName: e.target.value})}
+                          placeholder="Client Name"
+                          className="form-control mb-2"
+                        />
+                        <input
+                          type="tel"
+                          value={editProjectData.phoneNumber}
+                          onChange={(e) => setEditProjectData({...editProjectData, phoneNumber: e.target.value})}
+                          placeholder="Phone Number"
+                          className="form-control mb-2"
+                        />
+                        {/* <input
+                          type="email"
+                          value={editProjectData.email}
+                          onChange={(e) => setEditProjectData({...editProjectData, email: e.target.value})}
+                          placeholder="Email Address"
+                          className="form-control mb-2"
+                        /> */}
+                        {/* <input
+                          type="date"
+                          value={editProjectData.startDate}
+                          onChange={(e) => setEditProjectData({...editProjectData, startDate: e.target.value})}
+                          placeholder="Start Date"
+                          className="form-control mb-2"
+                        /> */}
+                        <input
+                          type="date"
+                          value={editProjectData.expectedEndDate}
+                          onChange={(e) => setEditProjectData({...editProjectData, expectedEndDate: e.target.value})}
+                          placeholder="Expected End Date"
+                          className="form-control mb-2"
+                          min={editProjectData.startDate}
+                        />
+                        <input
+                          type="number"
+                          value={editProjectData.expectedCost}
+                          onChange={(e) => setEditProjectData({...editProjectData, expectedCost: e.target.value})}
+                          placeholder="Expected Budget (₹)"
+                          className="form-control mb-3"
+                          min="0"
+                          step="1000"
+                        />
+                        <div className="edit-actions">
+                          <button className="btn btn-success btn-sm me-2" onClick={handleUpdateProject}>
+                            <i className="fas fa-check me-1"></i>Save
+                          </button>
+                          <button className="btn btn-secondary btn-sm" onClick={handleCancelEdit}>
+                            <i className="fas fa-times me-1"></i>Cancel
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  ) : (
-                    <>
-                      <h4 className="project-card-name">{project.name}</h4>
-                      
-                      <div className="project-card-details">
-                        {project.type && (
-                          <div className="detail-row">
-                            <i className="fas fa-tag"></i>
-                            <span>{project.type}</span>
-                          </div>
-                        )}
-                        {project.location && (
-                          <div className="detail-row">
-                            <i className="fas fa-map-marker-alt"></i>
-                            <span>{project.location}</span>
-                          </div>
-                        )}
-                        {project.clientName && (
-                          <div className="detail-row">
-                            <i className="fas fa-user-tie"></i>
-                            <span>{project.clientName}</span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="project-card-footer">
-                        <small className="text-muted">
-                          <i className="fas fa-calendar me-1"></i>
-                          Created: {new Date(project.createdAt).toLocaleDateString()}
-                        </small>
-                      </div>
-                    </>
                   )}
                 </div>
               </div>

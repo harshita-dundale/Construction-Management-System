@@ -177,6 +177,18 @@ function PostJobForm() {
                         (p) => p._id === e.target.value
                       );
                       dispatch(selectProject(selected));
+                      // Auto-fill fields from selected project
+                      if (selected) {
+                        if (selected.location) {
+                          dispatch(setLocation(selected.location));
+                        }
+                        if (selected.email) {
+                          dispatch(setEmail(selected.email));
+                        }
+                        if (selected.phoneNumber) {
+                          dispatch(setPhoneNo(selected.phoneNumber));
+                        }
+                      }
                     }}
                     required
                   >

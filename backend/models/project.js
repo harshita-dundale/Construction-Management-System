@@ -26,6 +26,11 @@ const projectSchema = new mongoose.Schema({
   type: { type: String, default: "" },
   location: { type: String, default: "" },
   clientName: { type: String, default: "" },
+  phoneNumber: { type: String, default: "" },
+  email: { type: String, default: "" },
+  startDate: { type: Date },
+  expectedEndDate: { type: Date },
+  expectedCost: { type: String, default: "" },
   createdAt: { type: Date, default: Date.now },
 });
 projectSchema.index({ userId: 1, name: 1 }, { unique: true });

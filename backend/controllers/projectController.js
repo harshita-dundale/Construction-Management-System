@@ -19,7 +19,7 @@ export const getProjectsByUserId = async (req, res) => {
 // 🔹 Add New Project
 export const addProject = async (req, res) => {
   try {
-    const { userId, name, type, location, clientName } = req.body;
+    const { userId, name, type, location, clientName, phoneNumber, email, startDate, expectedEndDate, expectedCost } = req.body;
 
     if (!userId || !name) {
       return res.status(400).json({ error: "User ID and Project name required" });
@@ -36,6 +36,11 @@ export const addProject = async (req, res) => {
       type: type || "",
       location: location || "",
       clientName: clientName || "",
+      phoneNumber: phoneNumber || "",
+      email: email || "",
+      startDate: startDate || null,
+      expectedEndDate: expectedEndDate || null,
+      expectedCost: expectedCost || "",
       createdAt: new Date(),
     });
 
@@ -54,7 +59,7 @@ export const addProject = async (req, res) => {
 export const updateProject = async (req, res) => {
   try {
     const projectId = req.params.id;
-    const { name, type, location, clientName } = req.body;
+    const { name, type, location, clientName, phoneNumber, email, startDate, expectedEndDate, expectedCost } = req.body;
 
     if (!name) {
       return res.status(400).json({ error: "Project name is required" });
@@ -66,7 +71,12 @@ export const updateProject = async (req, res) => {
         name,
         type: type || "",
         location: location || "",
-        clientName: clientName || ""
+        clientName: clientName || "",
+        phoneNumber: phoneNumber || "",
+        email: email || "",
+        startDate: startDate || null,
+        expectedEndDate: expectedEndDate || null,
+        expectedCost: expectedCost || ""
       },
       { new: true }
     );
