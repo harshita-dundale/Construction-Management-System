@@ -5,6 +5,7 @@ import { GrFormView } from "react-icons/gr";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Header from "../Components/Header";
+import "./PayrollPageEnhanced.css"; // 👈 added
 
 function PayrollPageEnhanced() {
   const selectedProject = useSelector((state) => state.project.selectedProject);
@@ -22,7 +23,6 @@ function PayrollPageEnhanced() {
   const [selectedName, setSelectedName] = useState("");
   const [selectedWorkerId, setSelectedWorkerId] = useState(null);
   const [paymentLoading, setPaymentLoading] = useState(null);
-
   useEffect(() => {
     const fetchHiredWorkers = async () => {
       if (!projectId) {
@@ -122,7 +122,7 @@ function PayrollPageEnhanced() {
       );
       return;
     }
-    
+
     const paid = parseInt(value, 10) || 0;
     if (paid < 0) {
       toast.error("Amount could not be negative");
@@ -147,7 +147,7 @@ function PayrollPageEnhanced() {
       );
       return;
     }
-    
+
     setPaymentLoading(worker._id);
 
     const payload = {
@@ -272,7 +272,7 @@ function PayrollPageEnhanced() {
       </>
     );
   }
-  
+
   if (error) return <div className="alert alert-danger">{error}</div>;
 
   return (
@@ -284,7 +284,7 @@ function PayrollPageEnhanced() {
           <div className="col-12">
             <div className="mt-4  justify-content-between align-items-center">
               <div>
-                <h1 className="h3 mb-0 text-gray-800 fw-bold">
+                <h1 className="h3 mb-0 text-gray-800 fw-bold mt-5">
                   <RiSecurePaymentFill className="me-2 text-primary" />
                   Payroll Dashboard
                 </h1>
@@ -297,9 +297,17 @@ function PayrollPageEnhanced() {
                 </div> */}
               </div>
               <div className="text-end">
-                <span className="badge bg-primary fs-6 px-3 py-2">
+                <button className="btn btn-outline-primary px-4 py-2 fw-semibold"
+                  style={{
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    border: 'none',
+                    color: 'white',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                  }}>
+                  <i className="fas fa-project-diagram me-2"></i>
                   {selectedProject?.name || "No Project Selected"}
-                </span>
+                </button>
               </div>
             </div>
           </div>
@@ -352,8 +360,13 @@ function PayrollPageEnhanced() {
                       Total Paid
                     </div>
                     <div className="h5 mb-0 font-weight-bold text-gray-800">₹{totalPaid.toLocaleString()}</div>
-                    <div className="progress progress-sm mt-2">
-                      <div className="progress-bar bg-info" style={{width: `${totalPayable > 0 ? (totalPaid/totalPayable)*100 : 0}%`}}></div>
+                    <div className="progress progress-sm mt-2" style={{ backgroundColor: '#e9ecef', height: '8px', borderRadius: '4px' }}>
+                      <div className="progress-bar" style={{ 
+                        width: `${totalPayable > 0 ? (totalPaid / totalPayable) * 100 : 0}%`,
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        borderRadius: '4px',
+                        transition: 'width 0.6s ease'
+                      }}></div>
                     </div>
                   </div>
                   <div className="col-auto">
@@ -387,7 +400,7 @@ function PayrollPageEnhanced() {
         <div className="row mb-4">
           <div className="col-12">
             <div className="card shadow">
-              <div className="card-header py-3" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white'}}>
+              <div className="card-header py-3" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
                 <h6 className="m-0 font-weight-bold">Payment Status Overview</h6>
               </div>
               <div className="card-body">
@@ -395,6 +408,7 @@ function PayrollPageEnhanced() {
                   <div className="col-md-4">
                     <div className="status-item">
                       <div className="status-circle bg-success">{paidWorkers}</div>
+                      
                       <h6 className="mt-2 text-success">Fully Paid</h6>
                     </div>
                   </div>
@@ -454,143 +468,144 @@ function PayrollPageEnhanced() {
                     <th className="px-3 py-3"><i className="fas fa-cogs me-2"></i>Actions</th>
                   </tr>
                 </thead>
-                  <tbody>
-                    {hiredWorkers.map((worker, index) => {
-                      const remainingPayable = Math.max(0, worker.payable - (worker.actualPaid || 0));
-                      const paymentProgress = worker.payable > 0 ? ((worker.actualPaid || 0) / worker.payable) * 100 : 0;
-                      
-                      return (
-                        <tr key={worker._id} className="payroll-row align-middle">
-                          <td className="px-3 py-3">
-                            <div className="worker-number">
-                              {index + 1}
-                            </div>
-                          </td>
-                          
-                          <td className="px-3 py-3">
-                            <div className="worker-info">
-                              <div className="d-flex align-items-center">
-                                {/* <div className="worker-avatar me-3">
-                                  <div className="worker-icon">
-                                    <i className="fas fa-hard-hat"></i>
-                                  </div>
-                                </div> */}
-                                <div>
-                                  <h6 className="mb-0 fw-bold worker-name">{worker.name}</h6>
-                                  <small className="job-title">{worker.jobTitle}</small>
-                                  <div className="mt-1">
-                                    <span className="salary-badge">₹{worker.salary}/day</span>
-                                  </div>
+                <tbody>
+                  {hiredWorkers.map((worker, index) => {
+                    const remainingPayable = Math.max(0, worker.payable - (worker.actualPaid || 0));
+                    const paymentProgress = worker.payable > 0 ? ((worker.actualPaid || 0) / worker.payable) * 100 : 0;
+
+                    return (
+                      <tr key={worker._id} className="payroll-row align-middle">
+                        <td className="px-3 py-3" >
+                          <div className="worker-number">
+                            {index + 1}
+                          </div>
+                        </td>
+
+                        <td className="px-3 py-3">
+                          <div className="worker-info">
+                            <div className="d-flex align-items-center">
+                              <div>
+                                <h6 className="mb-0 fw-bold worker-name">{worker.name}</h6>
+                                <small className="job-title">{worker.jobTitle}</small>
+                                <div className="mt-1">
+                                  <span className="salary-badge">₹{worker.salary}/day</span>
                                 </div>
                               </div>
                             </div>
-                          </td>
-                          
-                          <td className="px-3 py-3">
-                            <div className="attendance-info">
-                              <div className="d-flex justify-content-between mb-1">
-                                <span className="badge bg-success">{worker.present} Present</span>
-                                <span className="badge bg-danger">{worker.absent} Absent</span>
-                              </div>
-                              <small className="text-muted">Total: {worker.present + worker.absent} days</small>
+                          </div>
+                        </td>
+
+                        <td className="px-3 py-3">
+                          <div className="attendance-info">
+                            <div className="d-flex justify-content-between mb-1">
+                              <span className="badge bg-success">{worker.present} Present</span>
+                              <span className="badge bg-danger">{worker.absent} Absent</span>
                             </div>
-                          </td>
-                          
-                          <td className="px-3 py-3">
-                            <div className="payment-info">
-                              <div className="mb-2">
-                                <div className="d-flex justify-content-between align-items-center mb-1">
-                                  <span className="fw-bold text-success">₹{worker.payable}</span>
-                                  <span className="text-muted small">Total Earned</span>
-                                </div>
-                                <div className="progress mb-1" style={{height: '6px'}}>
-                                  <div 
-                                    className="progress-bar bg-info" 
-                                    style={{width: `${paymentProgress}%`}}
-                                  ></div>
-                                </div>
-                                <div className="d-flex justify-content-between">
-                                  <span className="text-info small">₹{worker.actualPaid || 0} Paid</span>
-                                  <span className="text-warning small">₹{remainingPayable} Remaining</span>
-                                </div>
+                            <small className="text-muted">Total: {worker.present + worker.absent} days</small>
+                          </div>
+                        </td>
+
+                        <td className="px-3 py-3">
+                          <div className="payment-info">
+                            <div className="mb-2">
+                              <div className="d-flex justify-content-between align-items-center mb-1">
+                                <span className="fw-bold text-success">₹{worker.payable}</span>
+                                <span className="text-muted    fw-bold">Total Earned</span>
                               </div>
-                              
-                              <div className="payment-input">
-                                <div className="input-group input-group-sm">
-                                  <span className="input-group-text">₹</span>
-                                  <input
-                                    type="number"
-                                    className="form-control"
-                                    value={worker.amountPaid || ''}
-                                    min="0"
-                                    max={remainingPayable}
-                                    placeholder={remainingPayable.toString()}
-                                    onChange={(e) => handleAmountChange(worker._id, e.target.value)}
-                                  />
-                                </div>
+                              <div className="progress mb-1" style={{ height: '8px', backgroundColor: '#e9ecef', borderRadius: '4px' }}>
+                                <div
+                                   className="progress-bar"
+
+                                  style={{ 
+                                    width: `${paymentProgress}%`,
+                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                    borderRadius: '4px',
+                                    transition: 'width 0.6s ease'
+                                  }}
+                                ></div>
+                              </div>
+                              <div className="d-flex justify-content-between">
+                                <span className=" small">₹{worker.actualPaid || 0} Paid</span>
+                                <span className=" small">₹{remainingPayable} Remaining</span>
                               </div>
                             </div>
-                          </td>
-                          
-                          <td className="px-2 py-3">
-                            <div className="action-buttons">
-                              {/* <div className="mb-2">
+
+                            <div className="payment-input">
+                              <div className="input-group input-group-sm">
+                                <span className="input-group-text">₹</span>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  value={worker.amountPaid || ''}
+                                  min="0"
+                                  max={remainingPayable}
+                                  placeholder={remainingPayable.toString()}
+                                  onChange={(e) => handleAmountChange(worker._id, e.target.value)}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className="px-2 py-3">
+                          <div className="action-buttons">
+                            {/* <div className="mb-2">
                                 {getEnhancedStatusBadge(worker)}
                               </div> */}
-                              
-                              <div className="btn-group-vertical d-grid gap-1">
-                                <button
-                                  className="btn btn-warning btn-sm text-white"
-                                  onClick={() => openHistoryModal(worker._id, worker.name)}
-                                  style={{
-                                    background: 'linear-gradient(135deg, #ff9500 0%, #ff6b35 100%)',
-                                    border: 'none',
-                                    fontWeight: '600'
-                                  }}
-                                >
-                                  <i className="fas fa-history me-1"></i>History
-                                </button>
-                                
-                                <button
-                                  className="btn btn-success btn-sm"
-                                  onClick={() => handleConfirmPayment(worker)}
-                                  disabled={worker.amountPaid <= 0 || remainingPayable <= 0 || paymentLoading === worker._id}
-                                  style={{
-                                    background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
-                                    border: 'none',
-                                    fontWeight: '600'
-                                  }}
-                                >
-                                  {paymentLoading === worker._id ? (
-                                    <>
-                                      <span className="spinner-border spinner-border-sm me-1" role="status"></span>
-                                      Processing...
-                                    </>
-                                  ) : (
-                                    <>
-                                      <i className="fas fa-check me-1"></i>Pay Now
-                                    </>
-                                  )}
-                                </button>
-                              </div>
+
+                            <div className="btn-group-vertical d-grid gap-1">
+                              <button
+                                className="btn btn-warning btn-sm text-white"
+                                onClick={() => openHistoryModal(worker._id, worker.name)}
+                                style={{
+                                  // background: 'linear-gradient(135deg, #ff9500 0%, #ff6b35 100%)',
+                                  border: 'none',
+                                  fontWeight: '600'
+                                }}
+                              >
+                                <i className="fas fa-history me-1"></i>History
+                              </button>
+
+                              <button
+                                className="btn btn-success btn-sm"
+                                onClick={() => handleConfirmPayment(worker)}
+                                disabled={worker.amountPaid <= 0 || remainingPayable <= 0 || paymentLoading === worker._id}
+                                style={{
+                                  background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                  border: 'none',
+                                  fontWeight: '600'
+                                }}
+                              >
+                                {paymentLoading === worker._id ? (
+                                  <>
+                                    <span className="spinner-border spinner-border-sm me-1" role="status"></span>
+                                    Processing...
+                                  </>
+                                ) : (
+                                  <>
+                                    <i className="fas fa-check me-1"></i>Pay Now
+                                  </>
+                                )}
+                              </button>
                             </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
-          // </div>
+          </div>
+          /* </div> */
         )}
 
         {/* Enhanced History Modal */}
         {showModal && (
-          <div className="modal show d-block" style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
+          <div className="modal show d-block" style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}>
             <div className="modal-dialog modal-xl">
               <div className="modal-content shadow-lg border-0">
-                <div className="modal-header text-white" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+                <div className="modal-header text-white" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
                   <div className="d-flex align-items-center">
                     <div className="avatar-circle me-3">
                       {selectedName.charAt(0).toUpperCase()}
@@ -608,7 +623,7 @@ function PayrollPageEnhanced() {
                     <button className="btn-close btn-close-white" onClick={() => setShowModal(false)} />
                   </div>
                 </div>
-                
+
                 <div className="modal-body p-4">
                   {selectedHistory.length === 0 ? (
                     <div className="text-center py-5">
@@ -647,10 +662,10 @@ function PayrollPageEnhanced() {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="table-responsive">
                         <table className="table table-hover">
-                          <thead className="custom-table-header" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important', color: 'white !important'}}>
+                          <thead className="custom-table-header" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important', color: 'white !important' }}>
                             <tr>
                               <th className="px-3 py-3"><i className="fas fa-calendar me-2"></i>Date</th>
                               <th className="px-3 py-3"><i className="fas fa-rupee-sign me-2"></i>Amount Paid</th>
@@ -699,22 +714,25 @@ function PayrollPageEnhanced() {
                                           </span>
                                         </td>
                                         <td className="px-3 py-3">
-                                          <span className={`badge fs-6 px-3 py-2 ${
-                                            status === "Paid" ? "bg-success" : 
-                                            status === "Partial" ? "bg-warning text-dark" : "bg-danger"
-                                          }`}>
-                                            <i className={`fas ${
-                                              status === "Paid" ? "fa-check-circle" : 
-                                              status === "Partial" ? "fa-clock" : "fa-times-circle"
-                                            } me-1`}></i>
+                                          <span className={`badge fs-6 px-3 py-2 ${status === "Paid" ? "bg-success" :
+                                              status === "Partial" ? "bg-warning text-dark" : "bg-danger"
+                                            }`}>
+                                            <i className={`fas ${status === "Paid" ? "fa-check-circle" :
+                                                status === "Partial" ? "fa-clock" : "fa-times-circle"
+                                              } me-1`}></i>
                                             {status}
                                           </span>
                                         </td>
                                         <td className="px-3 py-3">
-                                          <div className="progress" style={{height: '8px', width: '100px'}}>
-                                            <div 
-                                              className="progress-bar bg-info" 
-                                              style={{width: `${progress}%`}}
+                                          <div className="progress" style={{ height: '10px', width: '120px', backgroundColor: '#e9ecef', borderRadius: '5px' }}>
+                                            <div
+                                              className="progress-bar"
+                                              style={{ 
+                                                width: `${progress}%`,
+                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                borderRadius: '5px',
+                                                transition: 'width 0.6s ease'
+                                              }}
                                             ></div>
                                           </div>
                                           <small className="text-muted">{progress.toFixed(1)}%</small>
@@ -754,22 +772,25 @@ function PayrollPageEnhanced() {
                                         </span>
                                       </td>
                                       <td className="px-3 py-3">
-                                        <span className={`badge fs-6 px-3 py-2 ${
-                                          status === "Paid" ? "bg-success" : 
-                                          status === "Partial" ? "bg-warning text-dark" : "bg-danger"
-                                        }`}>
-                                          <i className={`fas ${
-                                            status === "Paid" ? "fa-check-circle" : 
-                                            status === "Partial" ? "fa-clock" : "fa-times-circle"
-                                          } me-1`}></i>
+                                        <span className={`badge fs-6 px-3 py-2 ${status === "Paid" ? "bg-success" :
+                                            status === "Partial" ? "bg-warning text-dark" : "bg-danger"
+                                          }`}>
+                                          <i className={`fas ${status === "Paid" ? "fa-check-circle" :
+                                              status === "Partial" ? "fa-clock" : "fa-times-circle"
+                                            } me-1`}></i>
                                           {status}
                                         </span>
                                       </td>
                                       <td className="px-3 py-3">
-                                        <div className="progress" style={{height: '8px', width: '100px'}}>
-                                          <div 
-                                            className="progress-bar bg-info" 
-                                            style={{width: `${progress}%`}}
+                                        <div className="progress" style={{ height: '10px', width: '120px', backgroundColor: '#e9ecef', borderRadius: '5px' }}>
+                                          <div
+                                            className="progress-bar"
+                                            style={{ 
+                                              width: `${progress}%`,
+                                              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                              borderRadius: '5px',
+                                              transition: 'width 0.6s ease'
+                                            }}
                                           ></div>
                                         </div>
                                         <small className="text-muted">{progress.toFixed(1)}%</small>
@@ -787,7 +808,7 @@ function PayrollPageEnhanced() {
                     </>
                   )}
                 </div>
-                
+
                 <div className="modal-footer bg-light">
                   <div className="d-flex justify-content-between w-100">
                     <div className="text-muted">
@@ -816,191 +837,7 @@ function PayrollPageEnhanced() {
         pauseOnHover
         theme="colored"
       />
-
-      {/* Modern Custom Styles */}
-      <style jsx>{`
-        .border-left-primary {
-          border-left: 0.25rem solid #4e73df !important;
-        }
-        .border-left-success {
-          border-left: 0.25rem solid #1cc88a !important;
-        }
-        .border-left-info {
-          border-left: 0.25rem solid #36b9cc !important;
-        }
-        .border-left-warning {
-          border-left: 0.25rem solid #f6c23e !important;
-        }
-        .status-circle {
-          width: 60px;
-          height: 60px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.5rem;
-          font-weight: bold;
-          color: white;
-          margin: 0 auto;
-        }
-        
-        /* Modern Payroll Table Styles */
-        .payroll-table-card {
-          background: white;
-          border-radius: 20px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-          border: 1px solid rgba(102, 126, 234, 0.1);
-          overflow: hidden;
-          margin-bottom: 2rem;
-        }
-        
-        .table-header {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          padding: 1.5rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        
-        .table-title {
-          margin: 0;
-          font-size: 1.25rem;
-          font-weight: 600;
-        }
-        
-        .table-summary {
-          display: flex;
-          gap: 1rem;
-        }
-        
-        .summary-item {
-          font-size: 0.9rem;
-          opacity: 0.9;
-        }
-        
-        .modern-table {
-          margin: 0;
-        }
-        
-        .modern-table thead th {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border: none;
-          padding: 1rem;
-          font-weight: 600;
-          color: white;
-          border-bottom: 2px solid #667eea;
-        }
-        
-        .payroll-row {
-          transition: all 0.3s ease;
-        }
-        
-        .payroll-row:hover {
-          background: rgba(102, 126, 234, 0.05);
-          transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .payroll-row td {
-          padding: 1rem;
-          vertical-align: middle;
-        }
-        
-        .worker-icon {
-          width: 40px;
-          height: 40px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-size: 1rem;
-        }
-        
-        .worker-name {
-          color: #2c3e50;
-          font-size: 1rem;
-        }
-        
-        .job-title {
-          color: #6c757d;
-          font-size: 0.85rem;
-        }
-        
-        .salary-badge {
-          background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-          color: white;
-          padding: 0.25rem 0.5rem;
-          border-radius: 12px;
-          font-size: 0.75rem;
-          font-weight: 600;
-        }
-        
-        .avatar-circle {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-weight: bold;
-        }
-        
-        .worker-number {
-          width: 35px;
-          height: 35px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: bold;
-          color: white;
-          font-size: 0.9rem;
-        }
-        
-        .progress-sm {
-          height: 0.5rem;
-        }
-        
-        .card {
-          border-radius: 0.35rem;
-        }
-        
-        .custom-table-header {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-        }
-        
-        .custom-table-header th {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-          color: white !important;
-          border: none !important;
-        }
-        
-        @media (max-width: 768px) {
-          .table-header {
-            flex-direction: column;
-            gap: 1rem;
-            text-align: center;
-          }
-          
-          .table-summary {
-            justify-content: center;
-          }
-          
-          .worker-info .d-flex {
-            flex-direction: column;
-            text-align: center;
-            gap: 0.5rem;
-          }
-        }
-      `}</style>
     </>
   );
 }
-
 export default PayrollPageEnhanced;

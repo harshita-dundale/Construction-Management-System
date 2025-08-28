@@ -5,14 +5,14 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #d6e6e9;
-}
+} */
 
-h1 {
+/* h1 {
   margin-top: 0%;
   text-align: center;
   color: #000000;
-}
-button {
+} */
+/* button {
   cursor: pointer;
   background-color: #1a73e8;
   color: white;
@@ -20,9 +20,9 @@ button {
   padding-top: 50px ;
   border-radius: 5px;
   margin-right: 10px;
-}
+} */
 
-button[type="reset"] {
+/* button[type="reset"] {
   background-color: #f44336;
 }
 

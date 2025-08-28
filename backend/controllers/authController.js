@@ -141,15 +141,15 @@ export const getUserByEmail = async (req, res) => {
 export const uploadProfileImage = async (req, res) => {
   const { auth0Id, imageUrl } = req.body;
 
-  if (!auth0Id || !imageUrl) {
-    return res.status(400).json({ error: 'auth0Id and imageUrl are required' });
+  if (!auth0Id) {
+    return res.status(400).json({ error: 'auth0Id is required' });
   }
 
   try {
     const user = await User.findOneAndUpdate(
       { auth0Id },
       { 
-        profileImage: imageUrl,
+        profileImage: imageUrl, // Can be null for delete
         updatedAt: new Date()
       },
       { new: true, upsert: true } // Create if doesn't exist
@@ -161,11 +161,43 @@ export const uploadProfileImage = async (req, res) => {
 
     res.json({ 
       success: true, 
-      message: 'Profile image updated successfully',
+      message: imageUrl ? 'Profile image updated successfully' : 'Profile image deleted successfully',
       profileImage: user.profileImage 
     });
   } catch (error) {
     console.error("Error updating profile image:", error);
+    res.status(500).json({ error: 'Server error', details: error.message });
+  }
+};
+
+// 🔹 Delete Profile Image
+export const deleteProfileImage = async (req, res) => {
+  const { auth0Id } = req.body;
+
+  if (!auth0Id) {
+    return res.status(400).json({ error: 'auth0Id is required' });
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { auth0Id },
+      { 
+        profileImage: null,
+        updatedAt: new Date()
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ 
+      success: true, 
+      message: 'Profile image deleted successfully'
+    });
+  } catch (error) {
+    console.error("Error deleting profile image:", error);
     res.status(500).json({ error: 'Server error', details: error.message });
   }
 };

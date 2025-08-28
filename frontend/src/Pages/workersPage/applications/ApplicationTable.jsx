@@ -1,10 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { joinAndRejectAppli } from "../../Redux/applicationsSlice";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const ApplicationTable = ({ onViewDetails, activeTab }) => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { applications, loading } = useSelector((state) => state.applications);
 
   const handleJoin = (id) => {
@@ -58,7 +60,8 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
         <table className="modern-applications-table">
           <thead>
             <tr>
-              <th><i className="fas fa-briefcase me-2"></i>Job Title</th>
+              <th><i className="fas fa-briefcase me-2"></i>Job Title </th>
+             
               <th><i className="fas fa-calendar-alt me-2"></i>Start Date</th>
               <th><i className="fas fa-calendar-check me-2"></i>End Date</th>
               <th><i className="fas fa-clock me-2"></i>Applied Date</th>
@@ -76,9 +79,22 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
               return (
                 <tr key={index} className="table-row">
                   <td className="job-title-cell">
+                   
                     <div className="job-info">
                       <h6 className="job-name">{app.jobId?.title || "N/A"}</h6>
                     </div>
+                      <button 
+                        className="view-btn"
+                        onClick={() => navigate('/attendances', { 
+                          state: { 
+                            selectedJobId: app.jobId?._id,
+                            selectedJobTitle: app.jobId?.title 
+                          } 
+                        })}
+                      >
+                        <i className="fas fa-eye me-1"></i>
+                        View
+                      </button>
                   </td>
                   <td className="date-cell">
                     {app.jobId?.startDate ? new Date(app.jobId.startDate).toLocaleDateString() : "N/A"}
@@ -256,6 +272,26 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
           cursor: not-allowed;
           transform: none !important;
           box-shadow: none !important;
+        }
+        
+        .view-btn {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border: none;
+          padding: 0.4rem 0.8rem;
+          border-radius: 6px;
+          font-size: 0.8rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          margin-top: 0.5rem;
+        }
+        
+        .view-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 3px 8px rgba(102, 126, 234, 0.3);
         }
         
         @media (max-width: 768px) {

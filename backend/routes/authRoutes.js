@@ -3,7 +3,8 @@ import {
   setUserRole,
   getUserRole,
   getUserByEmail,
-  uploadProfileImage
+  uploadProfileImage,
+  deleteProfileImage
 } from "../controllers/authController.js";
 
 const router = express.Router();
@@ -14,6 +15,7 @@ router.get("/get-role", getUserRole);
 
 // 🔹 User profile routes
 router.get("/get-user/:email", getUserByEmail); 
-router.put("/profile-image", uploadProfileImage); 
+router.put("/profile-image", uploadProfileImage);
+router.delete("/profile-image", deleteProfileImage); 
 
 export default router;
