@@ -295,7 +295,7 @@ function Dashboard() {
             title="No Workers Available"
             message="Please hire workers first to manage attendance."
             actionButton={
-              <button className="btn btn-primary" onClick={() => window.location.href = '/builder-dashboard'}>
+              <button className="btn btn-primary" onClick={() => window.location.href = '/Project_pannel '}>
                 <i className="fas fa-plus me-2"></i>Hire Workers
               </button>
             }

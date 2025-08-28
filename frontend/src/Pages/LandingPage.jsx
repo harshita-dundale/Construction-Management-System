@@ -33,7 +33,7 @@ function LandingPage() {
   const getRouteFromTitle = (title) => {
     switch (title) {
       case "Job Management":
-        return "/builder-dashboard";
+        return "/Project_pannel ";
       case "Worker Management":
         return "/hiredworkers";
       case "Material Management":

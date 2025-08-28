@@ -59,7 +59,7 @@ function Header() {
   const currentPath = location.pathname.toLowerCase();
 
   const builderPaths = [
-    "/builder-dashboard",
+    "/project_pannel",
     "/viewpostedjobs",
     "/materialmanagement",
     "/dashboard",
@@ -161,9 +161,9 @@ function Header() {
                   <li className="nav-item me-3">
                     <a
                       className={`nav-link modern-nav-link ${
-                        currentPath === "/builder-dashboard" ? "active" : ""
+                        currentPath === "/project_pannel" ? "active" : ""
                       }`}
-                      onClick={() => navigate("/builder-dashboard")}
+                      onClick={() => navigate("/project_pannel")}
                     >
                       <i className="fas fa-tachometer-alt me-2"></i>Dashboard
                     </a>

@@ -47,7 +47,7 @@ function RoleSelectionPage() {
   
         dispatch(selectProject(selected));
         localStorage.setItem(`selectedProject_${user.sub}`, JSON.stringify(selected));
-        navigate("/Builder-Dashboard");
+        navigate("/Project_pannel");
       });
     }
   }, [role, user?.sub, dispatch]);
@@ -122,7 +122,7 @@ function RoleSelectionPage() {
         show={showProjectModal}
         handleClose={() => {
           setShowProjectModal(false);
-          navigate("/Builder-Dashboard");
+          navigate("/Project_pannel");
         }}
       />
     </>

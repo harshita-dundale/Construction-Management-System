@@ -5,7 +5,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import LandingPage from './Pages/LandingPage';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RoleSelectionPage from './Pages/RoleSelectionPage';
-import Builder_dashboard from './builder_Deshboard/Builder_dashboard';
+import Project_pannel from './builder_Deshboard/Project_pannel';
 import BrowseJob from './Pages/workersPage/BrowseJob';
 import PostJobForm from './builder_Deshboard/PostJobForm';
 import ViewApplications from './builder_Deshboard/ViewApplications';
@@ -39,7 +39,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/role-selection" element={<RoleSelectionPage />} />
-          <Route path="/Builder-Dashboard" element={<Builder_dashboard />} />
+          <Route path="/Project_pannel" element={<Project_pannel />} />
           <Route path="/post-job" element={<PostJobForm />} />
           <Route path="/ViewApplications" element={<ViewApplications />} />
           <Route path="/browse-Job" element={<BrowseJob />} />

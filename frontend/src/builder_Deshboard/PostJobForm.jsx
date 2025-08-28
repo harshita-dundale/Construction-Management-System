@@ -147,7 +147,7 @@ function PostJobForm() {
             <div className="card-header">
               <button
                 className="btn-back mb-3"
-                onClick={() => navigate("/Builder-Dashboard")}
+                onClick={() => navigate("/Project_pannel ")}
               >
                 <i className="fas fa-arrow-left me-2"></i>
                 Back to Dashboard

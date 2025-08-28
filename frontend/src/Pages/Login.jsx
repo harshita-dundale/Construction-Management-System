@@ -71,7 +71,7 @@ const Login = () => {
                     if (targetRoute) {
                         navigate(targetRoute, { replace: true });
                     } else {
-                        navigate(storedRole === "builder" ? "/builder-dashboard" : "/browse-job", { replace: true });
+                        navigate(storedRole === "builder" ? "/Project_pannel " : "/browse-job", { replace: true });
                     }
                     return;
                 }
@@ -81,7 +81,7 @@ const Login = () => {
                     if (targetRoute) {
                         navigate(targetRoute, { replace: true });
                     } else {
-                        navigate(role === "builder" ? "/builder-dashboard" : "/browse-job", { replace: true });
+                        navigate(role === "builder" ? "/Project_pannel " : "/browse-job", { replace: true });
                     }
                 } else {
                     console.log("Redirecting user to role selection...");
