@@ -233,7 +233,7 @@ function ViewPostedJobs() {
 
         <div className="container">
           {displayJobs.length === 0 ? (
-            <div className="empty-state">
+            <div className="empty-state-parent">
               <div className="empty-icon">
                 <i className="fas fa-briefcase"></i>
               </div>

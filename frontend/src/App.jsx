@@ -1,11 +1,10 @@
-import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import 'font-awesome/css/font-awesome.min.css';
+// FontAwesome icons loaded via CDN in index.html
 import LandingPage from './Pages/LandingPage';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RoleSelectionPage from './Pages/RoleSelectionPage';
-import Builder_dashboard from './builder_Deshboard/Builder_dashboard';
+import Builder_dashboard from './builder_Deshboard/BuilderDashboard/Builder_dashboard'
 import BrowseJob from './Pages/workersPage/BrowseJob';
 import PostJobForm from './builder_Deshboard/PostJobForm';
 import ViewApplications from './builder_Deshboard/ViewApplications';
