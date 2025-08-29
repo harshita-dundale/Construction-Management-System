@@ -1,8 +1,7 @@
-.dashboard-wrapper {
+.proj-dashboard-wrapper {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-attachment: fixed;
-  padding-top: 5.5rem;
+  padding-top: 5rem;
   position: relative;
 }
 
@@ -594,7 +593,7 @@
   gap: 1rem;
 }
 
-.stat-item {
+.proj-stat-item {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -605,12 +604,12 @@
   transition: all 0.2s ease;
 }
 
-.stat-item:hover {
+.proj-stat-item:hover {
   border-color: #667eea;
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
 }
 
-.stat-item i {
+.proj-stat-item i {
   font-size: 1.1rem;
   color: #667eea;
   width: 20px;

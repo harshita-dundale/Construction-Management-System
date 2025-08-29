@@ -154,18 +154,16 @@ function ViewPostedJobs() {
         <div className="jobs-header-section">
           <div className="container">
             <div className="row align-items-center">
-              <div className="col-md-8">
-                <div className="header-badge">
+              <div className="col-md-8">               
+                <div className="header-content">
+                  <h1 className="header-title">My Posted Jobs</h1>
+                </div>
+                <p className="header-subtitle me-5">
+                Streamline your hiring process by managing and tracking all job postings efficiently, ensuring better organization and faster recruitment.                </p>
+                {/* <div className="header-badge">
                   <i className="fas fa-briefcase me-2"></i>
                   Job Management
-                </div>
-                <div className="header-content">
-
-                  <h1 className="header-title">My Posted Jobs</h1>
-
-                </div><p className="header-subtitle">
-                  Manage and track all your job postings efficiently
-                </p>
+                </div> */}
               </div>
               <div className="col-md-4">
               

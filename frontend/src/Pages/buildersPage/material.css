@@ -4,10 +4,11 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     position: relative;
-    padding: 2rem 0;
+    /* padding: 0.5rem 0; */
+    margin-top: 5.5rem;
   }
   
-  .material-header::before {
+  /* .material-header::before {
     content: '';
     position: absolute;
     top: 0;
@@ -21,7 +22,7 @@
     );
     transform: skewX(-15deg);
     transform-origin: top;
-  }
+  } */
   
   .mate-head-content {
     position: relative;
@@ -85,13 +86,6 @@
 .material-management-container {
     min-height: 100vh;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  }
-  
-  .material-header {
-    background: white;
-    padding: 2rem 0;
-    margin-top: 6rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   }
   
   .header-badge {
@@ -389,7 +383,7 @@
   }
   @media (max-width: 768px) {
     .material-header {
-      padding: 2rem 0;
+      padding: 1rem 0;
       text-align: center;
     }
   

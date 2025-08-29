@@ -254,19 +254,18 @@ const MaterialManagement = () => {
         {/* Header Section */}
         <div className="material-header">
   <div className="container">
-    <div className="row align-items-center">
+    <div className="row d-flex align-items-center pt-4">
       {/* Left Side: Heading, Subtitle */}
-      <div className="col-md-8">
+      <div className="col-md-8 ">
         <div className="mate-head-content">
-          <span className="mate-head-badge">
+          <h1 className="mate-head-title">Inventory Control</h1>
+          <p className="mate-head-subtitle me-5">
+          Efficiently track, manage, and optimize construction materials to reduce waste, control costs, and improve project productivity.
+          </p>
+          <span className="mate-head-badge mt-3">
             <i className="fas fa-boxes me-2"></i>
             Material Management
           </span>
-
-          <h1 className="mate-head-title">Inventory Control</h1>
-          <p className="mate-head-subtitle">
-            Track, manage, and optimize your construction materials
-          </p>
         </div>
       </div>
 
@@ -285,17 +284,11 @@ const MaterialManagement = () => {
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-
-        <div className="container">
-          {/* Control Panel */}
-          <div className="control-panel">
+      {/* Control Panel */}
+      <div className="control-panel">
             <div className="row align-items-center">
-              <div className="col-md-8">
-                <div className="search-container">
+              <div className="col-md-8 ">
+                <div className="search-container ">
                   <i className="fas fa-search search-icon"></i>
                   <input
                     type="text"
@@ -317,12 +310,18 @@ const MaterialManagement = () => {
               </div>
             </div>
           </div>
+    </div>
+  </div>
+</div>
+
+
+        <div className="container">
 
           {/* Add Material Form */}
           {showAddMaterial && (
-            <div className="add-material-card">
+            <div className="add-material-card mt-4">
               <form onSubmit={handleAddMaterial}>
-                <div className="form-header">
+                <div className="form-header ">
                   <h5 className="form-title">
                     <i className="fas fa-plus-circle me-2"></i>
                     Add New Material
@@ -402,7 +401,7 @@ const MaterialManagement = () => {
           )}
 
           {/* Materials Table */}
-          <div className="materials-table-card">
+          <div className="materials-table-card mt-4">
             <div className="table-header">
               <h5 className="table-title">
                 <i className="fas fa-list me-2"></i>
