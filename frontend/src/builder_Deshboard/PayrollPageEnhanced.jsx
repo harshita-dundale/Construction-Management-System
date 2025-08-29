@@ -284,7 +284,7 @@ function PayrollPageEnhanced() {
           <div className="col-12">
             <div className="mt-4  justify-content-between align-items-center">
               <div>
-                <h1 className="h3 mb-0 text-gray-800 fw-bold mt-5">
+                <h1 className="h3 mb-0 text-gray-800 fw-bold mt-5 text-center">
                   <RiSecurePaymentFill className="me-2 text-primary" />
                   Payroll Dashboard
                 </h1>

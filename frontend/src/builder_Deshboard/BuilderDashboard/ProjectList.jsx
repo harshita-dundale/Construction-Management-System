@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { selectProject } from '../../Pages/Redux/projectSlice';
 
 function ProjectList({
@@ -14,8 +15,15 @@ function ProjectList({
   setShowProjectModal,
 }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const reversedProjects = [...(projects || [])].reverse();
   const currentProjects = reversedProjects.slice(indexOfFirstProject, indexOfLastProject) || [];
+
+  const handleProjectClick = (project) => {
+    dispatch(selectProject(project));
+    localStorage.setItem('selectedProject', JSON.stringify(project));
+    navigate('/Project_pannel');
+  };
 
   return (
     <div className="container-fluid px-3 px-md-4 mt-5 pb-5">
@@ -34,10 +42,7 @@ function ProjectList({
               <div key={project._id} className="col-12 col-sm-6 col-lg-4">
                 <div
                   className={`project-card ${selectedProject?._id === project._id ? 'active' : ''}`}
-                  onClick={() => {
-                    dispatch(selectProject(project));
-                    localStorage.setItem('selectedProject', JSON.stringify(project));
-                  }}
+                  onClick={() => handleProjectClick(project)}
                 >
                   <div className="project-header">
                     <div className="project-status-badge">

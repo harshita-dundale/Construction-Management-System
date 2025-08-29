@@ -128,7 +128,7 @@ const ProfileAvatar = () => {
       <ProfileModal show={showModal} handleClose={() => setShowModal(false)} />
       
       {/* Enhanced Styles */}
-      <style jsx>{`
+      <style>{`
         .modern-profile-dropdown {
           position: relative;
         }
