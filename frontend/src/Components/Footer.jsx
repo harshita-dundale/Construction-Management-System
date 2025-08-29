@@ -59,7 +59,7 @@ function Footer() {
                     <h5 className="section-title">Builder Services</h5>
                   </div>
                   <ul className="service-links">
-                    <li><a href="/builder-dashboard"><i className="fas fa-users me-2"></i>Hire Workers</a></li>
+                    <li><a href="/Project_pannel "><i className="fas fa-users me-2"></i>Hire Workers</a></li>
                     <li><a href="/materialmanagement"><i className="fas fa-boxes me-2"></i>Manage Material</a></li>
                     <li><a href="/profitandcostanalysis"><i className="fas fa-chart-line me-2"></i>Profit/Loss Analysis</a></li>
                     <li><a href="/hiredworkers"><i className="fas fa-user-cog me-2"></i>Manage Workers</a></li>

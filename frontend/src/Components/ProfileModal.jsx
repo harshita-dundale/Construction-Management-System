@@ -304,7 +304,7 @@ const ProfileModal = ({ show, handleClose }) => {
       </div>
       
       {/* Enhanced Styles */}
-      <style jsx>{`
+      <style>{`
         .modal-backdrop-modern {
           position: fixed;
           top: 0;

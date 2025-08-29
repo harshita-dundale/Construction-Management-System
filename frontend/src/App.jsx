@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 // FontAwesome icons loaded via CDN in index.html
+import Project_pannel from './builder_Deshboard/Project_pannel';
 import LandingPage from './Pages/LandingPage';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RoleSelectionPage from './Pages/RoleSelectionPage';
@@ -39,6 +40,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/role-selection" element={<RoleSelectionPage />} />
           <Route path="/Builder-Dashboard" element={<Builder_dashboard />} />
+          <Route path="/Project_pannel" element={<Project_pannel />} />
           <Route path="/post-job" element={<PostJobForm />} />
           <Route path="/ViewApplications" element={<ViewApplications />} />
           <Route path="/browse-Job" element={<BrowseJob />} />
