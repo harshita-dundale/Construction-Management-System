@@ -278,7 +278,7 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
           border: none;
-          padding: 0.4rem 0.8rem;
+          padding: 0.2rem 0.4rem;
           border-radius: 6px;
           font-size: 0.8rem;
           font-weight: 500;

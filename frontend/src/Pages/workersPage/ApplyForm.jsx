@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -109,18 +109,18 @@ function ApplyForm() {
             {/* Form - Full Width */}
             <div className="col-12 d-flex align-items-center justify-content-center">
               <div className="form-container">
-                <div className="form-header">
+                <div className="form-header ">
                   <button
-                    className="back-btn"
+                    className="btn-back "
                     onClick={() => navigate("/browse-Job")}
                   >
                     <i className="fas fa-arrow-left me-2"></i>
                     Back to Jobs
                   </button>
                   
-                  <div className="form-title-section">
-                    <h1 className="form-title">Apply for Position</h1>
-                    <p className="form-subtitle">Fill out the form below to submit your application</p>
+                  <div className="form-title-section text-center mt-3">
+                    <h1 className="form-title mb-4">Apply for Position</h1>
+                    {/* <p className="form-subtitle">Fill out the form below to submit your application</p> */}
                     {currentJob && (
                       <div className="job-info-card">
                         <div className="job-badge">
@@ -307,7 +307,7 @@ function ApplyForm() {
           width: 100%;
           max-width: 500px;
           margin: 0 auto;
-          padding: 3rem 2rem;
+          padding: 2rem 1rem;
         }
         
         .back-btn {
@@ -327,9 +327,9 @@ function ApplyForm() {
         }
         
         .form-title {
-          font-size: 2.5rem;
+          font-size: 1.9rem;
           font-weight: 800;
-          color: #2c3e50;
+          color: #fff;
           margin-bottom: 0.5rem;
         }
         
@@ -341,10 +341,10 @@ function ApplyForm() {
         
         .job-info-card {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          padding: 1rem 1.5rem;
+          padding: 0.4rem 2rem;
           border-radius: 15px;
           color: white;
-          margin-bottom: 2rem;
+          // margin-bottom: 0.5rem;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -357,27 +357,27 @@ function ApplyForm() {
         
         .job-salary {
           background: rgba(255, 255, 255, 0.2);
-          padding: 0.5rem 1rem;
+          padding: 0.3rem 1rem;
           border-radius: 20px;
           font-weight: 600;
         }
         
         .modern-form {
           background: white;
-          padding: 2.5rem;
+          padding: 1.3rem;
           border-radius: 20px;
           box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         }
         
         .form-group {
-          margin-bottom: 2rem;
+        margin-bottom: 1rem;
         }
         
         .form-label {
           display: block;
           font-weight: 600;
           color: #2c3e50;
-          margin-bottom: 0.75rem;
+          //margin-bottom: 0.75rem;
           font-size: 1rem;
         }
         
@@ -399,8 +399,8 @@ function ApplyForm() {
         
         .form-actions {
           display: flex;
-          gap: 1rem;
-          margin-top: 2rem;
+          //gap: 1rem;
+          // margin-top: 2rem;
         }
         
         .submit-btn {
@@ -408,7 +408,7 @@ function ApplyForm() {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           border: none;
           color: white;
-          padding: 1rem 2rem;
+          padding: 1rem 1.5rem;
           border-radius: 12px;
           font-weight: 600;
           font-size: 1rem;
