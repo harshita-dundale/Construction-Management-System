@@ -269,8 +269,23 @@ const MaterialManagement = () => {
               </div>
               <div className="col-md-4">
                 <div className="header-stats">
-                  <div className="stats-grid">
+                    
+                  <div className="stats-grid"><div className="text-end">
+                <button className="btn btn-outline-primary px-4 py-2 fw-semibold"
+                  style={{
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    border: 'none',
+                    color: 'white',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                  }}>
+                  <i className="fas fa-project-diagram me-2"></i>
+                  {selectedProject?.name || "No Project Selected"}
+                </button>
+              </div>
                     <div className="stat-item">
+
+                      
                       <div className="stat-number">{filteredMaterials.length}</div>
                       <div className="stat-label">Materials</div>
                     </div>
@@ -278,6 +293,9 @@ const MaterialManagement = () => {
                       <div className="stat-number">₹{totalCost.toFixed(0)}</div>
                       <div className="stat-label">Total Value</div>
                     </div>
+
+
+                    
                   </div>
                 </div>
               </div>

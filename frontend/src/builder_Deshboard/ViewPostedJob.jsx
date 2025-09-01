@@ -155,10 +155,12 @@ function ViewPostedJobs() {
           <div className="container">
             <div className="row align-items-center">
               <div className="col-md-8">
-                <div className="header-badge">
-                  <i className="fas fa-briefcase me-2"></i>
-                  Job Management
-                </div>
+                {/* <div className="header-badge"> */}
+                  <button className="btn-back-dashboard mb-3" onClick={() => navigate("/Builder-Dashboard")}>
+                    <i className="fas fa-arrow-left me-2"></i>
+                    Back to Dashboard
+                  </button>
+                {/* </div> */}
                 <div className="header-content">
 
                   <h1 className="header-title">My Posted Jobs</h1>
@@ -214,24 +216,7 @@ function ViewPostedJobs() {
             </div>
           </div>
         </div>
-
-        {/* Project Filter */}
-        {/* {selectedProject && (
-          <div className="container mb-4">
-            <div className="project-filter">
-              <div className="filter-icon">
-                <i className="fas fa-building"></i>
-              </div>
-              <div className="filter-content">
-                <h6 className="filter-title">{selectedProject.name}</h6>
-                <span className="filter-subtitle">Project Filter Active</span>
-              </div>
-              <div className="filter-badge">{displayJobs.length} Jobs</div>
-            </div>
-          </div>
-        )} */}
-
-        <div className="container">
+       <div className="container">
           {displayJobs.length === 0 ? (
             <div className="empty-state-parent">
               <div className="empty-icon">
