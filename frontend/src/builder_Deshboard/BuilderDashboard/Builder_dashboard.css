@@ -102,7 +102,7 @@
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
 }
 
-.project-header {
+.proj-card-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -465,3 +465,23 @@
     text-align: center;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -161,7 +161,120 @@ function Card3({ application, isHiredView = false, onDelete }) {
         </div>
       )}
 
-      {!isHiredView && status !== "under_review" && (
+      {!isHiredView && status === "accepted" && (
+        <div className="card-actions">
+          <button
+            className="action-btn undo-btn"
+            onClick={handleUndo}
+            disabled={loading}
+          >
+            <i className="fas fa-undo me-2"></i>
+            Undo
+          </button>
+          <button
+            className="action-btn delete-btn"
+            onClick={async () => {
+              Swal.fire({
+                title: "Are you sure?",
+                text: `Do you want to delete "${application.name}"'s application?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, Delete",
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  setLoading(true);
+                  try {
+                    const res = await fetch(
+                      `http://localhost:5000/api/apply/${application._id}`,
+                      {
+                        method: "DELETE",
+                      }
+                    );
+
+                    if (res.ok) {
+                      Swal.fire("Deleted!", "Application has been deleted.", "success");
+                      refreshApplications();
+                    } else {
+                      Swal.fire("Error", "Failed to delete application.", "error");
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    Swal.fire("Error", "An error occurred while deleting.", "error");
+                  } finally {
+                    setLoading(false);
+                  }
+                }
+              });
+            }}
+            disabled={loading}
+          >
+            <i className="fas fa-trash me-2"></i>
+            {loading ? "Deleting..." : "Delete"}
+          </button>
+        </div>
+      )}
+
+      {!isHiredView && status === "joined" && (
+        <div className="card-actions">
+          <button
+            className="action-btn view-btn"
+            onClick={() => {
+              // Navigate to worker profile or details page
+              window.open(`/worker-profile/${application.userId?._id || application._id}`, '_blank');
+            }}
+            disabled={loading}
+          >
+            <i className="fas fa-eye me-2"></i>
+            View Worker
+          </button>
+          <button
+            className="action-btn delete-btn"
+            onClick={async () => {
+              Swal.fire({
+                title: "Are you sure?",
+                text: `Do you want to remove "${application.name}" from the project?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, Remove",
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  setLoading(true);
+                  try {
+                    const res = await fetch(
+                      `http://localhost:5000/api/apply/${application._id}`,
+                      {
+                        method: "DELETE",
+                      }
+                    );
+
+                    if (res.ok) {
+                      Swal.fire("Removed!", "Worker has been removed from project.", "success");
+                      refreshApplications();
+                    } else {
+                      Swal.fire("Error", "Failed to remove worker.", "error");
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    Swal.fire("Error", "An error occurred while removing.", "error");
+                  } finally {
+                    setLoading(false);
+                  }
+                }
+              });
+            }}
+            disabled={loading}
+          >
+            <i className="fas fa-user-minus me-2"></i>
+            {loading ? "Removing..." : "Remove"}
+          </button>
+        </div>
+      )}
+
+      {!isHiredView && status === "rejected" && (
         <div className="card-actions">
           <button
             className="action-btn undo-btn"

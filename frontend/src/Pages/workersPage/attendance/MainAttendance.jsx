@@ -72,14 +72,14 @@ const MainAttendance = () => {
       <Header />
       <div className="attendance-container">
         {/* Header Section */}
-        <div className="attendance-header">
+        {/* <div className="attendance-header">
           <div className="header-content">
             <h3 className="header-titl">
               <i className="fas fa-calendar-check me-2"></i>
               My Attendance
             </h3>
           </div>
-        </div>
+        </div> */}
         
         {selectedJobFromState ? (
           // Show only selected job data

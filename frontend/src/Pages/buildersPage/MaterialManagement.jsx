@@ -253,62 +253,42 @@ const MaterialManagement = () => {
       <div className="material-management-container">
         {/* Header Section */}
         <div className="material-header">
-          <div className="container">
-            <div className="row align-items-center">
-              <div className="col-md-8">
-                <div className="header-content">
-                  <div className="header-badge mb-2">
-                    <i className="fas fa-boxes me-2"></i>
-                    Material Management
-                  </div>
-                  <h1 className="header-title">Inventory Control</h1>
-                  <p className="header-subtitle">
-                    Track, manage, and optimize your construction materials
-                  </p>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="header-stats">
-                    
-                  <div className="stats-grid"><div className="text-end">
-                <button className="btn btn-outline-primary px-4 py-2 fw-semibold"
-                  style={{
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    border: 'none',
-                    color: 'white',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                  }}>
-                  <i className="fas fa-project-diagram me-2"></i>
-                  {selectedProject?.name || "No Project Selected"}
-                </button>
-              </div>
-                    <div className="stat-item">
+  <div className="container">
+    <div className="row d-flex align-items-center pt-4">
+      {/* Left Side: Heading, Subtitle */}
+      <div className="col-md-8 ">
+        <div className="mate-head-content">
+          <h1 className="mate-head-title">Inventory Control</h1>
+          <p className="mate-head-subtitle me-5">
+          Efficiently track, manage, and optimize construction materials to reduce waste, control costs, and improve project productivity.
+          </p>
+          <span className="mate-head-badge mt-3">
+            <i className="fas fa-boxes me-2"></i>
+            Material Management
+          </span>
+        </div>
+      </div>
 
-                      
-                      <div className="stat-number">{filteredMaterials.length}</div>
-                      <div className="stat-label">Materials</div>
-                    </div>
-                    <div className="stat-item">
-                      <div className="stat-number">₹{totalCost.toFixed(0)}</div>
-                      <div className="stat-label">Total Value</div>
-                    </div>
-
-
-                    
-                  </div>
-                </div>
-              </div>
+      {/* Right Side: Stats */}
+      <div className="col-md-4">
+        <div className="header-stats">
+          <div className="stats-grid">
+            <div className="stat-item">
+              <div className="stat-number">{filteredMaterials.length}</div>
+              <div className="stat-label">Materials</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">₹{totalCost.toFixed(0)}</div>
+              <div className="stat-label">Total Value</div>
             </div>
           </div>
         </div>
-
-        <div className="container">
-          {/* Control Panel */}
-          <div className="control-panel">
+      </div>
+      {/* Control Panel */}
+      <div className="control-panel">
             <div className="row align-items-center">
-              <div className="col-md-8">
-                <div className="search-container">
+              <div className="col-md-8 ">
+                <div className="search-container ">
                   <i className="fas fa-search search-icon"></i>
                   <input
                     type="text"
@@ -330,12 +310,18 @@ const MaterialManagement = () => {
               </div>
             </div>
           </div>
+    </div>
+  </div>
+</div>
+
+
+        <div className="container">
 
           {/* Add Material Form */}
           {showAddMaterial && (
-            <div className="add-material-card">
+            <div className="add-material-card mt-4">
               <form onSubmit={handleAddMaterial}>
-                <div className="form-header">
+                <div className="form-header ">
                   <h5 className="form-title">
                     <i className="fas fa-plus-circle me-2"></i>
                     Add New Material
@@ -415,7 +401,7 @@ const MaterialManagement = () => {
           )}
 
           {/* Materials Table */}
-          <div className="materials-table-card">
+          <div className="materials-table-card mt-4">
             <div className="table-header">
               <h5 className="table-title">
                 <i className="fas fa-list me-2"></i>
@@ -559,341 +545,6 @@ const MaterialManagement = () => {
           </div>
         </div>
       </div>
-      
-      {/* Enhanced Styles */}
-      <style jsx>{`
-        .material-management-container {
-          min-height: 100vh;
-          background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        }
-        
-        .material-header {
-          background: white;
-          padding: 2rem 0;
-          margin-top: 6rem;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header-badge {
-          display: inline-block;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          padding: 0.5rem 1rem;
-          border-radius: 25px;
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
-        
-        .header-title {
-        
-          font-size: 3rem;
-          font-weight: 800;
-          color: #2c3e50;
-          margin: 0.5rem 0;
-        }
-        
-        .header-subtitle {
-          font-size: 1.2rem;
-          color: #6c757d;
-          margin: 0;
-        }
-        
-        .stats-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
-        
-        .stat-item {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          padding: 1rem;
-          border-radius: 10px;
-          text-align: center;
-        }
-        
-        .stat-number {
-          font-size: 1.5rem;
-          font-weight: 800;
-          margin-bottom: 0.25rem;
-        }
-        
-        .stat-label {
-          font-size: 0.8rem;
-          opacity: 0.9;
-        }
-        
-        .control-panel {
-          background: white;
-          padding: 1.5rem;
-          border-radius: 15px;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-          margin: 2rem 0;
-        }
-        
-        .search-container {
-          position: relative;
-        }
-        
-        .search-icon {
-          position: absolute;
-          left: 1rem;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #6c757d;
-          z-index: 2;
-        }
-        
-        .search-input {
-          width: 100%;
-          padding: 0.75rem 1rem 0.75rem 2.5rem;
-          border: 2px solid #e9ecef;
-          border-radius: 25px;
-          font-size: 1rem;
-          transition: all 0.3s ease;
-        }
-        
-        .search-input:focus {
-          border-color: #667eea;
-          box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-          outline: none;
-        }
-        
-        .btn-add-material {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border: none;
-          color: white;
-          padding: 0.75rem 1.5rem;
-          border-radius: 25px;
-          font-weight: 600;
-          transition: all 0.3s ease;
-        }
-        
-        .btn-add-material:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-          color: white;
-        }
-        
-        .add-material-card {
-          background: white;
-          border-radius: 15px;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-          margin-bottom: 2rem;
-          overflow: hidden;
-        }
-        
-        .form-header {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          padding: 1.5rem;
-        }
-        
-        .form-title {
-          margin: 0;
-          font-size: 1.25rem;
-          font-weight: 600;
-        }
-        
-        .form-body {
-          padding: 2rem;
-        }
-        
-        .modern-input {
-          border: 2px solid #e9ecef;
-          border-radius: 8px;
-          padding: 0.75rem;
-          transition: all 0.3s ease;
-        }
-        
-        .modern-input:focus {
-          border-color: #667eea;
-          box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-        
-        .btn-submit {
-          background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-          border: none;
-          color: white;
-          padding: 0.75rem 1.5rem;
-          border-radius: 8px;
-          font-weight: 600;
-          transition: all 0.3s ease;
-        }
-        
-        .btn-submit:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
-          color: white;
-        }
-        
-        .materials-table-card {
-          background: white;
-          border-radius: 15px;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
-        }
-        
-        .table-header {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          padding: 1.5rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        
-        .table-title {
-          margin: 0;
-          font-size: 1.25rem;
-          font-weight: 600;
-        }
-        
-        .table-summary {
-          display: flex;
-          gap: 1rem;
-        }
-        
-        .summary-item {
-          font-size: 0.9rem;
-          opacity: 0.9;
-        }
-        
-        .modern-table {
-          margin: 0;
-        }
-        
-        .modern-table thead th {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border: none;
-          padding: 1rem;
-          font-weight: 600;
-          color: white;
-          border-bottom: 2px solid #667eea;
-        }
-        
-        .material-row {
-          transition: all 0.3s ease;
-        }
-        
-        .material-row:hover {
-          background: rgba(102, 126, 234, 0.05);
-        }
-        
-        .material-row td {
-          padding: 1rem;
-          vertical-align: middle;
-        }
-        
-        .material-name {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-        }
-        
-        .material-icon {
-          width: 35px;
-          height: 35px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-size: 0.9rem;
-        }
-        
-        .name-text {
-          font-weight: 600;
-          color: #2c3e50;
-        }
-        
-        .quantity-display {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-        
-        .quantity-number {
-          font-weight: 700;
-          font-size: 1.1rem;
-          color: #2c3e50;
-        }
-        
-        .quantity-unit {
-          font-size: 0.8rem;
-          color: #6c757d;
-        }
-        
-        .price-display,
-        .cost-display {
-          font-weight: 600;
-          color: #11998e;
-        }
-        
-        .action-buttons {
-          display: flex;
-          gap: 0.25rem;
-          justify-content: center;
-        }
-        
-        .empty-state {
-          text-align: center;
-          padding: 4rem 2rem;
-        }
-        
-        .empty-icon {
-          width: 100px;
-          height: 100px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto 2rem;
-          font-size: 3rem;
-          color: white;
-        }
-        
-        .empty-title {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: #2c3e50;
-          margin-bottom: 1rem;
-        }
-        
-        .empty-description {
-          color: #6c757d;
-          font-size: 1rem;
-          max-width: 400px;
-          margin: 0 auto;
-        }
-        
-        @media (max-width: 768px) {
-          .header-title {
-            font-size: 2rem;
-          }
-          
-          .stats-grid {
-            grid-template-columns: 1fr;
-          }
-          
-          .table-header {
-            flex-direction: column;
-            gap: 1rem;
-            text-align: center;
-          }
-          
-          .table-summary {
-            justify-content: center;
-          }
-          
-          .material-name {
-            flex-direction: column;
-            text-align: center;
-          }
-        }
-      `}</style>
     </>
   );
 };

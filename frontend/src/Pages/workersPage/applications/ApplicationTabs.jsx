@@ -21,14 +21,15 @@ const ApplicationTabs = () => {
   return (
     <div className="applications-container">
       {/* Header Section */}
-      <div className="applications-header">
-        <div className="header-content">
+      <div className="">
+      {/* applications-header */}
+        {/* <div className="header-content">
           <h3 className="header-title">
             <i className="fas fa-file-alt me-2"></i>
             My Applications
           </h3>
         </div>
-        <p className="header-subtitle">Track and manage your job applications</p>
+        <p className="header-subtitle">Track and manage your job applications</p> */}
       </div>
       <div className="modern-tabs-container">
         <div className="tabs-wrapper">

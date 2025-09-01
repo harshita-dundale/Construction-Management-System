@@ -310,7 +310,7 @@ function Builder_dashboard() {
   const totalProjectCost = totalMaterialCost + totalWorkerPayable + enhancedPayrollTotal;
 
   return (
-    <div className="dashboard-wrapper">
+    <div className="proj-dashboard-wrapper">
       <Header />
 
       {/* Back Button */}
@@ -330,7 +330,7 @@ function Builder_dashboard() {
         </button>
       </div> */}
 
-      <div className="container-fluid px-3 px-md-4 mb-4" style={{ marginTop: '1rem' }}>
+      <div className="container-fluid px-3 px-md-4 " >
 
         {/* Project Overview Card */}
         {selectedProject && (
@@ -345,7 +345,7 @@ function Builder_dashboard() {
                     onClick={() => navigate("/Builder-Dashboard")}
                   >
                     <i className="fas fa-arrow-left me-2"></i>
-                    Back to Dashboard
+                    Back to Home
                   </button>
                   <div className="progress-section">
                     <div className="progress-circle-large">
@@ -407,28 +407,28 @@ function Builder_dashboard() {
                       </div>
 
                       <div className="project-stats-grid">
-                        <div className="stat-item">
+                        <div className="proj-stat-item">
                           <i className="fas fa-briefcase"></i>
                           <div className="state-content">
                             <span className="state-number">{projectDetails.totalJobs}</span>
                             <span className="state-label">Total Jobs</span>
                           </div>
                         </div>
-                        <div className="stat-item">
+                        <div className="proj-stat-item">
                           <i className="fas fa-file-alt"></i>
                           <div className="state-content">
                             <span className="state-number">{projectDetails.totalApplications}</span>
                             <span className="state-label">Applications</span>
                           </div>
                         </div>
-                        <div className="stat-item">
+                        <div className="proj-stat-item">
                           <i className="fas fa-users"></i>
                           <div className="state-content">
                             <span className="state-number">{dashboardStats.workersHired}</span>
                             <span className="state-label">Workers</span>
                           </div>
                         </div>
-                        <div className="stat-item">
+                        <div className="proj-stat-item">
                           <i className="fas fa-chart-line"></i>
                           <div className="state-content">
                             <span className="state-number">{dashboardStats.attendanceRate}%</span>
@@ -699,7 +699,7 @@ function Builder_dashboard() {
         })()}
 
         <div style={{ textAlign: 'center', marginBottom: '3rem', padding: '2rem 0', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '20px', backdropFilter: 'blur(10px)' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#2c3e50', marginBottom: '1rem', letterSpacing: '-1px' }}>Management Tools</h2>
+          <h2 className="dash-title">Management Tools</h2>
           <p style={{ fontSize: '1.1rem', color: '#6c757d', fontWeight: '400', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>Access all your project management features</p>
         </div>
 

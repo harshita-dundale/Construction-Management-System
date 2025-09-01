@@ -44,7 +44,7 @@ function ProjectList({
                   className={`project-card ${selectedProject?._id === project._id ? 'active' : ''}`}
                   onClick={() => handleProjectClick(project)}
                 >
-                  <div className="project-header">
+                  <div className="proj-card-head">
                     <div className="project-status-badge">
                       <i className={`fas ${selectedProject?._id === project._id ? 'fa-check-circle' : 'fa-circle'} me-2`}></i>
                       {selectedProject?._id === project._id ? 'Active' : 'Available'}

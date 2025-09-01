@@ -178,16 +178,16 @@
           margin: 0 auto 1rem;
         }
         
-        .error-state i,
+        /* .error-state i,
         .empty-state i {
           font-size: 3rem;
           color: #dc3545;
           margin-bottom: 1rem;
         }
-        
+      
         .empty-state i {
           color: #6c757d;
-        }
+        } */
         
         .empty-state h4 {
           color: #495057;
