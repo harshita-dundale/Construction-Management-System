@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { RiSecurePaymentFill } from "react-icons/ri";
 import { GrFormView } from "react-icons/gr";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import Header from "../Components/Header";
 import "./PayrollPageEnhanced.css"; // 👈 added
 
@@ -58,7 +58,9 @@ function PayrollPageEnhanced() {
                 `http://localhost:5000/api/worker-records/history/${workerId}`
               );
               const history = await sumRes.json();
-              presentCount = history.filter((h) => h.status === "Present").length;
+              presentCount = history.filter(
+                (h) => h.status === "Present"
+              ).length;
               absentCount = history.filter((h) => h.status === "Absent").length;
               totalPayable = presentCount * salary;
             } catch (err) {
@@ -96,7 +98,7 @@ function PayrollPageEnhanced() {
               present: presentCount,
               absent: absentCount,
               payable: totalPayable,
-              amountPaid: '',
+              amountPaid: "",
               actualPaid: actualPaidAmount,
               paymentStatus: paymentStatus,
             };
@@ -116,9 +118,9 @@ function PayrollPageEnhanced() {
   }, [projectId]);
 
   const handleAmountChange = (workerId, value) => {
-    if (value === '') {
+    if (value === "") {
       setHiredWorkers((prev) =>
-        prev.map((w) => (w._id === workerId ? { ...w, amountPaid: '' } : w))
+        prev.map((w) => (w._id === workerId ? { ...w, amountPaid: "" } : w))
       );
       return;
     }
@@ -143,7 +145,9 @@ function PayrollPageEnhanced() {
     const remainingAmount = worker.payable - (worker.actualPaid || 0);
     if (worker.amountPaid > remainingAmount) {
       toast.error(
-        `Do not give more money\nRemaining: ₹${remainingAmount}\nAlready paid: ₹${worker.actualPaid || 0}`
+        `Do not give more money\nRemaining: ₹${remainingAmount}\nAlready paid: ₹${
+          worker.actualPaid || 0
+        }`
       );
       return;
     }
@@ -171,12 +175,15 @@ function PayrollPageEnhanced() {
 
       if (!res.ok) throw new Error("Failed to save payroll");
 
-      toast.success(`💰 Payment successful!\n${worker.name}: ₹${worker.amountPaid} paid`, {
-        style: {
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: '#fff'
+      toast.success(
+        `💰 Payment successful!\n${worker.name}: ₹${worker.amountPaid} paid`,
+        {
+          style: {
+            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            color: "#fff",
+          },
         }
-      });
+      );
 
       setHiredWorkers((prev) =>
         prev.map((w) => {
@@ -185,7 +192,7 @@ function PayrollPageEnhanced() {
             const newStatus = newTotalPaid >= w.payable ? "Paid" : "Partial";
             return {
               ...w,
-              amountPaid: '',
+              amountPaid: "",
               actualPaid: newTotalPaid,
               paymentStatus: newStatus,
             };
@@ -225,7 +232,9 @@ function PayrollPageEnhanced() {
 
   const openHistoryModal = async (workerId, name) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/payroll/worker/${workerId}`);
+      const res = await fetch(
+        `http://localhost:5000/api/payroll/worker/${workerId}`
+      );
       const data = await res.json();
       setSelectedHistory(data);
     } catch {
@@ -238,21 +247,33 @@ function PayrollPageEnhanced() {
   };
 
   const getWorkerTotalPayable = (workerId) => {
-    const worker = hiredWorkers.find(w => w._id === workerId);
+    const worker = hiredWorkers.find((w) => w._id === workerId);
     return worker?.payable || 0;
   };
 
   // Calculate summary statistics
   const totalWorkers = hiredWorkers.length;
   const totalPayable = hiredWorkers.reduce((sum, w) => sum + w.payable, 0);
-  const totalPaid = hiredWorkers.reduce((sum, w) => sum + (w.actualPaid || 0), 0);
+  const totalPaid = hiredWorkers.reduce(
+    (sum, w) => sum + (w.actualPaid || 0),
+    0
+  );
   const totalRemaining = totalPayable - totalPaid;
-  const paidWorkers = hiredWorkers.filter(w => w.paymentStatus === "Paid").length;
-  const partialWorkers = hiredWorkers.filter(w => w.paymentStatus === "Partial").length;
-  const unpaidWorkers = hiredWorkers.filter(w => w.paymentStatus === "Unpaid").length;
+  const paidWorkers = hiredWorkers.filter(
+    (w) => w.paymentStatus === "Paid"
+  ).length;
+  const partialWorkers = hiredWorkers.filter(
+    (w) => w.paymentStatus === "Partial"
+  ).length;
+  const unpaidWorkers = hiredWorkers.filter(
+    (w) => w.paymentStatus === "Unpaid"
+  ).length;
 
   // Calculate total material cost
-  const totalMaterialCost = materials.reduce((sum, m) => sum + (m.unitPrice * (m.quantity || 1)), 0);
+  const totalMaterialCost = materials.reduce(
+    (sum, m) => sum + m.unitPrice * (m.quantity || 1),
+    0
+  );
   // Combined total
   const totalProjectCost = totalPayable + totalMaterialCost;
 
@@ -262,11 +283,17 @@ function PayrollPageEnhanced() {
         <Header />
         <div className="container mt-5">
           <div className="text-center" style={{ marginTop: "10rem" }}>
-            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
+            <div
+              className="spinner-border text-primary mb-3"
+              role="status"
+              style={{ width: "3rem", height: "3rem" }}
+            >
               <span className="visually-hidden">Loading...</span>
             </div>
             <h4>Loading Payroll Data...</h4>
-            <p className="text-muted">Please wait while we fetch worker payment information.</p>
+            <p className="text-muted">
+              Please wait while we fetch worker payment information.
+            </p>
           </div>
         </div>
       </>
@@ -278,41 +305,49 @@ function PayrollPageEnhanced() {
   return (
     <>
       <Header />
-      <div className="container-fluid px-4" style={{ marginTop: "6rem" }}>
-        {/* Dashboard Header */}
-        <div className="row mb-4">
-          <div className="col-12">
-            <div className="mt-4  justify-content-between align-items-center">
-              <div>
-                <h1 className="h3 mb-0 text-gray-800 fw-bold mt-5 text-center">
-                  <RiSecurePaymentFill className="me-2 text-primary" />
-                  Payroll Dashboard
-                </h1>
-                <p className="text-muted text-center mb-4">Manage worker payments and track payroll status</p>
-                {/* Total Project Cost in Header */}
-                {/* <div className="mt-2">
-                  <span className="badge bg-secondary fs-5 px-4 py-2">
-                    Total Project Cost: ₹{totalProjectCost.toLocaleString()}
-                  </span>
+      <div className="jobs-header-section" style={{ marginTop: "6rem" }}>
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-md-8">
+              <div className="header-content">
+                <h1 className="header-title">Payroll Management</h1>
+              </div>
+              <p className="header-subtitle me-5">
+                {/* Automates salary calculations based on attendance and job
+                details. Helps builders track payments, deductions, and project
+                expenses accurately. */}
+                Easily calculate salaries from attendance, track payments, and ensure workers get timely and transparent payouts.
+              </p>
+              <span className="mate-head-badge mt-3">
+                <i className="fas fa-boxes me-2"></i>
+                Manage Payment
+              </span>
+              {/* <div className="header-badge">
+                  <i className="fas fa-briefcase me-2"></i>
+                  Job Management
                 </div> */}
-              </div>
-              <div className="text-end">
-                <button className="btn btn-outline-primary px-4 py-2 fw-semibold"
-                  style={{
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    border: 'none',
-                    color: 'white',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                  }}>
-                  <i className="fas fa-project-diagram me-2"></i>
-                  {selectedProject?.name || "No Project Selected"}
-                </button>
-              </div>
+            </div>
+            <div className="col-md-4">
+              {selectedProject && (
+                <div className="container mb-4  mt-3">
+                  <div className="project-filter">
+                    <div className="filter-icon">
+                      <i className="fas fa-building"></i>
+                    </div>
+                    <div className="filter-content">
+                      <h6 className="filter-title">{selectedProject.name}</h6>
+                      <span className="filter-subtitle">
+                        Project Filter Active
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
-
+      </div>
+      <div className="container-fluid px-4 ">
         {/* Summary Cards */}
         <div className="row g-2 mb-4">
           <div className="col-xl-3 col-md-6">
@@ -323,7 +358,9 @@ function PayrollPageEnhanced() {
                     <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
                       Total Workers
                     </div>
-                    <div className="h5 mb-0 font-weight-bold text-gray-800">{totalWorkers}</div>
+                    <div className="h5 mb-0 font-weight-bold text-gray-800">
+                      {totalWorkers}
+                    </div>
                   </div>
                   <div className="col-auto">
                     <i className="fas fa-users fa-2x text-gray-300"></i>
@@ -341,7 +378,9 @@ function PayrollPageEnhanced() {
                     <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
                       Total Payable
                     </div>
-                    <div className="h5 mb-0 font-weight-bold text-gray-800">₹{totalPayable.toLocaleString()}</div>
+                    <div className="h5 mb-0 font-weight-bold text-gray-800">
+                      ₹{totalPayable.toLocaleString()}
+                    </div>
                   </div>
                   <div className="col-auto">
                     <i className="fas fa-rupee-sign fa-2x text-gray-300"></i>
@@ -359,14 +398,31 @@ function PayrollPageEnhanced() {
                     <div className="text-xs font-weight-bold text-info text-uppercase mb-1">
                       Total Paid
                     </div>
-                    <div className="h5 mb-0 font-weight-bold text-gray-800">₹{totalPaid.toLocaleString()}</div>
-                    <div className="progress progress-sm mt-2" style={{ backgroundColor: '#e9ecef', height: '8px', borderRadius: '4px' }}>
-                      <div className="progress-bar" style={{ 
-                        width: `${totalPayable > 0 ? (totalPaid / totalPayable) * 100 : 0}%`,
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        borderRadius: '4px',
-                        transition: 'width 0.6s ease'
-                      }}></div>
+                    <div className="h5 mb-0 font-weight-bold text-gray-800">
+                      ₹{totalPaid.toLocaleString()}
+                    </div>
+                    <div
+                      className="progress progress-sm mt-2"
+                      style={{
+                        backgroundColor: "#e9ecef",
+                        height: "8px",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      <div
+                        className="progress-bar"
+                        style={{
+                          width: `${
+                            totalPayable > 0
+                              ? (totalPaid / totalPayable) * 100
+                              : 0
+                          }%`,
+                          background:
+                            "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                          borderRadius: "4px",
+                          transition: "width 0.6s ease",
+                        }}
+                      ></div>
                     </div>
                   </div>
                   <div className="col-auto">
@@ -385,7 +441,9 @@ function PayrollPageEnhanced() {
                     <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
                       Remaining
                     </div>
-                    <div className="h5 mb-0 font-weight-bold text-gray-800">₹{totalRemaining.toLocaleString()}</div>
+                    <div className="h5 mb-0 font-weight-bold text-gray-800">
+                      ₹{totalRemaining.toLocaleString()}
+                    </div>
                   </div>
                   <div className="col-auto">
                     <i className="fas fa-clock fa-2x text-gray-300"></i>
@@ -400,27 +458,42 @@ function PayrollPageEnhanced() {
         <div className="row mb-4">
           <div className="col-12">
             <div className="card shadow">
-              <div className="card-header py-3" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
-                <h6 className="m-0 font-weight-bold">Payment Status Overview</h6>
+              <div
+                className="card-header py-3"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  color: "white",
+                }}
+              >
+                <h6 className="m-0 font-weight-bold">
+                  Payment Status Overview
+                </h6>
               </div>
               <div className="card-body">
                 <div className="row text-center">
                   <div className="col-md-4">
                     <div className="status-item">
-                      <div className="status-circle bg-success">{paidWorkers}</div>
-                      
+                      <div className="status-circle bg-success">
+                        {paidWorkers}
+                      </div>
+
                       <h6 className="mt-2 text-success">Fully Paid</h6>
                     </div>
                   </div>
                   <div className="col-md-4">
                     <div className="status-item">
-                      <div className="status-circle bg-warning">{partialWorkers}</div>
+                      <div className="status-circle bg-warning">
+                        {partialWorkers}
+                      </div>
                       <h6 className="mt-2 text-warning">Partially Paid</h6>
                     </div>
                   </div>
                   <div className="col-md-4">
                     <div className="status-item">
-                      <div className="status-circle bg-danger">{unpaidWorkers}</div>
+                      <div className="status-circle bg-danger">
+                        {unpaidWorkers}
+                      </div>
                       <h6 className="mt-2 text-danger">Unpaid</h6>
                     </div>
                   </div>
@@ -431,11 +504,16 @@ function PayrollPageEnhanced() {
         </div>
 
         {hiredWorkers.length === 0 ? (
-          <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ minHeight: "50vh" }}
+          >
             <div className="text-center">
               <i className="fas fa-users fa-4x text-muted mb-3"></i>
               <h4 className="text-muted">No Workers Available</h4>
-              <p className="text-muted">Please hire workers first to manage payroll.</p>
+              <p className="text-muted">
+                Please hire workers first to manage payroll.
+              </p>
             </div>
           </div>
         ) : (
@@ -452,8 +530,8 @@ function PayrollPageEnhanced() {
                   {hiredWorkers.length} Workers
                 </span>
                 <span className="summary-item">
-                  <i className="fas fa-rupee-sign me-1"></i>
-                  ₹{totalPayable.toLocaleString()} Total
+                  <i className="fas fa-rupee-sign me-1"></i>₹
+                  {totalPayable.toLocaleString()} Total
                 </span>
               </div>
             </div>
@@ -461,34 +539,54 @@ function PayrollPageEnhanced() {
               <table className="table modern-table">
                 <thead>
                   <tr>
-                    <th className="px-3 py-3"><i className="fas fa-hashtag me-2"></i>Sr.</th>
-                    <th className="px-3 py-3"><i className="fas fa-user me-2"></i>Worker Details</th>
-                    <th className="px-3 py-3"><i className="fas fa-calendar-check me-2"></i>Attendance</th>
-                    <th className="px-3 py-3"><i className="fas fa-wallet me-2"></i>Payment Info</th>
-                    <th className="px-3 py-3"><i className="fas fa-cogs me-2"></i>Actions</th>
+                    <th className="px-3 py-3">
+                      <i className="fas fa-hashtag me-2"></i>Sr.
+                    </th>
+                    <th className="px-3 py-3">
+                      <i className="fas fa-user me-2"></i>Worker Details
+                    </th>
+                    <th className="px-3 py-3">
+                      <i className="fas fa-calendar-check me-2"></i>Attendance
+                    </th>
+                    <th className="px-3 py-3">
+                      <i className="fas fa-wallet me-2"></i>Payment Info
+                    </th>
+                    <th className="px-3 py-3">
+                      <i className="fas fa-cogs me-2"></i>Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {hiredWorkers.map((worker, index) => {
-                    const remainingPayable = Math.max(0, worker.payable - (worker.actualPaid || 0));
-                    const paymentProgress = worker.payable > 0 ? ((worker.actualPaid || 0) / worker.payable) * 100 : 0;
+                    const remainingPayable = Math.max(
+                      0,
+                      worker.payable - (worker.actualPaid || 0)
+                    );
+                    const paymentProgress =
+                      worker.payable > 0
+                        ? ((worker.actualPaid || 0) / worker.payable) * 100
+                        : 0;
 
                     return (
                       <tr key={worker._id} className="payroll-row align-middle">
-                        <td className="px-3 py-3" >
-                          <div className="worker-number">
-                            {index + 1}
-                          </div>
+                        <td className="px-3 py-3">
+                          <div className="worker-number">{index + 1}</div>
                         </td>
 
                         <td className="px-3 py-3">
                           <div className="worker-info">
                             <div className="d-flex align-items-center">
                               <div>
-                                <h6 className="mb-0 fw-bold worker-name">{worker.name}</h6>
-                                <small className="job-title">{worker.jobTitle}</small>
+                                <h6 className="mb-0 fw-bold worker-name">
+                                  {worker.name}
+                                </h6>
+                                <small className="job-title">
+                                  {worker.jobTitle}
+                                </small>
                                 <div className="mt-1">
-                                  <span className="salary-badge">₹{worker.salary}/day</span>
+                                  <span className="salary-badge">
+                                    ₹{worker.salary}/day
+                                  </span>
                                 </div>
                               </div>
                             </div>
@@ -498,10 +596,16 @@ function PayrollPageEnhanced() {
                         <td className="px-3 py-3">
                           <div className="attendance-info">
                             <div className="d-flex justify-content-between mb-1">
-                              <span className="badge bg-success">{worker.present} Present</span>
-                              <span className="badge bg-danger">{worker.absent} Absent</span>
+                              <span className="badge bg-success">
+                                {worker.present} Present
+                              </span>
+                              <span className="badge bg-danger">
+                                {worker.absent} Absent
+                              </span>
                             </div>
-                            <small className="text-muted">Total: {worker.present + worker.absent} days</small>
+                            <small className="text-muted">
+                              Total: {worker.present + worker.absent} days
+                            </small>
                           </div>
                         </td>
 
@@ -509,24 +613,39 @@ function PayrollPageEnhanced() {
                           <div className="payment-info">
                             <div className="mb-2">
                               <div className="d-flex justify-content-between align-items-center mb-1">
-                                <span className="fw-bold text-success">₹{worker.payable}</span>
-                                <span className="text-muted    fw-bold">Total Earned</span>
+                                <span className="fw-bold text-success">
+                                  ₹{worker.payable}
+                                </span>
+                                <span className="text-muted    fw-bold">
+                                  Total Earned
+                                </span>
                               </div>
-                              <div className="progress mb-1" style={{ height: '8px', backgroundColor: '#e9ecef', borderRadius: '4px' }}>
+                              <div
+                                className="progress mb-1"
+                                style={{
+                                  height: "8px",
+                                  backgroundColor: "#e9ecef",
+                                  borderRadius: "4px",
+                                }}
+                              >
                                 <div
-                                   className="progress-bar"
-
-                                  style={{ 
+                                  className="progress-bar"
+                                  style={{
                                     width: `${paymentProgress}%`,
-                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                    borderRadius: '4px',
-                                    transition: 'width 0.6s ease'
+                                    background:
+                                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                                    borderRadius: "4px",
+                                    transition: "width 0.6s ease",
                                   }}
                                 ></div>
                               </div>
                               <div className="d-flex justify-content-between">
-                                <span className=" small">₹{worker.actualPaid || 0} Paid</span>
-                                <span className=" small">₹{remainingPayable} Remaining</span>
+                                <span className=" small">
+                                  ₹{worker.actualPaid || 0} Paid
+                                </span>
+                                <span className=" small">
+                                  ₹{remainingPayable} Remaining
+                                </span>
                               </div>
                             </div>
 
@@ -536,11 +655,16 @@ function PayrollPageEnhanced() {
                                 <input
                                   type="number"
                                   className="form-control"
-                                  value={worker.amountPaid || ''}
+                                  value={worker.amountPaid || ""}
                                   min="0"
                                   max={remainingPayable}
                                   placeholder={remainingPayable.toString()}
-                                  onChange={(e) => handleAmountChange(worker._id, e.target.value)}
+                                  onChange={(e) =>
+                                    handleAmountChange(
+                                      worker._id,
+                                      e.target.value
+                                    )
+                                  }
                                 />
                               </div>
                             </div>
@@ -556,11 +680,13 @@ function PayrollPageEnhanced() {
                             <div className="btn-group-vertical d-grid gap-1">
                               <button
                                 className="btn btn-warning btn-sm text-white"
-                                onClick={() => openHistoryModal(worker._id, worker.name)}
+                                onClick={() =>
+                                  openHistoryModal(worker._id, worker.name)
+                                }
                                 style={{
                                   // background: 'linear-gradient(135deg, #ff9500 0%, #ff6b35 100%)',
-                                  border: 'none',
-                                  fontWeight: '600'
+                                  border: "none",
+                                  fontWeight: "600",
                                 }}
                               >
                                 <i className="fas fa-history me-1"></i>History
@@ -569,16 +695,24 @@ function PayrollPageEnhanced() {
                               <button
                                 className="btn btn-success btn-sm"
                                 onClick={() => handleConfirmPayment(worker)}
-                                disabled={worker.amountPaid <= 0 || remainingPayable <= 0 || paymentLoading === worker._id}
+                                disabled={
+                                  worker.amountPaid <= 0 ||
+                                  remainingPayable <= 0 ||
+                                  paymentLoading === worker._id
+                                }
                                 style={{
-                                  background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
-                                  border: 'none',
-                                  fontWeight: '600'
+                                  background:
+                                    "linear-gradient(135deg, #28a745 0%, #20c997 100%)",
+                                  border: "none",
+                                  fontWeight: "600",
                                 }}
                               >
                                 {paymentLoading === worker._id ? (
                                   <>
-                                    <span className="spinner-border spinner-border-sm me-1" role="status"></span>
+                                    <span
+                                      className="spinner-border spinner-border-sm me-1"
+                                      role="status"
+                                    ></span>
                                     Processing...
                                   </>
                                 ) : (
@@ -602,25 +736,46 @@ function PayrollPageEnhanced() {
 
         {/* Enhanced History Modal */}
         {showModal && (
-          <div className="modal show d-block" style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}>
+          <div
+            className="modal show d-block"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
+          >
             <div className="modal-dialog modal-xl">
               <div className="modal-content shadow-lg border-0">
-                <div className="modal-header text-white" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+                <div
+                  className="modal-header text-white"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  }}
+                >
                   <div className="d-flex align-items-center">
                     <div className="avatar-circle me-3">
                       {selectedName.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <h5 className="modal-title mb-0 fw-bold">{selectedName}'s Payment History</h5>
-                      <small className="opacity-75">Complete payment transaction history</small>
+                      <h5 className="modal-title mb-0 fw-bold">
+                        {selectedName}'s Payment History
+                      </h5>
+                      <small className="opacity-75">
+                        Complete payment transaction history
+                      </small>
                     </div>
                   </div>
                   <div className="d-flex align-items-center">
                     <div className="text-end me-3">
                       <div className="text-white-50 small">Total Payable</div>
-                      <div className="h5 mb-0 text-white">₹{getWorkerTotalPayable(selectedWorkerId).toLocaleString()}</div>
+                      <div className="h5 mb-0 text-white">
+                        ₹
+                        {getWorkerTotalPayable(
+                          selectedWorkerId
+                        ).toLocaleString()}
+                      </div>
                     </div>
-                    <button className="btn-close btn-close-white" onClick={() => setShowModal(false)} />
+                    <button
+                      className="btn-close btn-close-white"
+                      onClick={() => setShowModal(false)}
+                    />
                   </div>
                 </div>
 
@@ -629,7 +784,9 @@ function PayrollPageEnhanced() {
                     <div className="text-center py-5">
                       <i className="fas fa-receipt fa-4x text-muted mb-3"></i>
                       <h5 className="text-muted">No Payment History</h5>
-                      <p className="text-muted">No payment transactions found for this worker.</p>
+                      <p className="text-muted">
+                        No payment transactions found for this worker.
+                      </p>
                     </div>
                   ) : (
                     <>
@@ -639,22 +796,39 @@ function PayrollPageEnhanced() {
                             <div className="card-body">
                               <div className="row text-center">
                                 <div className="col-md-4">
-                                  <h6 className="text-muted mb-1">Total Transactions</h6>
-                                  <h4 className="text-primary mb-0">{selectedHistory.length}</h4>
-                                </div>
-                                <div className="col-md-4">
-                                  <h6 className="text-muted mb-1">Total Paid</h6>
-                                  <h4 className="text-success mb-0">
-                                    ₹{selectedHistory.reduce((sum, record) => {
-                                      if (record.paidAmounts) {
-                                        return sum + record.paidAmounts.reduce((a, b) => a + b, 0);
-                                      }
-                                      return sum + (record.paidAmount || 0);
-                                    }, 0).toLocaleString()}
+                                  <h6 className="text-muted mb-1">
+                                    Total Transactions
+                                  </h6>
+                                  <h4 className="text-primary mb-0">
+                                    {selectedHistory.length}
                                   </h4>
                                 </div>
                                 <div className="col-md-4">
-                                  <h6 className="text-muted mb-1">Payment Status</h6>
+                                  <h6 className="text-muted mb-1">
+                                    Total Paid
+                                  </h6>
+                                  <h4 className="text-success mb-0">
+                                    ₹
+                                    {selectedHistory
+                                      .reduce((sum, record) => {
+                                        if (record.paidAmounts) {
+                                          return (
+                                            sum +
+                                            record.paidAmounts.reduce(
+                                              (a, b) => a + b,
+                                              0
+                                            )
+                                          );
+                                        }
+                                        return sum + (record.paidAmount || 0);
+                                      }, 0)
+                                      .toLocaleString()}
+                                  </h4>
+                                </div>
+                                <div className="col-md-4">
+                                  <h6 className="text-muted mb-1">
+                                    Payment Status
+                                  </h6>
                                   <h4 className="text-info mb-0">Active</h4>
                                 </div>
                               </div>
@@ -665,19 +839,40 @@ function PayrollPageEnhanced() {
 
                       <div className="table-responsive">
                         <table className="table table-hover">
-                          <thead className="custom-table-header" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important', color: 'white !important' }}>
+                          <thead
+                            className="custom-table-header"
+                            style={{
+                              background:
+                                "linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important",
+                              color: "white !important",
+                            }}
+                          >
                             <tr>
-                              <th className="px-3 py-3"><i className="fas fa-calendar me-2"></i>Date</th>
-                              <th className="px-3 py-3"><i className="fas fa-rupee-sign me-2"></i>Amount Paid</th>
-                              <th className="px-3 py-3"><i className="fas fa-wallet me-2"></i>Remaining</th>
-                              <th className="px-3 py-3"><i className="fas fa-info-circle me-2"></i>Status</th>
-                              <th className="px-3 py-3"><i className="fas fa-chart-line me-2"></i>Progress</th>
+                              <th className="px-3 py-3">
+                                <i className="fas fa-calendar me-2"></i>Date
+                              </th>
+                              <th className="px-3 py-3">
+                                <i className="fas fa-rupee-sign me-2"></i>Amount
+                                Paid
+                              </th>
+                              <th className="px-3 py-3">
+                                <i className="fas fa-wallet me-2"></i>Remaining
+                              </th>
+                              <th className="px-3 py-3">
+                                <i className="fas fa-info-circle me-2"></i>
+                                Status
+                              </th>
+                              <th className="px-3 py-3">
+                                <i className="fas fa-chart-line me-2"></i>
+                                Progress
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
                             {(() => {
                               let runningTotal = 0;
-                              const totalPayable = getWorkerTotalPayable(selectedWorkerId);
+                              const totalPayable =
+                                getWorkerTotalPayable(selectedWorkerId);
                               const rows = [];
 
                               selectedHistory.forEach((record, recordIndex) => {
@@ -685,20 +880,36 @@ function PayrollPageEnhanced() {
                                   record.paymentDates.forEach((date, i) => {
                                     const paid = record.paidAmounts[i] || 0;
                                     runningTotal += paid;
-                                    const remaining = Math.max(0, totalPayable - runningTotal);
-                                    const progress = totalPayable > 0 ? (runningTotal / totalPayable) * 100 : 0;
-                                    const status = remaining === 0 ? "Paid" : remaining < totalPayable ? "Partial" : "Unpaid";
+                                    const remaining = Math.max(
+                                      0,
+                                      totalPayable - runningTotal
+                                    );
+                                    const progress =
+                                      totalPayable > 0
+                                        ? (runningTotal / totalPayable) * 100
+                                        : 0;
+                                    const status =
+                                      remaining === 0
+                                        ? "Paid"
+                                        : remaining < totalPayable
+                                        ? "Partial"
+                                        : "Unpaid";
 
                                     rows.push(
-                                      <tr key={`${recordIndex}-${i}`} className="align-middle">
+                                      <tr
+                                        key={`${recordIndex}-${i}`}
+                                        className="align-middle"
+                                      >
                                         <td className="px-3 py-3">
                                           <div className="d-flex align-items-center">
                                             <i className="fas fa-calendar-day text-primary me-2"></i>
                                             <span className="fw-medium">
-                                              {new Date(date).toLocaleDateString("en-IN", {
-                                                day: 'numeric',
-                                                month: 'short',
-                                                year: 'numeric'
+                                              {new Date(
+                                                date
+                                              ).toLocaleDateString("en-IN", {
+                                                day: "numeric",
+                                                month: "short",
+                                                year: "numeric",
                                               })}
                                             </span>
                                           </div>
@@ -714,49 +925,92 @@ function PayrollPageEnhanced() {
                                           </span>
                                         </td>
                                         <td className="px-3 py-3">
-                                          <span className={`badge fs-6 px-3 py-2 ${status === "Paid" ? "bg-success" :
-                                              status === "Partial" ? "bg-warning text-dark" : "bg-danger"
-                                            }`}>
-                                            <i className={`fas ${status === "Paid" ? "fa-check-circle" :
-                                                status === "Partial" ? "fa-clock" : "fa-times-circle"
-                                              } me-1`}></i>
+                                          <span
+                                            className={`badge fs-6 px-3 py-2 ${
+                                              status === "Paid"
+                                                ? "bg-success"
+                                                : status === "Partial"
+                                                ? "bg-warning text-dark"
+                                                : "bg-danger"
+                                            }`}
+                                          >
+                                            <i
+                                              className={`fas ${
+                                                status === "Paid"
+                                                  ? "fa-check-circle"
+                                                  : status === "Partial"
+                                                  ? "fa-clock"
+                                                  : "fa-times-circle"
+                                              } me-1`}
+                                            ></i>
                                             {status}
                                           </span>
                                         </td>
                                         <td className="px-3 py-3">
-                                          <div className="progress" style={{ height: '10px', width: '120px', backgroundColor: '#e9ecef', borderRadius: '5px' }}>
+                                          <div
+                                            className="progress"
+                                            style={{
+                                              height: "10px",
+                                              width: "120px",
+                                              backgroundColor: "#e9ecef",
+                                              borderRadius: "5px",
+                                            }}
+                                          >
                                             <div
                                               className="progress-bar"
-                                              style={{ 
+                                              style={{
                                                 width: `${progress}%`,
-                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                borderRadius: '5px',
-                                                transition: 'width 0.6s ease'
+                                                background:
+                                                  "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                                                borderRadius: "5px",
+                                                transition: "width 0.6s ease",
                                               }}
                                             ></div>
                                           </div>
-                                          <small className="text-muted">{progress.toFixed(1)}%</small>
+                                          <small className="text-muted">
+                                            {progress.toFixed(1)}%
+                                          </small>
                                         </td>
                                       </tr>
                                     );
                                   });
                                 } else {
-                                  const paid = record.paidAmount || record.totalAmount || 0;
+                                  const paid =
+                                    record.paidAmount ||
+                                    record.totalAmount ||
+                                    0;
                                   runningTotal += paid;
-                                  const remaining = Math.max(0, totalPayable - runningTotal);
-                                  const progress = totalPayable > 0 ? (runningTotal / totalPayable) * 100 : 0;
-                                  const status = remaining === 0 ? "Paid" : remaining < totalPayable ? "Partial" : "Unpaid";
+                                  const remaining = Math.max(
+                                    0,
+                                    totalPayable - runningTotal
+                                  );
+                                  const progress =
+                                    totalPayable > 0
+                                      ? (runningTotal / totalPayable) * 100
+                                      : 0;
+                                  const status =
+                                    remaining === 0
+                                      ? "Paid"
+                                      : remaining < totalPayable
+                                      ? "Partial"
+                                      : "Unpaid";
 
                                   rows.push(
-                                    <tr key={recordIndex} className="align-middle">
+                                    <tr
+                                      key={recordIndex}
+                                      className="align-middle"
+                                    >
                                       <td className="px-3 py-3">
                                         <div className="d-flex align-items-center">
                                           <i className="fas fa-calendar-day text-primary me-2"></i>
                                           <span className="fw-medium">
-                                            {new Date(record.paymentDate || record.createdAt).toLocaleDateString("en-IN", {
-                                              day: 'numeric',
-                                              month: 'short',
-                                              year: 'numeric'
+                                            {new Date(
+                                              record.paymentDate ||
+                                                record.createdAt
+                                            ).toLocaleDateString("en-IN", {
+                                              day: "numeric",
+                                              month: "short",
+                                              year: "numeric",
                                             })}
                                           </span>
                                         </div>
@@ -772,28 +1026,51 @@ function PayrollPageEnhanced() {
                                         </span>
                                       </td>
                                       <td className="px-3 py-3">
-                                        <span className={`badge fs-6 px-3 py-2 ${status === "Paid" ? "bg-success" :
-                                            status === "Partial" ? "bg-warning text-dark" : "bg-danger"
-                                          }`}>
-                                          <i className={`fas ${status === "Paid" ? "fa-check-circle" :
-                                              status === "Partial" ? "fa-clock" : "fa-times-circle"
-                                            } me-1`}></i>
+                                        <span
+                                          className={`badge fs-6 px-3 py-2 ${
+                                            status === "Paid"
+                                              ? "bg-success"
+                                              : status === "Partial"
+                                              ? "bg-warning text-dark"
+                                              : "bg-danger"
+                                          }`}
+                                        >
+                                          <i
+                                            className={`fas ${
+                                              status === "Paid"
+                                                ? "fa-check-circle"
+                                                : status === "Partial"
+                                                ? "fa-clock"
+                                                : "fa-times-circle"
+                                            } me-1`}
+                                          ></i>
                                           {status}
                                         </span>
                                       </td>
                                       <td className="px-3 py-3">
-                                        <div className="progress" style={{ height: '10px', width: '120px', backgroundColor: '#e9ecef', borderRadius: '5px' }}>
+                                        <div
+                                          className="progress"
+                                          style={{
+                                            height: "10px",
+                                            width: "120px",
+                                            backgroundColor: "#e9ecef",
+                                            borderRadius: "5px",
+                                          }}
+                                        >
                                           <div
                                             className="progress-bar"
-                                            style={{ 
+                                            style={{
                                               width: `${progress}%`,
-                                              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                              borderRadius: '5px',
-                                              transition: 'width 0.6s ease'
+                                              background:
+                                                "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                                              borderRadius: "5px",
+                                              transition: "width 0.6s ease",
                                             }}
                                           ></div>
                                         </div>
-                                        <small className="text-muted">{progress.toFixed(1)}%</small>
+                                        <small className="text-muted">
+                                          {progress.toFixed(1)}%
+                                        </small>
                                       </td>
                                     </tr>
                                   );
@@ -812,9 +1089,14 @@ function PayrollPageEnhanced() {
                 <div className="modal-footer bg-light">
                   <div className="d-flex justify-content-between w-100">
                     <div className="text-muted">
-                      <small>Last updated: {new Date().toLocaleDateString()}</small>
+                      <small>
+                        Last updated: {new Date().toLocaleDateString()}
+                      </small>
                     </div>
-                    <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => setShowModal(false)}
+                    >
                       <i className="fas fa-times me-1"></i>Close
                     </button>
                   </div>

@@ -139,7 +139,39 @@ function Dashboard() {
   const [date, setDate] = useState(
     () => new Date().toISOString().split("T")[0]
   );
+  const [totalPresent, setTotalPresent] = useState(0);
+  const [totalAbsent, setTotalAbsent] = useState(0);
   const selectedProject = useSelector((state) => state.project.selectedProject);
+
+  // Fetch attendance stats for selected date and project
+  const fetchAttendanceStats = async () => {
+    if (!selectedProject?._id || !date) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/worker-records/stats?projectId=${selectedProject._id}&date=${date}`
+      );
+      
+      if (response.ok) {
+        const stats = await response.json();
+        setTotalPresent(stats.present || 0);
+        setTotalAbsent(stats.absent || 0);
+      } else {
+        // If no stats endpoint, calculate from current workers
+        const presentCount = hiredWorkers.filter(w => w.present).length;
+        const absentCount = hiredWorkers.length - presentCount;
+        setTotalPresent(presentCount);
+        setTotalAbsent(absentCount);
+      }
+    } catch (err) {
+      console.error("Error fetching attendance stats:", err);
+      // Fallback to current selection
+      const presentCount = hiredWorkers.filter(w => w.present).length;
+      const absentCount = hiredWorkers.length - presentCount;
+      setTotalPresent(presentCount);
+      setTotalAbsent(absentCount);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -174,6 +206,11 @@ function Dashboard() {
 
     fetchData();
   }, [selectedProject]);
+
+  // Fetch stats when project or date changes
+  useEffect(() => {
+    fetchAttendanceStats();
+  }, [selectedProject, date, hiredWorkers]);
 
   const handleAttendanceToggle = (id) => {
     setHiredWorkers((prev) =>
@@ -249,8 +286,44 @@ function Dashboard() {
       <Header />
       <ToastContainer />
 
-      <div className="container mt-5">
-        <h2 className="text-center mb-4">Mark Attendance</h2>
+      <div className="material-header">
+  <div className="container">
+    <div className="row d-flex align-items-center py-4">
+      {/* Left Side: Heading, Subtitle */}
+      <div className="col-md-8 ">
+        <div className="mate-head-content">
+          <h1 className="mate-head-title">Manage Attendance</h1>
+          <p className="mate-head-subtitle me-5">
+          Easily mark and track daily attendance of workers. View job-wise records, monitor presence/absence, and maintain accurate logs for smoother project management.
+          </p>
+          <span className="mate-head-badge mt-3">
+            <i className="fas fa-boxes me-2"></i>
+            {selectedProject?.name || 'Attendance Management'}
+          </span>
+        </div>
+      </div>
+
+      {/* Right Side: Stats */}
+      <div className="col-md-4">
+        <div className="header-stats">
+          <div className="stats-grid">
+            <div className="stat-item">
+              <div className="stat-number">{totalPresent}</div>
+              <div className="stat-label">Total Present</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">{totalAbsent}</div>
+              <div className="stat-label">Total Absent</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div className="container mt-4">
+        {/* <h2 className="text-center mb-4">Mark Attendance</h2> */}
 
         <div className="d-flex justify-content-between align-items-center mb-4">
           <div className="input-group w-50">
@@ -266,24 +339,19 @@ function Dashboard() {
             />
           </div>
 
-          <div className="btn-group">
+          <div className="attendance-actions">
             <button
-              className="btn"
+              className="btn attendance-btn present-btn"
               onClick={() => handleApplyAll(true)}
-              style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                border: 'none',
-                color: 'white',
-                borderRadius: '10px',
-                fontWeight: '600'
-              }}
             >
+              <i className="fas fa-check-circle me-2"></i>
               Mark All Present
             </button>
             <button
-              className="btn btn-outline-danger"
+              className="btn attendance-btn absent-btn"
               onClick={() => handleApplyAll(false)}
             >
+              <i className="fas fa-times-circle me-2"></i>
               Mark All Absent
             </button>
           </div>
@@ -320,9 +388,9 @@ function Dashboard() {
                   </td>
                   <td className="worker-name-cell">
                     <div className="worker-info">
-                      <div className="worker-avatar me-3">
+                      {/* <div className="worker-avatar me-3">
                         <i className="fas fa-hard-hat"></i>
-                      </div>
+                      </div> */}
                       <span className="worker-name">{worker.name}</span>
                     </div>
                   </td>
@@ -368,6 +436,50 @@ function Dashboard() {
         </div>
         
         <style jsx>{`
+          .attendance-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+          }
+          
+          .attendance-btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            min-width: 160px;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          }
+          
+          .present-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+          }
+          
+          .present-btn:hover {
+            background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            color: white;
+          }
+          
+          .absent-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+            color: white;
+          }
+          
+          .absent-btn:hover {
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+            color: white;
+          }
+          
           .modern-table-container {
             background: white;
             border-radius: 15px;
@@ -453,7 +565,7 @@ function Dashboard() {
       </div>
         )}
 
-        <div className="d-flex justify-content-end mt-4">
+        <div className="d-flex justify-content-end my-4">
           <button
             disabled={processing}
             onClick={handleSubmitAttendance}

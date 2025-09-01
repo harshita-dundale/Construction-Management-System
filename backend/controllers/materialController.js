@@ -17,8 +17,28 @@ export const getAllMaterials = async (req, res) => {
 export const createMaterial = async (req, res) => {
   const { name, quantity, unitPrice, unit, projectId } = req.body;
 
-  const newMaterial = new Material({ name, quantity, unitPrice, unit, projectId });
   try {
+    // Check if material already exists in this project (case-insensitive)
+    const existingMaterial = await Material.findOne({
+      name: { $regex: new RegExp(`^${name.trim()}$`, 'i') },
+      projectId: new mongoose.Types.ObjectId(projectId),
+    });
+
+    if (existingMaterial) {
+      return res.status(409).json({ 
+        message: `Material "${name}" already exists in this project. Use update instead.`,
+        existingMaterial 
+      });
+    }
+
+    const newMaterial = new Material({ 
+      name: name.trim(), 
+      quantity, 
+      unitPrice, 
+      unit: unit.trim(), 
+      projectId 
+    });
+    
     const saved = await newMaterial.save();
     res.status(201).json(saved);
   } catch (err) {
@@ -40,7 +60,7 @@ export const updateMaterialUsage = async (req, res) => {
 
   try {
     const material = await Material.findOne({
-      name: name.trim().toLowerCase(),
+      name: { $regex: new RegExp(`^${name.trim()}$`, 'i') },
       projectId: new mongoose.Types.ObjectId(projectId),
     });
 

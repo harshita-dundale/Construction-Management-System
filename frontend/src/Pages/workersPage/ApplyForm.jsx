@@ -9,7 +9,6 @@ import {
   resetForm,
 } from "../Redux/ApplyJobSlice";
 import "bootstrap/dist/css/bootstrap.min.css";
-import image1 from "../../assets/images/photos/postjob.png";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 
@@ -22,6 +21,50 @@ function ApplyForm() {
   const navigate = useNavigate();
   const { user, isAuthenticated, isLoading } = useAuth0();
 
+  // Clear form first, then auto-fill from user profile
+  useEffect(() => {
+    dispatch(resetForm());
+  }, [dispatch]);
+
+  // Auto-fill from user profile data
+  useEffect(() => {
+    const autoFillFromProfile = async () => {
+      if (!user?.email) return;
+
+      // Auto-fill name from Auth0
+      if (user.name) {
+        dispatch(setFullName(user.name));
+      }
+
+      try {
+        // Get user profile data
+        const encodedEmail = encodeURIComponent(user.email);
+        const response = await fetch(`http://localhost:5000/api/auth/get-user/${encodedEmail}`);
+        
+        if (response.ok) {
+          const userData = await response.json();
+          
+          // Auto-fill phone from profile
+          if (userData.phoneNo) {
+            dispatch(setPhoneNo(userData.phoneNo));
+          }
+          
+          // Auto-fill experience from profile
+          if (userData.experience) {
+            dispatch(setExperience(userData.experience.toString()));
+          }
+        }
+      } catch (error) {
+        console.log('Could not fetch user profile for auto-fill');
+        // Form stays with just Auth0 name filled
+      }
+    };
+
+    if (user && isAuthenticated) {
+      autoFillFromProfile();
+    }
+  }, [user, isAuthenticated, dispatch]);
+
   useEffect(() => {
     if (!currentJob?._id) {
       toast.error("Job ID not found. Please try again.");
@@ -32,13 +75,6 @@ function ApplyForm() {
   if (isLoading) return <div>Loading user...</div>;
 
   const jobId = currentJob?._id;
-
-  // useEffect(() => {
-  //   if (!jobId) {
-  //     toast.error("Job ID not found. Please try again.");
-  //     navigate("/browse-Job");
-  //   }
-  // }, [jobId, navigate]);
   
   if (!jobId) {
     toast.error("Job ID not found. Please try again.");
@@ -85,7 +121,7 @@ function ApplyForm() {
       alert("User not logged in or email not found!");
       return;
     }
-   // console.log("🔍 projectId in currentJob:", currentJob?.projectId);
+
     const payload = {
       userId: user._id,
       name: applyJob.fullName,
@@ -114,46 +150,33 @@ function ApplyForm() {
       console.error(error);
     }
   };
+
   return (
     <>
       <div className="apply-form-wrapper">
         <div className="container-fluid px-0">
           <div className="row g-0 min-vh-100">
-            {/* Left Side - Image (Commented Out) */}
-            {/* <div className="col-lg-6 d-flex align-items-center justify-content-center bg-gradient">
-              <div className="image-container">
-                <div className="floating-elements">
-                  <div className="floating-circle circle-1"></div>
-                  <div className="floating-circle circle-2"></div>
-                  <div className="floating-circle circle-3"></div>
-                </div>
-                <img
-                  src={image1}
-                  className="main-image"
-                  alt="Apply for Job"
-                />
-                <div className="image-overlay">
-                  <h3 className="overlay-title">Join Our Team</h3>
-                  <p className="overlay-subtitle">Start your construction career today</p>
-                </div>
-              </div>
-            </div> */}
-
-            {/* Form - Full Width */}
             <div className="col-12 d-flex align-items-center justify-content-center">
               <div className="form-container">
-                <div className="form-header ">
-                  <button
-                    className="btn-back "
+                <div className="form-header">
+                  {/* <button
+                    className="btn-back"
                     onClick={() => navigate("/browse-Job")}
                   >
                     <i className="fas fa-arrow-left me-2"></i>
                     Back to Jobs
                   </button>
-                  
+                   */}
+
+                   <button
+                    className="btn-back mb-3"
+                    onClick={() => navigate("/browse-Job")}
+                  >
+                    <i className="fas fa-arrow-left me-2"></i>
+                    Back to Jobs
+                  </button>
                   <div className="form-title-section text-center mt-3">
                     <h1 className="form-title mb-4">Apply for Position</h1>
-                    {/* <p className="form-subtitle">Fill out the form below to submit your application</p> */}
                     {currentJob && (
                       <div className="job-info-card">
                         <div className="job-badge">
@@ -255,7 +278,7 @@ function ApplyForm() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{__html: `
         .apply-form-wrapper {
           min-height: 100vh;
           background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -379,7 +402,7 @@ function ApplyForm() {
           padding: 2rem 1rem;
         }
         
-        .back-btn {
+        .btn-back {
           background: rgba(102, 126, 234, 0.1);
           border: 1px solid rgba(102, 126, 234, 0.3);
           color: #667eea;
@@ -389,7 +412,7 @@ function ApplyForm() {
           margin-bottom: 2rem;
         }
         
-        .back-btn:hover {
+        .btn-back:hover {
           background: #667eea;
           color: white;
           transform: translateY(-2px);
@@ -398,14 +421,8 @@ function ApplyForm() {
         .form-title {
           font-size: 1.9rem;
           font-weight: 800;
-          color: #fff;
+          color: #2c3e50;
           margin-bottom: 0.5rem;
-        }
-        
-        .form-subtitle {
-          color: #6c757d;
-          font-size: 1.1rem;
-          margin-bottom: 2rem;
         }
         
         .job-info-card {
@@ -413,7 +430,6 @@ function ApplyForm() {
           padding: 0.4rem 2rem;
           border-radius: 15px;
           color: white;
-          // margin-bottom: 0.5rem;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -439,14 +455,13 @@ function ApplyForm() {
         }
         
         .form-group {
-        margin-bottom: 1rem;
+          margin-bottom: 1rem;
         }
         
         .form-label {
           display: block;
           font-weight: 600;
           color: #2c3e50;
-          //margin-bottom: 0.75rem;
           font-size: 1rem;
         }
         
@@ -468,8 +483,7 @@ function ApplyForm() {
         
         .form-actions {
           display: flex;
-          //gap: 1rem;
-          // margin-top: 2rem;
+          gap: 0.5rem;
         }
         
         .submit-btn {
@@ -514,28 +528,6 @@ function ApplyForm() {
           font-weight: 500;
         }
         
-        @media (max-width: 991px) {
-          .bg-gradient {
-            min-height: 40vh;
-          }
-          
-          .form-container {
-            padding: 2rem 1.5rem;
-          }
-          
-          .form-title {
-            font-size: 2rem;
-          }
-          
-          .overlay-title {
-            font-size: 2rem;
-          }
-          
-          .main-image {
-            max-width: 300px;
-          }
-        }
-        
         @media (max-width: 576px) {
           .form-actions {
             flex-direction: column;
@@ -551,10 +543,9 @@ function ApplyForm() {
             padding: 1.5rem;
           }
         }
-      `}</style>
+      `}} />
     </>
   );
 }
 
 export default ApplyForm;
-

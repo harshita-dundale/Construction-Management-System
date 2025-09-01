@@ -131,8 +131,44 @@ const MaterialManagement = () => {
         const data = await res.json();
 
         if (!res.ok) {
-          if (data.message && data.message.includes('E11000')) {
-            Swal.fire("Duplicate Material", `Material "${newMaterial.name}" already exists in this project. Please use a different name or update the existing material.`, "error");
+          if (res.status === 409) {
+            // Material already exists - offer to update existing
+            const result = await Swal.fire({
+              title: 'Material Already Exists',
+              text: data.message,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: 'var(--secondary-color)',
+              cancelButtonColor: 'gray',
+              confirmButtonText: 'Update Existing',
+              cancelButtonText: 'Cancel'
+            });
+
+            if (result.isConfirmed && data.existingMaterial) {
+              // Update existing material quantity
+              try {
+                const updateRes = await fetch(`http://localhost:5000/api/materials/usage`, {
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    name: data.existingMaterial.name,
+                    quantityUsed: -(newMaterial.quantity), // Negative to add stock
+                    projectId: selectedProject._id,
+                  }),
+                });
+
+                const updateData = await updateRes.json();
+                if (updateRes.ok) {
+                  dispatch(updateUsage(updateData));
+                  setNewMaterial({ name: "", quantity: 0, unitPrice: 0, unit: "" });
+                  Swal.fire("Success", `Added ${newMaterial.quantity} ${newMaterial.unit} to existing stock`, "success");
+                } else {
+                  Swal.fire("Error", updateData.message || "Failed to update stock", "error");
+                }
+              } catch (err) {
+                Swal.fire("Error", "Failed to update existing material", "error");
+              }
+            }
           } else {
             Swal.fire("Error", data.message || "Material add failed", "error");
           }
@@ -264,7 +300,7 @@ const MaterialManagement = () => {
           </p>
           <span className="mate-head-badge mt-3">
             <i className="fas fa-boxes me-2"></i>
-            Material Management
+            {selectedProject?.name || 'Material Management'}
           </span>
         </div>
       </div>
@@ -313,8 +349,6 @@ const MaterialManagement = () => {
     </div>
   </div>
 </div>
-
-
         <div className="container">
 
           {/* Add Material Form */}

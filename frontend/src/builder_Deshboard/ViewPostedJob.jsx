@@ -212,24 +212,7 @@ function ViewPostedJobs() {
             </div>
           </div>
         </div>
-
-        {/* Project Filter */}
-        {/* {selectedProject && (
-          <div className="container mb-4">
-            <div className="project-filter">
-              <div className="filter-icon">
-                <i className="fas fa-building"></i>
-              </div>
-              <div className="filter-content">
-                <h6 className="filter-title">{selectedProject.name}</h6>
-                <span className="filter-subtitle">Project Filter Active</span>
-              </div>
-              <div className="filter-badge">{displayJobs.length} Jobs</div>
-            </div>
-          </div>
-        )} */}
-
-        <div className="container">
+       <div className="container">
           {displayJobs.length === 0 ? (
             <div className="empty-state-parent">
               <div className="empty-icon">

@@ -3,6 +3,7 @@ import {
   setUserRole,
   getUserRole,
   getUserByEmail,
+  updateUserProfile,
   uploadProfileImage,
   deleteProfileImage
 } from "../controllers/authController.js";
@@ -15,6 +16,7 @@ router.get("/get-role", getUserRole);
 
 // 🔹 User profile routes
 router.get("/get-user/:email", getUserByEmail); 
+router.put("/update-profile", updateUserProfile); // New route for profile updates
 router.put("/profile-image", uploadProfileImage);
 router.delete("/profile-image", deleteProfileImage); 
 

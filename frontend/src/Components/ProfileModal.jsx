@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { CgProfile } from "react-icons/cg";
+import { toast } from "react-toastify";
 
 const CLOUD_NAME = "dalh0rbn1";
 const UPLOAD_PRESET = "ml_default";
@@ -11,6 +12,11 @@ const ProfileModal = ({ show, handleClose }) => {
   const [imageError, setImageError] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [experience, setExperience] = useState("");
+  const [isEditingPhone, setIsEditingPhone] = useState(false);
+  const [isEditingExperience, setIsEditingExperience] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const handleEsc = (e) => {
@@ -21,12 +27,11 @@ const ProfileModal = ({ show, handleClose }) => {
   }, [handleClose]);
 
   useEffect(() => {
-    const fetchProfileImage = async () => {
+    const fetchUserProfile = async () => {
       try {
         if (!user?.email) return;
 
         const encodedEmail = encodeURIComponent(user.email);
-
         const res = await fetch(
           `http://localhost:5000/api/auth/get-user/${encodedEmail}`
         );
@@ -37,12 +42,14 @@ const ProfileModal = ({ show, handleClose }) => {
 
         const data = await res.json();
         setProfileImage(data.profileImage);
+        setPhoneNumber(data.phoneNo || "");
+        setExperience(data.experience || "");
       } catch (err) {
-        console.error("Failed to fetch image", err);
+        console.error("Failed to fetch user profile", err);
       }
     };
 
-    fetchProfileImage();
+    fetchUserProfile();
   }, [user]);
 
   if (!user) return null;
@@ -50,6 +57,79 @@ const ProfileModal = ({ show, handleClose }) => {
   const profileSrc = !imageError
     ? profileImage || user.picture
     : DEFAULT_PROFILE_IMAGE;
+
+  // Save phone number to backend
+  const savePhoneNumber = async () => {
+    if (!phoneNumber.trim()) {
+      toast.error("Phone number cannot be empty");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      toast.error("Please enter a valid 10-digit phone number");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/update-profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          phoneNo: phoneNumber,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update phone number");
+      }
+
+      setIsEditingPhone(false);
+      toast.success("Phone number updated successfully!");
+    } catch (error) {
+      console.error("Error updating phone number:", error);
+      toast.error("Failed to update phone number");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Save experience to backend
+  const saveExperience = async () => {
+    if (!experience.trim()) {
+      toast.error("Experience cannot be empty");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/update-profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          experience: parseInt(experience),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update experience");
+      }
+
+      setIsEditingExperience(false);
+      toast.success("Experience updated successfully!");
+    } catch (error) {
+      console.error("Error updating experience:", error);
+      toast.error("Failed to update experience");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   // Upload image to Cloudinary & save to backend
   const handleImageUpload = async (e) => {
@@ -247,44 +327,154 @@ const ProfileModal = ({ show, handleClose }) => {
                   </h6>
                   
                   <div className="details-grid">
-                    {[
-                      { 
-                        icon: "fas fa-user", 
-                        label: "Username", 
-                        value: user.nickname || "Not set" 
-                      },
-                      { 
-                        icon: "fas fa-envelope", 
-                        label: "Email Address", 
-                        value: user.email 
-                      },
-                      {
-                        icon: "fas fa-clock",
-                        label: "Last Updated",
-                        value: new Date(user.updated_at).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        }),
-                      },
-                      { 
-                        icon: "fas fa-id-card", 
-                        label: "User ID", 
-                        value: user.sub.substring(0, 20) + '...' 
-                      },
-                    ].map((field, index) => (
-                      <div className="detail-item" key={index}>
-                        <div className="detail-icon">
-                          <i className={field.icon}></i>
-                        </div>
-                        <div className="detail-content">
-                          <label className="detail-label">{field.label}</label>
-                          <div className="detail-value">{field.value}</div>
+                    {/* Username */}
+                    <div className="detail-item">
+                      <div className="detail-icon">
+                        <i className="fas fa-user"></i>
+                      </div>
+                      <div className="detail-content">
+                        <label className="detail-label">Username</label>
+                        <div className="detail-value">{user.nickname || "Not set"}</div>
+                      </div>
+                    </div>
+
+                    {/* Email */}
+                    <div className="detail-item">
+                      <div className="detail-icon">
+                        <i className="fas fa-envelope"></i>
+                      </div>
+                      <div className="detail-content">
+                        <label className="detail-label">Email Address</label>
+                        <div className="detail-value">{user.email}</div>
+                      </div>
+                    </div>
+
+                    {/* Phone Number - Editable */}
+                    <div className="detail-item">
+                      <div className="detail-icon">
+                        <i className="fas fa-phone"></i>
+                      </div>
+                      <div className="detail-content">
+                        <label className="detail-label">Phone Number</label>
+                        {isEditingPhone ? (
+                          <div className="edit-field">
+                            <input
+                              type="tel"
+                              className="edit-input"
+                              value={phoneNumber}
+                              onChange={(e) => setPhoneNumber(e.target.value)}
+                              placeholder="Enter 10-digit phone number"
+                              maxLength="10"
+                              pattern="\d{10}"
+                            />
+                            <div className="edit-actions">
+                              <button 
+                                className="save-btn" 
+                                onClick={savePhoneNumber}
+                                disabled={isSaving}
+                              >
+                                {isSaving ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-check"></i>}
+                              </button>
+                              <button 
+                                className="cancel-btn" 
+                                onClick={() => setIsEditingPhone(false)}
+                                disabled={isSaving}
+                              >
+                                <i className="fas fa-times"></i>
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="detail-value-editable">
+                            <span>{phoneNumber || "Not set"}</span>
+                            <button 
+                              className="edit-btn" 
+                              onClick={() => setIsEditingPhone(true)}
+                            >
+                              <i className="fas fa-edit"></i>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Experience - Editable */}
+                    <div className="detail-item">
+                      <div className="detail-icon">
+                        <i className="fas fa-medal"></i>
+                      </div>
+                      <div className="detail-content">
+                        <label className="detail-label">Experience (Years)</label>
+                        {isEditingExperience ? (
+                          <div className="edit-field">
+                            <input
+                              type="number"
+                              className="edit-input"
+                              value={experience}
+                              onChange={(e) => setExperience(e.target.value)}
+                              placeholder="Years of experience"
+                              min="0"
+                            />
+                            <div className="edit-actions">
+                              <button 
+                                className="save-btn" 
+                                onClick={saveExperience}
+                                disabled={isSaving}
+                              >
+                                {isSaving ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-check"></i>}
+                              </button>
+                              <button 
+                                className="cancel-btn" 
+                                onClick={() => setIsEditingExperience(false)}
+                                disabled={isSaving}
+                              >
+                                <i className="fas fa-times"></i>
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="detail-value-editable">
+                            <span>{experience || "Not set"}</span>
+                            <button 
+                              className="edit-btn" 
+                              onClick={() => setIsEditingExperience(true)}
+                            >
+                              <i className="fas fa-edit"></i>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Last Updated */}
+                    <div className="detail-item">
+                      <div className="detail-icon">
+                        <i className="fas fa-clock"></i>
+                      </div>
+                      <div className="detail-content">
+                        <label className="detail-label">Last Updated</label>
+                        <div className="detail-value">
+                          {new Date(user.updated_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
                         </div>
                       </div>
-                    ))}
+                    </div>
+
+                    {/* User ID */}
+                    <div className="detail-item">
+                      <div className="detail-icon">
+                        <i className="fas fa-id-card"></i>
+                      </div>
+                      <div className="detail-content">
+                        <label className="detail-label">User ID</label>
+                        <div className="detail-value">{user.sub.substring(0, 20) + '...'}</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -304,7 +494,7 @@ const ProfileModal = ({ show, handleClose }) => {
       </div>
       
       {/* Enhanced Styles */}
-      <style>{`
+      <style dangerouslySetInnerHTML={{__html: `
         .modal-backdrop-modern {
           position: fixed;
           top: 0;
@@ -618,6 +808,87 @@ const ProfileModal = ({ show, handleClose }) => {
           font-weight: 500;
           word-break: break-word;
         }
+
+        .detail-value-editable {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 0.95rem;
+          color: #2c3e50;
+          font-weight: 500;
+        }
+
+        .edit-btn {
+          background: none;
+          border: none;
+          color: #667eea;
+          cursor: pointer;
+          padding: 0.25rem;
+          border-radius: 4px;
+          transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+          background: rgba(102, 126, 234, 0.1);
+          transform: scale(1.1);
+        }
+
+        .edit-field {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .edit-input {
+          flex: 1;
+          padding: 0.5rem;
+          border: 2px solid #667eea;
+          border-radius: 6px;
+          font-size: 0.9rem;
+          outline: none;
+        }
+
+        .edit-actions {
+          display: flex;
+          gap: 0.25rem;
+        }
+
+        .save-btn {
+          background: #28a745;
+          color: white;
+          border: none;
+          padding: 0.5rem;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .save-btn:hover {
+          background: #218838;
+          transform: scale(1.1);
+        }
+
+        .cancel-btn {
+          background: #dc3545;
+          color: white;
+          border: none;
+          padding: 0.5rem;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+          background: #c82333;
+          transform: scale(1.1);
+        }
+
+        .save-btn:disabled,
+        .cancel-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
+        }
         
         .modal-footer-modern {
           background: white;
@@ -625,8 +896,6 @@ const ProfileModal = ({ show, handleClose }) => {
           text-align: center;
           border-top: 1px solid #e9ecef;
         }
-        
-
         
         @media (max-width: 768px) {
           .modal-container {
@@ -651,10 +920,8 @@ const ProfileModal = ({ show, handleClose }) => {
             width: 120px;
             height: 120px;
           }
-          
-
         }
-      `}</style>
+      `}} />
     </>
   );
 };

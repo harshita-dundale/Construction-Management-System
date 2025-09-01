@@ -83,18 +83,20 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
                     <div className="job-info">
                       <h6 className="job-name">{app.jobId?.title || "N/A"}</h6>
                     </div>
-                      <button 
-                        className="view-btn"
-                        onClick={() => navigate('/attendances', { 
-                          state: { 
-                            selectedJobId: app.jobId?._id,
-                            selectedJobTitle: app.jobId?.title 
-                          } 
-                        })}
-                      >
-                        <i className="fas fa-eye me-1"></i>
-                        View
-                      </button>
+                      {app.status === "joined" && (
+                        <button 
+                          className="view-btn"
+                          onClick={() => navigate('/attendances', { 
+                            state: { 
+                              selectedJobId: app.jobId?._id,
+                              selectedJobTitle: app.jobId?.title 
+                            } 
+                          })}
+                        >
+                          <i className="fas fa-eye me-1"></i>
+                          View
+                        </button>
+                      )}
                   </td>
                   <td className="date-cell">
                     {app.jobId?.startDate ? new Date(app.jobId.startDate).toLocaleDateString() : "N/A"}
