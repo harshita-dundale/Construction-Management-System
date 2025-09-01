@@ -41,7 +41,7 @@ function DashboardStats({ totalProjects, ongoingWorkers, totalMaterialExpenses, 
       <div className="row g-3 justify-content-center">
         {statsData.map((stat, index) => (
           <div key={index} className="col-12 col-sm-6 col-lg-3">
-            <div className="stat-card">
+            <div className="dash1-card">
               <div className="stat-icon" style={{ background: stat.bgGradient }}>
                 <i className={stat.icon}></i>
               </div>

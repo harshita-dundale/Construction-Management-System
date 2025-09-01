@@ -165,7 +165,7 @@ function Header() {
                       }`}
                       onClick={() => navigate("/project_pannel")}
                     >
-                      <i className="fas fa-tachometer-alt me-2"></i>Dashboard
+                      <i className="fas fa-tachometer-alt me-2"></i>Home
                     </a>
                   </li>
                   <li className="nav-item me-3">

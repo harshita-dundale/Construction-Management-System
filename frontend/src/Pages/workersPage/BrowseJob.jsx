@@ -5,6 +5,7 @@ import EmptyState from "../../components/EmptyState";
 import "./BrowseJob.css";
 //import { setCurrentJob } from "../../Pages/Redux/applicationsSlice";
 import JobCard from "../../Components/cards/JobCard";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function BrowseJob() {
   const [jobs, setJobs] = useState([]);
@@ -12,6 +13,8 @@ function BrowseJob() {
   const [flippedCards, setFlippedCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [monthlyIncome, setMonthlyIncome] = useState(0);
+  const { user, isAuthenticated } = useAuth0();
 
   // Filter out expired jobs
   const filterActiveJobs = (jobsList) => {
@@ -38,6 +41,57 @@ function BrowseJob() {
       .catch((err) => console.error("Error fetching jobs:", err))
       .finally(() => setLoading(false));
   }, []);
+
+  // Fetch current month income for logged-in worker
+  useEffect(() => {
+    const fetchMonthlyIncome = async () => {
+      if (!isAuthenticated || !user?.email) {
+        setMonthlyIncome(0);
+        return;
+      }
+
+      try {
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth() + 1;
+        const currentYear = currentDate.getFullYear();
+        
+        // Fetch worker's attendance history
+        const response = await fetch(`http://localhost:5000/api/attendance/summary/${encodeURIComponent(user.email)}`);
+        if (!response.ok) {
+          setMonthlyIncome(0);
+          return;
+        }
+        
+        const data = await response.json();
+        let totalIncome = 0;
+        
+        // Calculate income for current month across all jobs
+        if (data.history && Array.isArray(data.history)) {
+          data.history.forEach(job => {
+            if (job.attendanceRecords && Array.isArray(job.attendanceRecords)) {
+              job.attendanceRecords.forEach(record => {
+                const recordDate = new Date(record.date);
+                if (recordDate.getMonth() + 1 === currentMonth && recordDate.getFullYear() === currentYear) {
+                  if (record.status === "Present") {
+                    // Use job salary or default daily wage
+                    const dailyWage = job.salary || 1000;
+                    totalIncome += dailyWage;
+                  }
+                }
+              });
+            }
+          });
+        }
+        
+        setMonthlyIncome(totalIncome);
+      } catch (error) {
+        console.error("Error fetching monthly income:", error);
+        setMonthlyIncome(0);
+      }
+    };
+
+    fetchMonthlyIncome();
+  }, [isAuthenticated, user?.email]);
 
   // Search functionality
   useEffect(() => {
@@ -123,13 +177,17 @@ function BrowseJob() {
                   <div className="stat-label">Active Jobs</div>
                 </div>
                 <div className="stat-card">
+                  <div className="stat-number">₹{monthlyIncome.toLocaleString()}</div>
+                  <div className="stat-label">This Month Income</div>
+                </div>
+                {/* <div className="stat-card">
                   <div className="stat-number">50+</div>
                   <div className="stat-label">Companies</div>
-                </div>
-                <div className="stat-card">
+                </div> */}
+                {/* <div className="stat-card">
                   <div className="stat-number">1000+</div>
                   <div className="stat-label">Workers Hired</div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

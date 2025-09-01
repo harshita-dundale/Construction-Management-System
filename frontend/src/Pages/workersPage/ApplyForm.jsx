@@ -18,6 +18,7 @@ function ApplyForm() {
   const currentJob = useSelector((state) => state.applications.currentJob);
   const applyJob = useSelector((state) => state.applyJob);
   const [submitStatus, setSubmitStatus] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const navigate = useNavigate();
   const { user, isAuthenticated, isLoading } = useAuth0();
 
@@ -44,8 +45,40 @@ function ApplyForm() {
     return;
   }
 
+  // Phone number validation function
+  const validatePhoneNumber = (phone) => {
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phone) {
+      return "Phone number is required";
+    }
+    if (phone.length !== 10) {
+      return "Phone number must be exactly 10 digits";
+    }
+    if (!phoneRegex.test(phone)) {
+      return "Phone number must start with 6, 7, 8, or 9";
+    }
+    return "";
+  };
+
+  // Handle phone number change with validation
+  const handlePhoneChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    if (value.length <= 10) {
+      dispatch(setPhoneNo(value));
+      setPhoneError(validatePhoneNumber(value));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate phone number before submission
+    const phoneValidationError = validatePhoneNumber(applyJob.phoneNo);
+    if (phoneValidationError) {
+      setPhoneError(phoneValidationError);
+      toast.error(phoneValidationError);
+      return;
+    }
 
     // ✅ More Reliable Check
     if (!isAuthenticated || !user || !user.email) {
@@ -159,14 +192,23 @@ function ApplyForm() {
                     </label>
                     <input
                       type="tel"
-                      className="form-input"
+                      className={`form-input ${phoneError ? 'error' : ''}`}
                       placeholder="Enter 10-digit phone number"
                       value={applyJob.phoneNo}
-                      onChange={(e) => dispatch(setPhoneNo(e.target.value))}
-                      pattern="\d{10}"
+                      onChange={handlePhoneChange}
                       maxLength="10"
                       required
                     />
+                    {phoneError && (
+                      <div className="error-message">
+                        <i className="fas fa-exclamation-circle me-1"></i>
+                        {phoneError}
+                      </div>
+                    )}
+                    <div className="input-hint">
+                      <i className="fas fa-info-circle me-1"></i>
+                      Enter a valid 10-digit Indian mobile number
+                    </div>
                   </div>
 
                   <div className="form-group">
@@ -246,6 +288,33 @@ function ApplyForm() {
           border-radius: 50%;
           background: rgba(255, 255, 255, 0.1);
           animation: float 6s ease-in-out infinite;
+        }
+        
+        .form-input.error {
+          border-color: #dc3545;
+          box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+        
+        .error-message {
+          color: #dc3545;
+          font-size: 0.875rem;
+          margin-top: 0.25rem;
+          display: flex;
+          align-items: center;
+        }
+        
+        .input-hint {
+          color: #6c757d;
+          font-size: 0.75rem;
+          margin-top: 0.25rem;
+          display: flex;
+          align-items: center;
+        }
+        
+        .form-input:focus {
+          border-color: #667eea;
+          box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+          outline: none;
         }
         
         .circle-1 {

@@ -59,8 +59,9 @@ const PaymentSummary = ({ jobId }) => {
       .length || 0;
   const selectedAttendanceRecords = selectedJob?.attendanceRecords || [];
   
-  // Get daily wage - use payment record or default
-  const dailyWage = selectedPaymentRecords[0]?.totalSalary / (presentCount || 1) || 1000;
+  // Get daily wage - use payment record or default with proper formatting
+  const rawDailyWage = selectedPaymentRecords[0]?.totalSalary / (presentCount || 1) || 1000;
+  const dailyWage = Math.round(rawDailyWage); // Round to nearest whole number
   
   // Calculate total earned based on attendance
   const totalEarned = presentCount * dailyWage;
@@ -80,12 +81,12 @@ const PaymentSummary = ({ jobId }) => {
     // Auto scroll to table after state update
     setTimeout(() => {
       if (section && showSection !== section) {
-        const tableElement = document.querySelector('.tableHistory');
-        if (tableElement) {
-          tableElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const historySection = document.querySelector(`[data-section="${section}"]`);
+        if (historySection) {
+          historySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
-    }, 100);
+    }, 150);
   };
 
   if (summaryStatus === "loading") {
@@ -129,21 +130,21 @@ const PaymentSummary = ({ jobId }) => {
                 <div className="metric-item mb-3">
                   <div className="d-flex justify-content-between align-items-center mb-1">
                     <span className="metric-label fw-bold">Daily Wage</span>
-                    <span className="metric-value fw-bold">₹{dailyWage}</span>
+                    <span className="metric-value fw-bold">₹{dailyWage.toLocaleString()}</span>
                   </div>
                 </div>
                 
                 <div className="metric-item mb-3">
                   <div className="d-flex justify-content-between align-items-center mb-1">
                     <span className="metric-label fw-bold">Total Earned</span>
-                    <span className="metric-value fw-bold text-success">₹{totalEarned}</span>
+                    <span className="metric-value fw-bold text-success">₹{totalEarned.toLocaleString()}</span>
                   </div>
                 </div>
                 
                 <div className="metric-item mb-3">
                   <div className="d-flex justify-content-between align-items-center mb-1">
                     <span className="metric-label fw-bold">Total Paid</span>
-                    <span className="metric-value fw-bold text-info">₹{totalPaid}</span>
+                    <span className="metric-value fw-bold text-info">₹{totalPaid.toLocaleString()}</span>
                   </div>
                   <div className="progress mb-2" style={{height: '8px'}}>
                     <div 
@@ -157,13 +158,17 @@ const PaymentSummary = ({ jobId }) => {
                 <div className="metric-item">
                   <div className="d-flex justify-content-between align-items-center">
                     <span className="metric-label fw-bold">Remaining</span>
-                    <span className="metric-value fw-bold text-warning">₹{pendingPayments}</span>
+                    <span className="metric-value fw-bold text-warning">₹{pendingPayments.toLocaleString()}</span>
                   </div>
                 </div>
               </div>
               
               <div className="mt-4 text-center">
-                <small className="text-muted"><i className="fas fa-click"></i> Click to view payment history</small>
+                <div className="click-hint-btn">
+                  <i className="fas fa-eye me-2"></i>
+                  <span>Click to view payment history</span>
+                  <i className="fas fa-chevron-down ms-2"></i>
+                </div>
               </div>
             </div>
           </div>
@@ -227,7 +232,11 @@ const PaymentSummary = ({ jobId }) => {
               )}
               
               <div className="mt-4 text-center">
-                <small className="text-muted"><i className="fas fa-click"></i> Click to view attendance history</small>
+                <div className="click-hint-btn">
+                  <i className="fas fa-eye me-2"></i>
+                  <span>Click to view attendance history</span>
+                  <i className="fas fa-chevron-down ms-2"></i>
+                </div>
               </div>
             </div>
           </div>
@@ -236,9 +245,9 @@ const PaymentSummary = ({ jobId }) => {
 
       {/* Enhanced Section Display */}
       {showSection === "payment" && (
-        <div className="row">
+        <div className="row" data-section="payment">
           <div className="col-12">
-            <div className="card shadow-lg border-0">
+            <div className="card shadow-lg border-0 history-table-card">
               <div className="card-header text-white" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
                 <h5 className="mb-0"><i className="fas fa-history me-2"></i>Payment History</h5>
               </div>
@@ -303,9 +312,9 @@ const PaymentSummary = ({ jobId }) => {
       )}
 
       {showSection === "attendance" && (
-        <div className="row">
+        <div className="row" data-section="attendance">
           <div className="col-12">
-            <div className="card shadow-lg border-0">
+            <div className="card shadow-lg border-0 history-table-card">
               <div className="card-header text-white" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
                 <h5 className="mb-0"><i className="fas fa-user-check me-2"></i>Attendance History</h5>
               </div>
@@ -562,3 +571,48 @@ if (typeof document !== 'undefined') {
 }
 
 export default PaymentSummary;
+      <style jsx>{`
+        .payment-card, .attendance-card {
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        
+        .payment-card:hover, .attendance-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        .click-hint-btn {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 8px 16px;
+          border-radius: 20px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          display: inline-flex;
+          align-items: center;
+          transition: all 0.3s ease;
+          box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        .click-hint-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .history-table-card {
+          animation: slideIn 0.5s ease-out;
+          margin-top: 2rem;
+        }
+        
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>

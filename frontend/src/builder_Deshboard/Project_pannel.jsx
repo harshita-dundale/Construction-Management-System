@@ -345,7 +345,7 @@ function Builder_dashboard() {
                     onClick={() => navigate("/Builder-Dashboard")}
                   >
                     <i className="fas fa-arrow-left me-2"></i>
-                    Back to Home
+                    Back to Dashboard
                   </button>
                   <div className="progress-section">
                     <div className="progress-circle-large">
