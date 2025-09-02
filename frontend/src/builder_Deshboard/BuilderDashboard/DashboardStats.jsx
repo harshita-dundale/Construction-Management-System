@@ -24,7 +24,7 @@ function DashboardStats({ totalProjects, ongoingWorkers, totalMaterialExpenses, 
       bgGradient: 'linear-gradient(135deg, #fd7e14 0%, #ffc107 100%)'
     },
     {
-      title: 'Pending Payments',
+      title: 'Workers Pending Payments',
       value: `₹${pendingPayments.toLocaleString()}`,
       icon: 'fas fa-credit-card',
       color: '#dc3545',

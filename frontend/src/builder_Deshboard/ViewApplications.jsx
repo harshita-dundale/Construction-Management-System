@@ -64,7 +64,7 @@ function ViewApplications() {
         </div>
       </div>
       
-      <div className="container py-5">
+      <div className="container pb-5">
         {/* Filters Section */}
         <div className="filters-card">
           <div className="filters-header">
@@ -118,10 +118,10 @@ function ViewApplications() {
           </div>
         </div>
 
-        {/* Applications Section */}
+        {/* Applications Section section-header*/}
         <div className="applications-section">
-          <div className="section-header">
-            <h3 className="section-title">
+          <div className="mt-3">
+            <h3 className="view-sec-title ms-4">
               <i className="fas fa-users me-2"></i>
               Applications ({filteredApplications.length})
             </h3>

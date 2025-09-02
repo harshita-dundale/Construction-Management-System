@@ -131,17 +131,17 @@
           border-bottom: none;
         }
         
-        .section-title {
+        .view-sec-title {
           font-size: 1.3rem;
           font-weight: 700;
-          color: white;
+          /* color: white; */
           margin-bottom: 0;
           display: flex;
           align-items: center;
         }
         
         .section-title i {
-          color: white;
+          /* color: white; */
         }
         
         .applications-grid {

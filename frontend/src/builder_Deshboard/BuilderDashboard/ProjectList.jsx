@@ -19,6 +19,12 @@ function ProjectList({
   const reversedProjects = [...(projects || [])].reverse();
   const currentProjects = reversedProjects.slice(indexOfFirstProject, indexOfLastProject) || [];
 
+  const toTitleCase = (str) => {
+    return str.replace(/\w\S*/g, (txt) => 
+      txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    );
+  };
+
   const handleProjectClick = (project) => {
     dispatch(selectProject(project));
     localStorage.setItem('selectedProject', JSON.stringify(project));
@@ -53,7 +59,7 @@ function ProjectList({
                       <i className="fas fa-building"></i>
                     </div>
                   </div>
-                  <h4 className="project-card-name">{project.name}</h4>
+                  <h4 className="project-card-name">{toTitleCase(project.name)}</h4>
                   <div className="project-card-details">
                     {project.type && (
                       <div className="detail-row">

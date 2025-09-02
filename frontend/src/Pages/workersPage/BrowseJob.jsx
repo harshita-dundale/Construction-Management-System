@@ -46,6 +46,7 @@ function BrowseJob() {
   useEffect(() => {
     const fetchMonthlyIncome = async () => {
       if (!isAuthenticated || !user?.email) {
+        console.log("❌ User not authenticated or no email:", { isAuthenticated, email: user?.email });
         setMonthlyIncome(0);
         return;
       }
@@ -54,28 +55,37 @@ function BrowseJob() {
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth() + 1;
         const currentYear = currentDate.getFullYear();
+        console.log("📅 Current month/year:", currentMonth, currentYear);
         
-        // Fetch worker's attendance history
-        const response = await fetch(`http://localhost:5000/api/attendance/summary/${encodeURIComponent(user.email)}`);
+        // Fetch worker attendance data using the correct endpoint
+        console.log("🔍 Fetching attendance data for:", user.email);
+        
+        const response = await fetch(`http://localhost:5000/api/worker-records/full-history?email=${encodeURIComponent(user.email)}`);
+        
         if (!response.ok) {
+          console.log("❌ Worker records endpoint failed:", response.status);
           setMonthlyIncome(0);
           return;
         }
         
         const data = await response.json();
+        console.log("📊 API Response:", data);
+        
         let totalIncome = 0;
         
-        // Calculate income for current month across all jobs
-        if (data.history && Array.isArray(data.history)) {
-          data.history.forEach(job => {
-            if (job.attendanceRecords && Array.isArray(job.attendanceRecords)) {
-              job.attendanceRecords.forEach(record => {
+        // Process the worker records data
+        if (Array.isArray(data)) {
+          console.log("📋 Processing worker records data...");
+          data.forEach(jobRecord => {
+            if (jobRecord.attendanceRecords && Array.isArray(jobRecord.attendanceRecords)) {
+              jobRecord.attendanceRecords.forEach(record => {
                 const recordDate = new Date(record.date);
                 if (recordDate.getMonth() + 1 === currentMonth && recordDate.getFullYear() === currentYear) {
                   if (record.status === "Present") {
-                    // Use job salary or default daily wage
-                    const dailyWage = job.salary || 1000;
+                    // Use a default daily wage of 1000 (you can fetch job details for actual salary)
+                    const dailyWage = 1000;
                     totalIncome += dailyWage;
+                    console.log("💰 Added income:", dailyWage, "Total:", totalIncome);
                   }
                 }
               });
@@ -83,9 +93,10 @@ function BrowseJob() {
           });
         }
         
+        console.log("💵 Final monthly income:", totalIncome);
         setMonthlyIncome(totalIncome);
       } catch (error) {
-        console.error("Error fetching monthly income:", error);
+        console.error("❌ Error fetching monthly income:", error);
         setMonthlyIncome(0);
       }
     };

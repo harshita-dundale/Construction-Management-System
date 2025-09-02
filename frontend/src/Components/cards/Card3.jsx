@@ -60,7 +60,7 @@ function Card3({ application, isHiredView = false, onDelete }) {
           </div>
           <div className="applicant-info">
             <h3 className="applicant-name">{application.name}</h3>
-            <div className="job-title">
+            <div className="view-card-title">
               <i className="fas fa-briefcase me-1"></i>
               {application.jobId?.title || "Job Title Not Available"}
             </div>
@@ -443,7 +443,7 @@ function Card3({ application, isHiredView = false, onDelete }) {
           color: white;
         }
         
-        .job-title {
+        .view-card-title {
           font-size: 0.9rem;
           opacity: 0.95;
           display: flex;
