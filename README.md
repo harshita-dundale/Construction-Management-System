@@ -32,4 +32,45 @@ The system manages **attendance, payroll, job applications, track status and bro
 - **Backend:** Node.js, Express.js  
 - **Database:** MongoDB (Mongoose ODM)  
 - **Authentication:** Auth0 (JWT for secure access)  
-- **Version Control:** Git, GitHub  
+- **Version Control:** Git, GitHub
+
+
+ ⚙️ Installation & Setup
+# Clone the repository
+git clone <your-repo-link>
+
+# Go to project directory
+cd construction-management-system
+
+# Install dependencies
+npm install
+
+# Run backend server
+cd backend
+npm install
+npm start
+
+# Run frontend
+cd frontend
+npm install
+npm start
+
+🔑 Environment Variables
+Create a .env file in backend folder with:
+
+MONGO_URI=your_mongodb_connection_string
+AUTH0_CLIENT_ID=your_auth0_client_id
+AUTH0_CLIENT_SECRET=your_auth0_client_secret
+AUTH0_DOMAIN=your_auth0_domain
+PORT=5000
+
+📌 Usage
+Builders login → create/manage jobs, track attendance, monitor site profit/loss
+Workers login → browse jobs, apply, check status & history
+Real-time updates ensure smooth communication between builders and workers
+
+🏆 Learning Outcomes
+Role-based access system in MERN stack
+Integrating Auth0 authentication in full-stack projects
+Building real-time dashboards with React and APIs
+Designing scalable MongoDB database structures
