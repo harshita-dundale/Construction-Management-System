@@ -677,23 +677,24 @@ function PayrollPageEnhanced() {
                                 {getEnhancedStatusBadge(worker)}
                               </div> */}
 
-                            <div className="btn-group-vertical d-grid gap-1">
+                            <div className="d-flex gap-2 justify-content-center">
                               <button
-                                className="btn btn-warning btn-sm text-white"
+                                className="btn btn-outline-primary btn-sm"
                                 onClick={() =>
                                   openHistoryModal(worker._id, worker.name)
                                 }
                                 style={{
-                                  // background: 'linear-gradient(135deg, #ff9500 0%, #ff6b35 100%)',
-                                  border: "none",
+                                  borderColor: "#667eea",
+                                  color: "#667eea",
                                   fontWeight: "600",
+                                  minWidth: "80px",
                                 }}
                               >
                                 <i className="fas fa-history me-1"></i>History
                               </button>
 
                               <button
-                                className="btn btn-success btn-sm"
+                                className="btn btn-sm"
                                 onClick={() => handleConfirmPayment(worker)}
                                 disabled={
                                   worker.amountPaid <= 0 ||
@@ -702,9 +703,11 @@ function PayrollPageEnhanced() {
                                 }
                                 style={{
                                   background:
-                                    "linear-gradient(135deg, #28a745 0%, #20c997 100%)",
+                                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                                   border: "none",
+                                  color: "white",
                                   fontWeight: "600",
+                                  minWidth: "80px",
                                 }}
                               >
                                 {paymentLoading === worker._id ? (
@@ -713,11 +716,11 @@ function PayrollPageEnhanced() {
                                       className="spinner-border spinner-border-sm me-1"
                                       role="status"
                                     ></span>
-                                    Processing...
+                                    Processing
                                   </>
                                 ) : (
                                   <>
-                                    <i className="fas fa-check me-1"></i>Pay Now
+                                    <i className="fas fa-rupee-sign me-1"></i>Pay Now
                                   </>
                                 )}
                               </button>
