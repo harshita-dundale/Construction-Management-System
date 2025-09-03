@@ -227,8 +227,8 @@ const ProfileModal = ({ show, handleClose }) => {
                   <CgProfile />
                 </div>
                 <div className="header-text">
-                  <h4 className="modal-title-modern">My Profile</h4>
-                  <p className="modal-subtitle">View and manage your account information</p>
+                  <h4 className="modal-title">My Profile</h4>
+                  {/* <p className="modal-subtitle">View and manage your account information</p> */}
                 </div>
               </div>
               <button className="close-button-simple" onClick={handleClose}>
@@ -549,7 +549,7 @@ const ProfileModal = ({ show, handleClose }) => {
         .modal-header-modern {
           background: white;
           color: #2c3e50;
-          padding: 2rem;
+          padding: 1rem;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -574,17 +574,19 @@ const ProfileModal = ({ show, handleClose }) => {
           color: white;
         }
         
-        .modal-title-modern {
-          margin: 0;
+        .modal-title {
+          color: #2c3e50;
+            margin: 0;
           font-size: 1.5rem;
           font-weight: 700;
         }
         
-        .modal-subtitle {
-          margin: 0;
-          opacity: 0.9;
-          font-size: 0.9rem;
-        }
+        // .modal-subtitle {
+        //   color: #2c3e50;
+        //   margin: 0;
+        //   opacity: 0.9;
+        //   font-size: 0.9rem;
+        // }
         
         .close-button-simple {
           background: none;

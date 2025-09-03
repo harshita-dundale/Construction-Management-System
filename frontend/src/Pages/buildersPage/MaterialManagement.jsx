@@ -70,53 +70,6 @@ const MaterialManagement = () => {
       newMaterial.unit.trim() !== "" &&
       selectedProject?._id
     ) {
-      // Check if material already exists in current project
-      const existingMaterial = materials.find(
-        mat => mat.name.toLowerCase().trim() === newMaterial.name.toLowerCase().trim()
-      );
-
-      if (existingMaterial) {
-        const result = await Swal.fire({
-          title: 'Material Already Exists',
-          text: `"${newMaterial.name}" already exists. Do you want to add ${newMaterial.quantity} ${newMaterial.unit} to existing stock?`,
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonColor: 'var(--secondary-color)',
-          cancelButtonColor: 'gray',
-          confirmButtonText: 'Yes, add to stock',
-          cancelButtonText: 'Cancel'
-        });
-
-        if (!result.isConfirmed) return;
-
-        // Update existing material quantity
-        try {
-          const updatedQty = existingMaterial.quantity + newMaterial.quantity;
-          const res = await fetch(`http://localhost:5000/api/materials/usage`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              name: existingMaterial.name.trim(),
-              quantityUsed: -(newMaterial.quantity), // Negative to add stock
-              projectId: selectedProject._id,
-            }),
-          });
-
-          const data = await res.json();
-          if (!res.ok) {
-            Swal.fire("Error", data.message || "Failed to update stock", "error");
-            return;
-          }
-
-          dispatch(updateUsage(data));
-          setNewMaterial({ name: "", quantity: 0, unitPrice: 0, unit: "" });
-          Swal.fire("Success", `Added ${newMaterial.quantity} ${newMaterial.unit} to existing stock`, "success");
-        } catch (err) {
-          console.error("Update failed:", err);
-          Swal.fire("Error", "Server error while updating stock", "error");
-        }
-        return;
-      }
 
       try {
         const res = await fetch("http://localhost:5000/api/materials", {
@@ -132,15 +85,15 @@ const MaterialManagement = () => {
 
         if (!res.ok) {
           if (res.status === 409) {
-            // Material already exists - offer to update existing
+            // Material already exists in THIS project - offer to update existing
             const result = await Swal.fire({
-              title: 'Material Already Exists',
-              text: data.message,
-              icon: 'warning',
+              title: 'Material Already Exists in This Project',
+              text: `"${newMaterial.name}" already exists in this project. Do you want to add ${newMaterial.quantity} ${newMaterial.unit} to existing stock?`,
+              icon: 'question',
               showCancelButton: true,
               confirmButtonColor: 'var(--secondary-color)',
               cancelButtonColor: 'gray',
-              confirmButtonText: 'Update Existing',
+              confirmButtonText: 'Yes, add to stock',
               cancelButtonText: 'Cancel'
             });
 
@@ -270,14 +223,11 @@ const MaterialManagement = () => {
     return (
       <>
         <Header />
-        <div className="container mt-5">
-          <div className="text-center" style={{ marginTop: "10rem" }}>
-            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <h4>Loading Materials...</h4>
-            <p className="text-muted">Please wait while we fetch material information.</p>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', color: '#6c757d' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem', color: '#667eea' }}>
+            <i className="fas fa-spinner fa-spin"></i>
           </div>
+          <p>Loading Materials...</p>
         </div>
       </>
     );

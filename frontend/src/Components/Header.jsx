@@ -142,7 +142,7 @@ function Header() {
                       }`}
                       onClick={() => navigate("/applications")}
                     >
-                      <i className="fas fa-file-alt me-2"></i>Applications
+                      <i className="fas fa-file-alt me-2"></i>Track Status
                     </a>
                   </li>
                 </>
