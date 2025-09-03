@@ -518,7 +518,7 @@ const ProfileModal = ({ show, handleClose }) => {
           justify-content: center;
           opacity: 0;
           visibility: hidden;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           padding: 1rem;
         }
         
@@ -538,8 +538,8 @@ const ProfileModal = ({ show, handleClose }) => {
           border-radius: 20px;
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
           overflow: hidden;
-          transform: scale(0.9);
-          transition: transform 0.3s ease;
+          // transform: scale(0.9);
+          // transition: transform 0.3s ease;
         }
         
         .modern-profile-modal.show .modal-content-modern {
@@ -591,7 +591,7 @@ const ProfileModal = ({ show, handleClose }) => {
           border: none;
           color: #6c757d;
           font-size: 1.5rem;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           padding: 0.5rem;
         }
         
@@ -630,7 +630,7 @@ const ProfileModal = ({ show, handleClose }) => {
           border-radius: 50%;
           object-fit: cover;
           border: 4px solid #f8f9fa;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
         
         .image-overlay {
@@ -647,7 +647,7 @@ const ProfileModal = ({ show, handleClose }) => {
           color: white;
           font-size: 1.5rem;
           opacity: 0;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
         
         .image-wrapper:hover .image-overlay {
@@ -663,7 +663,7 @@ const ProfileModal = ({ show, handleClose }) => {
           font-size: 0.9rem;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           display: inline-flex;
           align-items: center;
         }
@@ -682,7 +682,7 @@ const ProfileModal = ({ show, handleClose }) => {
           font-size: 0.9rem;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           display: inline-flex;
           align-items: center;
           margin-left: 0.5rem;
@@ -825,7 +825,7 @@ const ProfileModal = ({ show, handleClose }) => {
           cursor: pointer;
           padding: 0.25rem;
           border-radius: 4px;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
 
         .edit-btn:hover {
@@ -860,7 +860,7 @@ const ProfileModal = ({ show, handleClose }) => {
           padding: 0.5rem;
           border-radius: 4px;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
 
         .save-btn:hover {
@@ -875,7 +875,7 @@ const ProfileModal = ({ show, handleClose }) => {
           padding: 0.5rem;
           border-radius: 4px;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
 
         .cancel-btn:hover {

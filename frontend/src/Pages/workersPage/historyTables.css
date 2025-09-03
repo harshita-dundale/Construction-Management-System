@@ -32,7 +32,7 @@
   .body-row {
     background-color: #ffffff;
     border-bottom: 1px solid #f8f9fa;
-    transition: all 0.3s ease;
+    /* transition: all 0.3s ease; */
   }
   
   .body-row:hover {
@@ -103,13 +103,10 @@
     border-bottom: 2px solid #667eea;
   }
   
-  .attendance-row {
-    transition: all 0.3s ease;
-  }
-  
+ 
   .attendance-row:hover {
     background: rgba(102, 126, 234, 0.05);
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
   

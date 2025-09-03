@@ -59,7 +59,7 @@ const modernTableStyles = `
   }
   
   .attendance-row {
-    transition: all 0.3s ease;
+    // transition: all 0.3s ease;
   }
   
   .attendance-row:hover {
@@ -448,7 +448,7 @@ function Dashboard() {
             font-weight: 600;
             font-size: 0.9rem;
             border: none;
-            transition: all 0.3s ease;
+            // transition: all 0.3s ease;
             display: flex;
             align-items: center;
             min-width: 160px;

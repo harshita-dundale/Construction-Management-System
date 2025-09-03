@@ -270,14 +270,11 @@ const MaterialManagement = () => {
     return (
       <>
         <Header />
-        <div className="container mt-5">
-          <div className="text-center" style={{ marginTop: "10rem" }}>
-            <div className="spinner-border text-primary mb-3" role="status" style={{ width: "3rem", height: "3rem" }}>
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <h4>Loading Materials...</h4>
-            <p className="text-muted">Please wait while we fetch material information.</p>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', color: '#6c757d' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem', color: '#667eea' }}>
+            <i className="fas fa-spinner fa-spin"></i>
           </div>
+          <p>Loading Materials...</p>
         </div>
       </>
     );

@@ -113,7 +113,7 @@ function JobCard({ job, isFlipped, onToggleFlip }) {
           border: none;
           border-radius: 15px;
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           overflow: hidden;
         }
         
@@ -146,7 +146,7 @@ function JobCard({ job, isFlipped, onToggleFlip }) {
           border-radius: 50%;
           border: 3px solid #fff;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease;
+          // transition: transform 0.3s ease;
         }
         
         .card:hover .card-img-top {
@@ -213,7 +213,7 @@ function JobCard({ job, isFlipped, onToggleFlip }) {
         .btn {
           border-radius: 10px;
           font-weight: 600;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
         
         .btn-primary {

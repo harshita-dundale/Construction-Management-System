@@ -51,7 +51,7 @@ const ModernButton = ({
         .btn {
           border-radius: 12px;
           font-weight: 600;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           border: none;
           position: relative;
           overflow: hidden;

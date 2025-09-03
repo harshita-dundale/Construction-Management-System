@@ -43,11 +43,6 @@
   --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
   --shadow-xl: 0 15px 35px rgba(0, 0, 0, 0.2);
-  
-  /* Transitions */
-  --transition-fast: all 0.2s ease-in-out;
-  --transition-normal: all 0.3s ease-in-out;
-  --transition-slow: all 0.5s ease-in-out;
 }
 
 /* Dark Mode Support */
@@ -58,12 +53,6 @@
   --text-secondary: #e9ecef;
   --text-muted: #adb5bd;
 }
-
-/* Global Resets and Base Styles */
-* {
-  transition: var(--transition-fast);
-}
-
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
@@ -141,7 +130,7 @@ h5 { font-size: clamp(1rem, 1.5vw, 1.125rem); font-weight: 500; }
 .btn {
   border-radius: var(--radius-md);
   font-weight: 600;
-  transition: var(--transition-normal);
+  /* transition: var(--transition-normal); */
   border: none;
   position: relative;
   overflow: hidden;
@@ -214,7 +203,7 @@ h5 { font-size: clamp(1rem, 1.5vw, 1.125rem); font-weight: 500; }
   border: 2px solid #e9ecef;
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
-  transition: var(--transition-normal);
+  /* transition: var(--transition-normal); */
   background: var(--bg-primary);
 }
 
@@ -239,12 +228,12 @@ h5 { font-size: clamp(1rem, 1.5vw, 1.125rem); font-weight: 500; }
   border: none;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  transition: var(--transition-normal);
+  /* transition: var(--transition-normal); */
   background: var(--bg-primary);
 }
 
 .card:hover {
-  transform: translateY(-4px);
+  /* transform: translateY(-4px); */
   box-shadow: var(--shadow-lg);
 }
 
@@ -264,13 +253,10 @@ h5 { font-size: clamp(1rem, 1.5vw, 1.125rem); font-weight: 500; }
   padding: 1rem;
 }
 
-.table tbody tr {
-  transition: var(--transition-fast);
-}
 
 .table tbody tr:hover {
   background: rgba(38, 104, 103, 0.1);
-  transform: translateY(-1px);
+  /* transform: translateY(-1px); */
 }
 
 .table tbody td {
@@ -290,7 +276,7 @@ h5 { font-size: clamp(1rem, 1.5vw, 1.125rem); font-weight: 500; }
 
 .modern-table tbody tr:hover {
   background: rgba(38, 104, 103, 0.05);
-  transform: translateY(-1px);
+  /* transform: translateY(-1px); */
   box-shadow: 0 2px 8px rgba(5, 24, 33, 0.1);
 }
 

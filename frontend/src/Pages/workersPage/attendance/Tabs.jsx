@@ -55,7 +55,7 @@ const Tabs = ({ tabs, children }) => {
           color: #6c757d;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           display: flex;
           align-items: center;
         }
@@ -64,7 +64,7 @@ const Tabs = ({ tabs, children }) => {
           background: rgba(102, 126, 234, 0.1);
           border-color: #667eea;
           color: #667eea;
-          transform: translateY(-2px);
+          // transform: translateY(-2px);
         }
         
         .modern-tab-btn.active {

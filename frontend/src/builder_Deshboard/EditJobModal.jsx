@@ -281,7 +281,6 @@ function EditJobModal({ job, onClose, onSave }) {
           justify-content: center;
           color: white;
           font-size: 1.2rem;
-          transition: all 0.3s ease;
         }
         
         .close-button-modern:hover {
@@ -354,7 +353,7 @@ function EditJobModal({ job, onClose, onSave }) {
           border: 2px solid #e9ecef;
           border-radius: 10px;
           font-size: 0.95rem;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           background: white;
         }
         
@@ -380,7 +379,7 @@ function EditJobModal({ job, onClose, onSave }) {
           padding: 0.75rem 1.5rem;
           border-radius: 25px;
           font-weight: 600;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           display: flex;
           align-items: center;
         }
@@ -398,7 +397,7 @@ function EditJobModal({ job, onClose, onSave }) {
           padding: 0.75rem 2rem;
           border-radius: 25px;
           font-weight: 600;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           display: flex;
           align-items: center;
           box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);

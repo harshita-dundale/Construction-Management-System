@@ -4,8 +4,9 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     position: relative;
-    /* padding: 0.5rem 0; */
-    margin-top: 5.5rem;
+    padding: 2rem 0;
+    margin-top: 5rem;
+    margin-bottom: 2rem;
   }
   
   /* .material-header::before {
@@ -152,7 +153,7 @@
     position: absolute;
     left: 1rem;
     top: 50%;
-    transform: translateY(-50%);
+    /* transform: translateY(-50%); */
     color: #6c757d;
     z-index: 2;
   }
@@ -163,7 +164,7 @@
     border: 2px solid #e9ecef;
     border-radius: 25px;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    /* transition: all 0.3s ease; */
   }
   
   .search-input:focus {
@@ -179,11 +180,11 @@
     padding: 0.75rem 1.5rem;
     border-radius: 25px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    /* transition: all 0.3s ease; */
   }
   
   .btn-add-material:hover {
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     color: white;
   }
@@ -216,7 +217,7 @@
     border: 2px solid #e9ecef;
     border-radius: 8px;
     padding: 0.75rem;
-    transition: all 0.3s ease;
+    /* transition: all 0.3s ease; */
   }
   
   .modern-input:focus {
@@ -231,11 +232,11 @@
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    /* transition: all 0.3s ease; */
   }
   
   .btn-submit:hover {
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
     box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
     color: white;
   }
@@ -284,10 +285,10 @@
     color: white;
     border-bottom: 2px solid #667eea;
   }
-  
+/*   
   .material-row {
-    transition: all 0.3s ease;
-  }
+    /* transition: all 0.3s ease; */
+
   
   .material-row:hover {
     background: rgba(102, 126, 234, 0.05);
