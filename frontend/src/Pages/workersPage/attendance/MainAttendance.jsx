@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Tabs from "./Tabs";
 import PaymentSummary from "../payment/PaymentSummary";
 import Header from "../../../Components/Header";
@@ -13,6 +13,7 @@ const MainAttendance = () => {
 
   const { user, isAuthenticated, isLoading } = useAuth0();
   const location = useLocation();
+  const navigate = useNavigate();
   const workerEmail = user?.email;
   
   // Get selected job from navigation state
@@ -71,15 +72,16 @@ const MainAttendance = () => {
     <div className="attendance-page">
       <Header />
       <div className="attendance-container">
-        {/* Header Section */}
-        {/* <div className="attendance-header">
-          <div className="header-content">
-            <h3 className="header-titl">
-              <i className="fas fa-calendar-check me-2"></i>
-              My Attendance
-            </h3>
-          </div>
-        </div> */}
+        {/* Back Button */}
+        <div className="back-button-contain">
+          <button
+            className="btn-back-attendance"
+            onClick={() => navigate("/browse-job")}
+          >
+            <i className="fas fa-arrow-left me-2"></i>
+            Back to Jobs
+          </button>
+        </div>
         
         {selectedJobFromState ? (
           // Show only selected job data

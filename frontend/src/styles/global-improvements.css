@@ -257,7 +257,7 @@ h5 { font-size: clamp(1rem, 1.5vw, 1.125rem); font-weight: 500; }
 }
 
 .table thead th {
-  background: var(--primary-gradient);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
   color: var(--text-color);
   font-weight: 600;

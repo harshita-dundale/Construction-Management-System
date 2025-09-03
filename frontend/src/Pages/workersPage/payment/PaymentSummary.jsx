@@ -350,7 +350,7 @@ const PaymentSummary = ({ jobId }) => {
                             <td className="px-4 py-3">
                               <span className={`badge fs-6 px-3 py-2 ${
                                 entry.status === "Present" 
-                                  ? "bg-success" 
+                                  ? "bg-primary" 
                                   : "bg-danger"
                               }`}>
                                 <i className={`fas ${

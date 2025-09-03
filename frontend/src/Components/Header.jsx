@@ -82,6 +82,9 @@ function Header() {
     "/attendances",
   ].includes(currentPath);
 
+  // Check if current page is Builder Dashboard
+  const isBuilderDashboard = currentPath === "/builder-dashboard";
+
   return (
     <header className="modern-header">
       <nav className="navbar navbar-expand-lg navbar-dark py-3">
@@ -142,21 +145,23 @@ function Header() {
                       <i className="fas fa-file-alt me-2"></i>Applications
                     </a>
                   </li>
-                  {/* <li className="nav-item me-4">
-                    <a
-                      className={`nav-link modern-nav-link ${
-                        currentPath === "/attendances" ? "active" : ""
-                      }`}
-                      onClick={() => navigate("/attendances")}
-                    >
-                      <i className="fas fa-wallet me-2"></i>Payroll Manager
-                    </a>
-                  </li> */}
                 </>
               )}
 
-              {/* Builder Navigation */}
-              {isBuilderPage && (
+              {/* Builder Dashboard - Only Dashboard Tab */}
+              {isBuilderDashboard && (
+                <li className="nav-item me-3">
+                  <a
+                    className="nav-link modern-nav-link active"
+                    onClick={() => navigate("/builder-dashboard")}
+                  >
+                    <i className="fas fa-tachometer-alt me-2"></i>Dashboard
+                  </a>
+                </li>
+              )}
+
+              {/* Builder Navigation - Other Pages */}
+              {isBuilderPage && !isBuilderDashboard && (
                 <>
                   <li className="nav-item me-3">
                     <a
@@ -212,7 +217,7 @@ function Header() {
               )}
 
               {/* Default Static Page Nav */}
-              {!isWorkerPage && !isBuilderPage && (
+              {!isWorkerPage && !isBuilderPage && !isBuilderDashboard && (
                 <>
                   <li className="nav-item me-3">
                     <a

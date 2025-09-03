@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Card3 from "../Components/cards/Card3";
 import Header from "../Components/Header";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -13,6 +14,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 function ViewApplications() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { applications, filteredApplications, loading, error } = useSelector(
     (state) => state.applications
   );
@@ -53,11 +55,21 @@ function ViewApplications() {
       {/* Hero Section */}
       <div className="applications-hero">
         <div className="container">
+          {/* Back Button */}
+          
+          
           <div className="text-center">
-            <div className="hero-badge mb-3">
-              <i className="fas fa-file-alt me-2"></i>
-              Applications Management
-            </div>
+            {/* <div className="hero-badge mb-3"> */}
+              {/* <div className="back-button-container-apps"> */}
+            <button
+              className="btn-back-apps"
+              onClick={() => navigate("/project_pannel")}
+            >
+              <i className="fas fa-arrow-left me-2"></i>
+              Back to Projects
+            </button>
+          {/* </div> */}
+            {/* </div> */}
             <h1 className="hero-title">Review Job Applications</h1>
             <p className="hero-subtitle">Manage and review applications for your construction projects</p>
           </div>
@@ -160,10 +172,47 @@ function ViewApplications() {
         </div>
       </div>
       
+      {/* Inline Styles for Back Button */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .back-button-container-apps {
+          margin-bottom: 2rem;
+          padding: 1rem 0;
+        }
+
+        .btn-back-apps {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border: none;
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border-radius: 25px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-back-apps:hover {
+          background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+          color: white;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+          .back-button-container-apps {
+            padding: 0.5rem 0;
+          }
+          
+          .btn-back-apps {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+          }
+        }
+      `}} />
     </div>
   );
 }
-
-
 
 export default ViewApplications;

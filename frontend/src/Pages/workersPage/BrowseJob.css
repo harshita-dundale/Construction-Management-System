@@ -61,6 +61,14 @@
   margin-bottom: 0;
 }
 
+.hero-title-white {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0;
+  color: white !important;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -217,6 +225,12 @@
   .hero-title {
     font-size: 2.5rem;
     text-align: center;
+  }
+
+  .hero-title-white {
+    font-size: 2.5rem;
+    text-align: center;
+    color: white !important;
   }
 
   .hero-description {

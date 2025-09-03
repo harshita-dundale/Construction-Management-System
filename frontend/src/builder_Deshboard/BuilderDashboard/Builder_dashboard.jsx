@@ -250,6 +250,7 @@ function Builder_dashboard() {
         totalPages={totalPages}
         handlePageChange={handlePageChange}
         setShowProjectModal={setShowProjectModal}
+        onProjectUpdate={() => dispatch(fetchProjects(user?.sub))}
       />
       {/* Dashboard Cards */}
       {/* <div className="container-fluid px-3 px-md-4 mb-4" style={{ marginTop: '3rem' }}>

@@ -70,23 +70,12 @@ function Card3({ application, isHiredView = false, onDelete }) {
             </div>
           </div>
         </div>
-        {/* <div className="status-badge">
-          <span className={`status-indicator status-${status}`}>
-            {status === "accepted" && "✅"}
-            {status === "rejected" && "❌"}
-            {status === "joined" && "🎯"}
-            {status === "under_review" && "⏳"}
-          </span>
-        </div> */}
       </div>
       
       <div className="card-content">
         <div className="info-section">
           <div className="info-row">
             <div className="info-item">
-              {/* <div className="info-icon phone-icon">
-                <i className="fas fa-phone"></i>
-              </div> */}
               <div className="info-details">
                 <span className="info-label">Contact</span>
                 <span className="info-value">{application.phoneNo}</span>
@@ -94,9 +83,6 @@ function Card3({ application, isHiredView = false, onDelete }) {
             </div>
             
             <div className="info-item">
-              {/* <div className="info-icon experience-icon">
-                <i className="fas fa-medal"></i>
-              </div> */}
               <div className="info-details">
                 <span className="info-label">Experience</span>
                 <span className="info-value">{application.experience} years</span>
@@ -106,7 +92,6 @@ function Card3({ application, isHiredView = false, onDelete }) {
         </div>
         
         <div className="status-section">
-          {/* Builder Status */}
           <div className="status-container">
             <span className="status-label">Builder Status</span>
             <div className={`status-pill builder-status-${application.builderStatus || status}`}>
@@ -124,7 +109,6 @@ function Card3({ application, isHiredView = false, onDelete }) {
             </div>
           </div>
             
-          {/* Worker Action Status */}
           {(status === "joined" || status === "rejected") && (
             <div className="worker-status-container">
               <span className="status-label">Worker Response</span>
@@ -221,7 +205,6 @@ function Card3({ application, isHiredView = false, onDelete }) {
           <button
             className="action-btn view-btn"
             onClick={() => {
-              // Navigate to worker profile or details page
               window.open(`/worker-profile/${application.userId?._id || application._id}`, '_blank');
             }}
             disabled={loading}
@@ -332,6 +315,15 @@ function Card3({ application, isHiredView = false, onDelete }) {
       {isHiredView && (
         <div className="card-actions">
           <button
+            className="action-btn view-btn"
+            onClick={() => {
+              window.open(`/worker-profile/${application.userId?._id || application._id}`, '_blank');
+            }}
+          >
+            <i className="fas fa-eye me-2"></i>
+            View Profile
+          </button>
+          <button
             className="action-btn remove-btn"
             onClick={async () => {
               Swal.fire({
@@ -380,7 +372,7 @@ function Card3({ application, isHiredView = false, onDelete }) {
         </div>
       )}
       
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{__html: `
         .application-card {
           background: white;
           border-radius: 20px;
@@ -397,12 +389,6 @@ function Card3({ application, isHiredView = false, onDelete }) {
           transform: translateY(-8px);
           box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
           border-color: rgba(102, 126, 234, 0.2);
-        }
-        
-        @media (max-width: 768px) {
-          .application-card:hover {
-            transform: translateY(-4px);
-          }
         }
         
         .card-header {
@@ -459,21 +445,6 @@ function Card3({ application, isHiredView = false, onDelete }) {
           align-items: center;
         }
         
-        .status-badge {
-          position: absolute;
-          top: 1rem;
-          right: 1rem;
-          background: white;
-          border-radius: 12px;
-          width: 40px;
-          height: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.3rem;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-        
         .card-content {
           padding: 1rem;
           flex-grow: 1;
@@ -501,25 +472,6 @@ function Card3({ application, isHiredView = false, onDelete }) {
           border-left: 3px solid #667eea;
           min-width: 0;
           overflow: visible;
-        }
-        
-        .info-icon {
-          width: 28px;
-          height: 28px;
-          border-radius: 6px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.7rem;
-          color: white;
-        }
-        
-        .phone-icon {
-          background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-        }
-        
-        .experience-icon {
-          background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
         }
         
         .info-details {
@@ -720,6 +672,17 @@ function Card3({ application, isHiredView = false, onDelete }) {
           box-shadow: 0 6px 16px rgba(108, 117, 125, 0.4);
         }
         
+        .view-btn {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .view-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+        
         .action-btn:disabled {
           opacity: 0.6;
           cursor: not-allowed;
@@ -727,36 +690,6 @@ function Card3({ application, isHiredView = false, onDelete }) {
           box-shadow: none;
         }
         
-        /* Tablet Styles */
-        @media (max-width: 1024px) {
-          .card-header {
-            padding: 1.25rem;
-          }
-          
-          .applicant-avatar {
-            width: 45px;
-            height: 45px;
-            font-size: 1.1rem;
-          }
-          
-          .applicant-name {
-            font-size: 1.1rem;
-          }
-          
-          .card-content {
-            padding: 1rem;
-          }
-          
-          .info-row {
-            gap: 0.5rem;
-          }
-          
-          .info-item {
-            padding: 0.65rem;
-          }
-        }
-        
-        /* Mobile Styles */
         @media (max-width: 768px) {
           .application-card {
             border-radius: 15px;
@@ -795,12 +728,6 @@ function Card3({ application, isHiredView = false, onDelete }) {
             gap: 0.4rem;
           }
           
-          .info-icon {
-            width: 24px;
-            height: 24px;
-            font-size: 0.6rem;
-          }
-          
           .info-label {
             font-size: 0.6rem;
           }
@@ -826,82 +753,7 @@ function Card3({ application, isHiredView = false, onDelete }) {
             font-size: 0.85rem;
           }
         }
-        
-        /* Small Mobile Styles */
-        @media (max-width: 480px) {
-          .application-card {
-            border-radius: 12px;
-            margin: 0.1rem;
-          }
-          
-          .card-header {
-            padding: 0.75rem;
-          }
-          
-          .header-content {
-            gap: 0.75rem;
-          }
-          
-          .applicant-avatar {
-            width: 35px;
-            height: 35px;
-            font-size: 0.9rem;
-          }
-          
-          .applicant-name {
-            font-size: 0.95rem;
-          }
-          
-          .application-date {
-            font-size: 0.75rem;
-          }
-          
-          .card-content {
-            padding: 0.6rem;
-          }
-          
-          .info-section {
-            margin-bottom: 0.3rem;
-          }
-          
-          .info-item {
-            padding: 0.5rem;
-          }
-          
-          .info-icon {
-            width: 22px;
-            height: 22px;
-            font-size: 0.55rem;
-          }
-          
-          .info-label {
-            font-size: 0.55rem;
-          }
-          
-          .info-value {
-            font-size: 0.65rem;
-          }
-          
-          .status-label {
-            font-size: 0.65rem;
-            margin-bottom: 0.3rem;
-          }
-          
-          .status-pill {
-            padding: 0.35rem 0.7rem;
-            font-size: 0.75rem;
-          }
-          
-          .card-actions {
-            padding: 0.5rem 0.75rem;
-          }
-          
-          .action-btn {
-            padding: 0.6rem;
-            font-size: 0.8rem;
-          }
-        }
-      `}</style>
+      `}} />
     </div>
   );
 }

@@ -196,13 +196,13 @@ function Builder_dashboard() {
         setMaterialCost(materialsCost);
         console.log('💰 Total material cost:', materialsCost);
 
-        // Fetch jobs for this project - handle 404 gracefully
+        // Fetch jobs for this project using correct API endpoint
         let jobsData = [];
         try {
-          const jobsRes = await fetch(`http://localhost:5000/api/jobs/project/${selectedProject._id}`);
+          const jobsRes = await fetch(`http://localhost:5000/api/jobs?projectId=${selectedProject._id}`);
           if (jobsRes.ok) {
             const jobsResponse = await jobsRes.json();
-            jobsData = jobsResponse.jobs || [];
+            jobsData = jobsResponse || [];
             console.log('✅ Jobs fetched:', jobsData.length);
           } else if (jobsRes.status === 404) {
             console.log('📝 No jobs found for this project');
@@ -312,24 +312,6 @@ function Builder_dashboard() {
   return (
     <div className="proj-dashboard-wrapper">
       <Header />
-
-      {/* Back Button */}
-      {/* <div className="container-fluid px-3 px-md-4" style={{ marginTop: '1rem' }}>
-        <button 
-          className="btn btn-outline-primary mb-3"
-          onClick={() => navigate('/Builder-Dashboard')}
-          style={{
-            borderRadius: '10px',
-            padding: '0.5rem 1rem',
-            fontSize: '0.9rem',
-            fontWeight: '500'
-          }}
-        >
-          <i className="fas fa-arrow-left me-2"></i>
-          Back
-        </button>
-      </div> */}
-
       <div className="container-fluid px-3 px-md-4 " >
 
         {/* Project Overview Card */}
@@ -339,44 +321,26 @@ function Builder_dashboard() {
 
               <div className="project-overview-card">
 
-                <div className="project-header">
+                <div className="project-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <button
                     className="btn-back mb-3"
                     onClick={() => navigate("/Builder-Dashboard")}
+                    style={{ alignSelf: 'flex-start' }}
                   >
                     <i className="fas fa-arrow-left me-2"></i>
                     Back to Dashboard
                   </button>
-                  <div className="progress-section">
-                    <div className="progress-circle-large">
-
-                      <svg width="140" height="140" viewBox="0 0 120 120">
-                        <circle cx="60" cy="60" r="50" stroke="#e9ecef" strokeWidth="10" fill="none" />
-                        <circle
-                          cx="60" cy="60" r="50"
-                          stroke={overallProgress === 100 ? "#28a745" : overallProgress > 50 ? "#ffc107" : "#667eea"}
-                          strokeWidth="10" fill="none"
-                          strokeDasharray={`${2 * Math.PI * 50}`}
-                          strokeDashoffset={`${2 * Math.PI * 50 * (1 - overallProgress / 100)}`}
-                          strokeLinecap="round" transform="rotate(-90 60 60)"
-                        />
-                      </svg>
-                      <div className="progress-text-large">
-                        <span className="progress-number-large">{overallProgress}%</span>
-                        <span className="progress-label-large">Complete</span>
-                      </div>
-                    </div>
-                    <div className="progress-info">
-                      <h3 className="project-title">
-                        <i className="fas fa-building me-2"></i>
-                        {selectedProject.name}
-                      </h3>
-                      {/* <p className="project-id">ID: {selectedProject._id?.slice(-8)}</p> */}
-                      <span className={`project-id ${overallProgress === 100 ? 'completed' : overallProgress > 20 ? 'ongoing' : 'planning'}`}>
-                        {overallProgress === 100 ? 'Completed' : overallProgress > 20 ? 'Ongoing' : 'Planning'}
-                      </span>
-                    </div>
+                  <div className="project-info-section" style={{ textAlign: 'center', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <h3 className="project-title" style={{ color: 'white', margin: '0 0 0.5rem 0', fontSize: '1.5rem', fontWeight: '700' }}>
+                      <i className="fas fa-building me-2"></i>
+                      {selectedProject.name}
+                    </h3>
+                    <span className="project-status-badge" style={{ color: 'white', background: 'rgba(255, 255, 255, 0.2)', padding: '0.5rem 1rem', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>
+                      <i className="fas fa-check-circle me-1"></i>
+                      Active Project
+                    </span>
                   </div>
+                  <div style={{ width: '150px' }}></div>
                 </div>
 
                 <div className="project-details">
@@ -487,7 +451,7 @@ function Builder_dashboard() {
         {/* Quick Stats Section */}
         {selectedProject && (
           <div className="row mb-4">
-            <div className="col-12" style={{ textAlign: 'center' }}>
+            <div classNye ame="col-12" style={{ textAlign: 'center' }}>
               <h4 className="stats-title" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                 <i className="fas fa-chart-bar me-2"></i>
                 Project Statistics

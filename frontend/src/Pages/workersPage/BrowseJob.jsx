@@ -154,7 +154,7 @@ function BrowseJob() {
                 <i className="fas fa-briefcase me-2"></i>
                 Job Opportunities
               </div> */}
-              <h1 className="hero-title">Find Your Next
+              <h1 className="hero-title-white">Find Your Next
                 <span className="text-gradient"> Construction Job</span>
               </h1>
               <p className="hero-description fs-5 mt-4">
@@ -213,32 +213,6 @@ function BrowseJob() {
             <h2 className="dash-title text-center">Available Positions</h2>
             {/* <p className="section-subtitle">Browse through our latest job openings</p> */}
           </div>
-          
-          {/* Filter Bar */}
-          {/* <div className="filter-bar mb-4">
-            <div className="row align-items-center">
-              <div className="col-md-6">
-                <div className="results-count">
-                  <i className="fas fa-list me-2"></i>
-                  Showing {jobs.length} active jobs
-                </div>
-              </div>
-              <div className="col-md-6 text-end">
-                <div className="filter-buttons">
-                  <button className="btn btn-filter active">
-                    <i className="fas fa-th-large me-2"></i>All Jobs
-                  </button>
-                  <button className="btn btn-filter">
-                    <i className="fas fa-clock me-2"></i>Recent
-                  </button>
-                  <button className="btn btn-filter">
-                    <i className="fas fa-star me-2"></i>Featured
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div> */}
-          
           {/* Jobs Grid */}
           <div className="jobs-grid">
             {filteredJobs.length > 0 ? (
