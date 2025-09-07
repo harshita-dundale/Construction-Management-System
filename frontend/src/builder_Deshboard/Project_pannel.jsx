@@ -579,16 +579,16 @@ function Builder_dashboard() {
           }
 
           return (
-            <div className="row mb-4">
-              <div className="col-md-6">
-                <div className="budget-chart-card">
+            <div className="row mb-4 d-flex align-items-stretch">
+              <div className="col-md-6 d-flex">
+                <div className="budget-chart-card w-100">
                   <h4 className="budget-chart-title">
-                    <i className="fas fa-chart-donut me-2"></i>
+                    <i className="fas fa-chart-pie me-2"></i>
                     Budget Analysis
                   </h4>
                   <div className="donut-chart-container text-center">
                     <div className="donut-chart">
-                      <svg width="200" height="200" viewBox="0 0 200 200">
+                      <svg width="250" height="250" viewBox="0 0 200 200">
                         {/* Background circle - Total Budget Outline */}
                         <circle
                           cx="100"
@@ -653,8 +653,8 @@ function Builder_dashboard() {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6">
-                <div className="budget-details-card">
+              <div className="col-md-6 d-flex">
+                <div className="budget-details-card w-100">
                   <h4 className="budget-chart-title">
                     <i className="fas fa-info-circle me-2"></i>
                     Budget Details
