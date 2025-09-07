@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Header from "../Components/Header";
 import ProjectModal from "../Components/ProjectModal";
+import BackButton from "../Components/BackButton";
 import { selectProject } from "../Pages/Redux/projectSlice";
 import { toast } from "react-toastify";
 import "./Project_pannel.css";
@@ -322,27 +323,19 @@ function Builder_dashboard() {
               <div className="project-overview-card">
 
                 <div className="project-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <button
-                    className="btn-back mb-3"
-                    onClick={() => navigate("/Builder-Dashboard")}
-                    style={{ alignSelf: 'flex-start' }}
-                  >
-                    <i className="fas fa-arrow-left me-2"></i>
-                    Back to Dashboard
-                  </button>
+                  <BackButton to="/Builder-Dashboard" />
                   <div className="project-info-section" style={{ textAlign: 'center', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <h3 className="project-title" style={{ color: 'white', margin: '0 0 0.5rem 0', fontSize: '1.5rem', fontWeight: '700' }}>
                       <i className="fas fa-building me-2"></i>
                       {selectedProject.name}
                     </h3>
-                    <span className="project-status-badge" style={{ color: 'white', background: 'rgba(255, 255, 255, 0.2)', padding: '0.5rem 1rem', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>
+                    <span className="project-status-badge" style={{ color: 'white', background: 'rgba(255, 255, 255, 0.2)', padding: '0.5rem 1rem', fontSize: '0.9rem', fontWeight: '600' }}>
                       <i className="fas fa-check-circle me-1"></i>
                       Active Project
                     </span>
                   </div>
                   <div style={{ width: '150px' }}></div>
                 </div>
-
                 <div className="project-details">
                   {/* Project Info Cards */}
                   <div className="row g-3 mb-4">
@@ -508,7 +501,6 @@ function Builder_dashboard() {
                 <div className="state-content">
                   <p className="state-label">Materials in Stock</p>
                   <h5 className="state-number">{dashboardStats.materialsCount}</h5>
-                  
                 </div>
               </div>
             </div>
@@ -520,7 +512,7 @@ function Builder_dashboard() {
                 <div className="state-content">
                   <p className="state-label">Payroll This Month</p>
                   <h5 className="state-number">₹{dashboardStats.monthlyPayroll.toLocaleString()}</h5>
-                  
+
                 </div>
               </div>
             </div>
@@ -660,35 +652,35 @@ function Builder_dashboard() {
                     Budget Details
                   </h4>
                   <div className="budget-details-grid">
-                      <div className="budget-detail-card spent">
-                        <div className="budget-detail-icon">
-                          <i className="fas fa-arrow-up"></i>
-                        </div>
-                        <div className="budget-detail-content">
-                          <span className="budget-detail-label">Total Spent</span>
-                          <span className="budget-detail-value">₹{totalSpent.toLocaleString()}</span>
-                        </div>
+                    <div className="budget-detail-card spent">
+                      <div className="budget-detail-icon">
+                        <i className="fas fa-arrow-up"></i>
                       </div>
+                      <div className="budget-detail-content">
+                        <span className="budget-detail-label">Total Spent</span>
+                        <span className="budget-detail-value">₹{totalSpent.toLocaleString()}</span>
+                      </div>
+                    </div>
 
-                      <div className="budget-detail-card remaining">
-                        <div className="budget-detail-icon">
-                          <i className="fas fa-wallet"></i>
-                        </div>
-                        <div className="budget-detail-content">
-                          <span className="budget-detail-label">Remaining</span>
-                          <span className="budget-detail-value">₹{remaining.toLocaleString()}</span>
-                        </div>
+                    <div className="budget-detail-card remaining">
+                      <div className="budget-detail-icon">
+                        <i className="fas fa-wallet"></i>
                       </div>
+                      <div className="budget-detail-content">
+                        <span className="budget-detail-label">Remaining</span>
+                        <span className="budget-detail-value">₹{remaining.toLocaleString()}</span>
+                      </div>
+                    </div>
 
-                      <div className="budget-detail-card total">
-                        <div className="budget-detail-icon">
-                          <i className="fas fa-calculator"></i>
-                        </div>
-                        <div className="budget-detail-content">
-                          <span className="budget-detail-label">Total Budget</span>
-                          <span className="budget-detail-value">₹{budget.toLocaleString()}</span>
-                        </div>
+                    <div className="budget-detail-card total">
+                      <div className="budget-detail-icon">
+                        <i className="fas fa-calculator"></i>
                       </div>
+                      <div className="budget-detail-content">
+                        <span className="budget-detail-label">Total Budget</span>
+                        <span className="budget-detail-value">₹{budget.toLocaleString()}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

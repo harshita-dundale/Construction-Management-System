@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "../../Components/Header";
+import BackButton from "../../Components/BackButton";
 import { MdCoPresent } from "react-icons/md";
 
   function WorkerHistory() {
@@ -47,9 +48,14 @@ import { MdCoPresent } from "react-icons/md";
 
     return (
       <> <Header />
-      <div className="container mt-5" style={{ marginTop: "160px"}}>
-        <h2 className="text-center mb-4" style={{ marginTop: "160px"}}><MdCoPresent className="me-3 mb-1" />
- Attendance History</h2>
+      <div className="container" style={{ marginTop: "100px"}}>
+        {/* Header Row with Back Button and Title */}
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <BackButton to="/dashboard" text="Back to Dashboard" variant="outline" />
+          <h2 className="mb-0"><MdCoPresent className="me-3 mb-1" />
+            Attendance History</h2>
+          <div style={{ width: '200px' }}></div> {/* Spacer for centering */}
+        </div>
         
         <style>{`
           .history-table-card {

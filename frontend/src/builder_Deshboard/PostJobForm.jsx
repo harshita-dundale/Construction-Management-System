@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Header from "../Components/Header";
+import BackButton from "../Components/BackButton";
 import "./PostJobForm.css"
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -145,13 +146,7 @@ function PostJobForm() {
         <div className="col-lg-8">
           <div className="post-job-card">
             <div className="card-header">
-              <button
-                className="btn-back mb-3"
-                onClick={() => navigate("/Project_pannel ")}
-              >
-                <i className="fas fa-arrow-left me-2"></i>
-                Back to Dashboard
-              </button>
+              <BackButton to="/Project_pannel" />
               <h2 className="form-title">Job Details</h2>
               <p className="form-subtitle">Fill in the information below to post your job</p>
             </div>

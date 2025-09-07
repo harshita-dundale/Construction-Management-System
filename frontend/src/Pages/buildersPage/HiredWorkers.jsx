@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Card3 from "../../Components/cards/Card3"; 
 import Header from "../../Components/Header";
+import BackButton from "../../Components/BackButton";
 import { GrUserWorker } from "react-icons/gr";
 
 function HiredWorkers() {
@@ -33,13 +34,7 @@ function HiredWorkers() {
       <div className="container" style={{ marginTop: "90px"}}>
         {/* Back Button */}
         <div className="back-button-container-hired" style={{ marginTop: "2rem", marginBottom: "1rem" }}>
-          <button
-            className="btn-back-hired"
-            onClick={() => navigate("/project_pannel")}
-          >
-            <i className="fas fa-arrow-left me-2"></i>
-            Back to Projects
-          </button>
+          <BackButton to="/project_pannel" text="Back to Projects" variant="outline" />
         </div>
 
         <h2 className="mb-5 text-center fw-bold" style={{ color: "#333" }}>

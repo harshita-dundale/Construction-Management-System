@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Tabs from "./Tabs";
 import PaymentSummary from "../payment/PaymentSummary";
 import Header from "../../../Components/Header";
+import BackButton from "../../../Components/BackButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import "./MainAttendance.css"; // 👈 alag CSS import
 
@@ -74,13 +75,7 @@ const MainAttendance = () => {
       <div className="attendance-container">
         {/* Back Button */}
         <div className="back-button-contain">
-          <button
-            className="btn-back-attendance"
-            onClick={() => navigate("/browse-job")}
-          >
-            <i className="fas fa-arrow-left me-2"></i>
-            Back to Jobs
-          </button>
+          <BackButton to="/browse-job" text="Back to Jobs" variant="outline" />
         </div>
         
         {selectedJobFromState ? (
