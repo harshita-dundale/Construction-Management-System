@@ -171,14 +171,14 @@ function ProjectList({
   };
 
   return (
-    <div className="container-fluid px-3 px-md-4 mt-5 pb-5">
+    <div className="container-fluid px-3 px-md-4 mt-5 ">
       <div className="dash-header text-center">
-        <h2 className="dash-title">Your Projects</h2>
+        <h2 className="dash-title ">Your Projects</h2>
       </div>
       {projects && projects.length > 0 ? (
         <>
-          <div className="projects-info mb-3">
-            <span className="text-muted">
+          <div className="projects-info mb-4">
+            <span className="text-muted ">
               Showing {indexOfFirstProject + 1}-{Math.min(indexOfLastProject, projects.length)} of {projects.length} projects
             </span>
           </div>
@@ -306,7 +306,7 @@ function ProjectList({
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           font-size: 0.8rem;
           z-index: 10;
           position: relative;
@@ -315,6 +315,11 @@ function ProjectList({
         .edit-btn {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
+        }
+        
+        .edit-btn:hover {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+          color: white !important;
         }
         
         .delete-btn {

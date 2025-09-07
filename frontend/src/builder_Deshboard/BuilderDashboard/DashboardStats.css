@@ -1,13 +1,3 @@
-.dash-header {
-  margin-bottom: 2rem;
-}
-
-.dash-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
-}
 
 .dash-subtitle {
   color: #6c757d;
@@ -104,9 +94,7 @@
     font-size: 1.5rem;
   }
   
-  .dash-title {
-    font-size: 1.75rem;
-  }
+  
 }
 
 @media (max-width: 576px) {
@@ -126,9 +114,5 @@
   
   .stat-title {
     font-size: 0.85rem;
-  }
-  
-  .dash-title {
-    font-size: 1.5rem;
   }
 }

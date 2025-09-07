@@ -898,27 +898,89 @@ const ProfileModal = ({ show, handleClose }) => {
         }
         
         @media (max-width: 768px) {
+          .modern-profile-modal {
+            padding: 0.5rem;
+            align-items: flex-start;
+            padding-top: 2rem;
+          }
+          
           .modal-container {
-            width: 95%;
-            max-height: 95vh;
+            width: 100%;
+            max-width: 100%;
+            max-height: 90vh;
+          }
+          
+          .modal-content-modern {
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 15px;
           }
           
           .profile-layout {
             grid-template-columns: 1fr;
-            gap: 1.5rem;
+            gap: 1rem;
           }
           
           .modal-header-modern {
-            padding: 1.5rem;
+            padding: 1rem;
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+          }
+          
+          .header-content {
+            flex-direction: column;
+            text-align: center;
           }
           
           .modal-body-modern {
-            padding: 1.5rem;
+            padding: 1rem;
           }
           
           .profile-image {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
+          }
+          
+          .details-section {
+            padding: 1rem;
+          }
+          
+          .detail-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 1rem;
+          }
+          
+          .detail-content {
+            width: 100%;
+          }
+          
+          .detail-value-editable {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+          }
+          
+          .edit-field {
+            flex-direction: column;
+            width: 100%;
+          }
+          
+          .edit-input {
+            width: 100%;
+          }
+          
+          .upload-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+          }
+          
+          .delete-button {
+            margin-left: 0;
+            margin-top: 0;
           }
         }
       `}} />

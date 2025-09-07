@@ -252,39 +252,6 @@ function Builder_dashboard() {
         setShowProjectModal={setShowProjectModal}
         onProjectUpdate={() => dispatch(fetchProjects(user?.sub))}
       />
-      {/* Dashboard Cards */}
-      {/* <div className="container-fluid px-3 px-md-4 mb-4" style={{ marginTop: '3rem' }}>
-        <div className="dash-header text-center">
-          <h2 className="section-title">Management Tools</h2>
-          <p className="section-subtitle">Access all your project management features</p>
-        </div>
-        <div className="row g-3 d-flex justify-content-center">
-          {cardData1.map((card, index) => (
-            <div key={index} className="col-12 col-md-6 col-lg-4 col-xl-3 ">
-              <div className="dashboard-card " onClick={() => navigate(card.route)}>
-                <div className="card-header mb-3">
-                  <div className="card-icon">
-                    <img src={card.imgSrc} alt={card.title} className="card-image" />
-                  </div>
-                  <div className="card-badge">
-                    <i className="fas fa-arrow-right"></i>
-                  </div>
-                </div>
-                <div className="card-body">
-                  <h5 className="card-title">{card.title}</h5>
-                  <p className="card-description">{card.text}</p>
-                  <button className="btn-card-action">
-                    {card.buttonText}
-                    <i className="fas fa-chevron-right ms-2"></i>
-                  </button>
-                </div>
-                <div className="card-overlay"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div> */}
-
       <ProjectModal
         show={showProjectModal}
         handleClose={() => {

@@ -344,105 +344,148 @@ function Builder_dashboard() {
                 </div>
 
                 <div className="project-details">
-                  <div className="project-header-grid">
-                    <div className="project-main-info">
-                      <div className="project-dates">
-                        <div className="date-item">
-                          <i className="fas fa-calendar-start"></i>
-                          <div className="date-content">
-                            <span className="date-label">Started</span>
-                            <span className="date-value">{new Date(selectedProject.startDate || selectedProject.createdAt).toLocaleDateString()}</span>
-                          </div>
+                  {/* Project Info Cards */}
+                  <div className="row g-3 mb-4">
+                    <div className="col-md-4">
+                      <div className="info-card">
+                        <div className="info-card-icon">
+                          <i className="fas fa-calendar-alt"></i>
                         </div>
-                        <div className="date-item">
-                          <i className="fas fa-clock"></i>
-                          <div className="date-content">
-                            <span className="date-label">Duration</span>
-                            <span className="date-value">{projectDetails.projectDuration} days</span>
-                          </div>
-                        </div>
-                        <div className="date-item">
-                          <i className="fas fa-rupee-sign"></i>
-                          <div className="date-content">
-                            <span className="date-label">Budget</span>
-                            <span className="date-value">₹{selectedProject.expectedCost || 'Not Set'}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="project-stats-grid">
-                        <div className="proj-stat-item">
-                          <i className="fas fa-briefcase"></i>
-                          <div className="state-content">
-                            <span className="state-number">{projectDetails.totalJobs}</span>
-                            <span className="state-label">Total Jobs</span>
-                          </div>
-                        </div>
-                        <div className="proj-stat-item">
-                          <i className="fas fa-file-alt"></i>
-                          <div className="state-content">
-                            <span className="state-number">{projectDetails.totalApplications}</span>
-                            <span className="state-label">Applications</span>
-                          </div>
-                        </div>
-                        <div className="proj-stat-item">
-                          <i className="fas fa-users"></i>
-                          <div className="state-content">
-                            <span className="state-number">{dashboardStats.workersHired}</span>
-                            <span className="state-label">Workers</span>
-                          </div>
-                        </div>
-                        <div className="proj-stat-item">
-                          <i className="fas fa-chart-line"></i>
-                          <div className="state-content">
-                            <span className="state-number">{dashboardStats.attendanceRate}%</span>
-                            <span className="state-label">Attendance</span>
-                          </div>
+                        <div className="info-card-content">
+                          <span className="info-card-label">Started</span>
+                          <span className="info-card-value">{new Date(selectedProject.startDate || selectedProject.createdAt).toLocaleDateString()}</span>
                         </div>
                       </div>
                     </div>
-
-                    {(selectedProject.description || selectedProject.location) && (
-                      <div className="project-additional-info">
-                        {selectedProject.location && (
-                          <div className="info-item">
-                            <i className="fas fa-map-marker-alt"></i>
-                            <div className="info-content">
-                              <span className="info-label">Location</span>
-                              <span className="info-value">{selectedProject.location}</span>
-                            </div>
-                          </div>
-                        )}
-                        {selectedProject.type && (
-                          <div className="info-item">
-                            <i className="fas fa-building"></i>
-                            <div className="info-content">
-                              <span className="info-label">Project Type</span>
-                              <span className="info-value">{selectedProject.type}</span>
-                            </div>
-                          </div>
-                        )}
-                        {selectedProject.clientName && (
-                          <div className="info-item">
-                            <i className="fas fa-user"></i>
-                            <div className="info-content">
-                              <span className="info-label">Client</span>
-                              <span className="info-value">{selectedProject.clientName}</span>
-                            </div>
-                          </div>
-                        )}
-                        {selectedProject.description && (
-                          <div className="info-item description">
-                            <i className="fas fa-info-circle"></i>
-                            <div className="info-content">
-                              <span className="info-label">Description</span>
-                              <span className="info-value">{selectedProject.description}</span>
-                            </div>
-                          </div>
-                        )}
+                    <div className="col-md-4">
+                      <div className="info-card">
+                        <div className="info-card-icon">
+                          <i className="fas fa-clock"></i>
+                        </div>
+                        <div className="info-card-content">
+                          <span className="info-card-label">Duration</span>
+                          <span className="info-card-value">{projectDetails.projectDuration} days</span>
+                        </div>
                       </div>
-                    )}
+                    </div>
+                    <div className="col-md-4">
+                      <div className="info-card">
+                        <div className="info-card-icon">
+                          <i className="fas fa-rupee-sign"></i>
+                        </div>
+                        <div className="info-card-content">
+                          <span className="info-card-label">Budget</span>
+                          <span className="info-card-value">₹{selectedProject.expectedCost || 'Not Set'}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+
+                  {/* Project Stats */}
+                  <div className="row g-3 mb-4">
+                    <div className="col-md-3 col-6">
+                      <div className="stat-card-mini">
+                        <div className="stat-mini-icon jobs">
+                          <i className="fas fa-briefcase"></i>
+                        </div>
+                        <div className="stat-mini-content">
+                          <span className="stat-mini-number">{projectDetails.totalJobs}</span>
+                          <span className="stat-mini-label">Total Jobs</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-3 col-6">
+                      <div className="stat-card-mini">
+                        <div className="stat-mini-icon applications">
+                          <i className="fas fa-file-alt"></i>
+                        </div>
+                        <div className="stat-mini-content">
+                          <span className="stat-mini-number">{projectDetails.totalApplications}</span>
+                          <span className="stat-mini-label">Applications</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-3 col-6">
+                      <div className="stat-card-mini">
+                        <div className="stat-mini-icon workers">
+                          <i className="fas fa-users"></i>
+                        </div>
+                        <div className="stat-mini-content">
+                          <span className="stat-mini-number">{dashboardStats.workersHired}</span>
+                          <span className="stat-mini-label">Workers</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-3 col-6">
+                      <div className="stat-card-mini">
+                        <div className="stat-mini-icon attendance">
+                          <i className="fas fa-chart-line"></i>
+                        </div>
+                        <div className="stat-mini-content">
+                          <span className="stat-mini-number">{dashboardStats.attendanceRate}%</span>
+                          <span className="stat-mini-label">Attendance</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Additional Project Info */}
+                  {(selectedProject.description || selectedProject.location || selectedProject.type || selectedProject.clientName) && (
+                    <>
+                      {/* Location, Type, Client in one row */}
+                      {(selectedProject.location || selectedProject.type || selectedProject.clientName) && (
+                        <div className="row g-3 mb-3">
+                          {selectedProject.location && (
+                            <div className="col-md-4">
+                              <div className="detail-card">
+                                <div className="detail-card-header">
+                                  <i className="fas fa-map-marker-alt"></i>
+                                  <span>Location</span>
+                                </div>
+                                <div className="detail-card-body">{selectedProject.location}</div>
+                              </div>
+                            </div>
+                          )}
+                          {selectedProject.type && (
+                            <div className="col-md-4">
+                              <div className="detail-card">
+                                <div className="detail-card-header">
+                                  <i className="fas fa-building"></i>
+                                  <span>Project Type</span>
+                                </div>
+                                <div className="detail-card-body">{selectedProject.type}</div>
+                              </div>
+                            </div>
+                          )}
+                          {selectedProject.clientName && (
+                            <div className="col-md-4">
+                              <div className="detail-card">
+                                <div className="detail-card-header">
+                                  <i className="fas fa-user"></i>
+                                  <span>Client</span>
+                                </div>
+                                <div className="detail-card-body">{selectedProject.clientName}</div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {/* Description in separate row */}
+                      {selectedProject.description && (
+                        <div className="row g-3">
+                          <div className="col-12">
+                            <div className="detail-card">
+                              <div className="detail-card-header">
+                                <i className="fas fa-info-circle"></i>
+                                <span>Description</span>
+                              </div>
+                              <div className="detail-card-body">{selectedProject.description}</div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -451,42 +494,33 @@ function Builder_dashboard() {
         {/* Quick Stats Section */}
         {selectedProject && (
           <div className="row mb-4">
-            <div classNye ame="col-12" style={{ textAlign: 'center' }}>
+            <div className="col-12" style={{ textAlign: 'center' }}>
               <h4 className="stats-title" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                 <i className="fas fa-chart-bar me-2"></i>
                 Project Statistics
               </h4>
             </div>
-            <div className="col-6 col-md-6 mb-3">
-              <div className="stat-card materials">
+            <div className="col-6 col-md-6 mb-3 d-flex">
+              <div className="stat-card materials w-100">
                 <div className="stat-icon">
                   <i className="fas fa-boxes"></i>
                 </div>
                 <div className="state-content">
-                  <h5 className="state-number">{dashboardStats.materialsCount}</h5>
                   <p className="state-label">Materials in Stock</p>
+                  <h5 className="state-number">{dashboardStats.materialsCount}</h5>
+                  
                 </div>
               </div>
             </div>
-            {/* <div className="col-6 col-md-3 mb-3">
-              <div className="stat-card workers">
-                <div className="stat-icon">
-                  <i className="fas fa-users"></i>
-                </div>
-                <div className="stat-content">
-                  <h5 className="stat-number">{dashboardStats.workersHired}</h5>
-                  <p className="stat-label">Workers Hired</p>
-                </div>
-              </div>
-            </div> */}
-            <div className="col-6 col-md-6 mb-3">
-              <div className="stat-card payroll">
+            <div className="col-6 col-md-6 mb-3 d-flex">
+              <div className="stat-card payroll w-100">
                 <div className="stat-icon">
                   <i className="fas fa-rupee-sign"></i>
                 </div>
                 <div className="state-content">
-                  <h5 className="state-number">₹{dashboardStats.monthlyPayroll.toLocaleString()}</h5>
                   <p className="state-label">Payroll This Month</p>
+                  <h5 className="state-number">₹{dashboardStats.monthlyPayroll.toLocaleString()}</h5>
+                  
                 </div>
               </div>
             </div>
@@ -546,115 +580,115 @@ function Builder_dashboard() {
 
           return (
             <div className="row mb-4">
-              <div className="col-12">
+              <div className="col-md-6">
                 <div className="budget-chart-card">
                   <h4 className="budget-chart-title">
                     <i className="fas fa-chart-donut me-2"></i>
                     Budget Analysis
                   </h4>
+                  <div className="donut-chart-container text-center">
+                    <div className="donut-chart">
+                      <svg width="200" height="200" viewBox="0 0 200 200">
+                        {/* Background circle - Total Budget Outline */}
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="80"
+                          fill="none"
+                          stroke="#6c757d"
+                          strokeWidth="3"
+                          strokeDasharray="5,3"
+                        />
 
-                  <div className="chart-layout">
-                    <div className="donut-chart-container">
-                      <div className="donut-chart">
-                        <svg width="200" height="200" viewBox="0 0 200 200">
-                          {/* Background circle - Total Budget Outline */}
+                        {/* Inner background for segments */}
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="80"
+                          fill="none"
+                          stroke="#f8f9fa"
+                          strokeWidth="18"
+                        />
+
+                        {/* Spent amount arc - Only show if > 0 */}
+                        {spentPercentage > 0 && (
                           <circle
                             cx="100"
                             cy="100"
                             r="80"
                             fill="none"
-                            stroke="#6c757d"
-                            strokeWidth="3"
-                            strokeDasharray="5,3"
+                            stroke="#dc3545"
+                            strokeWidth="20"
+                            strokeDasharray={`${(spentPercentage / 100) * 502.65} 502.65`}
+                            strokeDashoffset="0"
+                            transform="rotate(-90 100 100)"
+                            strokeLinecap="round"
                           />
+                        )}
 
-                          {/* Inner background for segments */}
+                        {/* Remaining amount arc - Only show if > 0 */}
+                        {remainingPercentage > 0 && (
                           <circle
                             cx="100"
                             cy="100"
                             r="80"
                             fill="none"
-                            stroke="#f8f9fa"
-                            strokeWidth="18"
+                            stroke="#28a745"
+                            strokeWidth="20"
+                            strokeDasharray={`${(remainingPercentage / 100) * 502.65} 502.65`}
+                            strokeDashoffset={`-${(spentPercentage / 100) * 502.65}`}
+                            transform="rotate(-90 100 100)"
+                            strokeLinecap="round"
                           />
+                        )}
+                      </svg>
 
-                          {/* Spent amount arc - Only show if > 0 */}
-                          {spentPercentage > 0 && (
-                            <circle
-                              cx="100"
-                              cy="100"
-                              r="80"
-                              fill="none"
-                              stroke="#dc3545"
-                              strokeWidth="20"
-                              strokeDasharray={`${(spentPercentage / 100) * 502.65} 502.65`}
-                              strokeDashoffset="0"
-                              transform="rotate(-90 100 100)"
-                              strokeLinecap="round"
-                            />
-                          )}
-
-                          {/* Remaining amount arc - Only show if > 0 */}
-                          {remainingPercentage > 0 && (
-                            <circle
-                              cx="100"
-                              cy="100"
-                              r="80"
-                              fill="none"
-                              stroke="#28a745"
-                              strokeWidth="20"
-                              strokeDasharray={`${(remainingPercentage / 100) * 502.65} 502.65`}
-                              strokeDashoffset={`-${(spentPercentage / 100) * 502.65}`}
-                              transform="rotate(-90 100 100)"
-                              strokeLinecap="round"
-                            />
-                          )}
-                        </svg>
-
-                        <div className="chart-center">
-                          <div className="center-value">
-                            <span className="percentage">{spentPercentage.toFixed(0)}%</span>
-                            <span className="center-label">Used</span>
-                          </div>
+                      <div className="chart-center">
+                        <div className="center-value">
+                          <span className="percentage">{spentPercentage.toFixed(0)}%</span>
+                          <span className="center-label">Used</span>
                         </div>
                       </div>
                     </div>
-
-                    <div className="chart-details">
-                      <div className="detail-item spent">
-                        <div className="detail-indicator"></div>
-                        <div className="detail-content">
-                          <span className="detail-label">Total Spent</span>
-                          <span className="detail-value">₹{totalSpent.toLocaleString()}</span>
-                          <span className="detail-breakdown">
-                            Materials: ₹{totalMaterialCost.toLocaleString()} |
-                            Payroll: ₹{dashboardStats.monthlyPayroll.toLocaleString()}
-                          </span>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="budget-details-card">
+                  <h4 className="budget-chart-title">
+                    <i className="fas fa-info-circle me-2"></i>
+                    Budget Details
+                  </h4>
+                  <div className="budget-details-grid">
+                      <div className="budget-detail-card spent">
+                        <div className="budget-detail-icon">
+                          <i className="fas fa-arrow-up"></i>
+                        </div>
+                        <div className="budget-detail-content">
+                          <span className="budget-detail-label">Total Spent</span>
+                          <span className="budget-detail-value">₹{totalSpent.toLocaleString()}</span>
                         </div>
                       </div>
 
-                      <div className="detail-item remaining">
-                        <div className="detail-indicator"></div>
-                        <div className="detail-content">
-                          <span className="detail-label">Remaining Budget</span>
-                          <span className="detail-value">₹{remaining.toLocaleString()}</span>
-                          <span className="detail-breakdown">
-                            {remainingPercentage.toFixed(0)}% of total budget available
-                          </span>
+                      <div className="budget-detail-card remaining">
+                        <div className="budget-detail-icon">
+                          <i className="fas fa-wallet"></i>
+                        </div>
+                        <div className="budget-detail-content">
+                          <span className="budget-detail-label">Remaining</span>
+                          <span className="budget-detail-value">₹{remaining.toLocaleString()}</span>
                         </div>
                       </div>
 
-                      <div className="detail-item total">
-                        <div className="detail-indicator"></div>
-                        <div className="detail-content">
-                          <span className="detail-label">Total Budget</span>
-                          <span className="detail-value">₹{budget.toLocaleString()}</span>
-                          <span className="detail-breakdown">
-                            Allocated: {spentPercentage.toFixed(1)}% spent, {remainingPercentage.toFixed(1)}% remaining
-                          </span>
+                      <div className="budget-detail-card total">
+                        <div className="budget-detail-icon">
+                          <i className="fas fa-calculator"></i>
+                        </div>
+                        <div className="budget-detail-content">
+                          <span className="budget-detail-label">Total Budget</span>
+                          <span className="budget-detail-value">₹{budget.toLocaleString()}</span>
                         </div>
                       </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -667,9 +701,9 @@ function Builder_dashboard() {
           <p style={{ fontSize: '1.1rem', color: '#6c757d', fontWeight: '400', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>Access all your project management features</p>
         </div>
 
-        <div className="row g-3 d-flex justify-content-center mb-5">
+        <div className="row g-4 d-flex justify-content-center align-items-stretch mb-5">
           {cardData1.map((card, index) => (
-            <div key={index} className="col-12 col-md-6 col-lg-4 col-xl-3 ">
+            <div key={index} className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex">
               <div className="dashboard-card " onClick={() => navigate(card.route)}>
                 <div className="card-header mb-3">
                   <div className="card-icon">

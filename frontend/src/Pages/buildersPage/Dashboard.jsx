@@ -59,7 +59,7 @@ const modernTableStyles = `
   }
   
   .attendance-row {
-    // transition: all 0.3s ease;
+    transition: all 0.3s ease;
   }
   
   .attendance-row:hover {
@@ -91,7 +91,7 @@ const modernTableStyles = `
     font-weight: 600;
   }
   
-  .worker-number {
+  .atte-number {
     width: 35px;
     height: 35px;
     border-radius: 50%;
@@ -369,9 +369,9 @@ function Dashboard() {
             }
           />
         ) : (
-        <div className="modern-table-container">
+        <div className="atte-table-container">
           <div className="table-responsive">
-            <table className="modern-applications-table">
+            <table className="atte-applications-table">
               <thead>
                 <tr>
                   <th><i className="fas fa-hashtag me-2"></i>Sr.</th>
@@ -384,7 +384,7 @@ function Dashboard() {
               {hiredWorkers.map((worker, index) => (
                 <tr key={worker._id || index} className="table-row">
                   <td className="text-center">
-                    <div className="worker-number">{index + 1}</div>
+                    <div className="atte-number">{index + 1}</div>
                   </td>
                   <td className="worker-name-cell">
                     <div className="worker-info">
@@ -416,15 +416,7 @@ function Dashboard() {
                   <td>
                     <Link
                       to={`/attendance/worker/${worker.workerId}`}
-                      className="btn btn-sm"
-                      style={{
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        border: 'none',
-                        color: 'white',
-                        borderRadius: '10px',
-                        fontWeight: '600',
-                        textDecoration: 'none'
-                      }}
+                      className="btn btn-sm view-history-btn"
                     >
                       <GrFormView /> View History
                     </Link>
@@ -434,134 +426,6 @@ function Dashboard() {
             </tbody>
           </table>
         </div>
-        
-        <style jsx>{`
-          .attendance-actions {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-          }
-          
-          .attendance-btn {
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border: none;
-            // transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            min-width: 160px;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          }
-          
-          .present-btn {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-          }
-          
-          .present-btn:hover {
-            background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-            color: white;
-          }
-          
-          .absent-btn {
-            background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
-            color: white;
-          }
-          
-          .absent-btn:hover {
-            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
-            color: white;
-          }
-          
-          .modern-table-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            margin-top: 1rem;
-          }
-          
-          .modern-applications-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0;
-          }
-          
-          .modern-applications-table thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-          }
-          
-          .modern-applications-table th {
-            padding: 1rem;
-            font-weight: 600;
-            text-align: left;
-            border: none;
-            font-size: 0.9rem;
-          }
-          
-          .modern-applications-table th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          }
-          
-          .table-row {
-            border-bottom: 1px solid #e9ecef;
-          }
-          
-          .table-row:hover {
-            background: rgba(102, 126, 234, 0.05);
-            transform: translateY(-1px);
-          }
-          
-          .modern-applications-table td {
-            padding: 1rem;
-            vertical-align: middle;
-            border: none;
-          }
-          
-          .worker-number {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            margin: 0 auto;
-          }
-          
-          .worker-info {
-            display: flex;
-            align-items: center;
-          }
-          
-          .worker-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1rem;
-          }
-          
-          .worker-name {
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 1rem;
-          }
-        `}</style>
       </div>
         )}
 
@@ -569,14 +433,7 @@ function Dashboard() {
           <button
             disabled={processing}
             onClick={handleSubmitAttendance}
-            className="btn px-4 py-2"
-            style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              border: 'none',
-              color: 'white',
-              borderRadius: '10px',
-              fontWeight: '600'
-            }}
+            className="btn px-4 py-2 submit-btn"
           >
             {processing ? "Submitting..." : "Submit Attendance"}
           </button>

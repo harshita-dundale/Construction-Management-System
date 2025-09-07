@@ -1,18 +1,212 @@
-@media (max-width: 768px) {
-  .table td,
-  .table th {
-    white-space: nowrap;
+
+.attendance-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.attendance-btn {
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  min-width: 160px;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.present-btn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.present-btn:hover {
+  background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.absent-btn {
+  background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+}
+
+.absent-btn:hover {
+  background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Table Styles */
+/* ================================
+   Table Styles (Responsive)
+   ================================ */
+
+   .atte-table-container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 1rem;
+  }
+  
+  .atte-applications-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    min-width: 600px; /* ✅ prevent squishing on small screens */
+  }
+  
+  .atte-applications-table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+  
+  .atte-applications-table th {
+    padding: 1rem;
+    font-weight: 600;
+    text-align: left;
+    font-size: 0.9rem;
+    border: none;
+    white-space: nowrap; /* ✅ keep icons + text aligned */
+  }
+  
+  .table-row {
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .table-row:hover {
+    background: rgba(102, 126, 234, 0.05);
+    transform: translateY(-1px);
+  }
+  
+  .atte-applications-table td {
+    padding: 1rem;
     vertical-align: middle;
+    border: none;
   }
+  
+  .atte-number {
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin: 0 auto;
+  }
+  
+  .worker-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .worker-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1rem;
+  }
+  
+  /* ✅ View History Button */
+  .view-history-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 6px 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap; /* ✅ keeps text in one line */
+  }
+  
+  /* ✅ Submit Attendance Button */
+  .submit-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 10px 20px;
+  }
+  
+  /* ================================
+     Responsive Rules
+     ================================ */
+  
+  /* 📱 Mobile (<768px): Table scrolls horizontally */
+  @media (max-width: 768px) {
+    .table-responsive {
+      overflow-x: auto;   /* ✅ enables horizontal scroll */
+      -webkit-overflow-scrolling: touch;
+    }
+  
+    .atte-applications-table {
+      font-size: 0.85rem; /* ✅ slightly smaller text */
+    }
+  
+    .atte-applications-table th,
+    .atte-applications-table td {
+      padding: 0.6rem;
+    }
+  
+    .atte-number {
+      width: 28px;
+      height: 28px;
+      font-size: 0.8rem;
+    }
+  
+    .worker-name {
+      font-size: 0.9rem;
+    }
+  
+    .view-history-btn {
+      font-size: 0.8rem;
+      padding: 5px 10px;
+    }
+  }
+  
+  /* 📱 Extra small (<576px): Stack actions */
+  @media (max-width: 576px) {
+    .d-flex {
+      flex-direction: column !important;
+      gap: 0.4rem;
+    }
+  
+    .view-history-btn {
+      width: 100%; /* ✅ full width on mobile */
+      justify-content: center;
+    }
+  }
+  
 
+@media (max-width: 768px) {
+  .mate-head-title {
+    font-size: 1.6rem;
+  }
+  .mate-head-subtitle {
+    font-size: 0.9rem;
+    max-width: 100%;
+  }
+  .attendance-btn {
+    min-width: 120px;
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
   .form-check-input {
-    transform: scale(1.2); /* Makes checkbox more tappable on mobile */
+    transform: scale(1.2); /* Bigger checkboxes on mobile */
   }
-
   .table-responsive {
     overflow-x: auto;
   }
-
   .btn-sm {
     font-size: 0.85rem;
   }
