@@ -11,7 +11,7 @@ function Footer() {
         <div className="footer-main">
           <div className="container">
             {/* Brand Section */}
-            <div className="footer-brand text-center mb-5">
+            <div className="footer-brand text-center mb-3">
               <h3 className="brand-title">
                 <i className="fas fa-hard-hat me-3"></i>
                 ConstructHub
@@ -22,12 +22,12 @@ function Footer() {
             </div>
 
             {/* Footer Content Grid */}
-            <div className="row g-2">
+            <div className="row ">
               {/* Contact Section */}
               <div className="col-lg-4 col-md-6">
                 <div className="footer-section">
                   <div className="section-header">
-                    <div className="section-icon">
+                    <div className="footer-icon">
                       <i className="fas fa-phone"></i>
                     </div>
                     <h5 className="section-title">Contact Us</h5>
@@ -53,7 +53,7 @@ function Footer() {
               <div className="col-lg-4 col-md-6">
                 <div className="footer-section">
                   <div className="section-header">
-                    <div className="section-icon builder-icon">
+                    <div className="footer-icon ">
                       <i className="fas fa-hard-hat"></i>
                     </div>
                     <h5 className="section-title">Builder Services</h5>
@@ -71,7 +71,7 @@ function Footer() {
               <div className="col-lg-4 col-md-6">
                 <div className="footer-section">
                   <div className="section-header">
-                    <div className="section-icon worker-icon">
+                    <div className="footer-icon">
                       <i className="fas fa-user-tie"></i>
                     </div>
                     <h5 className="section-title">Worker Services</h5>
@@ -145,21 +145,21 @@ function Footer() {
         }
         
         .brand-title {
-          font-size: 2.5rem;
+          font-size: 2.2rem;
           font-weight: 800;
           color: white;
           margin-bottom: 1rem;
         }
         
         .brand-description {
-          font-size: 1.1rem;
+          font-size: 1rem;
           color: rgba(255, 255, 255, 0.8);
-          max-width: 500px;
+          max-width: 350px;
           margin: 0 auto;
         }
         
         .footer-section {
-          padding: 1rem 0;
+          // padding: 0.5rem 0;
           height: 100%;
         }
         
@@ -167,25 +167,18 @@ function Footer() {
           display: flex;
           align-items: center;
           gap: 1rem;
-          margin-bottom: 1.5rem;
+          margin-bottom: 0.6rem;
         }
         
-        .section-icon {
+        .footer-icon {
           width: 40px;
           height: 40px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          // background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 1.1rem;
-        }
-        
-        .builder-icon {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .worker-icon {
           background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
         }
         
@@ -216,7 +209,7 @@ function Footer() {
         .contact-item:hover {
           color: white;
           background: rgba(255, 255, 255, 0.1);
-          padding-left: 0.5rem;
+          padding-left: 0.3rem;
           transform: translateX(5px);
         }
         
@@ -242,13 +235,13 @@ function Footer() {
         .service-links a:hover {
           color: white;
           background: rgba(255, 255, 255, 0.1);
-          padding-left: 0.5rem;
+          padding-left: 0.3rem;
           transform: translateX(5px);
         }
         
         .footer-bottom {
           background: rgba(0, 0, 0, 0.2);
-          padding: 1.5rem 0;
+          padding: 1rem 0;
           border-top: 1px solid rgba(255, 255, 255, 0.1);
           position: relative;
           z-index: 2;

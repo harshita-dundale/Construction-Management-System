@@ -1,5 +1,5 @@
 .modern-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(#667eea 0%);
   position: fixed;
   top: 0;
   width: 100%;
@@ -14,6 +14,7 @@
 
 .logo-img:hover {
   transform: scale(1.05);
+  cursor: pointer;
 }
 
 .modern-nav-link {
@@ -29,6 +30,7 @@
   background: rgba(255, 255, 255, 0.1);
   color: white !important;
   transform: translateY(-2px);
+  cursor: pointer;
 }
 
 .modern-nav-link.active {
@@ -38,10 +40,11 @@
 }
 
 .btn-modern-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
   border: none;
   border-radius: 25px;
-  color: white;
+  color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);

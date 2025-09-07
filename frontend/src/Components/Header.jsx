@@ -99,6 +99,7 @@ function Header() {
               height="45"
               width="180"
               className="logo-img"
+              onClick={() => navigate("/")}
             />
           </div>
 
@@ -236,7 +237,7 @@ function Header() {
                       }`}
                       onClick={() => handleScrollToSection("services-section")}
                     >
-                      <i className="fas fa-cogs me-2"></i>Services
+                      <i className="fas fa-hard-hat me-2"></i>Services
                     </a>
                   </li>
                   <li className="nav-item me-4">
@@ -254,7 +255,7 @@ function Header() {
 
               {/* Auth Buttons */}
               {!isAuthenticated ? (
-                <li className="nav-item">
+                <li className="nav-item " >
                   <button
                     className="btn btn-modern-primary px-4 py-2"
                     type="button"
