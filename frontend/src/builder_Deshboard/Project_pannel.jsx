@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Header from "../Components/Header";
+import Sidebar from "../Components/Sidebar";
 import ProjectModal from "../Components/ProjectModal";
 import BackButton from "../Components/BackButton";
 import { selectProject } from "../Pages/Redux/projectSlice";
@@ -313,7 +314,8 @@ function Builder_dashboard() {
   return (
     <div className="proj-dashboard-wrapper">
       <Header />
-      <div className="container-fluid px-3 px-md-4 " >
+      <Sidebar />
+      <div className="container-fluid px-3 px-md-4" >
 
         {/* Project Overview Card */}
         {selectedProject && (

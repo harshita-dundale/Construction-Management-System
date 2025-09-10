@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Header from "../../Components/Header";
+import Sidebar from "../../Components/Sidebar";
 import ProjectModal from "../../Components/ProjectModal";
 import DashboardHeader from "./DashboardHeader";
 import DashboardStats from "./DashboardStats";
@@ -234,24 +235,27 @@ function Builder_dashboard() {
   return (
     <div className="dashboard-wrapper">
       <Header />
-      <DashboardHeader totalProjectCost={totalProjectCost} setShowProjectModal={setShowProjectModal} />
-      <DashboardStats
-        totalProjects={totalProjects}
-        ongoingWorkers={ongoingWorkers}
-        totalMaterialExpenses={totalMaterialExpenses}
-        pendingPayments={pendingPayments}
-      />
-      <ProjectList
-        projects={projects}
-        selectedProject={selectedProject}
-        indexOfFirstProject={indexOfFirstProject}
-        indexOfLastProject={indexOfLastProject}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        handlePageChange={handlePageChange}
-        setShowProjectModal={setShowProjectModal}
-        onProjectUpdate={() => dispatch(fetchProjects(user?.sub))}
-      />
+      <Sidebar />
+      <div>
+        <DashboardHeader totalProjectCost={totalProjectCost} setShowProjectModal={setShowProjectModal} />
+        <DashboardStats
+          totalProjects={totalProjects}
+          ongoingWorkers={ongoingWorkers}
+          totalMaterialExpenses={totalMaterialExpenses}
+          pendingPayments={pendingPayments}
+        />
+        <ProjectList
+          projects={projects}
+          selectedProject={selectedProject}
+          indexOfFirstProject={indexOfFirstProject}
+          indexOfLastProject={indexOfLastProject}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handlePageChange={handlePageChange}
+          setShowProjectModal={setShowProjectModal}
+          onProjectUpdate={() => dispatch(fetchProjects(user?.sub))}
+        />
+      </div>
       <ProjectModal
         show={showProjectModal}
         handleClose={() => {

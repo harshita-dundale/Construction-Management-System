@@ -5,6 +5,7 @@ import { GrFormView } from "react-icons/gr";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Components/Header";
+import Sidebar from "../Components/Sidebar";
 import "./PayrollPageEnhanced.css"; // 👈 added
 
 function PayrollPageEnhanced() {
@@ -305,6 +306,7 @@ function PayrollPageEnhanced() {
   return (
     <>
       <Header />
+      <Sidebar />
       <div className="jobs-header-section" style={{ marginTop: "6rem" }}>
         <div className="container">
           <div className="row align-items-center">

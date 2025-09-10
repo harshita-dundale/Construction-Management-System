@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import Header from "../Components/Header";
+import Sidebar from "../Components/Sidebar";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import JobCard1 from "../Components/cards/JobCard1";
@@ -149,6 +150,7 @@ function ViewPostedJobs() {
   return (
     <>
       <Header />
+      <Sidebar />
       <div className="jobs-page-container">
         {/* Header Section */}
         <div className="jobs-header-section">

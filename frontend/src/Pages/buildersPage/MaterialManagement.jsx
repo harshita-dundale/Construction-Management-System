@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../Components/Header";
+import Sidebar from "../../Components/Sidebar";
 import "./material.css";
 import {
   addMaterial,
@@ -283,6 +284,7 @@ const MaterialManagement = () => {
   return (
     <>
       <Header />
+      <Sidebar />
       <div className="material-management-container">
         {/* Header Section */}
         <div className="material-header">
