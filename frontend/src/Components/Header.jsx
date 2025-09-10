@@ -210,9 +210,11 @@ function Header() {
                   </button>
                 </li>
               ) : (
-                <li className="nav-item d-none d-lg-block">
-                  <ProfileAvatar />
-                </li>
+                !isBuilderPage && (
+                  <li className="nav-item d-none d-lg-block">
+                    <ProfileAvatar />
+                  </li>
+                )
               )}
             </ul>
           </div>

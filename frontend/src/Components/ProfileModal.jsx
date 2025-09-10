@@ -506,6 +506,17 @@ const ProfileModal = ({ show, handleClose }) => {
           z-index: 1040;
         }
         
+        /* Sidebar adjustments for backdrop */
+        body.has-sidebar .modal-backdrop-modern {
+          left: 250px;
+          width: calc(100% - 250px);
+        }
+        
+        body.has-sidebar.sidebar-collapsed .modal-backdrop-modern {
+          left: 60px;
+          width: calc(100% - 60px);
+        }
+        
         .modern-profile-modal {
           position: fixed;
           top: 0;
@@ -520,6 +531,17 @@ const ProfileModal = ({ show, handleClose }) => {
           visibility: hidden;
           // transition: all 0.3s ease;
           padding: 1rem;
+        }
+        
+        /* Sidebar adjustments */
+        body.has-sidebar .modern-profile-modal {
+          left: 250px;
+          width: calc(100vw - 250px);
+        }
+        
+        body.has-sidebar.sidebar-collapsed .modern-profile-modal {
+          left: 60px;
+          width: calc(100vw - 60px);
         }
         
         .modern-profile-modal.show {
@@ -775,15 +797,15 @@ const ProfileModal = ({ show, handleClose }) => {
         }
         
         .detail-icon {
-          width: 25px;
-          height: 25px;
+          width: 32px;
+          height: 32px;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           border-radius: 8px;
           display: flex;
           align-items: center;
           justify-content: center;
           color: white;
-          font-size: 0.9rem;
+          font-size: 1rem;
           flex-shrink: 0;
         }
         
@@ -904,6 +926,19 @@ const ProfileModal = ({ show, handleClose }) => {
             padding-top: 2rem;
           }
           
+          /* Mobile sidebar adjustments */
+          body.has-sidebar .modern-profile-modal,
+          body.has-sidebar.sidebar-collapsed .modern-profile-modal {
+            left: 0;
+            width: 100vw;
+          }
+          
+          body.has-sidebar .modal-backdrop-modern,
+          body.has-sidebar.sidebar-collapsed .modal-backdrop-modern {
+            left: 0;
+            width: 100%;
+          }
+          
           .modal-container {
             width: 100%;
             max-width: 100%;
@@ -947,14 +982,22 @@ const ProfileModal = ({ show, handleClose }) => {
           }
           
           .detail-item {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.5rem;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.75rem;
             padding: 1rem;
           }
           
+          .detail-icon {
+            width: 30px;
+            height: 30px;
+            font-size: 1rem;
+            flex-shrink: 0;
+          }
+          
           .detail-content {
-            width: 100%;
+            flex: 1;
+            min-width: 0;
           }
           
           .detail-value-editable {
