@@ -2,7 +2,7 @@
     color: #051821; /* Default text color */
     background-color: transparent;
     border: none;
-    transition: all 0.3s ease-in-out;
+    /* transition: all 0.3s ease-in-out; */
 }
 
 /* .nav-tabs .nav-link:hover {
@@ -34,7 +34,7 @@
           text-align: center;
         }
         
-        .header-title {
+        /* .header-title {
       
           font-size: 1.5rem;
           font-weight: 700;
@@ -42,7 +42,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-        }
+        } */
         
         .header-subtitle {
           font-size: 1rem;
@@ -76,7 +76,7 @@
           gap: 0.5rem;
           font-weight: 600;
           color: #6c757d;
-          transition: all 0.3s ease;
+          /* transition: all 0.3s ease; */
           cursor: pointer;
           text-transform: capitalize;
         }
@@ -85,7 +85,7 @@
           background: rgba(102, 126, 234, 0.1);
           border-color: #667eea;
           color: #667eea;
-          transform: translateY(-2px);
+          /* transform: translateY(-2px); */
         }
         
         .modern-tab.active {

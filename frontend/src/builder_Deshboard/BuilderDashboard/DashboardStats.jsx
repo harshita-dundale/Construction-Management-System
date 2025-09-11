@@ -34,9 +34,9 @@ function DashboardStats({ totalProjects, ongoingWorkers, totalMaterialExpenses, 
 
   return (
     <div className="container-fluid px-3 px-md-4 mb-5">
-      <div className="dash-header text-center mb-4">
+      <div className="dash-header text-center">
         <h2 className="dash-title">Dashboard Overview</h2>
-        <p className="dash-subtitle">A quick look at your project statistics</p>
+        <p className="dash-subtitle mb-4">A quick look at your project statistics</p>
       </div>
       <div className="row g-3 justify-content-center">
         {statsData.map((stat, index) => (

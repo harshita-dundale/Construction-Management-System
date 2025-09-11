@@ -1,7 +1,7 @@
 .dashboard-wrapper {
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding-top: 5.5rem;
+  padding-top: 30px;
 }
 
 .dashboard-header {
@@ -385,7 +385,7 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .dashboard-wrapper {
-    padding-top: 100px;
+    padding-top: 30px;
   }
   .dashboard-header {
     padding: 2rem 0;
@@ -422,7 +422,7 @@
 
 @media (max-width: 576px) {
   .dashboard-wrapper {
-    padding-top: 90px;
+    padding-top: 30px;
   }
   .dashboard-header {
     padding: 1rem 0;

@@ -40,15 +40,11 @@ const ApplicationSection = () => {
 
   if (initialLoading || loading) {
     return (
-      <>
-        <Header />
-        <div className="container mt-5">
-          <LoadingSpinner 
-            message="Loading Applications..." 
-            size="large" 
-          />
-        </div>
-      </>
+      <LoadingSpinner
+  loading={loading}
+  title="Loading Application status..."
+  subtitle="Please wait while we prepare your Application status ."
+/>
     );
   }
 

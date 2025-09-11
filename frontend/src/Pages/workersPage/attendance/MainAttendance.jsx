@@ -3,8 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Tabs from "./Tabs";
 import PaymentSummary from "../payment/PaymentSummary";
 import Header from "../../../Components/Header";
+import BackButton from "../../../Components/BackButton";
 import { useAuth0 } from "@auth0/auth0-react";
-import "./MainAttendance.css"; // 👈 alag CSS import
+import "./MainAttendance.css";
+import LoadingSpinner from "../../../Components/LoadingSpinner";
 
 const MainAttendance = () => {
   const [jobTitles, setJobTitles] = useState([]);
@@ -49,18 +51,11 @@ const MainAttendance = () => {
   
   if (isLoading || loadingJobs) {
     return (
-      <>
-        <Header />
-        <div className="loading-container">
-          <div className="loading-content">
-            <div className="loading-spinner">
-              <i className="fas fa-spinner fa-spin"></i>
-            </div>
-            <h4>Loading Attendance Data...</h4>
-            <p className="text-muted">Please wait while we fetch your job information.</p>
-          </div>
-        </div>
-      </>
+      <LoadingSpinner
+      loading={isLoading}
+      title="Loading Attendance Data..."
+      subtitle="Please wait while we prepare your job information."
+    />
     );
   }
 
@@ -74,13 +69,7 @@ const MainAttendance = () => {
       <div className="attendance-container">
         {/* Back Button */}
         <div className="back-button-contain">
-          <button
-            className="btn-back-attendance"
-            onClick={() => navigate("/browse-job")}
-          >
-            <i className="fas fa-arrow-left me-2"></i>
-            Back to Jobs
-          </button>
+          <BackButton to="/browse-job" text="Back to Jobs" variant="outline" />
         </div>
         
         {selectedJobFromState ? (

@@ -249,7 +249,7 @@ function ApplyForm() {
           font-weight: 600;
           margin-bottom: 2rem;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
         
         .btn-back:hover {

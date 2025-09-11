@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectProject } from '../../Pages/Redux/projectSlice';
+import EditJobModal from '../EditJobModal'
 import Swal from 'sweetalert2';
 
 function ProjectList({
@@ -37,91 +38,15 @@ function ProjectList({
     navigate('/Project_pannel');
   };
 
-  const handleEditProject = async (project, e) => {
+  const [editingProject, setEditingProject] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  
+  const handleEditProject = (project, e) => {
     e.stopPropagation();
-    
-    const { value: formValues } = await Swal.fire({
-      title: 'Edit Project',
-      html: `
-        <div style="text-align: left;">
-          <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Project Name</label>
-            <input id="swal-input1" class="swal2-input" value="${project.name}" placeholder="Project Name" style="margin: 0; width: 100%;">
-          </div>
-          <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Project Type</label>
-            <input id="swal-input2" class="swal2-input" value="${project.type || ''}" placeholder="Project Type" style="margin: 0; width: 100%;">
-          </div>
-          <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Location</label>
-            <input id="swal-input3" class="swal2-input" value="${project.location || ''}" placeholder="Location" style="margin: 0; width: 100%;">
-          </div>
-          <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Client Name</label>
-            <input id="swal-input4" class="swal2-input" value="${project.clientName || ''}" placeholder="Client Name" style="margin: 0; width: 100%;">
-          </div>
-          <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Expected Cost</label>
-            <input id="swal-input5" class="swal2-input" value="${project.expectedCost || ''}" placeholder="Expected Cost" style="margin: 0; width: 100%;">
-          </div>
-        </div>
-      `,
-      focusConfirm: false,
-      showCancelButton: true,
-      confirmButtonColor: '#667eea',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Update Project',
-      cancelButtonText: 'Cancel',
-      preConfirm: () => {
-        return {
-          name: document.getElementById('swal-input1').value,
-          type: document.getElementById('swal-input2').value,
-          location: document.getElementById('swal-input3').value,
-          clientName: document.getElementById('swal-input4').value,
-          expectedCost: document.getElementById('swal-input5').value
-        }
-      }
-    });
-
-    if (formValues) {
-      try {
-        const response = await fetch(`http://localhost:5000/api/projects/${project._id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...project,
-            ...formValues
-          })
-        });
-
-        if (response.ok) {
-          Swal.fire({
-            title: 'Updated!',
-            text: 'Project has been updated successfully.',
-            icon: 'success',
-            confirmButtonColor: '#667eea'
-          });
-          
-          // Refresh projects list
-          if (onProjectUpdate) {
-            onProjectUpdate();
-          }
-        } else {
-          throw new Error('Failed to update project');
-        }
-      } catch (error) {
-        console.error('Error updating project:', error);
-        Swal.fire({
-          title: 'Error!',
-          text: 'Failed to update project. Please try again.',
-          icon: 'error',
-          confirmButtonColor: '#667eea'
-        });
-      }
-    }
+    setEditingProject(project);
+    setShowEditModal(true);
   };
+  
 
   const handleDeleteProject = async (project, e) => {
     e.stopPropagation();
@@ -171,14 +96,14 @@ function ProjectList({
   };
 
   return (
-    <div className="container-fluid px-3 px-md-4 mt-5 pb-5">
+    <div className="container-fluid px-3 px-md-4 mt-5 ">
       <div className="dash-header text-center">
-        <h2 className="dash-title">Your Projects</h2>
+        <h2 className="dash-title ">Your Projects</h2>
       </div>
       {projects && projects.length > 0 ? (
         <>
-          <div className="projects-info mb-3">
-            <span className="text-muted">
+          <div className="projects-info mb-4">
+            <span className="text-muted ">
               Showing {indexOfFirstProject + 1}-{Math.min(indexOfLastProject, projects.length)} of {projects.length} projects
             </span>
           </div>
@@ -247,7 +172,7 @@ function ProjectList({
             ))}
           </div>
           {totalPages > 1 && (
-            <div className="pagination-wrapper mt-4">
+            <div className="pagination-wrapper mt-4 pb-5">
               <div className="pagination-container">
                 <button
                   className="pagination-btn"
@@ -285,7 +210,22 @@ function ProjectList({
           </div>
         </div>
       )}
-      
+      {editingProject && (
+        <EditJobModal
+          mode="projectModal"
+          project={editingProject}
+          show={showEditModal}
+          onClose={() => {
+            setShowEditModal(false);
+            setEditingProject(null);
+          }}
+          onSave={(updatedProject) => {
+            if (onProjectUpdate) onProjectUpdate();
+            setShowEditModal(false);
+            setEditingProject(null);
+          }}
+        />
+      )}
       {/* Inline Styles for Action Buttons */}
       <style dangerouslySetInnerHTML={{__html: `
         .project-actions {
@@ -306,7 +246,7 @@ function ProjectList({
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           font-size: 0.8rem;
           z-index: 10;
           position: relative;
@@ -315,6 +255,11 @@ function ProjectList({
         .edit-btn {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
+        }
+        
+        .edit-btn:hover {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+          color: white !important;
         }
         
         .delete-btn {

@@ -202,7 +202,7 @@ function Card3({ application, isHiredView = false, onDelete }) {
 
       {!isHiredView && status === "joined" && (
         <div className="card-actions">
-          <button
+          {/* <button
             className="action-btn view-btn"
             onClick={() => {
               window.open(`/worker-profile/${application.userId?._id || application._id}`, '_blank');
@@ -211,7 +211,7 @@ function Card3({ application, isHiredView = false, onDelete }) {
           >
             <i className="fas fa-eye me-2"></i>
             View Worker
-          </button>
+          </button> */}
           <button
             className="action-btn delete-btn"
             onClick={async () => {
@@ -314,7 +314,7 @@ function Card3({ application, isHiredView = false, onDelete }) {
 
       {isHiredView && (
         <div className="card-actions">
-          <button
+          {/* <button
             className="action-btn view-btn"
             onClick={() => {
               window.open(`/worker-profile/${application.userId?._id || application._id}`, '_blank');
@@ -322,7 +322,7 @@ function Card3({ application, isHiredView = false, onDelete }) {
           >
             <i className="fas fa-eye me-2"></i>
             View Profile
-          </button>
+          </button> */}
           <button
             className="action-btn remove-btn"
             onClick={async () => {
@@ -378,7 +378,7 @@ function Card3({ application, isHiredView = false, onDelete }) {
           border-radius: 20px;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
           overflow: hidden;
-          transition: all 0.4s ease;
+          // transition: all 0.4s ease;
           height: 100%;
           display: flex;
           flex-direction: column;
@@ -618,7 +618,7 @@ function Card3({ application, isHiredView = false, onDelete }) {
           border-radius: 12px;
           font-weight: 600;
           font-size: 0.9rem;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           cursor: pointer;
           display: flex;
           align-items: center;

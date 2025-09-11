@@ -6,6 +6,7 @@ import ProjectModal from "../../Components/ProjectModal";
 import DashboardHeader from "./DashboardHeader";
 import DashboardStats from "./DashboardStats";
 import ProjectList from "./ProjectList";
+import { Button } from 'react-bootstrap';
 import { selectProject, updateProject, deleteProject, fetchProjects } from "../../Pages/Redux/projectSlice";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
@@ -48,8 +49,6 @@ function Builder_dashboard() {
   const [ongoingWorkers, setOngoingWorkers] = useState(0);
   const [pendingPayments, setPendingPayments] = useState(0);
 
-  // ... (all other functions like handleEditProject, handleUpdateProject, etc. remain here)
-
   const totalPages = Math.ceil((projects?.length || 0) / projectsPerPage);
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
@@ -90,7 +89,6 @@ function Builder_dashboard() {
     fetchOngoingWorkers();
   }, [projects, user?.sub]);
 
-  // Calculate pending payments across all projects
   useEffect(() => {
     const fetchPendingPayments = async () => {
       if (!user?.sub || !projects?.length) {
@@ -232,9 +230,20 @@ function Builder_dashboard() {
   const totalProjectCost = totalMaterialCost + totalWorkerPayable + enhancedPayrollTotal;
 
   return (
+    <>
+    <Header />
+     <DashboardHeader
+  title="Project Management Hub"
+  subtitle="Streamline your projects with advanced tools. Monitor attendance, payments, and progress instantly. Organize workers and job roles without hassle."
+  actions={
+    <Button onClick={() => setShowProjectModal(true)} className="btn-dashboard-primary">
+      <i className="fas fa-cog me-2"></i> Manage Projects
+    </Button>
+  }
+/>
     <div className="dashboard-wrapper">
-      <Header />
-      <DashboardHeader totalProjectCost={totalProjectCost} setShowProjectModal={setShowProjectModal} />
+      {/* <DashboardHeader totalProjectCost={totalProjectCost} setShowProjectModal={setShowProjectModal} /> */}
+
       <DashboardStats
         totalProjects={totalProjects}
         ongoingWorkers={ongoingWorkers}
@@ -252,39 +261,6 @@ function Builder_dashboard() {
         setShowProjectModal={setShowProjectModal}
         onProjectUpdate={() => dispatch(fetchProjects(user?.sub))}
       />
-      {/* Dashboard Cards */}
-      {/* <div className="container-fluid px-3 px-md-4 mb-4" style={{ marginTop: '3rem' }}>
-        <div className="dash-header text-center">
-          <h2 className="section-title">Management Tools</h2>
-          <p className="section-subtitle">Access all your project management features</p>
-        </div>
-        <div className="row g-3 d-flex justify-content-center">
-          {cardData1.map((card, index) => (
-            <div key={index} className="col-12 col-md-6 col-lg-4 col-xl-3 ">
-              <div className="dashboard-card " onClick={() => navigate(card.route)}>
-                <div className="card-header mb-3">
-                  <div className="card-icon">
-                    <img src={card.imgSrc} alt={card.title} className="card-image" />
-                  </div>
-                  <div className="card-badge">
-                    <i className="fas fa-arrow-right"></i>
-                  </div>
-                </div>
-                <div className="card-body">
-                  <h5 className="card-title">{card.title}</h5>
-                  <p className="card-description">{card.text}</p>
-                  <button className="btn-card-action">
-                    {card.buttonText}
-                    <i className="fas fa-chevron-right ms-2"></i>
-                  </button>
-                </div>
-                <div className="card-overlay"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div> */}
-
       <ProjectModal
         show={showProjectModal}
         handleClose={() => {
@@ -299,6 +275,7 @@ function Builder_dashboard() {
         }}
       />
     </div>
+    </>
   );
 }
 

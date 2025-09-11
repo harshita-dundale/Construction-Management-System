@@ -518,7 +518,7 @@ const ProfileModal = ({ show, handleClose }) => {
           justify-content: center;
           opacity: 0;
           visibility: hidden;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           padding: 1rem;
         }
         
@@ -538,8 +538,8 @@ const ProfileModal = ({ show, handleClose }) => {
           border-radius: 20px;
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
           overflow: hidden;
-          transform: scale(0.9);
-          transition: transform 0.3s ease;
+          // transform: scale(0.9);
+          // transition: transform 0.3s ease;
         }
         
         .modern-profile-modal.show .modal-content-modern {
@@ -593,7 +593,7 @@ const ProfileModal = ({ show, handleClose }) => {
           border: none;
           color: #6c757d;
           font-size: 1.5rem;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           padding: 0.5rem;
         }
         
@@ -632,7 +632,7 @@ const ProfileModal = ({ show, handleClose }) => {
           border-radius: 50%;
           object-fit: cover;
           border: 4px solid #f8f9fa;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
         
         .image-overlay {
@@ -649,7 +649,7 @@ const ProfileModal = ({ show, handleClose }) => {
           color: white;
           font-size: 1.5rem;
           opacity: 0;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
         
         .image-wrapper:hover .image-overlay {
@@ -665,7 +665,7 @@ const ProfileModal = ({ show, handleClose }) => {
           font-size: 0.9rem;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           display: inline-flex;
           align-items: center;
         }
@@ -684,7 +684,7 @@ const ProfileModal = ({ show, handleClose }) => {
           font-size: 0.9rem;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
           display: inline-flex;
           align-items: center;
           margin-left: 0.5rem;
@@ -827,7 +827,7 @@ const ProfileModal = ({ show, handleClose }) => {
           cursor: pointer;
           padding: 0.25rem;
           border-radius: 4px;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
 
         .edit-btn:hover {
@@ -862,7 +862,7 @@ const ProfileModal = ({ show, handleClose }) => {
           padding: 0.5rem;
           border-radius: 4px;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
 
         .save-btn:hover {
@@ -877,7 +877,7 @@ const ProfileModal = ({ show, handleClose }) => {
           padding: 0.5rem;
           border-radius: 4px;
           cursor: pointer;
-          transition: all 0.3s ease;
+          // transition: all 0.3s ease;
         }
 
         .cancel-btn:hover {
@@ -900,27 +900,89 @@ const ProfileModal = ({ show, handleClose }) => {
         }
         
         @media (max-width: 768px) {
+          .modern-profile-modal {
+            padding: 0.5rem;
+            align-items: flex-start;
+            padding-top: 2rem;
+          }
+          
           .modal-container {
-            width: 95%;
-            max-height: 95vh;
+            width: 100%;
+            max-width: 100%;
+            max-height: 90vh;
+          }
+          
+          .modal-content-modern {
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 15px;
           }
           
           .profile-layout {
             grid-template-columns: 1fr;
-            gap: 1.5rem;
+            gap: 1rem;
           }
           
           .modal-header-modern {
-            padding: 1.5rem;
+            padding: 1rem;
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+          }
+          
+          .header-content {
+            flex-direction: column;
+            text-align: center;
           }
           
           .modal-body-modern {
-            padding: 1.5rem;
+            padding: 1rem;
           }
           
           .profile-image {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
+          }
+          
+          .details-section {
+            padding: 1rem;
+          }
+          
+          .detail-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 1rem;
+          }
+          
+          .detail-content {
+            width: 100%;
+          }
+          
+          .detail-value-editable {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+          }
+          
+          .edit-field {
+            flex-direction: column;
+            width: 100%;
+          }
+          
+          .edit-input {
+            width: 100%;
+          }
+          
+          .upload-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+          }
+          
+          .delete-button {
+            margin-left: 0;
+            margin-top: 0;
           }
         }
       `}} />

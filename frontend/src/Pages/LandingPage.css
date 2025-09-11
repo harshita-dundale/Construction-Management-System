@@ -37,16 +37,16 @@
 .card {
   transform: scale(1);
   box-shadow: none;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* transition: transform 0.3s ease, box-shadow 0.3s ease; */
 }
 .card:hover {
-  transform: scale(1.03);
+  /* transform: scale(1.03); */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 .service-btns {
   background-color: var(--primary-color);
   color: var(--text-color);
-  transition: all ease-in 0.5s;
+  /* transition: all ease-in 0.5s; */
 }
 .service-btns:hover {
   background-color: var(--secondary-color);
@@ -60,7 +60,7 @@
 }
 .roleSelect-btn {
   background-color: var(--primary-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  /* transition: background-color 0.3s ease, color 0.3s ease; */
   color: var(--text-color);
 }
 .roleSelect-btn:hover {

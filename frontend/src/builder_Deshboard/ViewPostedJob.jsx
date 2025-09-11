@@ -7,9 +7,9 @@ import EditJobModal from "./EditJobModal";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-
-import "./ViewPostedJobs.css"; // 👈 CSS file import
-
+import DashboardHeader from './BuilderDashboard/DashboardHeader'
+import "./ViewPostedJobs.css"; 
+import LoadingSpinner from '../Components/LoadingSpinner'
 function ViewPostedJobs() {
   const { user } = useAuth0();
   const navigate = useNavigate();
@@ -128,12 +128,12 @@ function ViewPostedJobs() {
   if (error) return <p className="text-danger text-center">Error: {error}</p>;
   if (loading)
     return (
-      <div className="loading-container">
-        <div className="loading-spinner">
-          <i className="fas fa-spinner fa-spin"></i>
-        </div>
-        <p>Loading your jobs...</p>
-      </div>
+      <LoadingSpinner
+  loading={loading}
+  error={error}
+  title="Loading Posted Jobs..."
+  subtitle="Please wait while we prepare your Posted Jobs ."
+/>
     );
 
   const displayJobs = selectedProject
@@ -149,69 +149,40 @@ function ViewPostedJobs() {
   return (
     <>
       <Header />
-      <div className="jobs-page-container">
-        {/* Header Section */}
-        <div className="jobs-header-section">
-          <div className="container">
-            <div className="row align-items-center">
-              <div className="col-md-8">               
-                <div className="header-content">
-                  <h1 className="header-title">My Posted Jobs</h1>
-                </div>
-                <p className="header-subtitle me-5">
-                Streamline your hiring process by managing and tracking all job postings efficiently, ensuring better organization and faster recruitment.                </p>
-                {/* <div className="header-badge">
-                  <i className="fas fa-briefcase me-2"></i>
-                  Job Management
-                </div> */}
-              </div>
-              <div className="col-md-4">
-              
-                {selectedProject && (
-                  <div className="container mb-4  mt-3">
-                    <div className="project-filter">
-                      <div className="filter-icon">
-                        <i className="fas fa-building"></i>
-                      </div>
-                      <div className="filter-content">
-                        <h6 className="filter-title">{selectedProject.name}</h6>
-                        <span className="filter-subtitle">Project Filter Active</span>
-                      </div>
-                      <div className="filter-badge">{displayJobs.length} Jobs</div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            {/* Quick Actions */}
-            <div className="row mt-4">
-              <div className="col-12">
-                <div className="quick-actions">
-                  <button
-                    className="action-btn primary-btn"
-                    onClick={() => navigate("/post-job")}>
-                    <i className="fas fa-plus me-2"></i>
-                    Post New Job
-                  </button>
-                  <button
-                    className="action-btn secondary-btn"
-                    onClick={() => navigate("/ViewApplications")}
-                  >
-                    <i className="fas fa-users me-2"></i>
-                    View Applications
-                  </button>
-                  <button
-                    className="action-btn tertiary-btn"
-                    onClick={() => toast.info("Analytics feature coming soon!")}
-                  >
-                    <i className="fas fa-chart-bar me-2"></i>
-                    Analytics
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Header Section */}
+      <DashboardHeader
+  title="My Posted Jobs"
+  subtitle="Streamline your hiring process by managing and tracking all job postings efficiently, ensuring better organization and faster recruitment."
+  projectFilter={
+    selectedProject && {
+      name: selectedProject.name,
+      jobsCount: displayJobs.length,
+    }
+  }
+  actions={
+    <div className="quick-actions">
+      <button
+        className="action-btn-posted primary-btn"
+        onClick={() => navigate("/post-job")}
+      >
+        <i className="fas fa-plus me-2"></i> Post New Job
+      </button>
+      <button
+        className="action-btn-posted secondary-btn"
+        onClick={() => navigate("/ViewApplications")}
+      >
+        <i className="fas fa-users me-2"></i> View Applications
+      </button>
+      <button
+        className="action-btn-posted tertiary-btn"
+        onClick={() => toast.info("Analytics feature coming soon!")}
+      >
+        <i className="fas fa-chart-bar me-2"></i> Analytics
+      </button>
+    </div>
+  }
+/>
+      <div className="jobs-page-container">       
        <div className="container">
           {displayJobs.length === 0 ? (
             <div className="empty-state-parent">
@@ -287,7 +258,9 @@ function ViewPostedJobs() {
       </div>
       {jobToEdit && (
         <EditJobModal
+          mode="jobModal"
           job={jobToEdit}
+          show={!!jobToEdit}
           onClose={() => setJobToEdit(null)}
           onSave={handleJobUpdate}
         />

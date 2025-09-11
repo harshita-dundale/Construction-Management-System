@@ -5,8 +5,9 @@ import { useSelector } from "react-redux";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { GrFormView } from "react-icons/gr";
-import LoadingSpinner from "../../components/LoadingSpinner";
+import LoadingSpinner from "../../Components/LoadingSpinner";
 import EmptyState from "../../components/EmptyState";
+import DashboardHeader from '../../builder_Deshboard/BuilderDashboard/DashboardHeader'
 import "./Dashboard.css";
 
 // Modern table styles
@@ -268,60 +269,28 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <>
-        <Header />
-        <div className="container mt-5">
-          <LoadingSpinner 
-            message="Loading Workers..." 
-            size="large" 
-          />
-        </div>
-      </>
+       <LoadingSpinner
+  loading={loading}
+  error={error}
+  title="Loading Attendance Records..."
+  subtitle="Fetching worker attendance details for this project."
+/>
     );
-  }  if (error)
-    return <p className="text-center mt-5 text-danger">Error: {error}</p>;
-
+  } 
   return (
     <>
       <Header />
       <ToastContainer />
 
-      <div className="material-header">
-  <div className="container">
-    <div className="row d-flex align-items-center py-4">
-      {/* Left Side: Heading, Subtitle */}
-      <div className="col-md-8 ">
-        <div className="mate-head-content">
-          <h1 className="mate-head-title">Manage Attendance</h1>
-          <p className="mate-head-subtitle me-5">
-          Easily mark and track daily attendance of workers. View job-wise records, monitor presence/absence, and maintain accurate logs for smoother project management.
-          </p>
-          <span className="mate-head-badge mt-3">
-            <i className="fas fa-boxes me-2"></i>
-            {selectedProject?.name || 'Attendance Management'}
-          </span>
-        </div>
-      </div>
-
-      {/* Right Side: Stats */}
-      <div className="col-md-4">
-        <div className="header-stats">
-          <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-number">{totalPresent}</div>
-              <div className="stat-label">Total Present</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">{totalAbsent}</div>
-              <div className="stat-label">Total Absent</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+      <DashboardHeader
+  title="Manage Attendance"
+  subtitle="Easily mark and track daily attendance of workers. View job-wise records, monitor presence/absence, and maintain accurate logs for smoother project management."
+  badgeText={selectedProject?.name || "Attendance Management"}
+  stats={[
+    { number: totalPresent, label: "Total Present" },
+    { number: totalAbsent, label: "Total Absent" },
+  ]}
+/>
       <div className="container mt-4">
         {/* <h2 className="text-center mb-4">Mark Attendance</h2> */}
 

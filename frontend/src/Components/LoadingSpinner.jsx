@@ -1,88 +1,65 @@
-import React from 'react';
+import Header from "../Components/Header";
+import "./LoadingSpinner.css";
+const LoadingSpinner = ({
+  loading = false,
+  error = null,
+  message = "Loading...",
+  title = "Loading Data...",
+  subtitle = "Please wait while we fetch information.",
+  size = "medium",
+  showHeader = true,
+}) => {
+  if (loading) {
+    return (
+      <>
+        {showHeader && <Header />}
+        <div className="modern-loading-container">
+          <div className="loading-content">
+            <div className={`modern-spinner ${size}`}>
+              <div className="spinner-ring"></div>
+              <div className="spinner-ring"></div>
+              <div className="spinner-ring"></div>
+              <div className="spinner-pulse"></div>
+            </div>
+            <div className="loading-text">
+              <h3 className="loading-title">{title}</h3>
+              <p className="loading-subtitle">{subtitle || message}</p>
+              <div className="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-const LoadingSpinner = ({ message = "Loading...", size = "medium" }) => {
-  const sizeClasses = {
-    small: "spinner-small",
-    medium: "spinner-medium", 
-    large: "spinner-large"
-  };
+      </>
+    );
+  }
 
-  return (
-    <div className="loading-container fade-in">
-      <div className={`spinner-modern ${sizeClasses[size]}`}></div>
-      <p className="loading-message">{message}</p>
-      
-      <style jsx>{`
-        .loading-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 3rem;
-          min-height: 200px;
-        }
-        
-        .spinner-modern {
-          border: 4px solid #f3f3f3;
-          border-top: 4px solid #051821;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-          margin-bottom: 1.5rem;
-        }
-        
-        .spinner-small {
-          width: 30px;
-          height: 30px;
-          border-width: 3px;
-        }
-        
-        .spinner-medium {
-          width: 50px;
-          height: 50px;
-          border-width: 4px;
-        }
-        
-        .spinner-large {
-          width: 70px;
-          height: 70px;
-          border-width: 5px;
-        }
-        
-        .loading-message {
-          color: #051821;
-          font-size: 1.1rem;
-          font-weight: 500;
-          margin: 0;
-          text-align: center;
-        }
-        
-        .fade-in {
-          animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @media (max-width: 768px) {
-          .loading-container {
-            padding: 2rem;
-            min-height: 150px;
-          }
-          
-          .loading-message {
-            font-size: 1rem;
-          }
-        }
-      `}</style>
-    </div>
-  );
+  if (error) {
+    return (
+      <>
+        {showHeader && <Header />}
+        <div className="modern-error-container">
+          <div className="error-content">
+            <div className="error-icon">
+              <i className="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 className="error-title">Oops! Something went wrong</h3>
+            <p className="error-message">{error}</p>
+            <button className="retry-btn" onClick={() => window.location.reload()}>
+              <i className="fas fa-redo me-2"></i>
+              Try Again
+            </button>
+          </div>
+        </div>
+  
+      </>
+    );
+  }
+
+  return null;
 };
 
 export default LoadingSpinner;

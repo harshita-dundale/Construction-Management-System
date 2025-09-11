@@ -1,6 +1,7 @@
 // src/components/AttendanceHistory.jsx
 import React from 'react';
 import { useSelector } from "react-redux";
+import BackButton from "../../../Components/BackButton";
 import "../historyTables.css";
 
 const AttendanceHistory = () => {
@@ -8,6 +9,10 @@ const AttendanceHistory = () => {
   if (!attendance || attendance.length === 0) {
     return (
       <div className="container my-5">
+        {/* Back Button */}
+        <div className="mb-3">
+          <BackButton to="/browse-job" text="Back to Jobs" variant="outline" />
+        </div>
         <div className="attendance-table-card">
           <div className="table-header">
             <h5 className="table-title">
@@ -31,6 +36,10 @@ const AttendanceHistory = () => {
   
   return (
     <div className="container my-5">
+      {/* Back Button */}
+      <div className="mb-3">
+        <BackButton to="/browse-job" text="Back to Jobs" variant="outline" />
+      </div>
       <div className="attendance-table-card">
         <div className="table-header">
           <h5 className="table-title">

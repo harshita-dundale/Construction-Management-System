@@ -16,6 +16,8 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineSaveAlt } from "react-icons/md";
 import { TbCancel } from "react-icons/tb";
 import { IoMdAdd } from "react-icons/io";
+import DashboardHeader from '../../builder_Deshboard/BuilderDashboard/DashboardHeader'
+import LoadingSpinner from '../../Components/LoadingSpinner'
 
 const MaterialManagement = () => {
   const dispatch = useDispatch();
@@ -105,7 +107,7 @@ const MaterialManagement = () => {
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
                     name: data.existingMaterial.name,
-                    quantityUsed: -(newMaterial.quantity), // Negative to add stock
+                    quantityUsed: -(newMaterial.quantity), 
                     projectId: selectedProject._id,
                   }),
                 });
@@ -200,7 +202,7 @@ const MaterialManagement = () => {
       if (res.ok) {
         dispatch(deleteMaterial(id));
         Swal.fire("Deleted!", "Material has been removed.", "success");
-        fetchMaterials(); // refresh
+        fetchMaterials(); 
       } else {
         Swal.fire("Error", "Failed to delete material.", "error");
       }
@@ -221,86 +223,44 @@ const MaterialManagement = () => {
 
   if (loading) {
     return (
-      <>
-        <Header />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', color: '#6c757d' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem', color: '#667eea' }}>
-            <i className="fas fa-spinner fa-spin"></i>
-          </div>
-          <p>Loading Materials...</p>
-        </div>
-      </>
+      <LoadingSpinner
+        loading={loading}
+        title="Loading Materials..."
+        subtitle="Please wait while we prepare your material list."
+        spinnerColor="text-success"
+      />
     );
   }
-
   return (
     <>
       <Header />
+      <DashboardHeader
+  title="Inventory Control"
+  subtitle="Efficiently track, manage, and optimize construction materials to reduce waste, control costs, and improve project productivity."
+  badgeText={selectedProject?.name || "Material Management"}
+  stats={[
+    { number: filteredMaterials.length, label: "Materials" },
+    { number: `₹${totalCost.toFixed(0)}`, label: "Total Value" },
+  ]}
+  showSearch={true}
+  searchValue={filter}
+  searchPlaceholder="Search materials by name..."
+  onSearchChange={(val) => dispatch(setFilter(val))}
+  controlButton={
+    <button
+      className="btn btn-add-material"
+      onClick={() => setShowAddMaterial(!showAddMaterial)}
+    >
+      <i
+        className={`fas ${showAddMaterial ? "fa-minus" : "fa-plus"} me-2`}
+      ></i>
+      {showAddMaterial ? "Hide Form" : "Add Material"}
+    </button>
+  }
+/>
+
       <div className="material-management-container">
-        {/* Header Section */}
-        <div className="material-header">
-  <div className="container">
-    <div className="row d-flex align-items-center pt-4">
-      {/* Left Side: Heading, Subtitle */}
-      <div className="col-md-8 ">
-        <div className="mate-head-content">
-          <h1 className="mate-head-title">Inventory Control</h1>
-          <p className="mate-head-subtitle me-5">
-          Efficiently track, manage, and optimize construction materials to reduce waste, control costs, and improve project productivity.
-          </p>
-          <span className="mate-head-badge mt-3">
-            <i className="fas fa-boxes me-2"></i>
-            {selectedProject?.name || 'Material Management'}
-          </span>
-        </div>
-      </div>
-
-      {/* Right Side: Stats */}
-      <div className="col-md-4">
-        <div className="header-stats">
-          <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-number">{filteredMaterials.length}</div>
-              <div className="stat-label">Materials</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">₹{totalCost.toFixed(0)}</div>
-              <div className="stat-label">Total Value</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Control Panel */}
-      <div className="control-panel">
-            <div className="row align-items-center">
-              <div className="col-md-8 ">
-                <div className="search-container ">
-                  <i className="fas fa-search search-icon"></i>
-                  <input
-                    type="text"
-                    className="search-input"
-                    placeholder="Search materials by name..."
-                    value={filter}
-                    onChange={(e) => dispatch(setFilter(e.target.value))}
-                  />
-                </div>
-              </div>
-              <div className="col-md-4 text-end">
-                <button
-                  className="btn btn-add-material"
-                  onClick={() => setShowAddMaterial(!showAddMaterial)}
-                >
-                  <i className={`fas ${showAddMaterial ? 'fa-minus' : 'fa-plus'} me-2`}></i>
-                  {showAddMaterial ? "Hide Form" : "Add Material"}
-                </button>
-              </div>
-            </div>
-          </div>
-    </div>
-  </div>
-</div>
         <div className="container">
-
           {/* Add Material Form */}
           {showAddMaterial && (
             <div className="add-material-card mt-4">

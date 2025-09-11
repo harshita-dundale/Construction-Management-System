@@ -5,6 +5,7 @@ import Card3 from "../Components/cards/Card3";
 import Header from "../Components/Header";
 import LoadingSpinner from "../components/LoadingSpinner";
 import EmptyState from "../components/EmptyState";
+import BackButton from "../Components/BackButton";
 import "./viewApplications.css";
 import {
   fetchApplications,
@@ -61,13 +62,7 @@ function ViewApplications() {
           <div className="text-center">
             {/* <div className="hero-badge mb-3"> */}
               {/* <div className="back-button-container-apps"> */}
-            <button
-              className="btn-back-apps"
-              onClick={() => navigate("/project_pannel")}
-            >
-              <i className="fas fa-arrow-left me-2"></i>
-              Back to Projects
-            </button>
+            <BackButton to="/project_pannel" text="Back to Projects" variant="outline" />
           {/* </div> */}
             {/* </div> */}
             <h1 className="hero-title">Review Job Applications</h1>
