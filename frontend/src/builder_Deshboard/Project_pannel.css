@@ -427,28 +427,17 @@
 
 /* Project Overview Styles */
 .project-overview-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  border: none;
   border-radius: 24px;
-  /* padding: 2.5rem; */
   margin-top: 2rem;
   color: #2c3e50;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.06);
   margin-bottom: 2rem;
   position: relative;
   overflow: hidden;
 }
 
-.project-overview-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-}
+
 
 .project-header {
   display: flex;

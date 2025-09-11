@@ -324,19 +324,8 @@ function Builder_dashboard() {
 
               <div className="project-overview-card">
 
-                <div className="project-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <BackButton to="/Builder-Dashboard" />
-                  <div className="project-info-section" style={{ textAlign: 'center', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <h3 className="project-title" style={{ color: 'white', margin: '0 0 0.5rem 0', fontSize: '1.5rem', fontWeight: '700' }}>
-                      <i className="fas fa-building me-2"></i>
-                      {selectedProject.name}
-                    </h3>
-                    <span className="project-status-badge" style={{ color: 'white', background: 'rgba(255, 255, 255, 0.2)', padding: '0.5rem 1rem', fontSize: '0.9rem', fontWeight: '600' }}>
-                      <i className="fas fa-check-circle me-1"></i>
-                      Active Project
-                    </span>
-                  </div>
-                  <div style={{ width: '150px' }}></div>
+                <div style={{ padding: '1rem', display: 'flex', justifyContent: 'flex-start' }}>
+                  <BackButton to="/Builder-Dashboard" variant="white" />
                 </div>
                 <div className="project-details">
                   {/* Project Info Cards */}

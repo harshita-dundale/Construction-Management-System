@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Card3 from "../Components/cards/Card3";
 import Header from "../Components/Header";
+import Sidebar from "../Components/Sidebar";
 import LoadingSpinner from "../components/LoadingSpinner";
 import EmptyState from "../components/EmptyState";
 import BackButton from "../Components/BackButton";
@@ -52,6 +53,7 @@ function ViewApplications() {
   return (
     <div className="view-applications-wrapper">
       <Header />
+      <Sidebar />
       
       {/* Hero Section */}
       <div className="applications-hero">
@@ -59,12 +61,10 @@ function ViewApplications() {
           {/* Back Button */}
           
           
+          {/* <div className="d-flex justify-content-between align-items-start mb-4">
+            <BackButton to="/project_pannel" text="Back to Projects" />
+          </div> */}
           <div className="text-center">
-            {/* <div className="hero-badge mb-3"> */}
-              {/* <div className="back-button-container-apps"> */}
-            <BackButton to="/project_pannel" text="Back to Projects" variant="outline" />
-          {/* </div> */}
-            {/* </div> */}
             <h1 className="hero-title">Review Job Applications</h1>
             <p className="hero-subtitle">Manage and review applications for your construction projects</p>
           </div>
@@ -142,7 +142,7 @@ function ViewApplications() {
                 <i className="fas fa-exclamation-triangle"></i>
                 <h4>Error Loading Applications</h4>
                 <p>{error}</p>
-                <button className="btn btn-outline-primary" onClick={() => window.location.reload()}>
+                <button className="btn btn--primary" onClick={() => window.location.reload()}>
                   <i className="fas fa-refresh me-2"></i>Try Again
                 </button>
               </div>

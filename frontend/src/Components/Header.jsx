@@ -161,6 +161,19 @@ function Header() {
                   </a>
                 </li>
               )}
+              
+              {/* All Builder Pages - Show Project Name */}
+              {isBuilderPage && (
+                <li className="nav-item me-3">
+                  <span className="nav-link modern-nav-link active project-name-header">
+                    <i className="fas fa-project-diagram me-2"></i>
+                    {localStorage.getItem("selectedProject") ? 
+                      JSON.parse(localStorage.getItem("selectedProject")).name || "Project" 
+                      : "Project"
+                    }
+                  </span>
+                </li>
+              )}
 
               {/* Default Static Page Nav */}
               {!isWorkerPage && !isBuilderPage && !isBuilderDashboard && (
@@ -210,11 +223,9 @@ function Header() {
                   </button>
                 </li>
               ) : (
-                !isBuilderPage && (
-                  <li className="nav-item d-none d-lg-block">
-                    <ProfileAvatar />
-                  </li>
-                )
+                <li className="nav-item d-none d-lg-block">
+                  <ProfileAvatar />
+                </li>
               )}
             </ul>
           </div>

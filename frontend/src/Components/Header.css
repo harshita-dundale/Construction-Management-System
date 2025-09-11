@@ -2,8 +2,9 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 999;
   box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
   backdrop-filter: blur(10px);
 }
@@ -51,6 +52,20 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
   color: white;
+}
+
+.project-name-header {
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  cursor: default !important;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-name-header:hover {
+  transform: none !important;
 }
 
 .navbar-toggler {
