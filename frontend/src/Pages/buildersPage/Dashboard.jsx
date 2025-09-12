@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../Components/Header";
+import Sidebar from "../../Components/Sidebar";
 import { toast, ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { FaCalendarAlt } from "react-icons/fa";
@@ -280,6 +281,7 @@ function Dashboard() {
   return (
     <>
       <Header />
+      <Sidebar />
       <ToastContainer />
 
       <DashboardHeader

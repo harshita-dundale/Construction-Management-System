@@ -8,6 +8,8 @@ import Header from "../Components/Header";
 import DashboardHeader from './BuilderDashboard/DashboardHeader'
 import LoadingSpinner from '../Components/LoadingSpinner'
 import "./PayrollPageEnhanced.css"; 
+import Sidebar from "../Components/Sidebar";
+import "./PayrollPageEnhanced.css"; // 👈 added
 
 function PayrollPageEnhanced() {
   const selectedProject = useSelector((state) => state.project.selectedProject);
@@ -291,12 +293,14 @@ function PayrollPageEnhanced() {
   return (
     <>
       <Header />
+      <Sidebar />
       <DashboardHeader
   title="Payroll Management"
   subtitle="Easily calculate salaries from attendance, track payments, and ensure workers get timely and transparent payouts."
   badgeText="Manage Payment"
   projectFilter={selectedProject && { name: selectedProject.name }}
 />
+
       <div className="container-fluid px-4 ">
         {/* Summary Cards */}
         <div className="row g-2 mb-4">

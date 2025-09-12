@@ -149,7 +149,9 @@ function Header() {
                 </>
               )}
 
-              {/* Builder Dashboard - Only Dashboard Tab */}
+
+
+              {/* Builder Dashboard - Show in Header */}
               {isBuilderDashboard && (
                 <li className="nav-item me-3">
                   <a
@@ -159,62 +161,6 @@ function Header() {
                     <i className="fas fa-tachometer-alt me-2"></i>Dashboard
                   </a>
                 </li>
-              )}
-
-              {/* Builder Navigation - Other Pages */}
-              {isBuilderPage && !isBuilderDashboard && (
-                <>
-                  <li className="nav-item me-3">
-                    <a
-                      className={`nav-link modern-nav-link ${
-                        currentPath === "/project_pannel" ? "active" : ""
-                      }`}
-                      onClick={() => navigate("/project_pannel")}
-                    >
-                      <i className="fas fa-tachometer-alt me-2"></i>Home
-                    </a>
-                  </li>
-                  <li className="nav-item me-3">
-                    <a
-                      className={`nav-link modern-nav-link ${
-                        currentPath === "/viewpostedjobs" ? "active" : ""
-                      }`}
-                      onClick={() => navigate("/viewpostedjobs")}
-                    >
-                      <i className="fas fa-briefcase me-2"></i>Posted Jobs
-                    </a>
-                  </li>
-                  <li className="nav-item me-3">
-                    <a
-                      className={`nav-link modern-nav-link ${
-                        currentPath === "/materialmanagement" ? "active" : ""
-                      }`}
-                      onClick={() => navigate("/materialmanagement")}
-                    >
-                      <i className="fas fa-boxes me-2"></i>Materials
-                    </a>
-                  </li>
-                  <li className="nav-item me-3">
-                    <a
-                      className={`nav-link modern-nav-link ${
-                        currentPath === "/dashboard" ? "active" : ""
-                      }`}
-                      onClick={() => navigate("/dashboard")}
-                    >
-                      <i className="fas fa-user-check me-2"></i>Attendance
-                    </a>
-                  </li>
-                  <li className="nav-item me-4">
-                    <a
-                      className={`nav-link modern-nav-link ${
-                        currentPath === "/payroll" ? "active" : ""
-                      }`}
-                      onClick={() => navigate("/payroll")}
-                    >
-                      <i className="fas fa-money-check-alt me-2"></i>Payroll
-                    </a>
-                  </li>
-                </>
               )}
 
               {/* Default Static Page Nav */}
@@ -265,9 +211,11 @@ function Header() {
                   </button>
                 </li>
               ) : (
-                <li className="nav-item d-none d-lg-block">
-                  <ProfileAvatar />
-                </li>
+                !isBuilderPage && (
+                  <li className="nav-item d-none d-lg-block">
+                    <ProfileAvatar />
+                  </li>
+                )
               )}
             </ul>
           </div>

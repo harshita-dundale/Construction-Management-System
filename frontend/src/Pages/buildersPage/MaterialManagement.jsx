@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../Components/Header";
+import Sidebar from "../../Components/Sidebar";
 import "./material.css";
 import {
   addMaterial,
@@ -234,6 +235,7 @@ const MaterialManagement = () => {
   return (
     <>
       <Header />
+      <Sidebar />
       <DashboardHeader
   title="Inventory Control"
   subtitle="Efficiently track, manage, and optimize construction materials to reduce waste, control costs, and improve project productivity."
