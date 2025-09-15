@@ -40,7 +40,7 @@ function Cards2({ imgSrc, title, text, buttonText, onClick }) {
           border-radius: 20px;
           padding: 2.5rem 2rem;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           cursor: pointer;
           position: relative;
           overflow: hidden;
@@ -81,7 +81,7 @@ function Cards2({ imgSrc, title, text, buttonText, onClick }) {
           justify-content: center;
           margin: 0 auto 1rem;
           padding: 1.5rem;
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           box-shadow: 0 8px 25px rgba(17, 153, 142, 0.3);
         }
         
@@ -110,7 +110,7 @@ function Cards2({ imgSrc, title, text, buttonText, onClick }) {
           color: white;
           font-size: 1rem;
           opacity: 0;
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
         }
         
@@ -146,7 +146,7 @@ function Cards2({ imgSrc, title, text, buttonText, onClick }) {
           padding: 1rem 2.5rem;
           font-weight: 600;
           font-size: 1rem;
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           width: 100%;
           display: flex;
           align-items: center;
@@ -168,7 +168,7 @@ function Cards2({ imgSrc, title, text, buttonText, onClick }) {
           bottom: 0;
           background: linear-gradient(135deg, rgba(17, 153, 142, 0.05) 0%, rgba(56, 239, 125, 0.05) 100%);
           opacity: 0;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
           pointer-events: none;
         }
         

@@ -136,7 +136,7 @@ const ProfileAvatar = () => {
         .profile-trigger {
           position: relative;
           cursor: pointer;
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           background: none;
           border: none;
           padding: 0;
@@ -152,7 +152,7 @@ const ProfileAvatar = () => {
           height: 40px;
           border-radius: 50% !important;
           border: 2px solid rgba(255, 255, 255, 0.3);
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
           object-fit: cover;
         }
         
@@ -263,7 +263,7 @@ const ProfileAvatar = () => {
           display: flex;
           align-items: center;
           gap: 1rem;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
           cursor: pointer;
           text-align: left;
         }

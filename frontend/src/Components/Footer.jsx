@@ -269,7 +269,7 @@ function Footer() {
           justify-content: center;
           color: white;
           font-size: 1.2rem;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
           border: 2px solid rgba(255, 255, 255, 0.2);
         }
         

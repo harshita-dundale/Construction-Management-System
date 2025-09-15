@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import ProfileAvatar from "./ProfileAvatar";
+
 import "./Sidebar.css";
 
 function Sidebar() {
@@ -44,12 +44,7 @@ function Sidebar() {
     };
   }, [isCollapsed, isBuilderPage, isBuilderDashboard]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("userRole");
-    logout({
-      returnTo: window.location.origin,
-    });
-  };
+
 
   if (!isBuilderPage || isBuilderDashboard) return null;
 
@@ -149,22 +144,7 @@ function Sidebar() {
           </div>
         </div>
 
-        <div className="sidebar-footer">
-          <div className="nav-item profile-section">
-            <div className="nav-link profile-link" title="Profile">
-              <div className="profile-wrapper">
-                <ProfileAvatar />
-              </div>
-              <span>Profile</span>
-            </div>
-          </div>
-          <div className="nav-item">
-            <a className="nav-link logout-btn" onClick={handleLogout} title="Logout">
-              <i className="fas fa-sign-out-alt"></i>
-              <span>Logout</span>
-            </a>
-          </div>
-        </div>
+
       </div>
       
       {/* Mobile overlay */}

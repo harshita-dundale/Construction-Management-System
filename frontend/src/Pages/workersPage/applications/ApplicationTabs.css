@@ -2,7 +2,7 @@
     color: #051821; /* Default text color */
     background-color: transparent;
     border: none;
-    /* transition: all 0.3s ease-in-out; */
+    transition: all 0.3s ease-in-out;
 }
 
 /* .nav-tabs .nav-link:hover {
@@ -76,7 +76,7 @@
           gap: 0.5rem;
           font-weight: 600;
           color: #6c757d;
-          /* transition: all 0.3s ease; */
+          transition: all 0.3s ease;
           cursor: pointer;
           text-transform: capitalize;
         }

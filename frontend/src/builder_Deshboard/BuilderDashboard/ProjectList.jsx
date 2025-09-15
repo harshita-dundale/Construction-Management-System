@@ -115,10 +115,12 @@ function ProjectList({
                   onClick={(e) => handleProjectClick(project, e)}
                 >
                   <div className="proj-card-head">
-                    <div className="project-status-badge">
+                    {/* <div className="project-status-badge">
                       <i className={`fas ${selectedProject?._id === project._id ? 'fa-check-circle' : 'fa-circle'} me-2`}></i>
                       {selectedProject?._id === project._id ? 'Active' : 'Available'}
-                    </div>
+                    </div> */}
+                                      <h4 className="project-card-name">{toTitleCase(project.name)}</h4>
+
                     <div className="project-actions">
                       <button
                         className="action-btn edit-btn"
@@ -136,7 +138,7 @@ function ProjectList({
                       </button>
                     </div>
                   </div>
-                  <h4 className="project-card-name">{toTitleCase(project.name)}</h4>
+                  {/* <h4 className="project-card-name">{toTitleCase(project.name)}</h4> */}
                   <div className="project-card-details">
                     {project.type && (
                       <div className="detail-row">
@@ -228,13 +230,26 @@ function ProjectList({
       )}
       {/* Inline Styles for Action Buttons */}
       <style dangerouslySetInnerHTML={{__html: `
-        .project-actions {
-          display: flex;
-          gap: 0.5rem;
-          opacity: 1;
+        .project-card {
           transition: all 0.3s ease;
-          z-index: 10;
-          position: relative;
+          transform: translateY(0);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .project-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .project-card.active {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+          border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .project-card.active:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 16px 32px rgba(102, 126, 234, 0.25);
         }
         
         .action-btn {
@@ -244,9 +259,44 @@ function ProjectList({
           border-radius: 6px;
           display: flex;
           align-items: center;
+          transition: all 0.2s ease;
+          opacity: 0.8;
+        }
+        
+        .action-btn:hover {
+          transform: scale(1.1);
+          opacity: 1;
+        }
+        
+        .project-actions {
+          opacity: 0.7;
+          transition: opacity 0.2s ease;
+        }
+        
+        .project-card:hover .project-actions {
+          opacity: 1;
+        }
+        
+        .click-hint {
+          transition: all 0.2s ease;
+          opacity: 0.8;
+        }
+        
+        .project-card:hover .click-hint {
+          opacity: 1;
+          transform: translateY(-2px);
+        }
+        
+        .project-card-name {
+          transition: color 0.2s ease;
+        }
+        
+        .project-card:hover .project-card-name {
+          color: #667eea;
+        }
           justify-content: center;
           cursor: pointer;
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           font-size: 0.8rem;
           z-index: 10;
           position: relative;
@@ -255,6 +305,7 @@ function ProjectList({
         .edit-btn {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
+          
         }
         
         .edit-btn:hover {
@@ -265,13 +316,6 @@ function ProjectList({
         .delete-btn {
           background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
           color: white;
-        }
-        
-        .proj-card-head {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          margin-bottom: 1rem;
         }
         
         .click-hint {

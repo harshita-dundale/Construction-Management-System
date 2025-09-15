@@ -4,7 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Header from "../Components/Header";
-import BackButton from "../Components/BackButton";
+import Sidebar from "../Components/Sidebar";
+// import BackButton from "../Components/BackButton";
 import "./PostJobForm.css"
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -126,6 +127,7 @@ function PostJobForm() {
   return (
     <div className="post-job-wrapper">
        <Header />
+       <Sidebar />
        
        {/* Hero Section */}
        <div className="post-job-hero">
@@ -146,7 +148,7 @@ function PostJobForm() {
         <div className="col-lg-8">
           <div className="post-job-card">
             <div className="card-header">
-              <BackButton to="/Project_pannel" />
+              {/* <BackButton to="/Project_pannel" /> */}
               <h2 className="form-title">Job Details</h2>
               <p className="form-subtitle">Fill in the information below to post your job</p>
             </div>
@@ -337,6 +339,17 @@ function PostJobForm() {
                   </div>
                 </div>
               </div>
+
+              {/* <div className="post-form-group mb-3">
+                <label style={{ fontWeight: "bold" }}>Upload Image</label>
+                <input
+                  type="file"
+                  className="form-control"
+                  accept="image/*"
+                  onChange={(e) => setSelectedImage(e.target.files[0])}
+                />
+              </div> */}
+
               <div className="form-actions">
                 <button
                   type="submit"

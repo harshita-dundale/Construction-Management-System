@@ -169,7 +169,7 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
         }
         
         .table-row {
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
           border-bottom: 1px solid #e9ecef;
         }
         
@@ -244,7 +244,7 @@ const ApplicationTable = ({ onViewDetails, activeTab }) => {
           font-size: 0.85rem;
           font-weight: 600;
           cursor: pointer;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
           display: flex;
           align-items: center;
         }

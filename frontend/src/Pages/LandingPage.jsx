@@ -95,8 +95,8 @@ function LandingPage() {
     <>
       <Header />
       <section className="landing-hero-section" id="home-section">
-        <div className="container">
-          <div className="row d-flex align-items-center min-vh-100">
+        <div className="container mt-3">
+          <div className="row d-flex align-items-center min-vh-100 ">
             <div className="col-md-6 col-12 hero-content">
               {/* <div className="hero-badge mb-4">
                 <i className="fas fa-hard-hat me-2"></i>
@@ -393,7 +393,7 @@ function LandingPage() {
           border-radius: 25px;
           color: white;
           font-weight: 600;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
           box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
         }
         
@@ -409,7 +409,7 @@ function LandingPage() {
           border-radius: 25px;
           color: #2c3e50;
           font-weight: 600;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
         }
         
         .btn-hero-secondary:hover {
@@ -442,7 +442,7 @@ function LandingPage() {
         .hero-image {
           border-radius: 20px;
           box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-          // transition: transform 0.3s ease;
+          transition: transform 0.3s ease;
         }
         
         .hero-image:hover {
@@ -604,7 +604,7 @@ function LandingPage() {
           padding: 2rem;
           text-align: center;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           cursor: pointer;
           height: 100%;
         }
@@ -640,7 +640,7 @@ function LandingPage() {
           color: white;
           padding: 0.75rem 1.5rem;
           font-weight: 600;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
         }
         
         .btn-service:hover {

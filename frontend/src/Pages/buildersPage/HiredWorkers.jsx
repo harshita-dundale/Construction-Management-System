@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Card3 from "../../Components/cards/Card3"; 
 import Header from "../../Components/Header";
+import Sidebar from "../../Components/Sidebar";
 import BackButton from "../../Components/BackButton";
 import { GrUserWorker } from "react-icons/gr";
 
@@ -31,10 +32,11 @@ function HiredWorkers() {
   return (
     <>
       <Header />
+      <Sidebar />
       <div className="container" style={{ marginTop: "90px"}}>
         {/* Back Button */}
         <div className="back-button-container-hired" style={{ marginTop: "2rem", marginBottom: "1rem" }}>
-          <BackButton to="/project_pannel" text="Back to Projects" variant="outline" />
+          <BackButton to="/project_pannel" text="Back to Projects" variant="white" />
         </div>
 
         <h2 className="mb-5 text-center fw-bold" style={{ color: "#333" }}>

@@ -99,7 +99,6 @@ function Header() {
               height="45"
               width="180"
               className="logo-img"
-              onClick={() => navigate("/")}
             />
           </div>
 
@@ -143,7 +142,7 @@ function Header() {
                       }`}
                       onClick={() => navigate("/applications")}
                     >
-                      <i className="fas fa-file-alt me-2"></i>Track Status
+                      <i className="fas fa-file-alt me-2"></i>Applications
                     </a>
                   </li>
                 </>
@@ -160,6 +159,19 @@ function Header() {
                   >
                     <i className="fas fa-tachometer-alt me-2"></i>Dashboard
                   </a>
+                </li>
+              )}
+              
+              {/* All Builder Pages - Show Project Name */}
+              {isBuilderPage && (
+                <li className="nav-item me-3">
+                  <span className="nav-link modern-nav-link active project-name-header">
+                    <i className="fas fa-project-diagram me-2"></i>
+                    {localStorage.getItem("selectedProject") ? 
+                      JSON.parse(localStorage.getItem("selectedProject")).name || "Project" 
+                      : "Project"
+                    }
+                  </span>
                 </li>
               )}
 
@@ -183,7 +195,7 @@ function Header() {
                       }`}
                       onClick={() => handleScrollToSection("services-section")}
                     >
-                      <i className="fas fa-hard-hat me-2"></i>Services
+                      <i className="fas fa-cogs me-2"></i>Services
                     </a>
                   </li>
                   <li className="nav-item me-4">
@@ -201,7 +213,7 @@ function Header() {
 
               {/* Auth Buttons */}
               {!isAuthenticated ? (
-                <li className="nav-item " >
+                <li className="nav-item">
                   <button
                     className="btn btn-modern-primary px-4 py-2"
                     type="button"
@@ -211,11 +223,9 @@ function Header() {
                   </button>
                 </li>
               ) : (
-                !isBuilderPage && (
-                  <li className="nav-item d-none d-lg-block">
-                    <ProfileAvatar />
-                  </li>
-                )
+                <li className="nav-item d-none d-lg-block">
+                  <ProfileAvatar />
+                </li>
               )}
             </ul>
           </div>

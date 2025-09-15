@@ -118,7 +118,7 @@ const ProjectModal = ({ show, handleClose }) => {
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false} size="lg" centered>
         <div className="modal-content-enhanced">
           <Modal.Header closeButton className="modal-header-enhanced">
-            <Modal.Title className="modal-title-enhanced">
+            <Modal.Title className="modal-title-enhanced text-white">
               <i className="fas fa-project-diagram me-2"></i>
               Project Management
             </Modal.Title>

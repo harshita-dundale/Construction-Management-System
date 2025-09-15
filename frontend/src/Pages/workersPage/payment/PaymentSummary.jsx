@@ -411,7 +411,7 @@ const cardStyles = `
     background: white;
     color: #2c3e50;
     cursor: pointer;
-    // transition: all 0.3s ease;
+     transition: all 0.3s ease;
     border-radius: 15px;
     border: 1px solid #e9ecef;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -574,7 +574,7 @@ export default PaymentSummary;
       <style jsx>{`
         .payment-card, .attendance-card {
           cursor: pointer;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
         }
         
         .payment-card:hover, .attendance-card:hover {
@@ -591,7 +591,7 @@ export default PaymentSummary;
           font-weight: 600;
           display: inline-flex;
           align-items: center;
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
         

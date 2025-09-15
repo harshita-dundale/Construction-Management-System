@@ -106,7 +106,7 @@ import { MdCoPresent } from "react-icons/md";
           }
           
           .modern-table tbody tr {
-            // transition: all 0.3s ease;
+            transition: all 0.3s ease;
           }
           
           .modern-table tbody tr:hover {
