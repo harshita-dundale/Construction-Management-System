@@ -17,6 +17,8 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineSaveAlt } from "react-icons/md";
 import { TbCancel } from "react-icons/tb";
 import { IoMdAdd } from "react-icons/io";
+import DashboardHeader from '../../builder_Deshboard/BuilderDashboard/DashboardHeader'
+import LoadingSpinner from '../../Components/LoadingSpinner'
 
 const MaterialManagement = () => {
   const dispatch = useDispatch();
@@ -71,53 +73,6 @@ const MaterialManagement = () => {
       newMaterial.unit.trim() !== "" &&
       selectedProject?._id
     ) {
-      // Check if material already exists in current project
-      const existingMaterial = materials.find(
-        mat => mat.name.toLowerCase().trim() === newMaterial.name.toLowerCase().trim()
-      );
-
-      if (existingMaterial) {
-        const result = await Swal.fire({
-          title: 'Material Already Exists',
-          text: `"${newMaterial.name}" already exists. Do you want to add ${newMaterial.quantity} ${newMaterial.unit} to existing stock?`,
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonColor: 'var(--secondary-color)',
-          cancelButtonColor: 'gray',
-          confirmButtonText: 'Yes, add to stock',
-          cancelButtonText: 'Cancel'
-        });
-
-        if (!result.isConfirmed) return;
-
-        // Update existing material quantity
-        try {
-          const updatedQty = existingMaterial.quantity + newMaterial.quantity;
-          const res = await fetch(`http://localhost:5000/api/materials/usage`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              name: existingMaterial.name.trim(),
-              quantityUsed: -(newMaterial.quantity), // Negative to add stock
-              projectId: selectedProject._id,
-            }),
-          });
-
-          const data = await res.json();
-          if (!res.ok) {
-            Swal.fire("Error", data.message || "Failed to update stock", "error");
-            return;
-          }
-
-          dispatch(updateUsage(data));
-          setNewMaterial({ name: "", quantity: 0, unitPrice: 0, unit: "" });
-          Swal.fire("Success", `Added ${newMaterial.quantity} ${newMaterial.unit} to existing stock`, "success");
-        } catch (err) {
-          console.error("Update failed:", err);
-          Swal.fire("Error", "Server error while updating stock", "error");
-        }
-        return;
-      }
 
       try {
         const res = await fetch("http://localhost:5000/api/materials", {
@@ -133,15 +88,15 @@ const MaterialManagement = () => {
 
         if (!res.ok) {
           if (res.status === 409) {
-            // Material already exists - offer to update existing
+            // Material already exists in THIS project - offer to update existing
             const result = await Swal.fire({
-              title: 'Material Already Exists',
-              text: data.message,
-              icon: 'warning',
+              title: 'Material Already Exists in This Project',
+              text: `"${newMaterial.name}" already exists in this project. Do you want to add ${newMaterial.quantity} ${newMaterial.unit} to existing stock?`,
+              icon: 'question',
               showCancelButton: true,
               confirmButtonColor: 'var(--secondary-color)',
               cancelButtonColor: 'gray',
-              confirmButtonText: 'Update Existing',
+              confirmButtonText: 'Yes, add to stock',
               cancelButtonText: 'Cancel'
             });
 
@@ -153,7 +108,7 @@ const MaterialManagement = () => {
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
                     name: data.existingMaterial.name,
-                    quantityUsed: -(newMaterial.quantity), // Negative to add stock
+                    quantityUsed: -(newMaterial.quantity), 
                     projectId: selectedProject._id,
                   }),
                 });
@@ -248,7 +203,7 @@ const MaterialManagement = () => {
       if (res.ok) {
         dispatch(deleteMaterial(id));
         Swal.fire("Deleted!", "Material has been removed.", "success");
-        fetchMaterials(); // refresh
+        fetchMaterials(); 
       } else {
         Swal.fire("Error", "Failed to delete material.", "error");
       }
@@ -269,87 +224,45 @@ const MaterialManagement = () => {
 
   if (loading) {
     return (
-      <>
-        <Header />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', color: '#6c757d' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem', color: '#667eea' }}>
-            <i className="fas fa-spinner fa-spin"></i>
-          </div>
-          <p>Loading Materials...</p>
-        </div>
-      </>
+      <LoadingSpinner
+        loading={loading}
+        title="Loading Materials..."
+        subtitle="Please wait while we prepare your material list."
+        spinnerColor="text-success"
+      />
     );
   }
-
   return (
     <>
       <Header />
       <Sidebar />
+      <DashboardHeader
+  title="Inventory Control"
+  subtitle="Efficiently track, manage, and optimize construction materials to reduce waste, control costs, and improve project productivity."
+  badgeText={selectedProject?.name || "Material Management"}
+  stats={[
+    { number: filteredMaterials.length, label: "Materials" },
+    { number: `₹${totalCost.toFixed(0)}`, label: "Total Value" },
+  ]}
+  showSearch={true}
+  searchValue={filter}
+  searchPlaceholder="Search materials by name..."
+  onSearchChange={(val) => dispatch(setFilter(val))}
+  controlButton={
+    <button
+      className="btn btn-add-material"
+      onClick={() => setShowAddMaterial(!showAddMaterial)}
+    >
+      <i
+        className={`fas ${showAddMaterial ? "fa-minus" : "fa-plus"} me-2`}
+      ></i>
+      {showAddMaterial ? "Hide Form" : "Add Material"}
+    </button>
+  }
+/>
+
       <div className="material-management-container">
-        {/* Header Section */}
-        <div className="material-header">
-  <div className="container">
-    <div className="row d-flex align-items-center pt-4">
-      {/* Left Side: Heading, Subtitle */}
-      <div className="col-md-8 ">
-        <div className="mate-head-content">
-          <h1 className="mate-head-title">Inventory Control</h1>
-          <p className="mate-head-subtitle me-5">
-          Efficiently track, manage, and optimize construction materials to reduce waste, control costs, and improve project productivity.
-          </p>
-          <span className="mate-head-badge mt-3">
-            <i className="fas fa-boxes me-2"></i>
-            {selectedProject?.name || 'Material Management'}
-          </span>
-        </div>
-      </div>
-
-      {/* Right Side: Stats */}
-      <div className="col-md-4">
-        <div className="header-stats">
-          <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-number">{filteredMaterials.length}</div>
-              <div className="stat-label">Materials</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">₹{totalCost.toFixed(0)}</div>
-              <div className="stat-label">Total Value</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Control Panel */}
-      <div className="control-panel">
-            <div className="row align-items-center">
-              <div className="col-md-8 ">
-                <div className="search-container ">
-                  <i className="fas fa-search search-icon"></i>
-                  <input
-                    type="text"
-                    className="search-input"
-                    placeholder="Search materials by name..."
-                    value={filter}
-                    onChange={(e) => dispatch(setFilter(e.target.value))}
-                  />
-                </div>
-              </div>
-              <div className="col-md-4 text-end">
-                <button
-                  className="btn btn-add-material"
-                  onClick={() => setShowAddMaterial(!showAddMaterial)}
-                >
-                  <i className={`fas ${showAddMaterial ? 'fa-minus' : 'fa-plus'} me-2`}></i>
-                  {showAddMaterial ? "Hide Form" : "Add Material"}
-                </button>
-              </div>
-            </div>
-          </div>
-    </div>
-  </div>
-</div>
         <div className="container">
-
           {/* Add Material Form */}
           {showAddMaterial && (
             <div className="add-material-card mt-4">

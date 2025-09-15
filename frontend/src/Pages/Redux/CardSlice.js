@@ -11,7 +11,7 @@ const initialState = {
     {
       imgSrc: icon1,
       title: "Job Management",
-      text: "Simplify job posting and manage all your project listings in one place, connecting with skilled workers.",
+      text: "Simplify job posting & manage all your project listings in one place, connecting with skilled workers.",
       buttonText: "Get start",
     },
     {
@@ -28,7 +28,7 @@ const initialState = {
     },
     {
       imgSrc: icon4 ,
-      title: "Payroll",
+      title: "Payroll Management",
       text: "Manage worker payments, track salaries, and handle payroll efficiently for all your projects.",
       buttonText: "Get start",
     },
@@ -36,14 +36,14 @@ const initialState = {
   cardWorker: [
     {
       imgSrc: worker1,
-      title: "Browse & Apply",
+      title: "Browse & Apply Job",
       text: "Explore available projects and apply to the ones that match your skills and expertise.",
       buttonText: "Get start",
     },
     {
       imgSrc: worker2,
       title: "Payment Management",
-      text: "Keep track of payments received, pending amounts, and financial summaries.",
+      text: "Keep track of payments received, pending amounts, and financial summaries with Date.",
       buttonText: "Get start",
     },
   ],

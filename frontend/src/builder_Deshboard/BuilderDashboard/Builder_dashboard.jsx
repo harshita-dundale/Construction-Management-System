@@ -7,6 +7,7 @@ import ProjectModal from "../../Components/ProjectModal";
 import DashboardHeader from "./DashboardHeader";
 import DashboardStats from "./DashboardStats";
 import ProjectList from "./ProjectList";
+import { Button } from 'react-bootstrap';
 import { selectProject, updateProject, deleteProject, fetchProjects } from "../../Pages/Redux/projectSlice";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
@@ -49,8 +50,6 @@ function Builder_dashboard() {
   const [ongoingWorkers, setOngoingWorkers] = useState(0);
   const [pendingPayments, setPendingPayments] = useState(0);
 
-  // ... (all other functions like handleEditProject, handleUpdateProject, etc. remain here)
-
   const totalPages = Math.ceil((projects?.length || 0) / projectsPerPage);
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
@@ -91,7 +90,6 @@ function Builder_dashboard() {
     fetchOngoingWorkers();
   }, [projects, user?.sub]);
 
-  // Calculate pending payments across all projects
   useEffect(() => {
     const fetchPendingPayments = async () => {
       if (!user?.sub || !projects?.length) {
@@ -233,29 +231,38 @@ function Builder_dashboard() {
   const totalProjectCost = totalMaterialCost + totalWorkerPayable + enhancedPayrollTotal;
 
   return (
+    <>
+    <Header />
+     <DashboardHeader
+  title="Project Management Hub"
+  subtitle="Streamline your projects with advanced tools. Monitor attendance, payments, and progress instantly. Organize workers and job roles without hassle."
+  actions={
+    <Button onClick={() => setShowProjectModal(true)} className="btn-dashboard-primary">
+      <i className="fas fa-cog me-2"></i> Add Projects
+    </Button>
+  }
+/>
+<Sidebar />
     <div className="dashboard-wrapper">
-      <Header />
-      <Sidebar />
-      <div>
-        <DashboardHeader totalProjectCost={totalProjectCost} setShowProjectModal={setShowProjectModal} />
-        <DashboardStats
-          totalProjects={totalProjects}
-          ongoingWorkers={ongoingWorkers}
-          totalMaterialExpenses={totalMaterialExpenses}
-          pendingPayments={pendingPayments}
-        />
-        <ProjectList
-          projects={projects}
-          selectedProject={selectedProject}
-          indexOfFirstProject={indexOfFirstProject}
-          indexOfLastProject={indexOfLastProject}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          handlePageChange={handlePageChange}
-          setShowProjectModal={setShowProjectModal}
-          onProjectUpdate={() => dispatch(fetchProjects(user?.sub))}
-        />
-      </div>
+      <DashboardStats
+        totalProjects={totalProjects}
+        ongoingWorkers={ongoingWorkers}
+        totalMaterialExpenses={totalMaterialExpenses}
+        pendingPayments={pendingPayments}
+      />
+      <ProjectList
+        projects={projects}
+        selectedProject={selectedProject}
+        indexOfFirstProject={indexOfFirstProject}
+        indexOfLastProject={indexOfLastProject}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+        setShowProjectModal={setShowProjectModal}
+        onProjectUpdate={() => dispatch(fetchProjects(user?.sub))}
+      />
+     
+      
       <ProjectModal
         show={showProjectModal}
         handleClose={() => {
@@ -270,6 +277,7 @@ function Builder_dashboard() {
         }}
       />
     </div>
+    </>
   );
 }
 

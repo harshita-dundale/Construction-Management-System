@@ -79,7 +79,7 @@ const MobileOptimizedTable = ({
         }
 
         .modern-table tbody tr {
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           border-bottom: 1px solid #f8f9fa;
         }
 
@@ -106,7 +106,7 @@ const MobileOptimizedTable = ({
           margin-bottom: 1rem;
           border-left: 4px solid #051821;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
         }
 
         .mobile-card:hover {

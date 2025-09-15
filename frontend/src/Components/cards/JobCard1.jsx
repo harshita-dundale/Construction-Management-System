@@ -25,7 +25,7 @@ function JobCard1({ job, onEdit, onDelete }) {
   }, []);
 
   return (
-    <div className="modern-job-card">
+    <div className="modern-job-card mb-5">
       {/* Card Header */}
       <div className="job-card-header">
         <div className="job-status-badge">

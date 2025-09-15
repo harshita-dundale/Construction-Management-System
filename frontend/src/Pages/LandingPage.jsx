@@ -94,9 +94,9 @@ function LandingPage() {
   return (
     <>
       <Header />
-      <section className="hero-section" id="home-section">
-        <div className="container">
-          <div className="row d-flex align-items-center min-vh-100">
+      <section className="landing-hero-section" id="home-section">
+        <div className="container mt-3">
+          <div className="row d-flex align-items-center min-vh-100 ">
             <div className="col-md-6 col-12 hero-content">
               {/* <div className="hero-badge mb-4">
                 <i className="fas fa-hard-hat me-2"></i>
@@ -113,14 +113,14 @@ function LandingPage() {
               <div className="hero-buttons d-flex justify-content-center justify-content-md-start gap-3 mt-5">
                 <button
                   onClick={handleGetStarted}
-                  className="btn btn-hero-primary px-4 py-3"
+                  className="btn btn-hero-primary px-3 py-2"
                 >
                   <i className="fas fa-rocket me-2"></i>
                   Get Started
                 </button>
                 <button
                   onClick={handleSeeMore}
-                  className="btn btn-hero-secondary px-4 py-3"
+                  className="btn btn-hero-secondary px-3 py-2"
                 >
                   <i className="fas fa-info-circle me-2"></i>
                   Learn More
@@ -128,24 +128,24 @@ function LandingPage() {
               </div>
               
               {/* Stats */}
-              <div className="hero-stats row mt-5 text-center text-md-start">
+              <div className=" row mt-4 text-center text-md-start">
                 <div className="col-4">
-                  <div className="stat-number">500+</div>
-                  <div className="stat-label">Projects</div>
+                  <div className="landing-number">500+</div>
+                  <div className="landing-label">Projects</div>
                 </div>
                 <div className="col-4">
-                  <div className="stat-number">1000+</div>
-                  <div className="stat-label">Workers</div>
+                  <div className="landing-number">1000+</div>
+                  <div className="landing-label">Workers</div>
                 </div>
                 <div className="col-4">
-                  <div className="stat-number">50+</div>
-                  <div className="stat-label">Builders</div>
+                  <div className="landing-number">50+</div>
+                  <div className="landing-label">Builders</div>
                 </div>
               </div>
             </div>
             
-            <div className="col-md-6 col-12 text-center mt-4 mt-md-0">
-              <div className="hero-image-container">
+            <div className="col-md-6 col-12 text-center mt-md-0 pt-3">
+              <div className="hero-image-container pt-5">
                 <img
                   src={homeImg}
                   alt="Construction Management"
@@ -282,23 +282,23 @@ function LandingPage() {
                   alt="About Construction Management"
                   className="about-image img-fluid"
                 />
-                <div className="about-overlay">
-                  <div className="about-stats">
+                {/* <div className="about-overlay">
+                  <div className="landing-about">
                     <div className="about-stat">
                       <i className="fas fa-award"></i>
                       <span>5+ Years Experience</span>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             
             <div className="col-md-6 col-12">
               <div className="about-content">
-                <div className="section-badge mb-3">
+                {/* <div className="section-badge mb-3">
                   <i className="fas fa-info-circle me-2"></i>
                   About Us
-                </div>
+                </div> */}
                 <h1 className="about-title">Building the Future of Construction Management</h1>
                 <p className="about-description mt-4 fs-5">
                   At the heart of every successful construction project lies effective collaboration between builders and workers. 
@@ -335,15 +335,15 @@ function LandingPage() {
       
       {/* Enhanced Styles */}
       <style jsx>{`
-        .hero-section {
+        .landing-hero-section {
           background: white;
           color: #2c3e50;
           position: relative;
           overflow: hidden;
-          padding-top: 6rem;
+          padding-top: 2rem;
         }
         
-        .hero-section::before {
+        .landing-hero-section::before {
           content: '';
           position: absolute;
           top: 0;
@@ -353,20 +353,20 @@ function LandingPage() {
           background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
         }
         
-        .hero-content {
-          position: relative;
-          z-index: 2;
-        }
+        // .hero-content {
+        //   position: relative;
+        //   z-index: 2;
+        // }
         
-        .hero-badge {
-          display: inline-block;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          padding: 0.5rem 1rem;
-          border-radius: 25px;
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
+        // .hero-badge {
+        //   display: inline-block;
+        //   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        //   color: white;
+        //   padding: 0.5rem 1rem;
+        //   border-radius: 25px;
+        //   font-size: 0.9rem;
+        //   font-weight: 500;
+        // }
         
         .hero-title {
           font-size: 3.5rem;
@@ -393,7 +393,7 @@ function LandingPage() {
           border-radius: 25px;
           color: white;
           font-weight: 600;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
           box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
         }
         
@@ -409,7 +409,7 @@ function LandingPage() {
           border-radius: 25px;
           color: #2c3e50;
           font-weight: 600;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
         }
         
         .btn-hero-secondary:hover {
@@ -419,20 +419,20 @@ function LandingPage() {
           color: white;
         }
         
-        .hero-stats {
-          margin-top: 3rem;
-        }
+        // .landing-hero-stats {
+        //   margin-top: 3rem;
+        // }
         
-        .stat-number {
-          font-size: 2rem;
+        .landing-number {
+          font-size: 1.7rem;
           font-weight: 800;
           color: #667eea;
         }
         
-        .stat-label {
+        .landing-label {
           font-size: 0.9rem;
           color: #6c757d;
-          margin-top: 0.5rem;
+          margin-top: 0.3rem;
         }
         
         .hero-image-container {
@@ -442,7 +442,7 @@ function LandingPage() {
         .hero-image {
           border-radius: 20px;
           box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-          // transition: transform 0.3s ease;
+          transition: transform 0.3s ease;
         }
         
         .hero-image:hover {
@@ -604,7 +604,7 @@ function LandingPage() {
           padding: 2rem;
           text-align: center;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           cursor: pointer;
           height: 100%;
         }
@@ -640,7 +640,7 @@ function LandingPage() {
           color: white;
           padding: 0.75rem 1.5rem;
           font-weight: 600;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
         }
         
         .btn-service:hover {
@@ -678,22 +678,23 @@ function LandingPage() {
           right: 20px;
         }
         
-        .about-stats {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          padding: 1rem 2rem;
-          border-radius: 15px;
-          text-align: center;
-          box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
+        // .landing-about {
+        //   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        //   color: white;
+        //   padding-top: 1rem;
+        //   padding-bottom: 1rem;
+        //   border-radius: 15px;
+        //   text-align: center;
+        //   box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        // }
         
-        .about-stat {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          font-weight: 600;
-        }
+        // .about-stat {
+        //   display: flex;
+        //   align-items: center;
+        //   justify-content: center;
+        //   gap: 0.5rem;
+        //   font-weight: 600;
+        // }
         
         .about-title {
           font-size: 2.5rem;
@@ -723,7 +724,7 @@ function LandingPage() {
         }
         
         @media (max-width: 992px) {
-          .hero-section {
+          .landing-hero-section {
             padding-top: 5rem;
           }
           
@@ -745,7 +746,7 @@ function LandingPage() {
         }
         
         @media (max-width: 768px) {
-          .hero-section {
+          .landing-hero-section {
             padding-top: 4rem;
           }
           
@@ -861,7 +862,7 @@ function LandingPage() {
         }
         
         @media (max-width: 576px) {
-          .hero-section {
+          .landing-hero-section {
             padding-top: 3rem;
           }
           

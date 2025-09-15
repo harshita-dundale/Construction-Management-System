@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectProject } from '../../Pages/Redux/projectSlice';
+import EditJobModal from '../EditJobModal'
 import Swal from 'sweetalert2';
 
 function ProjectList({
@@ -37,91 +38,15 @@ function ProjectList({
     navigate('/Project_pannel');
   };
 
-  const handleEditProject = async (project, e) => {
+  const [editingProject, setEditingProject] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  
+  const handleEditProject = (project, e) => {
     e.stopPropagation();
-    
-    const { value: formValues } = await Swal.fire({
-      title: 'Edit Project',
-      html: `
-        <div style="text-align: left;">
-          <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Project Name</label>
-            <input id="swal-input1" class="swal2-input" value="${project.name}" placeholder="Project Name" style="margin: 0; width: 100%;">
-          </div>
-          <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Project Type</label>
-            <input id="swal-input2" class="swal2-input" value="${project.type || ''}" placeholder="Project Type" style="margin: 0; width: 100%;">
-          </div>
-          <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Location</label>
-            <input id="swal-input3" class="swal2-input" value="${project.location || ''}" placeholder="Location" style="margin: 0; width: 100%;">
-          </div>
-          <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Client Name</label>
-            <input id="swal-input4" class="swal2-input" value="${project.clientName || ''}" placeholder="Client Name" style="margin: 0; width: 100%;">
-          </div>
-          <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Expected Cost</label>
-            <input id="swal-input5" class="swal2-input" value="${project.expectedCost || ''}" placeholder="Expected Cost" style="margin: 0; width: 100%;">
-          </div>
-        </div>
-      `,
-      focusConfirm: false,
-      showCancelButton: true,
-      confirmButtonColor: '#667eea',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Update Project',
-      cancelButtonText: 'Cancel',
-      preConfirm: () => {
-        return {
-          name: document.getElementById('swal-input1').value,
-          type: document.getElementById('swal-input2').value,
-          location: document.getElementById('swal-input3').value,
-          clientName: document.getElementById('swal-input4').value,
-          expectedCost: document.getElementById('swal-input5').value
-        }
-      }
-    });
-
-    if (formValues) {
-      try {
-        const response = await fetch(`http://localhost:5000/api/projects/${project._id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...project,
-            ...formValues
-          })
-        });
-
-        if (response.ok) {
-          Swal.fire({
-            title: 'Updated!',
-            text: 'Project has been updated successfully.',
-            icon: 'success',
-            confirmButtonColor: '#667eea'
-          });
-          
-          // Refresh projects list
-          if (onProjectUpdate) {
-            onProjectUpdate();
-          }
-        } else {
-          throw new Error('Failed to update project');
-        }
-      } catch (error) {
-        console.error('Error updating project:', error);
-        Swal.fire({
-          title: 'Error!',
-          text: 'Failed to update project. Please try again.',
-          icon: 'error',
-          confirmButtonColor: '#667eea'
-        });
-      }
-    }
+    setEditingProject(project);
+    setShowEditModal(true);
   };
+  
 
   const handleDeleteProject = async (project, e) => {
     e.stopPropagation();
@@ -190,10 +115,12 @@ function ProjectList({
                   onClick={(e) => handleProjectClick(project, e)}
                 >
                   <div className="proj-card-head">
-                    <div className="project-status-badge">
+                    {/* <div className="project-status-badge">
                       <i className={`fas ${selectedProject?._id === project._id ? 'fa-check-circle' : 'fa-circle'} me-2`}></i>
                       {selectedProject?._id === project._id ? 'Active' : 'Available'}
-                    </div>
+                    </div> */}
+                                      <h4 className="project-card-name">{toTitleCase(project.name)}</h4>
+
                     <div className="project-actions">
                       <button
                         className="action-btn edit-btn"
@@ -211,7 +138,7 @@ function ProjectList({
                       </button>
                     </div>
                   </div>
-                  <h4 className="project-card-name">{toTitleCase(project.name)}</h4>
+                  {/* <h4 className="project-card-name">{toTitleCase(project.name)}</h4> */}
                   <div className="project-card-details">
                     {project.type && (
                       <div className="detail-row">
@@ -247,7 +174,7 @@ function ProjectList({
             ))}
           </div>
           {totalPages > 1 && (
-            <div className="pagination-wrapper mt-4">
+            <div className="pagination-wrapper mt-4 pb-5">
               <div className="pagination-container">
                 <button
                   className="pagination-btn"
@@ -285,16 +212,44 @@ function ProjectList({
           </div>
         </div>
       )}
-      
+      {editingProject && (
+        <EditJobModal
+          mode="projectModal"
+          project={editingProject}
+          show={showEditModal}
+          onClose={() => {
+            setShowEditModal(false);
+            setEditingProject(null);
+          }}
+          onSave={(updatedProject) => {
+            if (onProjectUpdate) onProjectUpdate();
+            setShowEditModal(false);
+            setEditingProject(null);
+          }}
+        />
+      )}
       {/* Inline Styles for Action Buttons */}
       <style dangerouslySetInnerHTML={{__html: `
-        .project-actions {
-          display: flex;
-          gap: 0.5rem;
-          opacity: 1;
+        .project-card {
           transition: all 0.3s ease;
-          z-index: 10;
-          position: relative;
+          transform: translateY(0);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .project-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .project-card.active {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+          border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .project-card.active:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 16px 32px rgba(102, 126, 234, 0.25);
         }
         
         .action-btn {
@@ -304,9 +259,44 @@ function ProjectList({
           border-radius: 6px;
           display: flex;
           align-items: center;
+          transition: all 0.2s ease;
+          opacity: 0.8;
+        }
+        
+        .action-btn:hover {
+          transform: scale(1.1);
+          opacity: 1;
+        }
+        
+        .project-actions {
+          opacity: 0.7;
+          transition: opacity 0.2s ease;
+        }
+        
+        .project-card:hover .project-actions {
+          opacity: 1;
+        }
+        
+        .click-hint {
+          transition: all 0.2s ease;
+          opacity: 0.8;
+        }
+        
+        .project-card:hover .click-hint {
+          opacity: 1;
+          transform: translateY(-2px);
+        }
+        
+        .project-card-name {
+          transition: color 0.2s ease;
+        }
+        
+        .project-card:hover .project-card-name {
+          color: #667eea;
+        }
           justify-content: center;
           cursor: pointer;
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           font-size: 0.8rem;
           z-index: 10;
           position: relative;
@@ -315,6 +305,7 @@ function ProjectList({
         .edit-btn {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
+          
         }
         
         .edit-btn:hover {
@@ -325,13 +316,6 @@ function ProjectList({
         .delete-btn {
           background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
           color: white;
-        }
-        
-        .proj-card-head {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          margin-bottom: 1rem;
         }
         
         .click-hint {

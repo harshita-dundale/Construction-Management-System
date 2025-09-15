@@ -55,7 +55,7 @@ const Tabs = ({ tabs, children }) => {
           color: #6c757d;
           font-weight: 600;
           cursor: pointer;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
           display: flex;
           align-items: center;
         }

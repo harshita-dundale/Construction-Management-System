@@ -5,14 +5,15 @@ import { GrFormView } from "react-icons/gr";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Components/Header";
+import DashboardHeader from './BuilderDashboard/DashboardHeader'
+import LoadingSpinner from '../Components/LoadingSpinner'
+import "./PayrollPageEnhanced.css"; 
 import Sidebar from "../Components/Sidebar";
 import "./PayrollPageEnhanced.css"; // 👈 added
 
 function PayrollPageEnhanced() {
   const selectedProject = useSelector((state) => state.project.selectedProject);
   const projectId = selectedProject?._id;
-
-  // Get materials from Redux
   const materials = useSelector((state) => state.materials.materials);
 
   const [hiredWorkers, setHiredWorkers] = useState([]);
@@ -278,77 +279,28 @@ function PayrollPageEnhanced() {
   // Combined total
   const totalProjectCost = totalPayable + totalMaterialCost;
 
-  if (loading) {
+  if (loading || error) {
     return (
-      <>
-        <Header />
-        <div className="container mt-5">
-          <div className="text-center" style={{ marginTop: "10rem" }}>
-            <div
-              className="spinner-border text-primary mb-3"
-              role="status"
-              style={{ width: "3rem", height: "3rem" }}
-            >
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <h4>Loading Payroll Data...</h4>
-            <p className="text-muted">
-              Please wait while we fetch worker payment information.
-            </p>
-          </div>
-        </div>
-      </>
+      <LoadingSpinner
+      loading={loading}
+      error={error}
+      title="Loading Payroll Data..."
+      subtitle="Please wait while we fetch worker payment information."
+      spinnerColor="text-success"
+    />
     );
   }
-
-  if (error) return <div className="alert alert-danger">{error}</div>;
-
   return (
     <>
       <Header />
       <Sidebar />
-      <div className="jobs-header-section" style={{ marginTop: "6rem" }}>
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-md-8">
-              <div className="header-content">
-                <h1 className="header-title">Payroll Management</h1>
-              </div>
-              <p className="header-subtitle me-5">
-                {/* Automates salary calculations based on attendance and job
-                details. Helps builders track payments, deductions, and project
-                expenses accurately. */}
-                Easily calculate salaries from attendance, track payments, and ensure workers get timely and transparent payouts.
-              </p>
-              <span className="mate-head-badge mt-3">
-                <i className="fas fa-boxes me-2"></i>
-                Manage Payment
-              </span>
-              {/* <div className="header-badge">
-                  <i className="fas fa-briefcase me-2"></i>
-                  Job Management
-                </div> */}
-            </div>
-            <div className="col-md-4">
-              {selectedProject && (
-                <div className="container mb-4  mt-3">
-                  <div className="project-filter">
-                    <div className="filter-icon">
-                      <i className="fas fa-building"></i>
-                    </div>
-                    <div className="filter-content">
-                      <h6 className="filter-title">{selectedProject.name}</h6>
-                      <span className="filter-subtitle">
-                        Project Filter Active
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      <DashboardHeader
+  title="Payroll Management"
+  subtitle="Easily calculate salaries from attendance, track payments, and ensure workers get timely and transparent payouts."
+  badgeText="Manage Payment"
+  projectFilter={selectedProject && { name: selectedProject.name }}
+/>
+
       <div className="container-fluid px-4 ">
         {/* Summary Cards */}
         <div className="row g-2 mb-4">

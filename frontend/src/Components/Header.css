@@ -7,21 +7,26 @@
   z-index: 999;
   box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
   backdrop-filter: blur(10px);
+  padding: 0.5rem 0;
 }
 
 .logo-img {
   transition: transform 0.3s ease;
+  height: 32px;
+  width: 120px;
+  object-fit: contain;
+  filter: brightness(1.1) contrast(1.1);
 }
 
 .logo-img:hover {
   transform: scale(1.05);
+  filter: brightness(1.2) contrast(1.2);
 }
 
 .modern-nav-link {
   position: relative;
-  padding: 0.75rem 1rem !important;
+  padding: 0.5rem 0.8rem !important;
   border-radius: 8px;
-  /* transition: all 0.3s ease; */
   font-weight: 500;
   color: rgba(255, 255, 255, 0.9) !important;
 }
@@ -44,7 +49,7 @@
   border-radius: 25px;
   color: white;
   font-weight: 600;
-  /* transition: all 0.3s ease; */
+  padding: 0.4rem 0.9rem;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
@@ -56,9 +61,9 @@
 
 .project-name-header {
   font-weight: 600 !important;
-  font-size: 1rem !important;
+  font-size: 0.9rem !important;
   cursor: default !important;
-  max-width: 200px;
+  max-width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -70,7 +75,7 @@
 
 .navbar-toggler {
   border: none;
-  padding: 0.5rem;
+  padding: 0.3rem;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
 }
@@ -86,8 +91,8 @@
 @media (max-width: 991px) {
   .modern-nav-link {
     text-align: center;
-    margin: 0.25rem 0;
-    padding: 0.75rem 1rem;
+    margin: 0.2rem 0;
+    padding: 0.5rem 0.8rem;
   }
 
   .navbar-nav {
@@ -95,29 +100,34 @@
   }
 
   .btn-modern-primary {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     width: 100%;
-    max-width: 200px;
+    max-width: 180px;
   }
 }
 
 @media (max-width: 576px) {
   .modern-header {
-    padding: 0.5rem 0;
+    padding: 0.3rem 0;
   }
 
   .logo-img {
-    height: 35px;
-    width: 140px;
+    height: 28px;
+    width: 105px;
   }
 
   .modern-nav-link {
-    font-size: 0.9rem;
-    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
   }
 
   .btn-modern-primary {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .project-name-header {
+    font-size: 0.8rem !important;
+    max-width: 120px;
   }
 }

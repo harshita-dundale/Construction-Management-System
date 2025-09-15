@@ -151,7 +151,7 @@ function ViewPostedJobs() {
     <>
       <Header />
       <Sidebar />
-      <div className="jobs-page-container">
+      <div className="jobs-page-container mt-5">
         {/* Header Section */}
         <div className="jobs-header-section">
           <div className="container">
@@ -190,20 +190,20 @@ function ViewPostedJobs() {
               <div className="col-12">
                 <div className="quick-actions">
                   <button
-                    className="action-btn primary-btn"
+                    className="action-btn primary-btn action-btn-posted"
                     onClick={() => navigate("/post-job")}>
-                    <i className="fas fa-plus me-2"></i>
+                    <i className="fas fa-plus me-2 "></i>
                     Post New Job
                   </button>
                   <button
-                    className="action-btn secondary-btn"
+                    className="action-btn secondary-btn action-btn-posted"
                     onClick={() => navigate("/ViewApplications")}
                   >
                     <i className="fas fa-users me-2"></i>
                     View Applications
                   </button>
                   <button
-                    className="action-btn tertiary-btn"
+                    className="action-btn tertiary-btn action-btn-posted"
                     onClick={() => toast.info("Analytics feature coming soon!")}
                   >
                     <i className="fas fa-chart-bar me-2"></i>

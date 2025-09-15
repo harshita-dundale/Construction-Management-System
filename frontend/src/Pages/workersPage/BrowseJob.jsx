@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../Components/Header";
-import LoadingSpinner from "../../components/LoadingSpinner";
+import LoadingSpinner from "../../Components/LoadingSpinner";
 import EmptyState from "../../components/EmptyState";
 import "./BrowseJob.css";
 //import { setCurrentJob } from "../../Pages/Redux/applicationsSlice";
@@ -129,15 +129,11 @@ function BrowseJob() {
 
   if (loading) {
     return (
-      <>
-        <Header />
-        <div className="container mt-5">
-          <LoadingSpinner 
-            message="Loading Job Listings..." 
-            size="large" 
-          />
-        </div>
-      </>
+      <LoadingSpinner
+  loading={loading}
+  title="Loading Jobs..."
+  subtitle="Please wait while we prepare your Jobs ."
+/>
     );
   }
 

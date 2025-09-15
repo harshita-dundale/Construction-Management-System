@@ -39,7 +39,7 @@ function Cards({ imgSrc, title, text, buttonText, onClick }) {
           border-radius: 20px;
           padding: 2rem;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           cursor: pointer;
           position: relative;
           overflow: hidden;
@@ -78,7 +78,7 @@ function Cards({ imgSrc, title, text, buttonText, onClick }) {
           justify-content: center;
           margin: 0 auto 1rem;
           padding: 1rem;
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
         }
         
         .modern-service-card:hover .icon-container {
@@ -106,7 +106,7 @@ function Cards({ imgSrc, title, text, buttonText, onClick }) {
           color: white;
           font-size: 0.8rem;
           opacity: 0;
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
         }
         
         .card-content {
@@ -141,7 +141,7 @@ function Cards({ imgSrc, title, text, buttonText, onClick }) {
           padding: 0.75rem 2rem;
           font-weight: 600;
           font-size: 0.9rem;
-          // transition: all 0.3s ease;
+           transition: all 0.3s ease;
           width: 100%;
           display: flex;
           align-items: center;
@@ -162,7 +162,7 @@ function Cards({ imgSrc, title, text, buttonText, onClick }) {
           bottom: 0;
           background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
           opacity: 0;
-          // transition: all 0.3s ease;
+          transition: all 0.3s ease;
           pointer-events: none;
         }
         

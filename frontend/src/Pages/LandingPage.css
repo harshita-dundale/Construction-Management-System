@@ -37,7 +37,7 @@
 .card {
   transform: scale(1);
   box-shadow: none;
-  /* transition: transform 0.3s ease, box-shadow 0.3s ease; */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .card:hover {
   /* transform: scale(1.03); */
@@ -46,7 +46,7 @@
 .service-btns {
   background-color: var(--primary-color);
   color: var(--text-color);
-  /* transition: all ease-in 0.5s; */
+  transition: all ease-in 0.5s;
 }
 .service-btns:hover {
   background-color: var(--secondary-color);

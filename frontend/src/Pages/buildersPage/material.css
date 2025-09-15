@@ -60,7 +60,7 @@
     z-index: 2;
   }
   
-  .stats-grid {
+  .stats-grid-head {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
@@ -74,14 +74,16 @@
     text-align: center;
   }
   
-  .stat-number {
+  .stat-number-head {
     font-size: 1.5rem;
     font-weight: 700;
+  line-height: 1;
   }
   
-  .stat-label {
-    font-size: 0.9rem;
+  .stat-label-head {
+    font-size: 0.8rem;
     opacity: 0.9;
+    margin-top: 0.5rem;
   }
   
 .material-management-container {
@@ -99,12 +101,12 @@
     font-weight: 500;
   }
   
-  .header-title {
+  /* .header-title {
     font-size: 3rem;
     font-weight: 800;
     color: #2c3e50;
     margin: 0.5rem 0;
-  }
+  } */
   
   .header-subtitle {
     font-size: 1.2rem;
@@ -112,30 +114,14 @@
     margin: 0;
   }
   
-  .stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-  
-  .stat-item {
+  /* .stat-item {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 1rem;
     border-radius: 10px;
     text-align: center;
-  }
-  
-  .stat-number {
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin-bottom: 0.25rem;
-  }
-  
-  .stat-label {
-    font-size: 0.8rem;
-    opacity: 0.9;
-  }
+  } */ 
+
   
   .control-panel {
     background: white;
@@ -164,7 +150,7 @@
     border: 2px solid #e9ecef;
     border-radius: 25px;
     font-size: 1rem;
-    /* transition: all 0.3s ease; */
+    transition: all 0.3s ease;
   }
   
   .search-input:focus {
@@ -180,7 +166,7 @@
     padding: 0.75rem 1.5rem;
     border-radius: 25px;
     font-weight: 600;
-    /* transition: all 0.3s ease; */
+    transition: all 0.3s ease;
   }
   
   .btn-add-material:hover {
@@ -217,7 +203,7 @@
     border: 2px solid #e9ecef;
     border-radius: 8px;
     padding: 0.75rem;
-    /* transition: all 0.3s ease; */
+    transition: all 0.3s ease;
   }
   
   .modern-input:focus {
@@ -232,7 +218,7 @@
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     font-weight: 600;
-    /* transition: all 0.3s ease; */
+    transition: all 0.3s ease;
   }
   
   .btn-submit:hover {
@@ -400,7 +386,7 @@
       font-size: 1rem;
     }
   
-    .stats-grid {
+    .stats-grid-head {
       grid-template-columns: 1fr;
       margin-top: 1.5rem;
     }
@@ -408,13 +394,13 @@
   
   /* ===== Responsive ===== */
   @media (max-width: 768px) {
-    .header-title {
+    /* .header-title {
       font-size: 2rem;
-    }
+    } */
   
-    .stats-grid {
+    /* .stats-grid {
       grid-template-columns: 1fr;
-    }
+    } */
   
     .table-header {
       flex-direction: column;
