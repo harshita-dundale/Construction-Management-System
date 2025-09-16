@@ -8,12 +8,14 @@ import ProjectModal from "../Components/ProjectModal";
 import BackButton from "../Components/BackButton";
 import { selectProject } from "../Pages/Redux/projectSlice";
 import { toast } from "react-toastify";
+import { useAuth0 } from "@auth0/auth0-react";
 import "./Project_pannel.css";
 
 function Builder_dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  const { user } = useAuth0();
 
   const cardData1 = useSelector((state) => state.builder.cards);
   const [showProjectModal, setShowProjectModal] = useState(false);
@@ -148,9 +150,9 @@ function Builder_dashboard() {
 
       try {
         // Debug materials data
-        console.log('🔍 Redux materials:', materials);
-        console.log('🔍 Redux materials length:', materials?.length || 0);
-        console.log('🔍 Selected project ID:', selectedProject._id);
+        // console.log('🔍 Redux materials:', materials);
+        // console.log('🔍 Redux materials length:', materials?.length || 0);
+        // console.log('🔍 Selected project ID:', selectedProject._id);
 
         // Fetch materials if Redux is empty
         let materialsData = materials;
@@ -175,9 +177,9 @@ function Builder_dashboard() {
         }
 
         // Materials count for selected project
-        console.log('🔍 Starting materials filtering...');
-        console.log('🔍 Materials data type:', typeof materialsData);
-        console.log('🔍 Materials data is array:', Array.isArray(materialsData));
+        // console.log('🔍 Starting materials filtering...');
+        // console.log('🔍 Materials data type:', typeof materialsData);
+        // console.log('🔍 Materials data is array:', Array.isArray(materialsData));
 
         const projectMaterials = materialsData?.filter(m => {
           const match = m.projectId === selectedProject._id;
@@ -185,8 +187,8 @@ function Builder_dashboard() {
           return match;
         }) || [];
 
-        console.log('📦 Project materials found:', projectMaterials.length);
-        console.log('📦 Project materials list:', projectMaterials);
+        // console.log('📦 Project materials found:', projectMaterials.length);
+        // console.log('📦 Project materials list:', projectMaterials);
 
         // Calculate material cost
         const materialsCost = projectMaterials.reduce((sum, m) => {
@@ -198,25 +200,44 @@ function Builder_dashboard() {
         setMaterialCost(materialsCost);
         console.log('💰 Total material cost:', materialsCost);
 
-        // Fetch jobs for this project using correct API endpoint
+        // Fetch jobs for this project only
         let jobsData = [];
+        console.log('🔍 Fetching jobs for project:', selectedProject._id, selectedProject.name);
+        
         try {
-          const jobsRes = await fetch(`http://localhost:5000/api/jobs?projectId=${selectedProject._id}`);
-          if (jobsRes.ok) {
-            const jobsResponse = await jobsRes.json();
-            jobsData = jobsResponse || [];
-            console.log('✅ Jobs fetched:', jobsData.length);
-          } else if (jobsRes.status === 404) {
-            console.log('📝 No jobs found for this project');
-            jobsData = [];
-          } else {
-            console.log('⚠️ Jobs API error:', jobsRes.status);
-            jobsData = [];
+          // Use the builder-specific endpoint that groups jobs by project
+          if (user?.sub) {
+            const builderJobsRes = await fetch(`http://localhost:5000/api/jobs/builder/${encodeURIComponent(user.sub)}`);
+            if (builderJobsRes.ok) {
+              const builderJobsData = await builderJobsRes.json();
+              console.log('📊 Builder jobs response:', builderJobsData);
+              
+              if (builderJobsData.data && Array.isArray(builderJobsData.data)) {
+                // Find the project in the response
+                const projectData = builderJobsData.data.find(p => p.projectId === selectedProject._id);
+                jobsData = projectData ? projectData.jobs : [];
+                console.log('✅ Found project jobs:', jobsData.length, 'for project:', selectedProject.name);
+              }
+            } else {
+              console.log('⚠️ Builder jobs API failed, trying fallback');
+              // Fallback: fetch all jobs and filter by project
+              const allJobsRes = await fetch(`http://localhost:5000/api/jobs`);
+              if (allJobsRes.ok) {
+                const allJobs = await allJobsRes.json();
+                jobsData = Array.isArray(allJobs) ? allJobs.filter(job => 
+                  job.projectId === selectedProject._id || 
+                  (job.projectId && job.projectId._id === selectedProject._id)
+                ) : [];
+                console.log('🔄 Fallback jobs filtered:', jobsData.length);
+              }
+            }
           }
         } catch (err) {
           console.log('❌ Jobs API failed:', err.message);
           jobsData = [];
         }
+        
+        console.log('📈 Final jobs count for', selectedProject.name, ':', jobsData.length);
         const activeJobs = jobsData.filter(job => job.status === 'active' || !job.status).length;
 
         // Fetch all applications for this project
@@ -266,17 +287,17 @@ function Builder_dashboard() {
         if (hasAnyAttendance) progress += 20;
         if (enhancedPayrollTotal > 0) progress += 20;
 
-        console.log('📊 Final calculated stats:', {
-          materialsCount: projectMaterials.length,
-          workersHired: hiredWorkers.length,
-          attendanceRate,
-          monthlyPayroll: enhancedPayrollTotal,
-          totalJobs: jobsData.length,
-          activeJobs,
-          totalApplications: allAppsData.length,
-          projectDuration: durationDays,
-          overallProgress: progress
-        });
+        // console.log('📊 Final calculated stats:', {
+        //   materialsCount: projectMaterials.length,
+        //   workersHired: hiredWorkers.length,
+        //   attendanceRate,
+        //   monthlyPayroll: enhancedPayrollTotal,
+        //   totalJobs: jobsData.length,
+        //   activeJobs,
+        //   totalApplications: allAppsData.length,
+        //   projectDuration: durationDays,
+        //   overallProgress: progress
+        // });
 
         setDashboardStats({
           materialsCount: projectMaterials.length,

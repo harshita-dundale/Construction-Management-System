@@ -29,6 +29,7 @@ const ProjectModal = ({ show, handleClose }) => {
     expectedCost: ""
   });
   const [localError, setLocalError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   const [editingProject, setEditingProject] = useState(null);
   // const [editProjectData, setEditProjectData] = useState({
   //   name: "",
@@ -54,20 +55,122 @@ const ProjectModal = ({ show, handleClose }) => {
   //   handleClose();
   // };
 
+  const validateField = (field, value) => {
+    const errors = { ...fieldErrors };
+    
+    switch (field) {
+      case 'name':
+        if (!value.trim()) {
+          errors.name = 'Project name is required';
+        } else if (value.trim().length < 3) {
+          errors.name = 'Project name must be at least 3 characters';
+        } else if (value.trim().length > 50) {
+          errors.name = 'Project name must be less than 50 characters';
+        } else {
+          delete errors.name;
+        }
+        break;
+        
+      case 'location':
+        if (!value.trim()) {
+          errors.location = 'Project location is required';
+        } else if (value.trim().length < 5) {
+          errors.location = 'Location must be at least 5 characters';
+        } else {
+          delete errors.location;
+        }
+        break;
+        
+      case 'clientName':
+        if (!value.trim()) {
+          errors.clientName = 'Client name is required';
+        } else if (value.trim().length < 2) {
+          errors.clientName = 'Client name must be at least 2 characters';
+        } else if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
+          errors.clientName = 'Client name should only contain letters and spaces';
+        } else {
+          delete errors.clientName;
+        }
+        break;
+        
+      case 'phoneNumber':
+        if (value.trim() && !/^[6-9]\d{9}$/.test(value.trim())) {
+          errors.phoneNumber = 'Enter valid 10-digit Indian mobile number';
+        } else {
+          delete errors.phoneNumber;
+        }
+        break;
+        
+      case 'email':
+        if (value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
+          errors.email = 'Enter a valid email address';
+        } else {
+          delete errors.email;
+        }
+        break;
+        
+      case 'startDate':
+        if (value && new Date(value) < new Date().setHours(0,0,0,0)) {
+          errors.startDate = 'Start date cannot be in the past';
+        } else {
+          delete errors.startDate;
+        }
+        break;
+        
+      case 'expectedEndDate':
+        if (value && newProject.startDate && new Date(value) <= new Date(newProject.startDate)) {
+          errors.expectedEndDate = 'End date must be after start date';
+        } else {
+          delete errors.expectedEndDate;
+        }
+        break;
+        
+      case 'expectedCost':
+        if (value.trim() && (isNaN(value) || parseFloat(value) <= 0)) {
+          errors.expectedCost = 'Enter a valid positive amount';
+        } else if (value.trim() && parseFloat(value) > 10000000000) {
+          errors.expectedCost = 'Amount seems too large';
+        } else {
+          delete errors.expectedCost;
+        }
+        break;
+        
+      default:
+        break;
+    }
+    
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleInputChange = (field, value) => {
+    setNewProject({ ...newProject, [field]: value });
+    validateField(field, value);
+    if (localError) setLocalError(null);
+  };
+
   const handleNewProjectValidation = async () => {
-    if (!newProject.name.trim()) {
-      setLocalError("Project name is required");
-      return;
-    }
-    if (!newProject.location.trim()) {
-      setLocalError("Project location is required");
-      return;
-    }
-    if (!newProject.clientName.trim()) {
-      setLocalError("Client name is required");
+    // Validate all fields
+    const fieldsToValidate = ['name', 'location', 'clientName', 'phoneNumber', 'email', 'startDate', 'expectedEndDate', 'expectedCost'];
+    let isValid = true;
+    
+    fieldsToValidate.forEach(field => {
+      const fieldValid = validateField(field, newProject[field]);
+      if (!fieldValid) isValid = false;
+    });
+    
+    // Check for required fields
+    if (!newProject.name.trim() || !newProject.location.trim() || !newProject.clientName.trim()) {
+      setLocalError("Please fill in all required fields");
       return;
     }
     
+    if (!isValid) {
+      setLocalError("Please fix the errors above");
+      return;
+    }
+    
+    // Check for duplicate project name
     const isDuplicate = userProjects.some(
       (p) =>
         p.name.toLowerCase() === newProject.name.trim().toLowerCase() &&
@@ -107,6 +210,7 @@ const ProjectModal = ({ show, handleClose }) => {
         expectedCost: ""
       });
       setLocalError(null);
+      setFieldErrors({});
       handleClose();
     } catch (err) {
       console.error("Error adding project:", err);
@@ -155,10 +259,11 @@ const ProjectModal = ({ show, handleClose }) => {
                           type="text"
                           value={newProject.name}
                           placeholder="Enter project name"
-                          onChange={(e) => setNewProject({...newProject, name: e.target.value})}
-                          className="modern-input"
+                          onChange={(e) => handleInputChange('name', e.target.value)}
+                          className={`modern-input ${fieldErrors.name ? 'is-invalid' : ''}`}
                           required
                         />
+                        {fieldErrors.name && <div className="field-error">{fieldErrors.name}</div>}
                       </div>
                       
                       <div className="form-group">
@@ -190,10 +295,11 @@ const ProjectModal = ({ show, handleClose }) => {
                           type="text"
                           value={newProject.location}
                           placeholder="Enter project location (Address, City, State)"
-                          onChange={(e) => setNewProject({...newProject, location: e.target.value})}
-                          className="modern-input"
+                          onChange={(e) => handleInputChange('location', e.target.value)}
+                          className={`modern-input ${fieldErrors.location ? 'is-invalid' : ''}`}
                           required
                         />
+                        {fieldErrors.location && <div className="field-error">{fieldErrors.location}</div>}
                       </div>
                       
                       {/* Client Information */}
@@ -206,10 +312,11 @@ const ProjectModal = ({ show, handleClose }) => {
                           type="text"
                           value={newProject.clientName}
                           placeholder="Enter client/owner name"
-                          onChange={(e) => setNewProject({...newProject, clientName: e.target.value})}
-                          className="modern-input"
+                          onChange={(e) => handleInputChange('clientName', e.target.value)}
+                          className={`modern-input ${fieldErrors.clientName ? 'is-invalid' : ''}`}
                           required
                         />
+                        {fieldErrors.clientName && <div className="field-error">{fieldErrors.clientName}</div>}
                       </div>
                       
                       <div className="form-group">
@@ -220,11 +327,12 @@ const ProjectModal = ({ show, handleClose }) => {
                         <Form.Control
                           type="tel"
                           value={newProject.phoneNumber}
-                          placeholder="Enter contact phone number"
-                          onChange={(e) => setNewProject({...newProject, phoneNumber: e.target.value})}
-                          className="modern-input"
-                          pattern="[0-9]{10}"
+                          placeholder="Enter 10-digit mobile number"
+                          onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                          className={`modern-input ${fieldErrors.phoneNumber ? 'is-invalid' : ''}`}
+                          maxLength="10"
                         />
+                        {fieldErrors.phoneNumber && <div className="field-error">{fieldErrors.phoneNumber}</div>}
                       </div>
                       
                       <div className="form-group">
@@ -236,9 +344,10 @@ const ProjectModal = ({ show, handleClose }) => {
                           type="email"
                           value={newProject.email}
                           placeholder="Enter email address"
-                          onChange={(e) => setNewProject({...newProject, email: e.target.value})}
-                          className="modern-input"
+                          onChange={(e) => handleInputChange('email', e.target.value)}
+                          className={`modern-input ${fieldErrors.email ? 'is-invalid' : ''}`}
                         />
+                        {fieldErrors.email && <div className="field-error">{fieldErrors.email}</div>}
                       </div>
                       
                       {/* Project Timeline */}
@@ -250,9 +359,11 @@ const ProjectModal = ({ show, handleClose }) => {
                         <Form.Control
                           type="date"
                           value={newProject.startDate}
-                          onChange={(e) => setNewProject({...newProject, startDate: e.target.value})}
-                          className="modern-input"
+                          onChange={(e) => handleInputChange('startDate', e.target.value)}
+                          className={`modern-input ${fieldErrors.startDate ? 'is-invalid' : ''}`}
+                          min={new Date().toISOString().split('T')[0]}
                         />
+                        {fieldErrors.startDate && <div className="field-error">{fieldErrors.startDate}</div>}
                       </div>
                       
                       <div className="form-group">
@@ -263,10 +374,11 @@ const ProjectModal = ({ show, handleClose }) => {
                         <Form.Control
                           type="date"
                           value={newProject.expectedEndDate}
-                          onChange={(e) => setNewProject({...newProject, expectedEndDate: e.target.value})}
-                          className="modern-input"
+                          onChange={(e) => handleInputChange('expectedEndDate', e.target.value)}
+                          className={`modern-input ${fieldErrors.expectedEndDate ? 'is-invalid' : ''}`}
                           min={newProject.startDate}
                         />
+                        {fieldErrors.expectedEndDate && <div className="field-error">{fieldErrors.expectedEndDate}</div>}
                       </div>
                       
                       {/* Financial Information */}
@@ -279,11 +391,12 @@ const ProjectModal = ({ show, handleClose }) => {
                           type="number"
                           value={newProject.expectedCost}
                           placeholder="Enter expected project cost (₹)"
-                          onChange={(e) => setNewProject({...newProject, expectedCost: e.target.value})}
-                          className="modern-input"
+                          onChange={(e) => handleInputChange('expectedCost', e.target.value)}
+                          className={`modern-input ${fieldErrors.expectedCost ? 'is-invalid' : ''}`}
                           min="0"
                           step="1000"
                         />
+                        {fieldErrors.expectedCost && <div className="field-error">{fieldErrors.expectedCost}</div>}
                       </div>
 
                       {localError && (
@@ -292,6 +405,38 @@ const ProjectModal = ({ show, handleClose }) => {
                           {localError}
                         </div>
                       )}
+                      
+                      <style dangerouslySetInnerHTML={{__html: `
+                        .field-error {
+                          color: #dc3545;
+                          font-size: 0.875rem;
+                          margin-top: 0.25rem;
+                          display: flex;
+                          align-items: center;
+                        }
+                        
+                        .field-error::before {
+                          content: '⚠';
+                          margin-right: 0.5rem;
+                          font-size: 0.75rem;
+                        }
+                        
+                        .modern-input.is-invalid,
+                        .modern-select.is-invalid {
+                          border-color: #dc3545;
+                          box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+                        }
+                        
+                        .modern-input.is-invalid:focus,
+                        .modern-select.is-invalid:focus {
+                          border-color: #dc3545;
+                          box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+                        }
+                        
+                        .form-group {
+                          margin-bottom: 1.5rem;
+                        }
+                      `}} />
                       
                       <button className="create-btn" onClick={handleNewProjectValidation}>
                         <i className="fas fa-plus me-2"></i>

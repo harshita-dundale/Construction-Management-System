@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Card3 from "../../Components/cards/Card3"; 
+import SharedCard from "../../Components/cards/SharedCard"; 
 import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import BackButton from "../../Components/BackButton";
@@ -50,7 +50,12 @@ function HiredWorkers() {
           ) : (
             hired.map((worker) => (
               <div className="col-md-4 mb-3" key={worker._id}>
-                <Card3 application={worker} isHiredView={true} onDelete={fetchHired}/> 
+                <SharedCard 
+                  data={worker} 
+                  type="worker" 
+                  isHiredView={true}
+                  onRefresh={fetchHired}
+                /> 
               </div>
             ))
           )}

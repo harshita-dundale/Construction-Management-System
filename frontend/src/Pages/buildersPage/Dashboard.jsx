@@ -105,6 +105,13 @@ const modernTableStyles = `
     color: white;
     font-size: 0.9rem;
   }
+  .form-control-calender{
+    border: 2px solid #e9ecef;
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.9rem;
+  transition: var(--transition-normal);
+  background: var(--bg-primary);
+  }
   
   @media (max-width: 768px) {
     .table-header {
@@ -303,7 +310,7 @@ function Dashboard() {
             </span>
             <input
               type="date"
-              className="form-control"
+              className="form-control-calender"
               max={new Date().toISOString().split("T")[0]}
               value={date}
               onChange={(e) => setDate(e.target.value)}
@@ -334,7 +341,7 @@ function Dashboard() {
             title="No Workers Available"
             message="Please hire workers first to manage attendance."
             actionButton={
-              <button className="btn btn-primary" onClick={() => window.location.href = '/Project_pannel '}>
+              <button className="btn btn-primary" onClick={() => window.location.href = '/ViewApplications '}>
                 <i className="fas fa-plus me-2"></i>Hire Workers
               </button>
             }

@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Card3 from "../Components/cards/Card3";
+import SharedCard from "../Components/cards/SharedCard";
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
 import LoadingSpinner from "../components/LoadingSpinner";
 import EmptyState from "../components/EmptyState";
-import BackButton from "../Components/BackButton";
 import "./viewApplications.css";
 import {
   fetchApplications,
@@ -53,25 +52,8 @@ function ViewApplications() {
   return (
     <div className="view-applications-wrapper">
       <Header />
-      <Sidebar />
-      
-      {/* Hero Section */}
-      <div className="applications-hero">
-        <div className="container">
-          {/* Back Button */}
-          
-          
-          {/* <div className="d-flex justify-content-between align-items-start mb-4">
-            <BackButton to="/project_pannel" text="Back to Projects" />
-          </div> */}
-          <div className="text-center">
-            <h1 className="hero-title">Review Job Applications</h1>
-            <p className="hero-subtitle">Manage and review applications for your construction projects</p>
-          </div>
-        </div>
-      </div>
-      
-      <div className="container pb-5">
+      <Sidebar />  
+      <div className="container pt-4">
         {/* Filters Section */}
         <div className="filters-card">
           <div className="filters-header">
@@ -157,7 +139,11 @@ function ViewApplications() {
                 <div className="row g-2 mb-4" key={index}>
                   {row.map((application, index) => (
                     <div className="col-lg-4 col-md-6" key={application._id || index}>
-                      <Card3 application={application} />
+                      <SharedCard 
+                        data={application} 
+                        type="application" 
+                        isHiredView={false}
+                      />
                     </div>
                   ))}
                 </div>

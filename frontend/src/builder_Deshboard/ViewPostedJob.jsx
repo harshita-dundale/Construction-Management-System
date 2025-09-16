@@ -3,7 +3,7 @@ import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import JobCard1 from "../Components/cards/JobCard1";
+import SharedCard from "../Components/cards/SharedCard";
 import EditJobModal from "./EditJobModal";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
@@ -151,9 +151,9 @@ function ViewPostedJobs() {
     <>
       <Header />
       <Sidebar />
-      <div className="jobs-page-container mt-5">
+      <div className="jobs-page-container mt-5 pt-3">
         {/* Header Section */}
-        <div className="jobs-header-section">
+        <div className="jobs-header-section pt-5 pb-4">
           <div className="container">
             <div className="row align-items-center">
               <div className="col-md-8">               
@@ -169,7 +169,7 @@ function ViewPostedJobs() {
               </div>
               <div className="col-md-4">
               
-                {selectedProject && (
+                {/* {selectedProject && (
                   <div className="container mb-4  mt-3">
                     <div className="project-filter">
                       <div className="filter-icon">
@@ -182,11 +182,11 @@ function ViewPostedJobs() {
                       <div className="filter-badge">{displayJobs.length} Jobs</div>
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
             {/* Quick Actions */}
-            <div className="row mt-4">
+            {/* <div className="row mt-4">
               <div className="col-12">
                 <div className="quick-actions">
                   <button
@@ -211,7 +211,7 @@ function ViewPostedJobs() {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
        <div className="container">
@@ -245,8 +245,9 @@ function ViewPostedJobs() {
                                   <p>Processing...</p>
                                 </div>
                               ) : (
-                                <JobCard1
-                                  job={job}
+                                <SharedCard
+                                  data={job}
+                                  type="job"
                                   onEdit={setJobToEdit}
                                   onDelete={handleDeleteJob}
                                 />
@@ -271,8 +272,9 @@ function ViewPostedJobs() {
                               <p>Processing...</p>
                             </div>
                           ) : (
-                            <JobCard1
-                              job={job}
+                            <SharedCard
+                              data={job}
+                              type="job"
                               onEdit={setJobToEdit}
                               onDelete={handleDeleteJob}
                             />
