@@ -87,8 +87,9 @@
   }
   
 .material-management-container {
-    min-height: 100vh;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    overflow-x: hidden;
+    padding-bottom: 2rem;
   }
   
   .header-badge {
@@ -130,8 +131,8 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     margin: 2rem 0;
   }
-  
-  .search-container {
+
+  .search-containers {
     position: relative;
   }
   

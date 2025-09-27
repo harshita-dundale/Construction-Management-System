@@ -17,33 +17,41 @@ export const getAllMaterials = async (req, res) => {
 export const createMaterial = async (req, res) => {
   const { name, quantity, unitPrice, unit, projectId } = req.body;
 
+  if (!name || !quantity || !unitPrice || !unit || !projectId) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
   try {
-    // Check if material already exists in this project (case-insensitive)
+    // Check if material already exists for this project (case-insensitive)
     const existingMaterial = await Material.findOne({
-      name: { $regex: new RegExp(`^${name.trim()}$`, 'i') },
+      name: { $regex: new RegExp(`^${name.trim()}$`, "i") },
       projectId: new mongoose.Types.ObjectId(projectId),
     });
 
     if (existingMaterial) {
-      return res.status(409).json({ 
-        message: `Material "${name}" already exists in this project. Use update instead.`,
-        existingMaterial 
+      // 🔹 If exists, update quantity automatically
+      existingMaterial.quantity += quantity;
+      const updated = await existingMaterial.save();
+      return res.status(200).json({
+        message: "Material exists, quantity updated",
+        material: updated,
       });
     }
 
-    const newMaterial = new Material({ 
-      name: name.trim(), 
-      quantity, 
-      unitPrice, 
-      unit: unit.trim(), 
-      projectId 
+    // 🔹 If not exists, create new
+    const newMaterial = new Material({
+      name: name.trim(),
+      quantity,
+      unitPrice,
+      unit: unit.trim(),
+      projectId,
     });
-    
+
     const saved = await newMaterial.save();
     res.status(201).json(saved);
   } catch (err) {
-    console.error("Error saving material:", err.message); 
-    res.status(400).json({ message: err.message });
+    console.error("Error saving material:", err.message);
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -93,3 +101,4 @@ export const deleteMaterial = async (req, res) => {
     res.status(500).json({ message: "Failed to delete material" });
   }
 };
+
