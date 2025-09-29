@@ -85,7 +85,7 @@ const ProfileAvatar = () => {
         {showDropdown && (
           <div className="modern-dropdown-menu">
             {/* User Info Header */}
-            <div className="dropdown-header">
+            <div className="dropdown-header-profile">
               <div className="user-avatar">
                 {imageError || !displayImage ? (
                   <div className="avatar-fallback">{firstLetter}</div>
@@ -94,7 +94,7 @@ const ProfileAvatar = () => {
                 )}
               </div>
               <div className="user-info">
-                <div className="user-name">{user.name}</div>
+                <div className="user-name-outer">{user.name}</div>
                 <div className="user-email">{user.email}</div>
               </div>
             </div>
@@ -195,10 +195,10 @@ const ProfileAvatar = () => {
           border: 1px solid rgba(0, 0, 0, 0.1);
         }
         
-        .dropdown-header {
+        .dropdown-header-profile {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
-          padding: 1.5rem;
+          padding: 0.7rem;
           display: flex;
           align-items: center;
           gap: 1rem;
@@ -234,7 +234,7 @@ const ProfileAvatar = () => {
           min-width: 0;
         }
         
-        .user-name {
+        .user-name-outer {
           font-size: 1.1rem;
           font-weight: 600;
           margin-bottom: 0.25rem;
@@ -257,7 +257,7 @@ const ProfileAvatar = () => {
         
         .dropdown-item-modern {
           width: 100%;
-          padding: 1rem 1.5rem;
+          padding: 0.5rem 1rem;
           border: none;
           background: none;
           display: flex;
@@ -301,7 +301,7 @@ const ProfileAvatar = () => {
           color: white;
         }
         
-        .item-content {
+        .item-connt {
           flex: 1;
           min-width: 0;
         }
@@ -310,7 +310,7 @@ const ProfileAvatar = () => {
           display: block;
           font-weight: 600;
           color: #2c3e50;
-          margin-bottom: 0.25rem;
+          // margin-bottom: 0.25rem;
         }
         
         .item-subtitle {
@@ -328,8 +328,8 @@ const ProfileAvatar = () => {
             max-width: 320px;
           }
           
-          .dropdown-header {
-            padding: 1rem;
+          .dropdown-header-profile {
+            padding: 0.6rem;
           }
           
           .user-avatar .avatar-fallback,
@@ -339,7 +339,7 @@ const ProfileAvatar = () => {
           }
           
           .dropdown-item-modern {
-            padding: 0.75rem 1rem;
+            padding: 0.3rem 0.5rem;
           }
         }
       `}</style>

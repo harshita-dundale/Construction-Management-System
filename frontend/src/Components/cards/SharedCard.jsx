@@ -337,7 +337,7 @@ function SharedCard({ data, type, onEdit, onDelete, isHiredView = false, onRefre
         </div>
         
         {/* Status Section for Applications */}
-        {(type === 'application' || type === 'worker') && (
+        {/* {(type === 'application' || type === 'worker') && (
           <div className="status-section">
             <div className="status-container">
               <span className="status-label">Builder Status</span>
@@ -368,7 +368,7 @@ function SharedCard({ data, type, onEdit, onDelete, isHiredView = false, onRefre
               </div>
             )}
           </div>
-        )}
+        )} */}
       </div>
       
       {/* Action Buttons Footer */}

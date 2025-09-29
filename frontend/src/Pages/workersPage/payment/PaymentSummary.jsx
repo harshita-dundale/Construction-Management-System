@@ -282,12 +282,12 @@ const PaymentSummary = ({ jobId }) => {
                               </div>
                             </td>
                             <td className="px-4 py-3">
-                              <span className="badge bg-success fs-6 px-3 py-2">
+                              <span className="badge text-dark fs-6 px-3 py-2">
                                 ₹{entry.paidAmount || 0}
                               </span>
                             </td>
-                            <td className="px-4 py-3">
-                              <span className="badge bg-info px-3 py-2">
+                            <td className="px-4 py-3 fs-5">
+                              <span className="badge text-success px-3 py-2">
                                 <i className="fas fa-check-circle me-1"></i>Paid
                               </span>
                             </td>
@@ -335,7 +335,7 @@ const PaymentSummary = ({ jobId }) => {
                             <td className="px-4 py-3">
                               <div className="d-flex align-items-center">
                                 <div className="date-badge me-2">
-                                  <i className="fas fa-calendar-day text-success"></i>
+                                  <i className="fas fa-calendar-day text-info"></i>
                                 </div>
                                 <span className="fw-medium">
                                   {new Date(entry.date).toLocaleDateString("en-IN", {
@@ -347,11 +347,11 @@ const PaymentSummary = ({ jobId }) => {
                                 </span>
                               </div>
                             </td>
-                            <td className="px-4 py-3">
-                              <span className={`badge fs-6 px-3 py-2 ${
+                            <td className="px-4 py-3 ">
+                              <span className={`badge px-3 py-2 ${
                                 entry.status === "Present" 
-                                  ? "bg-primary" 
-                                  : "bg-danger"
+                                  ? "text-success" 
+                                  : "text-danger"
                               }`}>
                                 <i className={`fas ${
                                   entry.status === "Present" 

@@ -35,14 +35,14 @@ const EmptyState = ({
         
         .empty-icon {
           font-size: ${sizeClasses[size].icon};
-          color: #266867;
+          color: #2c3e50;
           margin-bottom: 1.5rem;
           display: block;
           animation: float 3s ease-in-out infinite;
         }
         
         .empty-title {
-          color: #051821;
+          color: #000000;
           margin-bottom: 1rem;
           font-weight: 600;
         }
@@ -50,7 +50,7 @@ const EmptyState = ({
         .empty-message {
           line-height: 1.6;
           margin-bottom: 2rem;
-          color: #266867;
+          color: #495057;
         }
         
         .empty-action {

@@ -68,7 +68,7 @@ const MainAttendance = () => {
       <Header />
       <div className="attendance-container">
         {/* Back Button */}
-        <div className="back-button-contain">
+        <div className="">
           <BackButton to="/browse-job" text="Back to Jobs" variant="outline" />
         </div>
         

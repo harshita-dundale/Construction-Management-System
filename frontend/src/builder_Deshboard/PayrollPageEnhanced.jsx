@@ -297,8 +297,8 @@ function PayrollPageEnhanced() {
       <DashboardHeader
   title="Payroll Management"
   subtitle="Easily calculate salaries from attendance, track payments, and ensure workers get timely and transparent payouts."
-  badgeText="Manage Payment"
-  projectFilter={selectedProject && { name: selectedProject.name }}
+  // badgeText="Manage Payment"
+  // projectFilter={selectedProject && { name: selectedProject.name }}
 />
 
       <div className="container-fluid px-4 ">
@@ -711,7 +711,7 @@ function PayrollPageEnhanced() {
                       {selectedName.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <h5 className="modal-title mb-0 fw-bold">
+                      <h5 className=" fs-4 mb-0 fw-bold">
                         {selectedName}'s Payment History
                       </h5>
                       <small className="opacity-75">
@@ -747,11 +747,11 @@ function PayrollPageEnhanced() {
                     </div>
                   ) : (
                     <>
-                      <div className="row mb-4">
+                      <div className="row mb-4 ">
                         <div className="col-md-12">
                           <div className="card bg-light">
                             <div className="card-body">
-                              <div className="row text-center">
+                              <div className="row text-center pt-3">
                                 <div className="col-md-4">
                                   <h6 className="text-muted mb-1">
                                     Total Transactions

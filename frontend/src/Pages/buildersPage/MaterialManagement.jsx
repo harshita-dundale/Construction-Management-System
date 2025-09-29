@@ -32,15 +32,13 @@ const MaterialManagement = () => {
     unitPrice: 0,
     unit: "",
   });
-  const [materialUsage, setMaterialUsage] = useState({
-    name: "",
-    quantityUsed: 0,
-  });
 
   const [showAddMaterial, setShowAddMaterial] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [editMaterialId, setEditMaterialId] = useState(null);
+  const [editedQty, setEditedQty] = useState(0);
 
-  // Fetch project-specific materials
+  // 🔹 Fetch project-specific materials
   const fetchMaterials = async () => {
     if (!selectedProject?._id) {
       setLoading(false);
@@ -63,17 +61,20 @@ const MaterialManagement = () => {
     fetchMaterials();
   }, [selectedProject]);
 
-  // Add Material
+  // 🔹 Add Material
   const handleAddMaterial = async (e) => {
     e.preventDefault();
+    if (!selectedProject?._id) {
+      Swal.fire("Error", "No project selected! Please select a project first.", "error");
+      return;
+    }
+
     if (
       newMaterial.name &&
       newMaterial.quantity > 0 &&
       newMaterial.unitPrice > 0 &&
-      newMaterial.unit.trim() !== "" &&
-      selectedProject?._id
+      newMaterial.unit.trim() !== ""
     ) {
-
       try {
         const res = await fetch("http://localhost:5000/api/materials", {
           method: "POST",
@@ -88,10 +89,9 @@ const MaterialManagement = () => {
 
         if (!res.ok) {
           if (res.status === 409) {
-            // Material already exists in THIS project - offer to update existing
             const result = await Swal.fire({
               title: 'Material Already Exists in This Project',
-              text: `"${newMaterial.name}" already exists in this project. Do you want to add ${newMaterial.quantity} ${newMaterial.unit} to existing stock?`,
+              text: `"${newMaterial.name}" already exists. Add ${newMaterial.quantity} ${newMaterial.unit}?`,
               icon: 'question',
               showCancelButton: true,
               confirmButtonColor: 'var(--secondary-color)',
@@ -101,14 +101,13 @@ const MaterialManagement = () => {
             });
 
             if (result.isConfirmed && data.existingMaterial) {
-              // Update existing material quantity
               try {
                 const updateRes = await fetch(`http://localhost:5000/api/materials/usage`, {
                   method: "PATCH",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
                     name: data.existingMaterial.name,
-                    quantityUsed: -(newMaterial.quantity), 
+                    quantityUsed: -(newMaterial.quantity),
                     projectId: selectedProject._id,
                   }),
                 });
@@ -141,10 +140,7 @@ const MaterialManagement = () => {
     }
   };
 
-  // Update Usage
-  const [editMaterialId, setEditMaterialId] = useState(null);
-  const [editedQty, setEditedQty] = useState(0);
-
+  // 🔹 Update Usage
   const handleSaveEdit = async (mat) => {
     if (editedQty === "" || isNaN(editedQty)) {
       Swal.fire("Invalid Input", "Quantity cannot be empty", "warning");
@@ -182,6 +178,7 @@ const MaterialManagement = () => {
     }
   };
 
+  // 🔹 Delete Material
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -232,37 +229,23 @@ const MaterialManagement = () => {
       />
     );
   }
+
   return (
     <>
       <Header />
       <Sidebar />
       <DashboardHeader
-  title="Inventory Control"
-  subtitle="Efficiently track, manage, and optimize construction materials to reduce waste, control costs, and improve project productivity."
-  badgeText={selectedProject?.name || "Material Management"}
-  stats={[
-    { number: filteredMaterials.length, label: "Materials" },
-    { number: `₹${totalCost.toFixed(0)}`, label: "Total Value" },
-  ]}
-  showSearch={true}
-  searchValue={filter}
-  searchPlaceholder="Search materials by name..."
-  onSearchChange={(val) => dispatch(setFilter(val))}
-  controlButton={
-    <button
-      className="btn btn-add-material"
-      onClick={() => setShowAddMaterial(!showAddMaterial)}
-    >
-      <i
-        className={`fas ${showAddMaterial ? "fa-minus" : "fa-plus"} me-2`}
-      ></i>
-      {showAddMaterial ? "Hide Form" : "Add Material"}
-    </button>
-  }
-/>
+        title="Inventory Control"
+        subtitle="Efficiently track, manage, and optimize construction materials to reduce waste, control costs, and improve project productivity."
+        stats={[
+          { number: filteredMaterials.length, label: "Materials" },
+          { number: `₹${totalCost.toFixed(0)}`, label: "Total Value" },
+        ]}
+      />
 
       <div className="material-management-container">
         <div className="container">
+
           {/* Add Material Form */}
           {showAddMaterial && (
             <div className="add-material-card mt-4">
@@ -348,120 +331,79 @@ const MaterialManagement = () => {
 
           {/* Materials Table */}
           <div className="materials-table-card mt-4">
-            <div className="table-header">
-              <h5 className="table-title">
-                <i className="fas fa-list me-2"></i>
-                Material Inventory
-              </h5>
-              <div className="table-summary">
-                <span className="summary-item">
-                  <i className="fas fa-cubes me-1"></i>
-                  {filteredMaterials.length} Items
-                </span>
-                <span className="summary-item">
-                  <i className="fas fa-rupee-sign me-1"></i>
-                  ₹{totalCost.toFixed(2)} Total
-                </span>
+            <div className="table-header d-flex justify-content-between align-items-center mb-2">
+              <div className="search-containers">
+                <div className="input-group">
+                  <span className="input-group-text">
+                    <i className="fas fa-search"></i>
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search materials..."
+                    value={filter}
+                    onChange={(e) => dispatch(setFilter(e.target.value))}
+                  />
+                </div>
               </div>
+              <button
+                className="btn btn-add-material"
+                onClick={() => setShowAddMaterial(!showAddMaterial)}
+              >
+                <i className={`fas ${showAddMaterial ? "fa-minus" : "fa-plus"} me-2`}></i>
+                {showAddMaterial ? "Hide Form" : "Add Material"}
+              </button>
             </div>
-            
+
             {filteredMaterials.length > 0 ? (
-              <div className="table-responsive mt-2">
+              <div className="table-responsive">
                 <table className="table modern-table">
                   <thead>
                     <tr>
-                      <th><i className="fas fa-tag me-2"></i>Material Name</th>
-                      <th><i className="fas fa-weight me-2"></i>Quantity</th>
-                      <th><i className="fas fa-rupee-sign me-2"></i>Unit Price</th>
-                      <th><i className="fas fa-calculator me-2"></i>Total Cost</th>
-                      <th><i className="fas fa-cogs me-2"></i>Actions</th>
+                      <th>Material Name</th>
+                      <th>Quantity</th>
+                      <th>Unit Price</th>
+                      <th>Total Cost</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredMaterials.map((mat) => (
-                      <tr key={mat._id} className="material-row">
-                        <td>
-                          <div className="material-name">
-                            <div className="material-icon">
-                              <i className="fas fa-cube"></i>
-                            </div>
-                            <span className="name-text">{mat.name}</span>
-                          </div>
-                        </td>
+                      <tr key={mat._id}>
+                        <td>{mat.name}</td>
                         <td>
                           {editMaterialId === mat._id ? (
-                            <div className="edit-quantity">
-                              <input
-                                type="number"
-                                className="form-control form-control-sm"
-                                value={
-                                  editedQty === null || editedQty === undefined
-                                    ? ""
-                                    : editedQty
-                                }
-                                onChange={(e) => {
-                                  const val = e.target.value;
-                                  setEditedQty(val === "" ? "" : Number(val));
-                                }}
-                              />
-                            </div>
+                            <input
+                              type="number"
+                              value={editedQty}
+                              onChange={(e) => setEditedQty(Number(e.target.value))}
+                            />
                           ) : (
-                            <div className="quantity-display">
-                              <span className="quantity-number">{mat.quantity}</span>
-                              <span className="quantity-unit">{mat.unit}</span>
-                            </div>
+                            `${mat.quantity} ${mat.unit}`
                           )}
                         </td>
+                        <td>₹{mat.unitPrice.toFixed(2)}</td>
+                        <td>₹{(mat.quantity * mat.unitPrice).toFixed(2)}</td>
                         <td>
-                          <span className="price-display">₹{mat.unitPrice.toFixed(2)}</span>
-                        </td>
-                        <td>
-                          <span className="cost-display">₹{(mat.quantity * mat.unitPrice).toFixed(2)}</span>
-                        </td>
-                        <td>
-                          <div className="action-buttons">
-                            {editMaterialId === mat._id ? (
-                              <>
-                                <button
-                                  className="btn btn-sm btn-success me-1"
-                                  onClick={() => handleSaveEdit(mat)}
-                                  title="Save Changes"
-                                >
-                                  <MdOutlineSaveAlt />
-                                </button>
-                                <button
-                                  className="btn btn-sm btn-secondary"
-                                  onClick={() => {
-                                    setEditMaterialId(null);
-                                    setEditedQty(null);
-                                  }}
-                                  title="Cancel"
-                                >
-                                  <TbCancel />
-                                </button>
-                              </>
-                            ) : (
-                              <>
-                                <button
-                                  className="btn btn-sm btn-outline-primary me-1"
-                                  onClick={() => {
-                                    setEditMaterialId(mat._id);
-                                    setEditedQty(mat.quantity);
-                                  }}
-                                  title="Edit Quantity"
-                                >
-                                  <MdEdit />
-                                </button>
-                                <button
-                                  className="btn btn-sm btn-outline-danger"
-                                  onClick={() => handleDelete(mat._id)}
-                                  title="Delete Material"
-                                >
-                                  <RiDeleteBin6Line />
-                                </button>
-                              </>
-                            )}
-                          </div>
+                          {editMaterialId === mat._id ? (
+                            <>
+                              <button onClick={() => handleSaveEdit(mat)}>
+                                <MdOutlineSaveAlt />
+                              </button>
+                              <button onClick={() => setEditMaterialId(null)}>
+                                <TbCancel />
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button onClick={() => { setEditMaterialId(mat._id); setEditedQty(mat.quantity); }}>
+                                <MdEdit />
+                              </button>
+                              <button onClick={() => handleDelete(mat._id)}>
+                                <RiDeleteBin6Line />
+                              </button>
+                            </>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -469,20 +411,13 @@ const MaterialManagement = () => {
                 </table>
               </div>
             ) : (
-              <div className="empty-state">
-                <div className="empty-icon">
-                  <i className="fas fa-boxes"></i>
-                </div>
-                <h4 className="empty-title">No Materials Found</h4>
-                <p className="empty-description">
-                  {filter ? `No materials match "${filter}"` : "Start by adding your first material to the inventory"}
-                </p>
+              <div className="empty-state text-center mt-4">
+                <h5>No Materials Found</h5>
                 {!filter && (
-                  <button 
-                    className="btn btn-primary mt-3"
+                  <button
+                    className="btn btn-primary mt-2"
                     onClick={() => setShowAddMaterial(true)}
                   >
-                    <i className="fas fa-plus me-2"></i>
                     Add First Material
                   </button>
                 )}

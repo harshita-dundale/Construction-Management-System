@@ -205,7 +205,7 @@ function ProjectList({
             </div>
             <h4>No Projects Found</h4>
             <p className="text-muted mb-4">Create your first project to get started</p>
-            <Button onClick={() => setShowProjectModal(true)} className="btn-dashboard-primary">
+            <Button onClick={() => setShowProjectModal(true)} className="btn-primary-gradient">
               <i className="fas fa-plus me-2"></i>
               Create Project
             </Button>
@@ -346,6 +346,24 @@ function ProjectList({
           align-items: center;
           flex-direction: row;
           gap: 0.5rem;
+        }
+        
+        .btn-primary-gradient {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+          border: none !important;
+          color: white !important;
+          padding: 0.75rem 1.5rem;
+          border-radius: 10px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary-gradient:hover {
+          background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+          color: white !important;
         }
         
         @media (max-width: 768px) {

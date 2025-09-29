@@ -12,6 +12,7 @@ const materialSchema = new mongoose.Schema({
   },
 });
 
-// No unique constraint - allow duplicate material names
+// ✅ Compound index: unique per project
+materialSchema.index({ name: 1, projectId: 1 }, { unique: true });
 
 export default mongoose.model("Material", materialSchema);

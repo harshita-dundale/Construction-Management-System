@@ -113,6 +113,37 @@ const modernTableStyles = `
   background: var(--bg-primary);
   }
   
+  .btn-primary-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  }
+  
+  .btn-primary-gradient:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    color: white;
+  }
+  
+  .empty-title {
+    color: #000000 !important;
+    font-weight: 600 !important;
+  }
+  
+  .empty-message {
+    color: #495057 !important;
+  }
+  
+  .empty-icon {
+    color: #2c3e50 !important;
+  }
+  
   @media (max-width: 768px) {
     .table-header {
       flex-direction: column;
@@ -294,7 +325,7 @@ function Dashboard() {
       <DashboardHeader
   title="Manage Attendance"
   subtitle="Easily mark and track daily attendance of workers. View job-wise records, monitor presence/absence, and maintain accurate logs for smoother project management."
-  badgeText={selectedProject?.name || "Attendance Management"}
+  // badgeText={selectedProject?.name || "Attendance Management"}
   stats={[
     { number: totalPresent, label: "Total Present" },
     { number: totalAbsent, label: "Total Absent" },
@@ -341,7 +372,7 @@ function Dashboard() {
             title="No Workers Available"
             message="Please hire workers first to manage attendance."
             actionButton={
-              <button className="btn btn-primary" onClick={() => window.location.href = '/ViewApplications '}>
+              <button className="btn btn-primary-gradient" onClick={() => window.location.href = '/ViewApplications '}>
                 <i className="fas fa-plus me-2"></i>Hire Workers
               </button>
             }
