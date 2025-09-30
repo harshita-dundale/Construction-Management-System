@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { setWorkerPayments, setMaterialCosts, setRevenue } from "../Redux/FinanceSlice";
+import { setWorkerPayments, setMaterialCosts, setRevenue } from "../Redux/financeSlice";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../Components/Header";
 
