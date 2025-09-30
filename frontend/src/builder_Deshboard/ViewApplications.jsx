@@ -7,7 +7,7 @@ import Sidebar from "../Components/Sidebar";
 import LoadingSpinner from "../Components/LoadingSpinner";
 import EmptyState from "../Components/EmptyState";
 import BackButton from "../Components/BackButton";
-import "./viewApplications.css";
+import "./ViewApplications.css";
 import {
   fetchApplications,
   setFilteredApplications,
