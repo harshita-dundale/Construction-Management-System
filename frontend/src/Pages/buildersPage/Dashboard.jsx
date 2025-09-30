@@ -7,7 +7,7 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { GrFormView } from "react-icons/gr";
 import LoadingSpinner from "../../Components/LoadingSpinner";
-import EmptyState from "../../components/EmptyState";
+import EmptyState from "../../Components/EmptyState";
 import DashboardHeader from '../../builder_Deshboard/BuilderDashboard/DashboardHeader'
 import "./Dashboard.css";
 

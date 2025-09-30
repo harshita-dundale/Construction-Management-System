@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../../Components/Header";
 import LoadingSpinner from "../../Components/LoadingSpinner";
-import EmptyState from "../../components/EmptyState";
+import EmptyState from "../../Components/EmptyState";
 import "./BrowseJob.css";
 //import { setCurrentJob } from "../../Pages/Redux/applicationsSlice";
 import JobCard from "../../Components/cards/JobCard";

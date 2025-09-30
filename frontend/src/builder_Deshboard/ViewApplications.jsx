@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Card3 from "../Components/cards/Card3";
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
-import LoadingSpinner from "../components/LoadingSpinner";
-import EmptyState from "../components/EmptyState";
+import LoadingSpinner from "../Components/LoadingSpinner";
+import EmptyState from "../Components/EmptyState";
 import BackButton from "../Components/BackButton";
 import "./viewApplications.css";
 import {

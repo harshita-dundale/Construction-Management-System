@@ -6,7 +6,7 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import BackButton from "../../Components/BackButton";
 import DashboardHeader from '../../builder_Deshboard/BuilderDashboard/DashboardHeader';
-import EmptyState from '../../components/EmptyState';
+import EmptyState from '../../Components/EmptyState';
 import { GrUserWorker } from "react-icons/gr";
 
 function HiredWorkers() {
