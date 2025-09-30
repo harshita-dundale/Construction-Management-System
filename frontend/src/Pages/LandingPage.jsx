@@ -102,7 +102,7 @@ function LandingPage() {
                 <i className="fas fa-hard-hat me-2"></i>
                 Construction Management Platform
               </div> */}
-              <h1 className="hero-title text-center text-md-start">
+              <h1 className="hero-title text-center text-md-start pt-5">
                 Builders & Workers
                 <span className="text-gradient"> Collaboration</span>
               </h1>
